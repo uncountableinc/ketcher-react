@@ -1,0 +1,125 @@
+/****************************************************************************
+ * Copyright 2021 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+@import '../../../../style/mixins';
+@import '../../../../style/variables';
+
+.tableContent {
+  display: grid;
+  grid-gap: 0 8px;
+  grid-template-columns: repeat(4, 100px);
+}
+
+.structTitle {
+  padding: 0 7px;
+  text-align: center;
+  margin: 6px 0 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  max-height: 30px;
+}
+
+.twoRowsTitleTable {
+  grid-auto-rows: 147px;
+}
+
+.oneRowTitleTable {
+  grid-auto-rows: 134px;
+  
+  .structTitle {
+    max-height: 16px;
+  }
+}
+
+.struct {
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  border: 1px solid @color-grey-5;
+  border-radius: 5px;
+  background-color: @color-background-primary;
+
+  &:hover {
+    background: @form-hover-background;
+  }
+
+  & svg {
+    width: 100px;
+    height: 100px;
+    left: -2px;
+    top: -1px;
+  }
+}
+
+.selectedTitle {
+  background-color: fade(@color-background-primary, 70%);
+}
+
+.td {
+  position: relative;
+  cursor: default;
+
+  &.selected .struct {
+    background-color: fade(@color-primary, 5%);
+    border: 2px solid @color-primary;
+  }
+}
+
+  .button {
+    .btn();
+
+    margin: 0;
+    border-radius: 0;
+    width: 18px;
+    height: 18px;
+    border: none;
+    color: #636363;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+
+    & > svg {
+      width: inherit;
+      height: inherit;
+    }
+
+    &:hover, &:active {
+      & path {
+        fill: @color-button-primary-hover;
+      }
+    }
+  }
+
+  .deleteButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  .editButton {
+    position: absolute;
+    top: 78px;
+    right: 5px;
+  }
+
+div.structure {
+  padding: 0; // TODO: tmp hack to fit viewbox
+  background-color: @color-background-primary;
+}

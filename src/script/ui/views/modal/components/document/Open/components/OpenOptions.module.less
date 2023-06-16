@@ -1,0 +1,83 @@
+/****************************************************************************
+ * Copyright 2021 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+@import '../../../../../../../../style/variables.less';
+
+.optionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  width: @width-medium-new;
+  padding: @padding-modal;
+  box-sizing: border-box;
+}
+
+.dropContainer {
+  width: 128px;
+  height: 134px;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0 4px 12px @color-dropcontainer-shadow;
+
+  div {
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    margin: 0;
+    text-align: center;
+    font-family: @Inter;
+    line-height: 12.1px;
+    font-size: 10px;
+  }
+
+  .buttonLabelWrapper {
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .buttonLabel {
+    color: @color-text-secondary;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .textLabelWrapper {
+    height: 12px;
+  }
+
+  .textLabel {
+    color: @color-text-primary;
+    opacity: 50%;
+    font-weight: 400;
+  }
+
+  .dropIconWrapper {
+    height: 40px;
+  }
+}

@@ -1,0 +1,113 @@
+/****************************************************************************
+ * Copyright 2021 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+@import '../../../../../../../style/variables.less';
+@import '../../../../../../../style/mixins.less';
+
+.dialog_body {
+  background-color: #fff;
+}
+
+.about {
+  width: @width-medium-new;
+  color: @color-text-primary;
+  font-weight: @font-weight-medium;
+
+  & > footer {
+    border-top: 1px solid #e1e5ea;
+    margin: 0;
+    padding: 15px;
+  }
+
+  & > div[class^='Dialog-module_dialog_body'] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  a {
+    // TODO: standard, after redesign, move to global styles
+    color: @color-primary;
+  }
+
+  .body {
+    height: 174px;
+    border-radius: 6px;
+    padding: 2px 72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-right: 3px;
+    .scrollbar();
+
+    .versionName {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .firstline {
+      display: inline-block;
+    }
+
+    .links {
+      text-align: right;
+    }
+
+    .infoLinks {
+      margin-top: 5px;
+    }
+
+    .indigoVersion {
+      margin-top: 20px;
+      display: flex;
+      gap: 2px;
+    }
+  }
+
+  .headerContent {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: @color-text-primary;
+    }
+
+    .title {
+      font-size: 20px;
+      line-height: 22px;
+    }
+  }
+
+  .indigoFirstLine {
+    display: inline-block;
+  }
+
+  dd {
+    margin: 0;
+    margin-bottom: 0.2em;
+  }
+
+  dt {
+    margin-top: 3px;
+  }
+
+  .okButton {
+    .button-secondary();
+  }
+}

@@ -1,0 +1,74 @@
+/****************************************************************************
+ * Copyright 2021 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+@import '../../../../../../../style/mixins.less';
+
+.fontSizeMenu {
+  display: inline-block;
+  position: absolute;
+  top: 74px;
+  right: 12px;
+  background: @color-background-primary;
+  max-height: 155px;
+  overflow-y: scroll;
+  z-index: 10;
+  padding: 4px;
+  font-size: 16px;
+  border-radius: 4px;
+  width: 58px;
+  border: 1px solid @color-grey-4;
+
+  .scrollbar();
+}
+
+.fontSizeOption {
+  padding: 4px;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.fontSizeOption:hover {
+  background: @gray-background-color;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fontBtn {
+  width: 68px;
+  height: 24px;
+  background-color: @color-background-primary;
+  border: 1px solid @color-grey-4;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.fontBtn::after {
+  content: ' ';
+  position: relative;
+  display: block;
+  background-size: contain;
+  width: 22px;
+  height: 22px;
+  bottom: 20px;
+  left: 18px;
+  margin: auto;
+  z-index: 10;
+  background-image: data-uri(
+    '../../../../../../../icons/files/dropdown-indicator.svg'
+  );
+}

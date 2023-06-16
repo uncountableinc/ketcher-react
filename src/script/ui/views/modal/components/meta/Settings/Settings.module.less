@@ -1,0 +1,114 @@
+/****************************************************************************
+ * Copyright 2021 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+@import '../../../../../../../style/variables.less';
+
+.headerContent {
+  display: flex;
+  gap: 8px;
+
+  .title {
+    padding-right: 4px;
+  }
+
+  .button {
+    background-color: transparent;
+    border: none;
+    color: @color-icon-active;
+    padding: 0;
+    font-size: 0;
+  
+    input[type='file'] {
+      display: none;
+    }
+  
+    &:hover {
+      color: @color-icon-hover;
+    }
+    
+    &:disabled {
+      color: @color-icon-disabled;
+    }
+  }
+}
+
+.accordion {
+  fieldset {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  ul {
+    > li {
+      padding: 10px 16px;
+    }
+  }
+
+  label {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 12px;
+    align-items: center;
+    line-height: 14px;
+    margin-bottom: 12px;
+    color: @color-text-primary;
+    height: 24px;
+
+    input[type='checkbox'] {
+      top: 0;
+    }
+
+    span > div,
+    select, input {
+      width: 120px;
+      margin-right: auto;
+    }
+
+    > :first-child {
+      width: 168px;
+      margin-right: @margin-left-right;
+    }
+  }
+}
+
+.settings {
+  width: @width-settings;
+  height: 70vh;
+  overflow: hidden;
+
+  fieldset[disabled] {
+    label > span {
+      opacity: 0.3;
+    }
+
+    label > div {
+      opacity: 0.6;
+    }
+  }
+
+   > header{
+      flex-shrink: 0;
+      box-shadow: 0 2px 4px 0 @color-accordion-shadow;
+      z-index: 10; 
+   }
+
+   > footer {
+      box-shadow: 0 -2px 4px 0 @color-accordion-shadow;
+      z-index: 10;
+   }
+}
