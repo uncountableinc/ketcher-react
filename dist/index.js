@@ -57,7 +57,7 @@ var _classPrivateFieldSet = require('@babel/runtime/helpers/classPrivateFieldSet
 var subscription = require('subscription');
 var reactContexify = require('react-contexify');
 require('react-contexify/ReactContexify.css');
-var urilib = require('url');
+var t = require('querystring');
 var MuiSelect = require('@mui/material/Select');
 var Divider$1 = require('@mui/material/Divider');
 var MenuItem = require('@mui/material/MenuItem');
@@ -123,7 +123,7 @@ var _taggedTemplateLiteral__default = /*#__PURE__*/_interopDefaultLegacy(_tagged
 var KN__namespace = /*#__PURE__*/_interopNamespace(KN);
 var _classPrivateFieldGet__default = /*#__PURE__*/_interopDefaultLegacy(_classPrivateFieldGet);
 var _classPrivateFieldSet__default = /*#__PURE__*/_interopDefaultLegacy(_classPrivateFieldSet);
-var urilib__default = /*#__PURE__*/_interopDefaultLegacy(urilib);
+var t__default = /*#__PURE__*/_interopDefaultLegacy(t);
 var MuiSelect__default = /*#__PURE__*/_interopDefaultLegacy(MuiSelect);
 var Divider__default = /*#__PURE__*/_interopDefaultLegacy(Divider$1);
 var MenuItem__default = /*#__PURE__*/_interopDefaultLegacy(MenuItem);
@@ -472,6 +472,21 @@ function createCommonjsModule(fn, basedir, module) {
 			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
 		}
 	}, fn(module, module.exports), module.exports;
+}
+
+function getAugmentedNamespace(n) {
+	if (n.__esModule) return n;
+	var a = Object.defineProperty({}, '__esModule', {value: true});
+	Object.keys(n).forEach(function (k) {
+		var d = Object.getOwnPropertyDescriptor(n, k);
+		Object.defineProperty(a, k, d.get ? d : {
+			enumerable: true,
+			get: function () {
+				return n[k];
+			}
+		});
+	});
+	return a;
 }
 
 function commonjsRequire () {
@@ -10290,7 +10305,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc2\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc3\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -25699,6 +25714,19 @@ var mapDispatchToProps$c = function mapDispatchToProps(dispatch) {
 };
 var About = reactRedux.connect(mapStateToProps$f, mapDispatchToProps$c)(AboutDialog);
 
+var e=/https?|ftp|gopher|file/;function o(o){"string"==typeof o&&(o=g(o));var r=function(t,e,o){var r=t.auth,a=t.hostname,s=t.protocol||"",p=t.pathname||"",n=t.hash||"",h=t.query||"",c=!1;r=r?encodeURIComponent(r).replace(/%3A/i,":")+"@":"",t.host?c=r+t.host:a&&(c=r+(~a.indexOf(":")?"["+a+"]":a),t.port&&(c+=":"+t.port)),h&&"object"==typeof h&&(h=e.encode(h));var l=t.search||h&&"?"+h||"";return s&&":"!==s.substr(-1)&&(s+=":"),t.slashes||(!s||o.test(s))&&!1!==c?(c="//"+(c||""),p&&"/"!==p[0]&&(p="/"+p)):c||(c=""),n&&"#"!==n[0]&&(n="#"+n),l&&"?"!==l[0]&&(l="?"+l),{protocol:s,host:c,pathname:p=p.replace(/[?#]/g,encodeURIComponent),search:l=l.replace("#","%23"),hash:n}}(o,t__default["default"],e);return ""+r.protocol+r.host+r.pathname+r.search+r.hash}var r="http://",a="w.w",s=r+a,p=/^([a-z0-9.+-]*:\/\/\/)([a-z0-9.+-]:\/*)?/i,n=/https?|ftp|gopher|file/;function h(t,e){var a="string"==typeof t?g(t):t;t="object"==typeof t?o(t):t;var h=g(e),c="";a.protocol&&!a.slashes&&(c=a.protocol,t=t.replace(a.protocol,""),c+="/"===e[0]||"/"===t[0]?"/":""),c&&h.protocol&&(c="",h.slashes||(c=h.protocol,e=e.replace(h.protocol,"")));var l=t.match(p);l&&!h.protocol&&(t=t.substr((c=l[1]+(l[2]||"")).length),/^\/\/[^/]/.test(e)&&(c=c.slice(0,-1)));var i=new URL(t,s+"/"),u=new URL(e,i).toString().replace(s,""),f=h.protocol||a.protocol;return f+=a.slashes||h.slashes?"//":"",!c&&f?u=u.replace(r,f):c&&(u=u.replace(r,"")),n.test(u)||~e.indexOf(".")||"/"===t.slice(-1)||"/"===e.slice(-1)||"/"!==u.slice(-1)||(u=u.slice(0,-1)),c&&(u=c+("/"===u[0]?u.substr(1):u)),u}function c(t,e){return g(h(t,e))}function l(){}l.prototype.parse=g,l.prototype.format=o,l.prototype.resolve=h,l.prototype.resolveObject=h;var i=/^https?|ftp|gopher|file/,u=/^(.*?)([#?].*)/,f=/^([a-z0-9.+-]*:)(\/{0,3})(.*)/i,m=/^([a-z0-9.+-]*:)?\/\/\/*/i,v=/^([a-z0-9.+-]*:)(\/{0,2})\[(.*)\]$/i;function g(e,r,p){if(void 0===r&&(r=!1),void 0===p&&(p=!1),e&&"object"==typeof e&&e instanceof l)return e;var n=(e=e.trim()).match(u);e=n?n[1].replace(/\\/g,"/")+n[2]:e.replace(/\\/g,"/"),v.test(e)&&"/"!==e.slice(-1)&&(e+="/");var h=!/(^javascript)/.test(e)&&e.match(f),c=m.test(e),g="";h&&(i.test(h[1])||(g=h[1].toLowerCase(),e=""+h[2]+h[3]),h[2]||(c=!1,i.test(h[1])?(g=h[1],e=""+h[3]):e="//"+h[3]),3!==h[2].length&&1!==h[2].length||(g=h[1],e="/"+h[3]));var d,y=(n?n[1]:e).match(/^https?:\/\/[^/]+(:[0-9]+)(?=\/|$)/),b=y&&y[1],C=new l,U="",w="";try{d=new URL(e);}catch(t){U=t,g||p||!/^\/\//.test(e)||/^\/\/.+[@.]/.test(e)||(w="/",e=e.substr(1));try{d=new URL(e,s);}catch(t){return C.protocol=g,C.href=g,C}}C.slashes=c&&!w,C.host=d.host===a?"":d.host,C.hostname=d.hostname===a?"":d.hostname.replace(/(\[|\])/g,""),C.protocol=U?g||null:d.protocol,C.search=d.search.replace(/\\/g,"%5C"),C.hash=d.hash.replace(/\\/g,"%5C");var j=e.split("#");!C.search&&~j[0].indexOf("?")&&(C.search="?"),C.hash||""!==j[1]||(C.hash="#"),C.query=r?t__default["default"].decode(d.search.substr(1)):C.search.substr(1),C.pathname=w+(h?function(t){return t.replace(/['^|`]/g,function(t){return "%"+t.charCodeAt().toString(16).toUpperCase()}).replace(/((?:%[0-9A-F]{2})+)/g,function(t,e){try{return decodeURIComponent(e).split("").map(function(t){var e=t.charCodeAt();return e>256||/^[a-z0-9]$/i.test(t)?t:"%"+e.toString(16).toUpperCase()}).join("")}catch(t){return e}})}(d.pathname):d.pathname),"about:"===C.protocol&&"blank"===C.pathname&&(C.protocol="",C.pathname=""),U&&"/"!==e[0]&&(C.pathname=C.pathname.substr(1)),g&&!i.test(g)&&"/"!==e.slice(-1)&&"/"===C.pathname&&(C.pathname=""),C.path=C.pathname+C.search,C.auth=[d.username,d.password].map(decodeURIComponent).filter(Boolean).join(":"),C.port=d.port,b&&!C.host.endsWith(b)&&(C.host+=b,C.port=b.slice(1)),C.href=w?""+C.pathname+C.search+C.hash:o(C);var R=/^(file)/.test(C.href)?["host","hostname"]:[];return Object.keys(C).forEach(function(t){~R.indexOf(t)||(C[t]=C[t]||null);}),C}
+
+var dist = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  parse: g,
+  format: o,
+  resolve: h,
+  resolveObject: c,
+  Url: l
+});
+
+var urilib = /*@__PURE__*/getAugmentedNamespace(dist);
+
 var helpers = createCommonjsModule(function (module, exports) {
 
 
@@ -25830,13 +25858,13 @@ var SchemaContext = exports.SchemaContext = function SchemaContext (schema, opti
 };
 
 SchemaContext.prototype.resolve = function resolve (target) {
-  return urilib__default["default"].resolve(this.base, target);
+  return urilib.resolve(this.base, target);
 };
 
 SchemaContext.prototype.makeChild = function makeChild(schema, propertyName){
   var path = (propertyName===undefined) ? this.path : this.path.concat([propertyName]);
   var id = schema.$id || schema.id;
-  var base = urilib__default["default"].resolve(this.base, id||'');
+  var base = urilib.resolve(this.base, id||'');
   var ctx = new SchemaContext(schema, this.options, path, base, Object.create(this.schemas));
   if(id && !ctx.schemas[base]){
     ctx.schemas[base] = schema;
@@ -27082,12 +27110,12 @@ var scan_1 = function scan(base, schema){
     if(!schema || typeof schema!='object') return;
     // Mark all referenced schemas so we can tell later which schemas are referred to, but never defined
     if(schema.$ref){
-      var resolvedUri = urilib__default["default"].resolve(baseuri, schema.$ref);
+      var resolvedUri = urilib.resolve(baseuri, schema.$ref);
       ref[resolvedUri] = ref[resolvedUri] ? ref[resolvedUri]+1 : 0;
       return;
     }
     var id = schema.$id || schema.id;
-    var ourBase = id ? urilib__default["default"].resolve(baseuri, id) : baseuri;
+    var ourBase = id ? urilib.resolve(baseuri, id) : baseuri;
     if (ourBase) {
       // If there's no fragment, append an empty one
       if(ourBase.indexOf('#')<0) ourBase += '#';
@@ -27252,7 +27280,7 @@ Validator.prototype.validate = function validate (instance, schema, options, ctx
   // This section indexes subschemas in the provided schema, so they don't need to be added with Validator#addSchema
   // This will work so long as the function at uri.resolve() will resolve a relative URI to a relative URI
   var id = schema.$id || schema.id;
-  var base = urilib__default["default"].resolve(options.base||anonymousBase, id||'');
+  var base = urilib.resolve(options.base||anonymousBase, id||'');
   if(!ctx){
     ctx = new SchemaContext(schema, options, [], base, Object.create(this.schemas));
     if (!ctx.schemas[base]) {
@@ -27399,7 +27427,7 @@ Validator.prototype.resolve = function resolve (schema, switchSchema, ctx) {
     return {subschema: ctx.schemas[switchSchema], switchSchema: switchSchema};
   }
   // Else try walking the property pointer
-  var parsed = urilib__default["default"].parse(switchSchema);
+  var parsed = urilib.parse(switchSchema);
   var fragment = parsed && parsed.hash;
   var document = fragment && fragment.length && switchSchema.substr(0, switchSchema.length - fragment.length);
   if (!document || !ctx.schemas[document]) {
@@ -33676,8 +33704,8 @@ var KetcherBuilder = function () {
                   initApp(element, staticResourcesUrl, {
                     buttons: buttons || {},
                     errorHandler: errorHandler || null,
-                    version: "2.11.0-rc.1-unc2" ,
-                    buildDate: "2023-06-16T05:24:57" ,
+                    version: "2.11.0-rc.1-unc4" ,
+                    buildDate: "2023-06-16T05:56:06" ,
                     buildNumber: ''
                   }, structService, resolve);
                 });
