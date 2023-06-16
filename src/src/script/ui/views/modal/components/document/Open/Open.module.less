@@ -1,0 +1,76 @@
+/****************************************************************************
+ * Copyright 2021 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+@import '../../../../../../../style/variables.less';
+@import '../../../../../../../style/mixins.less';
+
+.open {
+  box-shadow: 0 5px 20px @color-open-window-shadow;
+  background-color: @color-background-primary;
+
+  > div {
+    margin: 0;
+  }
+  
+  label {
+    display: block;
+    width: 22.5em;
+
+    input {
+      margin-bottom: 0.1em;
+    }
+  }
+
+  .textareaEditor {
+    padding: 12px;
+    width: 560px;
+    min-width: 32em;
+    min-height: 23em;
+    overflow: auto;
+    white-space: pre;
+    border: none;
+    border-bottom: 1px solid @color-grey-3;
+    border-radius: 0;
+    resize: both;
+    .scrollbar();
+
+    &:hover {
+      border: none;
+      border-bottom: 1px solid @color-grey-3;
+      border-radius: 0;
+    }
+  }
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.openButton,
+.cancelButton {
+  .button-secondary();
+}
+
+.copyButton {
+  .button-primary();
+}

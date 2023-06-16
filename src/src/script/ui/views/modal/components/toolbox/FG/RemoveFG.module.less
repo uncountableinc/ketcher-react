@@ -1,0 +1,61 @@
+@import '../../../../../../../style/variables';
+
+.window {
+  display: flex;
+  width: @width-small;
+  flex-direction: column;
+  background: @gray-background-color;
+  border-radius: 10px;
+  font-family: @Inter;
+
+  & > * {
+    margin: 10px 15px;
+  }
+}
+
+.question {
+  text-align: left;
+  color: @color-text-secondary;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.buttonOk,
+.buttonCancel {
+  border-radius: 2px;
+  border: none;
+  height: 1.8em;
+  width: content-box;
+}
+
+.buttonOk {
+  background: @color-button-primary;
+  color: @color-text-light;
+
+  &:hover {
+    background: @color-button-primary-hover;
+  }
+}
+
+.buttonCancel {
+  margin-right: 15px;
+  background: transparent;
+  border: 1px solid @color-button-secondary;
+  color: @color-button-secondary;
+
+  &:hover {
+    border-color: @color-button-secondary-hover;
+    color: @color-button-secondary-hover;
+  }
+}
