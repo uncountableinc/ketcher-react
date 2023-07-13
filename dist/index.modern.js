@@ -40,7 +40,7 @@ import _slicedToArray from '@babel/runtime/helpers/slicedToArray';
 import ReactDOM from 'react-dom';
 import { connect, useDispatch, Provider } from 'react-redux';
 import { combineReducers, createStore as createStore$1, applyMiddleware } from 'redux';
-import _, { throttle as throttle$1, inRange, difference, cloneDeep, isEqual as isEqual$1, range as range$1, isEmpty as isEmpty$1 } from 'lodash';
+import _, { throttle as throttle$1, inRange, difference, cloneDeep, isEqual as isEqual$1, range as range$1, isEmpty as isEmpty$1, uniqueId } from 'lodash';
 import 'redux-logger';
 import thunk from 'redux-thunk';
 import useResizeObserver from 'use-resize-observer/polyfilled';
@@ -9697,7 +9697,9 @@ var tools = typeSchema$1["enum"].reduce(function (res, type, i) {
   return res;
 }, toolActions);
 
-var KETCHER_INIT_EVENT_NAME = 'ketcher-init';
+var ketcherInitEventName = function ketcherInitEventName(ketcherId) {
+  return "ketcher-init-".concat(ketcherId);
+};
 var KETCHER_SAVED_SETTINGS_KEY = 'ketcher_editor_saved_settings';
 var MODES = {
   FG: 'fg'
@@ -10244,7 +10246,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc3\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc7\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -15340,7 +15342,8 @@ var useInterval = function useInterval(callback, delay) {
 var useSubscriptionOnEvents = function useSubscriptionOnEvents() {
   var dispatch = useDispatch();
   var _useAppContext = useAppContext(),
-    getKetcherInstance = _useAppContext.getKetcherInstance;
+    getKetcherInstance = _useAppContext.getKetcherInstance,
+    ketcherId = _useAppContext.ketcherId;
   var loadingHandler = function loadingHandler() {
     dispatch(indigoVerification(true));
   };
@@ -15364,12 +15367,13 @@ var useSubscriptionOnEvents = function useSubscriptionOnEvents() {
     var unsubscribeOnUnMount = function unsubscribeOnUnMount() {
       unsubscribe(getKetcherInstance());
     };
-    window.addEventListener(KETCHER_INIT_EVENT_NAME, function () {
+    var fullEventName = ketcherInitEventName(ketcherId);
+    window.addEventListener(fullEventName, function () {
       subscribeOnInit();
     });
     return function () {
       unsubscribeOnUnMount();
-      window.removeEventListener(KETCHER_INIT_EVENT_NAME, subscribeOnInit);
+      window.removeEventListener(fullEventName, subscribeOnInit);
     };
   }, []);
 };
@@ -33566,7 +33570,19 @@ var mapDispatchToProps = {
 };
 var AppContainer = connect(null, mapDispatchToProps)(App);
 
-function initApp(element, staticResourcesUrl, options, server, setEditor) {
+function initApp(element, staticResourcesUrl, options, server, resolve) {
+  var ketcherRef = null;
+  var setKetcher = function setKetcher(ketcher) {
+    ketcherRef = ketcher;
+  };
+  var ketcherId = uniqueId();
+  var setEditor = function setEditor(editor) {
+    resolve({
+      editor: editor,
+      setKetcher: setKetcher,
+      ketcherId: ketcherId
+    });
+  };
   var store = createStore(options, server, setEditor);
   store.dispatch(initKeydownListener(element));
   store.dispatch(initResize());
@@ -33584,8 +33600,9 @@ function initApp(element, staticResourcesUrl, options, server, setEditor) {
         children: jsx(appContext.Provider, {
           value: {
             getKetcherInstance: function getKetcherInstance() {
-              return window.ketcher;
-            }
+              return ketcherRef;
+            },
+            ketcherId: ketcherId
           },
           children: jsx(AppContainer, {})
         })
@@ -33632,7 +33649,7 @@ var KetcherBuilder = function () {
     key: "appendUiAsync",
     value: function () {
       var _appendUiAsync = _asyncToGenerator( _regeneratorRuntime.mark(function _callee2(element, staticResourcesUrl, errorHandler, buttons) {
-        var structService, editor;
+        var structService, _yield$Promise, editor, setKetcher, ketcherId;
         return _regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -33643,18 +33660,25 @@ var KetcherBuilder = function () {
                   initApp(element, staticResourcesUrl, {
                     buttons: buttons || {},
                     errorHandler: errorHandler || null,
-                    version: "2.11.0-rc.1-unc4" ,
-                    buildDate: "2023-06-16T05:56:06" ,
+                    version: "2.11.0-rc.1-unc7" ,
+                    buildDate: "2023-07-13T22:53:40" ,
                     buildNumber: ''
                   }, structService, resolve);
                 });
               case 3:
-                editor = _context2.sent;
+                _yield$Promise = _context2.sent;
+                editor = _yield$Promise.editor;
+                setKetcher = _yield$Promise.setKetcher;
+                ketcherId = _yield$Promise.ketcherId;
                 this.editor = editor;
                 this.editor.errorHandler = errorHandler && typeof errorHandler === 'function' ? errorHandler :
                 function () {};
                 this.formatterFactory = new FormatterFactory(structService);
-              case 7:
+                return _context2.abrupt("return", {
+                  setKetcher: setKetcher,
+                  ketcherId: ketcherId
+                });
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -33696,7 +33720,7 @@ function buildKetcherAsync(_x) {
 }
 function _buildKetcherAsync() {
   _buildKetcherAsync = _asyncToGenerator( _regeneratorRuntime.mark(function _callee(_ref) {
-    var element, staticResourcesUrl, structServiceProvider, buttons, errorHandler, builder;
+    var element, staticResourcesUrl, structServiceProvider, buttons, errorHandler, builder, _yield$builder$append, setKetcher, ketcherId, ketcher;
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -33710,8 +33734,16 @@ function _buildKetcherAsync() {
             _context.next = 7;
             return builder.appendUiAsync(element, staticResourcesUrl, errorHandler, buttons);
           case 7:
-            return _context.abrupt("return", builder.build());
-          case 8:
+            _yield$builder$append = _context.sent;
+            setKetcher = _yield$builder$append.setKetcher;
+            ketcherId = _yield$builder$append.ketcherId;
+            ketcher = builder.build();
+            setKetcher(ketcher);
+            return _context.abrupt("return", {
+              ketcher: ketcher,
+              ketcherId: ketcherId
+            });
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -33737,13 +33769,15 @@ function Editor(props) {
     }),
     height = _useResizeObserver.height,
     width = _useResizeObserver.width;
-  var ketcherInitEvent = new Event(KETCHER_INIT_EVENT_NAME);
   useEffect(function () {
     buildKetcherAsync(_objectSpread(_objectSpread({}, props), {}, {
       element: rootElRef.current
-    })).then(function (ketcher) {
+    })).then(function (_ref) {
+      var ketcher = _ref.ketcher,
+        ketcherId = _ref.ketcherId;
       if (typeof onInit === 'function') {
         onInit(ketcher);
+        var ketcherInitEvent = new Event(ketcherInitEventName(ketcherId));
         window.dispatchEvent(ketcherInitEvent);
       }
     });
@@ -33754,5 +33788,5 @@ function Editor(props) {
   });
 }
 
-export { Editor, KETCHER_INIT_EVENT_NAME, KETCHER_SAVED_SETTINGS_KEY, MODES, STRUCT_TYPE };
+export { appContext as AppContext, Editor, KETCHER_SAVED_SETTINGS_KEY, MODES, STRUCT_TYPE, ketcherInitEventName };
 //# sourceMappingURL=index.modern.js.map

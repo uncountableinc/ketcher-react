@@ -23,7 +23,10 @@ declare class KetcherBuilder {
     constructor();
     appendApiAsync(structServiceProvider: StructServiceProvider): Promise<void>;
     appendServiceMode(mode: ServiceMode): void;
-    appendUiAsync(element: HTMLDivElement | null, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig): Promise<void>;
+    appendUiAsync(element: HTMLDivElement | null, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig): Promise<{
+        setKetcher: (ketcher: Ketcher) => void;
+        ketcherId: string;
+    }>;
     build(): Ketcher;
 }
 export { KetcherBuilder };

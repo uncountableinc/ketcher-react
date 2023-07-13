@@ -22,6 +22,9 @@ interface Config {
     buttons?: ButtonsConfig;
     errorHandler: (message: string) => void;
 }
-declare function buildKetcherAsync({ element, staticResourcesUrl, structServiceProvider, buttons, errorHandler }: Config): Promise<import("ketcher-core").Ketcher>;
+declare function buildKetcherAsync({ element, staticResourcesUrl, structServiceProvider, buttons, errorHandler }: Config): Promise<{
+    ketcher: import("ketcher-core").Ketcher;
+    ketcherId: string;
+}>;
 export type { Config, ButtonsConfig };
 export default buildKetcherAsync;

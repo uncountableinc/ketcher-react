@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import { StructService } from 'ketcher-core';
-declare function initApp(element: HTMLDivElement | null, staticResourcesUrl: string, options: any, server: StructService, setEditor: (editor: any) => void): void;
+import { Ketcher, StructService } from 'ketcher-core';
+declare function initApp(element: HTMLDivElement | null, staticResourcesUrl: string, options: any, server: StructService, resolve: (args: {
+    editor: any;
+    setKetcher: (ketcher: Ketcher) => void;
+    ketcherId: string;
+}) => void): void;
 export { initApp };

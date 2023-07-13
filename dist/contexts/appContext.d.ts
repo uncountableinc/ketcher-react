@@ -17,6 +17,7 @@ import { Ketcher } from 'ketcher-core';
 import React from 'react';
 export interface IAppContext {
     getKetcherInstance: () => Ketcher;
+    ketcherId: string;
 }
 declare const appContext: React.Context<IAppContext>;
 export default appContext;

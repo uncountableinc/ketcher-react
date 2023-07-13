@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-export declare const KETCHER_INIT_EVENT_NAME = "ketcher-init";
+export declare const ketcherInitEventName: (ketcherId: string) => string;
 export declare const KETCHER_SAVED_SETTINGS_KEY = "ketcher_editor_saved_settings";
 export declare const MODES: {
     FG: string;
