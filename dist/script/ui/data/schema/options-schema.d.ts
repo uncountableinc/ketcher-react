@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import { SchemaObject } from 'ajv';
-declare type ExtendedSchema = SchemaObject & {
+import { Schema } from 'jsonschema';
+declare type ExtendedSchema = Schema & {
     enumNames?: Array<string>;
     default?: any;
 };
