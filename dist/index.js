@@ -4898,7 +4898,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc8\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc9\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -18828,7 +18828,7 @@ var Cursor = function Cursor(_ref) {
     };
   }, []);
   if (!enableHandTool) return null;
-  return jsxRuntime.jsx("div", {
+  return ReactDOM__default["default"].createPortal( jsxRuntime.jsx("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -18851,7 +18851,7 @@ var Cursor = function Cursor(_ref) {
         top: position.clientY
       }
     })
-  });
+  }), document.body, 'mouse-fixed');
 };
 
 var styles$b = {"button-common-styles":"ContextMenu-module_button-common-styles__pshYr","scrollbar":"ContextMenu-module_scrollbar__fCla5","contextMenu":"ContextMenu-module_contextMenu__oqyL-","icon":"ContextMenu-module_icon__KhXEk","subMenu":"ContextMenu-module_subMenu__87kBE"};
@@ -26509,8 +26509,8 @@ var KetcherBuilder = function () {
                   initApp(element, staticResourcesUrl, {
                     buttons: buttons || {},
                     errorHandler: errorHandler || null,
-                    version: "2.11.0-rc.1-unc8" ,
-                    buildDate: "2023-07-20T17:37:48" ,
+                    version: "2.11.0-rc.1-unc9" ,
+                    buildDate: "2023-08-31T18:41:20" ,
                     buildNumber: ''
                   }, structService, resolve);
                 });
