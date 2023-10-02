@@ -339,8 +339,6 @@ var ClipArea = function (_Component) {
         ref: this.textAreaRef,
         className: clsx('cliparea', classes$O.cliparea),
         contentEditable: true,
-        autoFocus: true
-        ,
         suppressContentEditableWarning: true
       });
     }
