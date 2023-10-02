@@ -26447,7 +26447,7 @@ var KetcherBuilder = function () {
                     buttons: buttons || {},
                     errorHandler: errorHandler || null,
                     version: "2.11.0-rc.1-unc11" ,
-                    buildDate: "2023-10-02T15:46:44" ,
+                    buildDate: "2023-10-02T15:55:25" ,
                     buildNumber: ''
                   }, structService, resolve);
                 });
