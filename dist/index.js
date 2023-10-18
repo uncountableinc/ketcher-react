@@ -4896,7 +4896,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.15\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc15\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -26508,7 +26508,7 @@ var KetcherBuilder = function () {
                     buttons: buttons || {},
                     errorHandler: errorHandler || null,
                     version: "2.11.0-rc.1-unc15" ,
-                    buildDate: "2023-10-18T13:22:14" ,
+                    buildDate: "2023-10-18T14:19:01" ,
                     buildNumber: ''
                   }, structService, resolve);
                 });
