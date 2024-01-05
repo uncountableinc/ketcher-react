@@ -4896,7 +4896,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc17\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.11.0-rc.1-unc18\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -11217,7 +11217,7 @@ var ZoomControls = function ZoomControls(_ref) {
       open: isExpanded,
       onClose: onClose,
       anchorEl: containerRef.current,
-      container: containerRef.current,
+      container: document.body,
       anchorOrigin: {
         vertical: 'bottom',
         horizontal: 'left'
@@ -18646,9 +18646,10 @@ function resetSelectionOnCanvasClick(editor, eventName, clientArea, event) {
 function updateLastCursorPosition(editor, event) {
   var events = ['mousemove', 'click', 'mousedown', 'mouseup', 'mouseover'];
   if (events.includes(event.type)) {
+    var _editor$options$zoom, _editor$options$zoom2;
     editor.lastCursorPosition = {
-      x: event.layerX,
-      y: event.layerY
+      x: event.layerX / ((_editor$options$zoom = editor.options().zoom) !== null && _editor$options$zoom !== void 0 ? _editor$options$zoom : 1.0),
+      y: event.layerY / ((_editor$options$zoom2 = editor.options().zoom) !== null && _editor$options$zoom2 !== void 0 ? _editor$options$zoom2 : 1.0)
     };
   }
 }
@@ -19412,6 +19413,9 @@ var props = {
   animation: false,
   className: styles$b.contextMenu
 };
+function BodyPortal(props) {
+  return ReactDOM__default["default"].createPortal(props.children, document.body, props.refKey);
+}
 var ContextMenu = function ContextMenu() {
   var _useAppContext = useAppContext(),
     getKetcherInstance = _useAppContext.getKetcherInstance;
@@ -19423,31 +19427,43 @@ var ContextMenu = function ContextMenu() {
     editor.contextMenu[id] = visible;
   }, [getKetcherInstance]);
   return jsxRuntime.jsxs(jsxRuntime.Fragment, {
-    children: [jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_BONDS,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_BONDS, visible);
-      },
-      children: jsxRuntime.jsx(BondMenuItems, {})
-    })), jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_ATOMS,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_ATOMS, visible);
-      },
-      children: jsxRuntime.jsx(AtomMenuItems, {})
-    })), jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_SELECTION,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_SELECTION, visible);
-      },
-      children: jsxRuntime.jsx(SelectionMenuItems, {})
-    })), jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS, visible);
-      },
-      children: jsxRuntime.jsx(FunctionalGroupMenuItems, {})
-    }))]
+    children: [jsxRuntime.jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_BONDS,
+      children: jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_BONDS,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_BONDS, visible);
+        },
+        children: jsxRuntime.jsx(BondMenuItems, {})
+      }))
+    }), jsxRuntime.jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_ATOMS,
+      children: jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_ATOMS,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_ATOMS, visible);
+        },
+        children: jsxRuntime.jsx(AtomMenuItems, {})
+      }))
+    }), jsxRuntime.jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_SELECTION,
+      children: jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_SELECTION,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_SELECTION, visible);
+        },
+        children: jsxRuntime.jsx(SelectionMenuItems, {})
+      }))
+    }), jsxRuntime.jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+      children: jsxRuntime.jsx(reactContexify.Menu, _objectSpread$E(_objectSpread$E({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS, visible);
+        },
+        children: jsxRuntime.jsx(FunctionalGroupMenuItems, {})
+      }))
+    })]
   });
 };
 
@@ -26507,8 +26523,8 @@ var KetcherBuilder = function () {
                   initApp(element, staticResourcesUrl, {
                     buttons: buttons || {},
                     errorHandler: errorHandler || null,
-                    version: "2.11.0-rc.1-unc17" ,
-                    buildDate: "2023-11-17T17:16:01" ,
+                    version: "2.11.0-rc.1-unc18" ,
+                    buildDate: "2024-01-05T20:41:18" ,
                     buildNumber: ''
                   }, structService, resolve);
                 });
