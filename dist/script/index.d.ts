@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+/// <reference types="react" />
+import { Root } from 'react-dom/client';
 import { ButtonsConfig } from './builders';
 import { StructServiceProvider } from 'ketcher-core';
 interface Config {
     element: HTMLDivElement | null;
+    appRoot: Root;
     staticResourcesUrl: string;
     structServiceProvider: StructServiceProvider;
     buttons?: ButtonsConfig;
     errorHandler: (message: string) => void;
+    togglerComponent?: JSX.Element;
 }
-declare function buildKetcherAsync({ element, staticResourcesUrl, structServiceProvider, buttons, errorHandler }: Config): Promise<{
+declare function buildKetcherAsync({ element, appRoot, staticResourcesUrl, structServiceProvider, buttons, errorHandler, togglerComponent, }: Config): Promise<{
     ketcher: import("ketcher-core").Ketcher;
     ketcherId: string;
 }>;
 export type { Config, ButtonsConfig };
+export * from './providers';
 export default buildKetcherAsync;

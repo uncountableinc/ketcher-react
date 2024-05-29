@@ -16,8 +16,9 @@
 /// <reference types="react" />
 interface AppCallProps {
     checkServer: () => void;
+    togglerComponent?: JSX.Element;
 }
 declare type Props = AppCallProps;
-declare const App: (props: Props) => JSX.Element;
+declare const App: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { AppCallProps };
 export { App };

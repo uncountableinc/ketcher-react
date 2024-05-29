@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { BaseCallProps, BaseProps } from '../../../modal.types';
 interface RemoveFGProps extends BaseProps {
     fgIds: any;
 }
 declare type Props = RemoveFGProps & BaseCallProps;
-declare const RemoveFG: (props: Props) => JSX.Element;
+declare const RemoveFG: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { RemoveFGProps };
 export { RemoveFG };

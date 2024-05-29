@@ -15,6 +15,8 @@
  ***************************************************************************/
 /// <reference types="react" />
 import { AppCallProps } from './App';
-declare const AppContainer: import("react-redux").ConnectedComponent<(props: AppCallProps) => JSX.Element, import("react-redux").Omit<AppCallProps, "checkServer">>;
+declare const AppContainer: import("react-redux").ConnectedComponent<(props: AppCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<AppCallProps, "checkServer" | "togglerComponent"> & {
+    togglerComponent?: JSX.Element | undefined;
+}>;
 export { AppContainer };
 export default AppContainer;

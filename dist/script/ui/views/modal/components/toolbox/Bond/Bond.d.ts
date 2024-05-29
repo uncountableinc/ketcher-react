@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { BaseCallProps, BaseProps } from '../../../modal.types';
-interface BondProps extends BaseProps {
-    center: number;
-    topology: number;
+interface BondSettings {
     type: string;
+    topology: number | null;
+    center: number | null;
+    customQuery: string;
+}
+interface BondProps extends BaseProps, BondSettings {
 }
 declare type Props = BondProps & BaseCallProps;
-declare const Bond: (props: Props) => JSX.Element;
+declare const Bond: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { BondProps };
 export default Bond;

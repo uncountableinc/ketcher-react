@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 export declare type TextEditorProps = {
     structStr: string;
     inputHandler: (str: string) => void;
     autoFocus?: boolean;
 };
-export declare const TextEditor: ({ structStr, inputHandler, autoFocus }: TextEditorProps) => JSX.Element;
+export declare const TextEditor: ({ structStr, inputHandler, autoFocus, }: TextEditorProps) => import("react/jsx-runtime").JSX.Element;

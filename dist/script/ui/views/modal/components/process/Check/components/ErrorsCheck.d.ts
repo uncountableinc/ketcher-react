@@ -14,4 +14,4 @@ export default ErrorsCheck;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare function ErrorsCheck(props: any): JSX.Element;
+declare function ErrorsCheck(props: any): import("react/jsx-runtime").JSX.Element;

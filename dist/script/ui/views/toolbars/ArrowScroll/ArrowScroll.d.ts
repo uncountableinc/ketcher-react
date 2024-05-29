@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ArrowScrollProps {
     startInView: boolean;
     endInView: boolean;
     scrollUp: any;
     scrollDown: any;
 }
-declare const ArrowScroll: ({ startInView, endInView, scrollUp, scrollDown }: ArrowScrollProps) => JSX.Element;
+declare const ArrowScroll: ({ startInView, endInView, scrollUp, scrollDown, }: ArrowScrollProps) => import("react/jsx-runtime").JSX.Element;
 export { ArrowScroll };

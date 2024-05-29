@@ -21,4 +21,4 @@ declare const bondQuery: ToolbarItem[];
 declare const bondSpecial: ToolbarItem[];
 declare const groupOptions: ToolbarItem[];
 declare const groupDescriptors: GroupDescriptor[];
-export { bondCommon, bondStereo, bondQuery, bondSpecial, groupOptions, groupDescriptors };
+export { bondCommon, bondStereo, bondQuery, bondSpecial, groupOptions, groupDescriptors, };

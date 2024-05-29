@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 declare type Props = {
     clickHandler: () => void;
     disabled: boolean;
@@ -21,5 +20,5 @@ declare type Props = {
     styles: string;
     title?: string;
 };
-export declare const DialogActionButton: ({ clickHandler, label, title, styles, disabled }: Props) => JSX.Element;
+export declare const DialogActionButton: ({ clickHandler, label, title, styles, disabled, }: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

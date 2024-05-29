@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { GroupDescriptor, MultiToolVariant } from './variants/variants.types';
 import { ToolbarItem, ToolbarItemVariant } from '../../toolbar.types';
 import { UiAction, UiActionAction } from '../../../../action';
@@ -30,12 +29,13 @@ interface ToolbarMultiToolItemProps {
     indigoVerification: boolean;
     className?: string;
     vertical?: boolean;
+    dataTestId?: string;
 }
 interface ToolbarMultiToolItemCallProps {
     onAction: (action: UiActionAction) => void;
     onOpen: (menuName: string, isSelected: boolean) => void;
 }
 declare type Props = ToolbarMultiToolItemProps & ToolbarMultiToolItemCallProps;
-declare const ToolbarMultiToolItem: (props: Props) => JSX.Element | null;
+declare const ToolbarMultiToolItem: (props: Props) => import("react/jsx-runtime").JSX.Element | null;
 export type { ToolbarMultiToolItemProps, ToolbarMultiToolItemCallProps };
 export { ToolbarMultiToolItem };

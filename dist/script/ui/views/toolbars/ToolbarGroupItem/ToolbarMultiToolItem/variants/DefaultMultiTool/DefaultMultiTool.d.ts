@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { MultiToolCallProps, MultiToolProps } from '../variants.types';
 declare type DefaultMultiToolProps = MultiToolProps;
 declare type DefaultMultiToolCallProps = MultiToolCallProps;
 declare type Props = DefaultMultiToolProps & DefaultMultiToolCallProps;
-declare const DefaultMultiTool: (props: Props) => JSX.Element;
+declare const DefaultMultiTool: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { DefaultMultiToolProps, DefaultMultiToolCallProps };
 export { DefaultMultiTool };

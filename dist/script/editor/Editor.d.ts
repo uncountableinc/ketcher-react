@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import { Action, Editor as KetcherEditor, Render, Struct } from 'ketcher-core';
+import { Action, FloatingToolsParams, Editor as KetcherEditor, Render, Struct } from 'ketcher-core';
 import { PipelineSubscription, Subscription } from 'subscription';
 import { Highlighter } from './highlighter';
 import { contextMenuInfo } from '../ui/views/components/ContextMenu/contextMenu.types';
@@ -27,6 +27,7 @@ export interface Selection {
     rxnPluses?: Array<number>;
     rxnArrows?: Array<number>;
     texts?: Array<number>;
+    rgroupAttachmentPoints?: Array<number>;
 }
 declare class Editor implements KetcherEditor {
     #private;
@@ -47,6 +48,8 @@ declare class Editor implements KetcherEditor {
     event: {
         message: Subscription;
         elementEdit: PipelineSubscription;
+        zoomIn: PipelineSubscription;
+        zoomOut: PipelineSubscription;
         bondEdit: PipelineSubscription;
         rgroupEdit: PipelineSubscription;
         sgroupEdit: PipelineSubscription;
@@ -63,24 +66,29 @@ declare class Editor implements KetcherEditor {
         showInfo: PipelineSubscription;
         apiSettings: PipelineSubscription;
         cursor: Subscription;
+        updateFloatingTools: Subscription<FloatingToolsParams>;
     };
     lastEvent: any;
+    macromoleculeConvertionError: string | null | undefined;
     constructor(clientArea: any, options: any);
     isDitrty(): boolean;
     setOrigin(): void;
     tool(name?: any, opts?: any): Tool | null;
     clear(): void;
-    renderAndRecoordinateStruct(struct: Struct): Struct;
-    struct(value?: Struct): Struct;
+    renderAndRecoordinateStruct(struct: Struct, needToCenterStruct?: boolean): Struct;
+    struct(value?: Struct, needToCenterStruct?: boolean): Struct;
     structToAddFragment(value: Struct): Struct;
     setOptions(opts: string): false | import("ketcher-core/dist/application/render/render.types").RenderOptions;
     options(value?: any): import("ketcher-core/dist/application/render/render.types").RenderOptions;
-    zoom(value?: any): number;
+    zoom(value?: any, event?: WheelEvent): number;
+    centerStruct(): void;
+    zoomAccordingContent(struct: Struct): void;
     selection(ci?: any): Selection | null;
-    hover(ci: any, newTool?: any, event?: PointerEvent): void;
-    update(action: Action | true, ignoreHistory?: boolean, options?: {
-        resizeCanvas: boolean;
-    }): void;
+    hover(ci: {
+        id: number;
+        map: string;
+    } | null, newTool?: any, event?: PointerEvent): void;
+    update(action: Action | true, ignoreHistory?: boolean): void;
     historySize(): {
         undo: any;
         redo: number;
@@ -91,7 +99,7 @@ declare class Editor implements KetcherEditor {
         handler: any;
     };
     unsubscribe(eventName: any, subscriber: any): void;
-    findItem(event: any, maps: any, skip?: any): any;
+    findItem(event: any, maps: Array<string> | null, skip?: any): any;
     findMerge(srcItems: any, maps: any): {
         atoms: Map<number, number>;
         bonds: Map<number, number>;
@@ -100,6 +108,8 @@ declare class Editor implements KetcherEditor {
     explicitSelected(): any;
     structSelected(): Struct;
     alignDescriptors(): void;
+    setMacromoleculeConvertionError(errorMessage: string): void;
+    clearMacromoleculeConvertionError(): void;
 }
 export { Editor };
 export default Editor;

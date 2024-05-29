@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ClipboardControlsProps {
     onCopy: () => void;
     onCopyMol: () => void;
@@ -27,5 +26,5 @@ interface ClipboardControlsProps {
         [key in string]: string;
     };
 }
-export declare const ClipboardControls: ({ onCopy, onCopyMol, onCopyKet, onCopyImage, onPaste, onCut, shortcuts, disabledButtons, hiddenButtons }: ClipboardControlsProps) => JSX.Element;
+export declare const ClipboardControls: ({ onCopy, onCopyMol, onCopyKet, onCopyImage, onPaste, onCut, shortcuts, disabledButtons, hiddenButtons, }: ClipboardControlsProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface UndoRedoProps {
     disabledButtons: string[];
     hiddenButtons: string[];
@@ -23,5 +22,5 @@ interface UndoRedoProps {
     onUndo: () => void;
     onRedo: () => void;
 }
-export declare const UndoRedo: ({ onUndo, onRedo, disabledButtons, hiddenButtons, shortcuts }: UndoRedoProps) => JSX.Element;
+export declare const UndoRedo: ({ onUndo, onRedo, disabledButtons, hiddenButtons, shortcuts, }: UndoRedoProps) => import("react/jsx-runtime").JSX.Element;
 export {};

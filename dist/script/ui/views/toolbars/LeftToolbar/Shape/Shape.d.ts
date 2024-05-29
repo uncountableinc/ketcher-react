@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { ToolbarGroupItemCallProps, ToolbarGroupItemProps } from '../../ToolbarGroupItem';
 interface ShapeProps extends Omit<ToolbarGroupItemProps, 'id' | 'options'> {
     height?: number;
 }
 declare type ShapeCallProps = ToolbarGroupItemCallProps;
 declare type Props = ShapeProps & ShapeCallProps;
-declare const Shape: (props: Props) => JSX.Element;
+declare const Shape: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { ShapeProps, ShapeCallProps };
 export { Shape };

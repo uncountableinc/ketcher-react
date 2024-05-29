@@ -16,4 +16,4 @@ export default FrozenInput;
  ***************************************************************************/
 declare function FrozenInput({ value }: {
     value: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

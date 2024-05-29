@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 export interface Option {
     value: string;
     label: string;
@@ -25,6 +24,9 @@ interface Props {
     value?: string;
     multiple?: boolean;
     disabled?: boolean;
+    formName?: string;
+    name?: string;
+    'data-testid'?: string;
 }
-declare const Select: ({ className, value, onChange, multiple, disabled, options }: Props) => JSX.Element;
+declare const Select: ({ className, value, onChange, multiple, disabled, options, formName, name, "data-testid": testId, }: Props) => import("react/jsx-runtime").JSX.Element;
 export default Select;

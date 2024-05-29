@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+/// <reference types="react" />
 import { Ketcher, ServiceMode, StructServiceProvider } from 'ketcher-core';
 import { ButtonsConfig } from './ButtonsConfig';
+import { Root } from 'react-dom/client';
 declare class KetcherBuilder {
     private structService;
     private editor;
@@ -23,7 +25,7 @@ declare class KetcherBuilder {
     constructor();
     appendApiAsync(structServiceProvider: StructServiceProvider): Promise<void>;
     appendServiceMode(mode: ServiceMode): void;
-    appendUiAsync(element: HTMLDivElement | null, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig): Promise<{
+    appendUiAsync(element: HTMLDivElement | null, appRoot: Root, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig, togglerComponent?: JSX.Element): Promise<{
         setKetcher: (ketcher: Ketcher) => void;
         ketcherId: string;
     }>;

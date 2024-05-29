@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import type { GenGroup as GenGroupType } from 'ketcher-core';
 declare type GenProps = {
     selected: (label: string) => boolean;
@@ -21,5 +20,5 @@ declare type GenProps = {
     group: GenGroupType;
     disabledQueryElements: Array<string> | null;
 };
-declare const GenGroup: ({ group, onAtomSelect, selected, disabledQueryElements }: GenProps) => JSX.Element;
+declare const GenGroup: ({ group, onAtomSelect, selected, disabledQueryElements, }: GenProps) => import("react/jsx-runtime").JSX.Element;
 export { GenGroup };

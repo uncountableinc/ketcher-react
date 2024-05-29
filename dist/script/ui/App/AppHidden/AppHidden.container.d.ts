@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { AppHiddenCallProps } from './AppHidden';
-declare const AppHiddenContainer: import("react-redux").ConnectedComponent<(props: AppHiddenCallProps) => JSX.Element, import("react-redux").Omit<AppHiddenCallProps, "onInitTmpls">>;
+declare const AppHiddenContainer: import("react-redux").ConnectedComponent<(props: AppHiddenCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<AppHiddenCallProps, "onInitTmpls">>;
 export { AppHiddenContainer };

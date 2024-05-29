@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { BaseCallProps, BaseProps } from '../../../modal.types';
 declare type Props = BaseProps & BaseCallProps;
 export declare const automapSchema: {
@@ -29,5 +28,5 @@ export declare const automapSchema: {
         };
     };
 };
-declare const Automap: (props: Props) => JSX.Element;
+declare const Automap: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export default Automap;

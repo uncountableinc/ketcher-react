@@ -17,7 +17,10 @@ export declare function initKeydownListener(element: any): (dispatch: any, getSt
 export declare function initClipboard(dispatch: any): {
     formats: any[];
     focused(): boolean;
-    onCut(): {} | null;
-    onCopy(): {} | null;
-    onPaste(data: any): void;
+    onLegacyCut(): {} | null;
+    onCut(): Promise<{} | null | undefined>;
+    onLegacyCopy(): {} | null;
+    onCopy(): Promise<{} | null | undefined>;
+    onPaste(data: any, isSmarts: boolean): Promise<void | undefined>;
+    onLegacyPaste(data: any, isSmarts: boolean): void;
 };

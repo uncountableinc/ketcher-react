@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
-export declare const Divider: () => JSX.Element;
+export declare const Divider: () => import("react/jsx-runtime").JSX.Element;
+export declare const HorizontalDivider: () => import("react/jsx-runtime").JSX.Element;

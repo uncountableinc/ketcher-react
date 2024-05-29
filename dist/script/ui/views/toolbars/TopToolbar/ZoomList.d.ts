@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ZoomListProps {
     zoom: number;
     setZoom: (zoom: number) => void;
 }
-declare const ZoomList: ({ zoom, setZoom }: ZoomListProps) => JSX.Element;
+declare const ZoomList: ({ zoom, setZoom }: ZoomListProps) => import("react/jsx-runtime").JSX.Element;
 export type { ZoomListProps };
 export { ZoomList };

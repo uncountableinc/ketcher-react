@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { ToolbarGroupItemCallProps, ToolbarGroupItemProps } from '../ToolbarGroupItem';
 interface BottomToolbarProps extends Omit<ToolbarGroupItemProps, 'id' | 'options'> {
     className?: string;
@@ -24,6 +23,6 @@ interface BottomToolbarProps extends Omit<ToolbarGroupItemProps, 'id' | 'options
 }
 declare type BottomToolbarCallProps = ToolbarGroupItemCallProps;
 declare type Props = BottomToolbarProps & BottomToolbarCallProps;
-declare const BottomToolbar: (props: Props) => JSX.Element;
+declare const BottomToolbar: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { BottomToolbarProps, BottomToolbarCallProps };
 export { BottomToolbar };

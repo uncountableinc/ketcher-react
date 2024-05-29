@@ -1,2 +1,2 @@
 export default Header;
-declare function Header(): JSX.Element;
+declare function Header(): import("react/jsx-runtime").JSX.Element;

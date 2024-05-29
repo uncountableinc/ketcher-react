@@ -23,14 +23,21 @@ export namespace formsState {
         const valid: boolean;
         namespace result {
             const label: string;
-            const charge: number;
+            const charge: null;
             const explicitValence: number;
             const hCount: number;
             const invRet: number;
-            const isotope: number;
+            const isotope: null;
             const radical: number;
             const ringBondCount: number;
             const substitutionCount: number;
+            const aromaticity: null;
+            const implicitHCount: null;
+            const ringMembership: null;
+            const ringSize: null;
+            const connectivity: null;
+            const chirality: null;
+            const customQuery: null;
         }
     }
     namespace attachmentPoints {
@@ -60,9 +67,11 @@ export namespace formsState {
         const valid_3: boolean;
         export { valid_3 as valid };
         export namespace result_3 {
-            const type: string;
-            const topology: number;
-            const center: number;
+            export const type: string;
+            export const topology: number;
+            export const center: number;
+            const customQuery_1: null;
+            export { customQuery_1 as customQuery };
         }
         export { result_3 as result };
     }

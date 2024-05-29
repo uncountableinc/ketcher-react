@@ -17,15 +17,17 @@ import { FC } from 'react';
 import { AnalyzingFileProps } from './AnalyzingFile';
 import { OpenOptionsProps } from './OpenOptions';
 import { TextEditorProps } from './TextEditor';
+import { CDXStructuresViewerProps } from './CDXStructuresViewer/CDXStructuresViewer';
 declare type ViewStates = {
     idle: string;
     textEditor: string;
     imageRec: string;
+    presentationViewer: string;
 };
 declare type SwitchProps = {
     currentState: string;
     states: ViewStates;
     isAnalyzingFile: boolean;
-} & OpenOptionsProps & TextEditorProps & AnalyzingFileProps;
+} & OpenOptionsProps & TextEditorProps & AnalyzingFileProps & CDXStructuresViewerProps;
 export declare const ViewSwitcher: FC<SwitchProps>;
 export {};

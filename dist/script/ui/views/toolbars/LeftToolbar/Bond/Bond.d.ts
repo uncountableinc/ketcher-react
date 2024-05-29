@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { ToolbarGroupItemCallProps, ToolbarGroupItemProps } from '../../ToolbarGroupItem';
 interface BondProps extends Omit<ToolbarGroupItemProps, 'id' | 'options'> {
     height?: number;
 }
 declare type BondCallProps = ToolbarGroupItemCallProps;
 declare type Props = BondProps & BondCallProps;
-declare const Bond: (props: Props) => JSX.Element;
+declare const Bond: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { BondProps, BondCallProps };
 export { Bond };

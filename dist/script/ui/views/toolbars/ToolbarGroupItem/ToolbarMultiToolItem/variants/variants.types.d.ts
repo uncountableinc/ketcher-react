@@ -32,4 +32,4 @@ interface MultiToolCallProps {
     onAction: (action: UiActionAction) => void;
 }
 declare type MultiToolVariant = 'default' | 'grouped';
-export type { GroupDescriptor, MultiToolProps, MultiToolCallProps, MultiToolVariant };
+export type { GroupDescriptor, MultiToolProps, MultiToolCallProps, MultiToolVariant, };

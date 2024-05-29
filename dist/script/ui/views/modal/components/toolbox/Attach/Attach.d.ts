@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { BaseCallProps, BaseProps } from '../../../modal.types';
 interface AttachPointsProps extends BaseProps {
     primary: boolean;
     secondary: boolean;
 }
 declare type Props = AttachPointsProps & BaseCallProps;
-declare const AttachPoints: (props: Props) => JSX.Element;
+declare const AttachPoints: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { AttachPointsProps };
 export default AttachPoints;

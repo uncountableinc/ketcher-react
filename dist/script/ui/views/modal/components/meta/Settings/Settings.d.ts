@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { BaseCallProps, BaseProps } from '../../../modal.types';
 import { StructService } from 'ketcher-core';
 interface SettingsProps extends BaseProps {
@@ -34,5 +33,5 @@ interface SettingsCallProps extends BaseCallProps {
     onReset: () => void;
 }
 declare type Props = SettingsProps & SettingsCallProps;
-declare const Settings: import("react-redux").ConnectedComponent<(props: Props) => JSX.Element, any>;
+declare const Settings: import("react-redux").ConnectedComponent<(props: Props) => import("react/jsx-runtime").JSX.Element, any>;
 export default Settings;

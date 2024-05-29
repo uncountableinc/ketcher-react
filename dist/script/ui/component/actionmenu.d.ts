@@ -6,4 +6,4 @@ declare function ActionMenu({ name, menu, className, role, ...props }: {
     menu: any;
     className: any;
     role: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

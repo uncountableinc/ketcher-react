@@ -19,9 +19,13 @@ declare class ReactionArrowTool implements Tool {
     private readonly editor;
     private dragCtx;
     constructor(editor: any, mode: any);
+    private get render();
+    private get reStruct();
     mousedown(event: any): void;
-    mousemove(event: any): void;
-    mouseup(): boolean;
-    click(event: any): void;
+    mousemove(event: PointerEvent): void;
+    mouseup(event: any): boolean;
+    private addNewArrowWithDragging;
+    private addNewArrowWithClicking;
+    private updateResizingState;
 }
 export default ReactionArrowTool;

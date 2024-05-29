@@ -13,6 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
-export declare const HorizontalBoxWithLines: () => JSX.Element;
-export declare const VerticalBoxWithLines: () => JSX.Element;
+export declare const HorizontalBoxWithLines: () => import("react/jsx-runtime").JSX.Element;
+export declare const VerticalBoxWithLines: () => import("react/jsx-runtime").JSX.Element;

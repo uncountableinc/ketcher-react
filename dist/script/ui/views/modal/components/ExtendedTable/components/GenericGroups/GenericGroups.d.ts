@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 declare type GenericGroupsProps = {
     selected: (label: string) => boolean;
     onAtomSelect: (label: string, activateImmediately: boolean) => void;
     disabledQueryElements: Array<string> | null;
 };
-declare function GenericGroups({ selected, onAtomSelect, disabledQueryElements }: GenericGroupsProps): JSX.Element;
+declare function GenericGroups({ selected, onAtomSelect, disabledQueryElements, }: GenericGroupsProps): import("react/jsx-runtime").JSX.Element;
 export default GenericGroups;

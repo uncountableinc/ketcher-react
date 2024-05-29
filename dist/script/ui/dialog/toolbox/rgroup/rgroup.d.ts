@@ -1,4 +1,4 @@
-declare var _default: import("react-redux").ConnectedComponent<typeof RGroup, import("react-redux").Omit<{
+declare const _default: import("react-redux").ConnectedComponent<typeof RGroup, import("react-redux").Omit<{
     [x: string]: any;
     disabledIds: any;
     values: any;
@@ -12,4 +12,4 @@ declare function RGroup({ disabledIds, values, formState, type, ...props }: {
     values: any;
     formState: any;
     type: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

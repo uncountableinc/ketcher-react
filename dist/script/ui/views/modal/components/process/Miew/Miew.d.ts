@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { Struct, StructService } from 'ketcher-core';
 declare type MiewDialogProps = {
     miewOpts: any;
@@ -27,5 +26,5 @@ declare type MiewDialogCallProps = {
     onExportCML: (cmlStruct: string) => void;
 };
 declare type Props = MiewDialogProps & MiewDialogCallProps;
-declare const Miew: import("react-redux").ConnectedComponent<({ miewOpts, server, struct, onExportCML, miewTheme, ...prop }: Props) => JSX.Element, import("react-redux").Omit<MiewDialogProps & MiewDialogCallProps, "miewOpts" | "server" | "struct" | "onExportCML" | "miewTheme">>;
+declare const Miew: import("react-redux").ConnectedComponent<({ miewOpts, server, struct, onExportCML, miewTheme, ...prop }: Props) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<MiewDialogProps & MiewDialogCallProps, "miewOpts" | "server" | "struct" | "onExportCML" | "miewTheme">>;
 export default Miew;

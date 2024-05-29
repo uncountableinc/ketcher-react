@@ -23,4 +23,4 @@ declare function SelectList({ schema, value, onSelect, splitIndexes, selected, c
     selected: any;
     component: any;
     classes: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

@@ -21,16 +21,22 @@ declare class SelectTool implements Tool {
     #private;
     private readonly editor;
     private dragCtx;
-    isMousedDown: boolean;
+    private previousMouseMoveEvent?;
+    isMouseDown: boolean;
+    readonly isMoving = false;
     constructor(editor: Editor, mode: SelectMode);
     isSelectionRunning(): boolean;
-    mousedown(event: any): boolean;
+    mousedown(event: any): true | undefined;
     mousemove(event: any): boolean;
     mouseup(event: any): void;
     dblclick(event: any): true | undefined;
     mouseleave(): void;
     private selectElementsOnCanvas;
     private isDraggingStructureOnSaltOrSolvent;
+    private updateArrowResizingState;
+    private isCloseToEdgeOfCanvas;
+    private handleMoveCloseToEdgeOfCanvas;
+    private moveViewBox;
 }
 export declare function selMerge(selection: any, add: any, reversible: boolean): any;
 export declare function getSelectedAtoms(selection: any, molecule: any): Atom[];

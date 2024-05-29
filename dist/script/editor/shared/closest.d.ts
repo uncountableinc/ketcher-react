@@ -25,3 +25,4 @@ declare function findCloseMerge(restruct: ReStruct, selected: object, maps: stri
     bonds: Map<number, number>;
     atomToFunctionalGroup: Map<number, number> | null;
 };
+import { ReStruct } from "ketcher-core/dist/application/render/restruct";

@@ -14,12 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 import { AnyAction } from 'redux';
+import { SdfItem } from 'ketcher-core';
 interface FGState {
     lib: [];
     functionalGroupInfo: any;
     mode: string;
 }
 declare const functionalGroupsReducer: (state: FGState | undefined, { type, payload }: AnyAction) => any;
+export declare const initFGroups: (lib: SdfItem[]) => {
+    type: string;
+    payload: {
+        lib: SdfItem[];
+    };
+};
 export declare const highlightFG: (...args: any[]) => void;
 export declare function initFGTemplates(): (dispatch: any) => Promise<void>;
 export default functionalGroupsReducer;

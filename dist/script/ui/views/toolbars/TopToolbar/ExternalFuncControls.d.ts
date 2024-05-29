@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ExternalFuncProps {
     isCollapsed: boolean;
     onLayout: () => void;
@@ -24,6 +23,7 @@ interface ExternalFuncProps {
     onCheck: () => void;
     onAnalyse: () => void;
     onMiew: () => void;
+    onToggleExplicitHydrogens: () => void;
     disabledButtons: string[];
     hiddenButtons: string[];
     indigoVerification: boolean;
@@ -31,5 +31,5 @@ interface ExternalFuncProps {
         [key in string]: string;
     };
 }
-export declare const ExternalFuncControls: ({ isCollapsed, onLayout, onClean, onAromatize, onDearomatize, onCalculate, onCheck, onAnalyse, onMiew, disabledButtons, indigoVerification, hiddenButtons, shortcuts }: ExternalFuncProps) => JSX.Element;
+export declare const ExternalFuncControls: ({ isCollapsed, onLayout, onClean, onAromatize, onDearomatize, onCalculate, onCheck, onAnalyse, onMiew, onToggleExplicitHydrogens, disabledButtons, indigoVerification, hiddenButtons, shortcuts, }: ExternalFuncProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -22,10 +22,13 @@ declare class PasteTool implements Tool {
     private mergeItems;
     private readonly isSingleContractedGroup;
     constructor(editor: any, struct: any);
+    setMergeItems(mergeItems: any): void;
+    private get restruct();
     mousedown(event: any): void;
     mousemove(event: any): void;
     mouseup(): void;
     cancel(): void;
     mouseleave(): void;
+    mouseLeaveClientArea(): void;
 }
 export default PasteTool;

@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 declare const EmptySearchResult: ({ textInfo }: {
     textInfo: any;
-}) => JSX.Element;
+}) => import("react/jsx-runtime").JSX.Element;
 export default EmptySearchResult;

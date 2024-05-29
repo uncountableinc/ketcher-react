@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { GenItem } from 'ketcher-core';
 declare type ButtonGenSetProps = {
     button: GenItem;
@@ -21,5 +20,5 @@ declare type ButtonGenSetProps = {
     selected: (label: string) => boolean;
     disabled: boolean;
 };
-declare const ButtonGenSet: ({ button, onAtomSelect, selected, disabled }: ButtonGenSetProps) => JSX.Element;
+declare const ButtonGenSet: ({ button, onAtomSelect, selected, disabled, }: ButtonGenSetProps) => import("react/jsx-runtime").JSX.Element;
 export default ButtonGenSet;

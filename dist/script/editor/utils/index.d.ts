@@ -15,3 +15,5 @@
  ***************************************************************************/
 export * from './customOnChangeHandler';
 export * from './elementOffset';
+export * from './structLayout';
+export * from './handleMovingPosibilityCursor';

@@ -9,7 +9,7 @@ declare class Table extends Component<any, any, any> {
         isInfo: boolean;
     };
     changeType: (type: any) => void;
-    headerContent: () => JSX.Element;
+    headerContent: () => import("react/jsx-runtime").JSX.Element;
     selected: (label: any) => any;
     onAtomSelect: (label: any, activateImmediately?: boolean) => void;
     result: () => {
@@ -32,6 +32,6 @@ declare class Table extends Component<any, any, any> {
         onMouseEnter: () => void;
         onMouseLeave: () => void;
     };
-    render(): JSX.Element;
+    render(): import("react/jsx-runtime").JSX.Element;
 }
 import { Component } from "react";

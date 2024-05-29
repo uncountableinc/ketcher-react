@@ -19,6 +19,7 @@ declare type Props = {
     server?: any;
     filename: string;
     outputFormat?: OutputFormatType;
+    bondThickness?: number;
     data: any;
     type?: string;
     mode?: string;
@@ -29,5 +30,5 @@ declare type Props = {
     disabled?: boolean;
 };
 declare type SaveButtonProps = PropsWithChildren<Props>;
-declare const SaveButton: (props: SaveButtonProps) => JSX.Element;
+declare const SaveButton: (props: SaveButtonProps) => import("react/jsx-runtime").JSX.Element;
 export { SaveButton };

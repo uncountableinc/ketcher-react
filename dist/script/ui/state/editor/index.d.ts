@@ -21,4 +21,8 @@ export default function initEditor(dispatch: any, getState: any): {
     onConfirm: () => Promise<any>;
     onShowInfo: (payload: any) => void;
     onApiSettings: (payload: any) => any;
+    onUpdateFloatingTools: (...args: any[]) => void;
+    onZoomIn: import("lodash").DebouncedFunc<() => any>;
+    onZoomOut: import("lodash").DebouncedFunc<() => any>;
+    onShowMacromoleculesErrorMessage: (payload: any) => any;
 };

@@ -29,9 +29,11 @@ interface AtomProps extends BaseCallProps, BaseProps {
     stereoParity: number;
     substitutionCount: number;
     unsaturatedAtom: boolean;
+    customQuery: string;
 }
 declare type Props = AtomProps & {
     isMultipleAtoms?: boolean;
+    isRestoredModal: boolean;
 };
 declare const Atom: FC<Props>;
 export type { AtomProps };

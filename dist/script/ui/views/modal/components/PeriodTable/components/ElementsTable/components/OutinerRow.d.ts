@@ -1,5 +1,5 @@
 export default OutinerRow;
-declare function OutinerRow({ row, caption, onAtomSelect, onDoubleClick, currentEvents, atomClassNames, className }: {
+declare function OutinerRow({ row, caption, onAtomSelect, onDoubleClick, currentEvents, atomClassNames, className, }: {
     row: any;
     caption: any;
     onAtomSelect: any;
@@ -7,4 +7,4 @@ declare function OutinerRow({ row, caption, onAtomSelect, onDoubleClick, current
     currentEvents: any;
     atomClassNames: any;
     className: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

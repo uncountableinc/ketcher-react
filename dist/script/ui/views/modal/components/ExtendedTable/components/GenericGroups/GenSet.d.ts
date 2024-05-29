@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import type { GenItemSet } from 'ketcher-core';
 declare type GenSetProps = {
     labels: GenItemSet[];
@@ -23,5 +22,5 @@ declare type GenSetProps = {
     group: string;
     disabledQueryElements: Array<string> | null;
 };
-declare function GenSet({ labels, selected, onAtomSelect, className, group, disabledQueryElements }: GenSetProps): JSX.Element;
+declare function GenSet({ labels, selected, onAtomSelect, className, group, disabledQueryElements, }: GenSetProps): import("react/jsx-runtime").JSX.Element;
 export { GenSet };

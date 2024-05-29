@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { UiAction, UiActionAction } from '../../../../action';
+import { IconName } from 'components';
 interface ActionButtonProps {
-    name: string;
+    name: IconName;
     action?: UiAction;
     status?: {
         disabled?: boolean;
@@ -26,11 +26,12 @@ interface ActionButtonProps {
     disableableButtons: string[];
     indigoVerification: boolean;
     className?: string;
+    dataTestId?: string;
 }
 interface ActionButtonCallProps {
     onAction: (action: UiActionAction) => void;
 }
 declare type Props = ActionButtonProps & ActionButtonCallProps;
-declare const ActionButton: (props: Props) => JSX.Element | null;
+declare const ActionButton: (props: Props) => import("react/jsx-runtime").JSX.Element | null;
 export type { ActionButtonProps, ActionButtonCallProps };
 export { ActionButton };

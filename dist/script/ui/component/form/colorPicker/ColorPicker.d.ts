@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ColorPickerProps {
     value: string;
     name: string;
@@ -24,5 +23,5 @@ interface ColorPickerCallProps {
     onChange: (value: string) => void;
 }
 declare type Props = ColorPickerProps & ColorPickerCallProps;
-declare const ColorPicker: (props: Props) => JSX.Element;
+declare const ColorPicker: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export default ColorPicker;

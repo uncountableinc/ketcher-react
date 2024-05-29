@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+import { Struct, Bond } from 'ketcher-core';
 import Editor from '../Editor';
 import { Tool } from './Tool';
+import TemplatePreview from './templatePreview';
+export declare function getBondFlipSign(struct: Struct, bond: Bond): number;
+export declare function getAngleFromEvent(event: any, ci: any, restruct: any): any;
 declare class TemplateTool implements Tool {
     private readonly editor;
     private readonly mode;
     private readonly template;
     private readonly findItems;
+    templatePreview: TemplatePreview | null;
     private dragCtx;
     private targetGroupsIds;
     private readonly isSaltOrSolvent;
@@ -36,6 +41,8 @@ declare class TemplateTool implements Tool {
     mousemove(event: any): boolean;
     mouseup(event?: any): boolean;
     cancel(): void;
-    mouseleave(e: any): void;
+    mouseleave(): void;
+    mouseLeaveClientArea(): void;
 }
+export declare function getSign(molecule: any, bond: any, v: any): 0 | 1 | -1;
 export default TemplateTool;

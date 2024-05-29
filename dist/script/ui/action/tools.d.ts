@@ -1,4 +1,4 @@
-declare var _default: {
+declare const _default: {
     hand: {
         title: string;
         shortcut: string;
@@ -7,26 +7,26 @@ declare var _default: {
         };
         hidden: (options: any) => boolean;
     };
-    'select-lasso': {
-        title: string;
-        shortcut: string;
-        action: {
-            tool: string;
-            opts: string;
-        };
-    };
     'select-rectangle': {
         title: string;
-        shortcut: string;
+        shortcut: string[];
         action: {
             tool: string;
             opts: string;
         };
         hidden: (options: any) => boolean;
     };
+    'select-lasso': {
+        title: string;
+        shortcut: string[];
+        action: {
+            tool: string;
+            opts: string;
+        };
+    };
     'select-fragment': {
         title: string;
-        shortcut: string;
+        shortcut: string[];
         action: {
             tool: string;
             opts: string;
@@ -76,11 +76,7 @@ declare var _default: {
         };
         hidden: (options: any) => boolean;
     };
-    transforms: {
-        hidden: (options: any) => boolean;
-    };
     'transform-rotate': {
-        shortcut: string;
         title: string;
         action: {
             tool: string;

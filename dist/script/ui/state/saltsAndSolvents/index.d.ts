@@ -14,10 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 import { AnyAction } from 'redux';
+import { SdfItem } from 'ketcher-core';
 interface SaltsAndSolventsState {
     lib: [];
     mode: string;
 }
 declare const saltsAndSolventsReducer: (state: SaltsAndSolventsState | undefined, { type, payload }: AnyAction) => any;
+export declare const initSaltsAndSolvents: (lib: SdfItem[]) => {
+    type: string;
+    payload: {
+        lib: SdfItem[];
+    };
+};
 export declare function initSaltsAndSolventsTemplates(): (dispatch: any) => Promise<void>;
 export default saltsAndSolventsReducer;

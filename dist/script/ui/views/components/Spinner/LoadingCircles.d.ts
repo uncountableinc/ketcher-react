@@ -13,5 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
-export declare const LoadingCircles: () => JSX.Element;
+export declare const LoadingCircles: () => import("react/jsx-runtime").JSX.Element;

@@ -5,6 +5,6 @@ declare class AnalyseDialog extends Component<any, any, any> {
     constructor(props: any);
     constructor(props: any, context: any);
     componentDidMount(): void;
-    render(): JSX.Element;
+    render(): import("react/jsx-runtime").JSX.Element;
 }
 import { Component } from "react";

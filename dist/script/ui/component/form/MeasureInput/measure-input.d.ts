@@ -1,8 +1,9 @@
 export default MeasureInput;
-declare function MeasureInput({ schema, value, onChange, name, ...rest }: {
+declare function MeasureInput({ schema, value, onChange, name, className, ...rest }: {
     [x: string]: any;
     schema: any;
     value: any;
     onChange: any;
     name: any;
-}): JSX.Element;
+    className: any;
+}): import("react/jsx-runtime").JSX.Element;

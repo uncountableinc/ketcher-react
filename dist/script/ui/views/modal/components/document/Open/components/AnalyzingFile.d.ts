@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 export declare type AnalyzingFileProps = {
     fileName?: string;
 };
-export declare const AnalyzingFile: ({ fileName }: AnalyzingFileProps) => JSX.Element;
+export declare const AnalyzingFile: ({ fileName }: AnalyzingFileProps) => import("react/jsx-runtime").JSX.Element;

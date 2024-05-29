@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import 'intersection-observer';
 import 'element-closest-polyfill';
 import 'regenerator-runtime/runtime';
@@ -22,8 +21,8 @@ import 'whatwg-fetch';
 import './index.less';
 import { Config } from './script';
 import { Ketcher } from 'ketcher-core';
-interface EditorProps extends Omit<Config, 'element'> {
+interface EditorProps extends Omit<Config, 'element' | 'appRoot'> {
     onInit?: (ketcher: Ketcher) => void;
 }
-declare function Editor(props: EditorProps): JSX.Element;
+declare function Editor(props: EditorProps): import("react/jsx-runtime").JSX.Element;
 export { Editor };

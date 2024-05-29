@@ -1,4 +1,3 @@
-/// <reference types="react" />
 /****************************************************************************
  * Copyright 2021 EPAM Systems
  *
@@ -25,6 +24,6 @@ interface RgroupLogicProps extends BaseProps {
     name?: string;
 }
 declare type Props = RgroupLogicProps & BaseCallProps;
-declare const RgroupLogic: (props: Props) => JSX.Element;
+declare const RgroupLogic: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { RgroupLogicProps };
 export default RgroupLogic;

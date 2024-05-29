@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface SystemControlsProps {
     disabledButtons: string[];
     hiddenButtons: string[];
@@ -24,5 +23,5 @@ interface SystemControlsProps {
     onFullscreen: () => void;
     onHelp: () => void;
 }
-export declare const SystemControls: ({ disabledButtons, hiddenButtons, onSettingsOpen, onFullscreen, onHelp, onAboutOpen, className }: SystemControlsProps) => JSX.Element;
+export declare const SystemControls: ({ disabledButtons, hiddenButtons, onSettingsOpen, onFullscreen, onHelp, onAboutOpen, className, }: SystemControlsProps) => import("react/jsx-runtime").JSX.Element;
 export {};

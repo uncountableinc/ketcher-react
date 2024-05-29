@@ -35,7 +35,7 @@ export declare function GenericInput({ schema, value, onChange, innerRef, type, 
     innerRef: any;
     type?: string | undefined;
     isFocused?: boolean | undefined;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;
 export declare namespace GenericInput {
     var val: (ev: any, schema: any) => any;
 }

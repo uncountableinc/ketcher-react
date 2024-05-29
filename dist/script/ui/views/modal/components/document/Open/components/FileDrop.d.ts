@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { DropzoneOptions } from 'react-dropzone';
+import { IconName } from 'components';
 declare type FileDropProps = {
     buttonLabel: string;
     textLabel: string;
-    iconName: string;
+    iconName: IconName;
     disabled?: boolean;
     disabledText?: string;
 } & DropzoneOptions;
-declare const FileDrop: ({ buttonLabel, textLabel, iconName, disabled, disabledText, ...rest }: FileDropProps) => JSX.Element;
+declare const FileDrop: ({ buttonLabel, textLabel, iconName, disabled, disabledText, ...rest }: FileDropProps) => import("react/jsx-runtime").JSX.Element;
 export { FileDrop };

@@ -40,21 +40,21 @@ declare const config: {
     zoom: {
         shortcut: string[];
         selected: (editor: any) => any;
-        action: (editor: any) => any;
+        action: (editor: any) => void;
         hidden: (options: any) => boolean;
     };
     'zoom-out': {
         shortcut: string[];
         title: string;
         disabled: (editor: any) => boolean;
-        action: (editor: any) => void;
+        action: (event: any) => (editor: any) => void;
         hidden: (options: any) => boolean;
     };
     'zoom-in': {
         shortcut: string[];
         title: string;
         disabled: (editor: any) => boolean;
-        action: (editor: any) => void;
+        action: (event: any) => (editor: any) => void;
         hidden: (options: any) => boolean;
     };
     'zoom-list': {
@@ -68,26 +68,26 @@ declare const config: {
         };
         hidden: (options: any) => boolean;
     };
-    'select-lasso': {
-        title: string;
-        shortcut: string;
-        action: {
-            tool: string;
-            opts: string;
-        };
-    };
     'select-rectangle': {
         title: string;
-        shortcut: string;
+        shortcut: string[];
         action: {
             tool: string;
             opts: string;
         };
         hidden: (options: any) => boolean;
     };
+    'select-lasso': {
+        title: string;
+        shortcut: string[];
+        action: {
+            tool: string;
+            opts: string;
+        };
+    };
     'select-fragment': {
         title: string;
-        shortcut: string;
+        shortcut: string[];
         action: {
             tool: string;
             opts: string;
@@ -137,11 +137,7 @@ declare const config: {
         };
         hidden: (options: any) => boolean;
     };
-    transforms: {
-        hidden: (options: any) => boolean;
-    };
     'transform-rotate': {
-        shortcut: string;
         title: string;
         action: {
             tool: string;
@@ -492,8 +488,16 @@ declare const config: {
         };
         hidden: (options: any) => boolean;
     };
+    'explicit-hydrogens': {
+        title: string;
+        action: {
+            thunk: (dispatch: any, getState: any) => void;
+        };
+        disabled: (editor: any, server: any, options: any) => boolean;
+        hidden: (options: any) => boolean;
+    };
     clear: {
-        shortcut: string;
+        shortcut: string[];
         title: string;
         action: {
             thunk: (dispatch: any, getState: any) => void;
@@ -547,7 +551,9 @@ declare const config: {
     cut: {
         shortcut: string;
         title: string;
-        action: (editor: any) => void;
+        action: {
+            thunk: (dispatch: any, _: any) => void;
+        };
         disabled: (editor: any) => boolean;
         hidden: (options: any) => boolean;
     };
@@ -558,7 +564,9 @@ declare const config: {
     copy: {
         shortcut: string;
         title: string;
-        action: (editor: any) => void;
+        action: {
+            thunk: (dispatch: any, _: any) => void;
+        };
         disabled: (editor: any) => boolean;
         hidden: (options: any) => boolean;
     };
@@ -586,7 +594,9 @@ declare const config: {
     paste: {
         shortcut: string;
         title: string;
-        action: (editor: any) => void;
+        action: {
+            thunk: (dispatch: any, _: any) => void;
+        };
         selected: ({ actions }: {
             actions: any;
         }) => any;
@@ -659,6 +669,13 @@ declare const config: {
                 pseudo: string;
                 type: string;
             };
+        };
+        hidden: (options: any) => boolean;
+    };
+    'info-modal': {
+        title: string;
+        action: {
+            dialog: string;
         };
         hidden: (options: any) => boolean;
     };

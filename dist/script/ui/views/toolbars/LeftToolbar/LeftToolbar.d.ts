@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { ToolbarGroupItemCallProps, ToolbarGroupItemProps } from '../ToolbarGroupItem';
 interface LeftToolbarProps extends Omit<ToolbarGroupItemProps, 'id' | 'options'> {
     className?: string;
 }
 declare type LeftToolbarCallProps = ToolbarGroupItemCallProps;
 declare type Props = LeftToolbarProps & LeftToolbarCallProps;
-declare const LeftToolbar: (props: Props) => JSX.Element;
+declare const LeftToolbar: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { LeftToolbarProps, LeftToolbarCallProps };
 export { LeftToolbar };

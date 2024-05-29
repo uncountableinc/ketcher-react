@@ -13,25 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import { Vec2 } from 'ketcher-core';
+/// <reference types="lodash" />
+import { FlipDirection, Vec2 } from 'ketcher-core';
 import Editor from '../Editor';
 import { Tool } from './Tool';
+declare type SnapMode = 'one-bond' | 'multiple-bonds';
 declare class RotateTool implements Tool {
     private readonly editor;
     dragCtx: any;
-    isNotActiveTool: boolean | undefined;
-    constructor(editor: any, dir: any, isNotActiveTool?: boolean);
-    mousedown(event: any, handleCenter?: Vec2, center?: Vec2): boolean;
-    /**
-     * @returns `[center, visibleAtoms]`,
-     * `visibleAtoms` = selected atoms
-     *                - atoms in contracted functional groups
-     *                + functional groups's attachment atoms
-     */
-    getCenter(editor: Editor): readonly [Vec2 | undefined, number[]];
-    mousemove(event: any): boolean;
+    isNotActiveTool: boolean;
+    private centerAtomId?;
+    private snapInfo;
+    constructor(editor: Editor, flipDirection?: FlipDirection);
+    private get reStruct();
+    private get struct();
+    private get selection();
+    get snapAngleDrawingProps(): {
+        isSnapping: boolean;
+        absoluteAngle: number;
+        relativeAngle: number;
+        snapMode: SnapMode;
+    } | null;
+    mousedownHandle(handleCenter: Vec2, center: Vec2): void;
+    getCenter(): Vec2 | undefined;
+    mousemove: import("lodash").DebouncedFunc<(event: any) => boolean>;
     mouseup(): boolean;
     cancel(): void;
     mouseleave(): void;
+    private initSnapInfo;
+    private calculateAbsoluteSnapAngles;
+    private calculateAbsoluteAnglesByFixedBond;
+    private calculateAbsoluteAnglesByBisector;
+    private partitionNeighborsBySelection;
+    private snap;
+    private saveSnappingBonds;
 }
 export default RotateTool;

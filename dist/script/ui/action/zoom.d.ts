@@ -1,23 +1,23 @@
 export const zoomList: number[];
-declare var _default: {
+declare const _default: {
     zoom: {
         shortcut: string[];
         selected: (editor: any) => any;
-        action: (editor: any) => any;
+        action: (editor: any) => void;
         hidden: (options: any) => boolean;
     };
     'zoom-out': {
         shortcut: string[];
         title: string;
         disabled: (editor: any) => boolean;
-        action: (editor: any) => void;
+        action: (event: any) => (editor: any) => void;
         hidden: (options: any) => boolean;
     };
     'zoom-in': {
         shortcut: string[];
         title: string;
         disabled: (editor: any) => boolean;
-        action: (editor: any) => void;
+        action: (event: any) => (editor: any) => void;
         hidden: (options: any) => boolean;
     };
     'zoom-list': {

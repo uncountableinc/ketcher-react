@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface AppHiddenCallProps {
     onInitTmpls: (cacheEl: any, url: any) => void;
 }
 declare type Props = AppHiddenCallProps;
-declare const AppHidden: (props: Props) => JSX.Element;
+declare const AppHidden: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { AppHiddenCallProps };
 export { AppHidden };

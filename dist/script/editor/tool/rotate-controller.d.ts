@@ -1,4 +1,6 @@
+/// <reference types="lodash" />
 import Editor from '../Editor';
+import { getDifference } from './rotate-controller.utils';
 declare class RotateController {
     isRotating: boolean;
     private editor;
@@ -14,6 +16,7 @@ declare class RotateController {
     private link?;
     private protractor?;
     private rotateArc?;
+    private snapAngleIndicator?;
     constructor(editor: Editor);
     private init;
     private get render();
@@ -22,7 +25,7 @@ declare class RotateController {
     rerender(): void;
     clean(): void;
     /**
-     * Revert rotation by pressing "Escape" key
+     * Revert rotation by pressing "Escape" key or "Right click" button
      */
     revert(): void;
     private isPartOfFragmentSelected;
@@ -45,6 +48,9 @@ declare class RotateController {
     private dragCrossMove;
     private dragCrossEnd;
     private dragCrossEndOUtOfBounding;
+    updateFloatingToolsPosition: import("lodash").DebouncedFunc<() => void>;
+    private updateSnapAngleIndicator;
+    private drawSnapAngleIndicator;
 }
 export default RotateController;
-export declare const getDifference: (currentDegree: number, structRotateDegree: number) => number;
+export { getDifference };

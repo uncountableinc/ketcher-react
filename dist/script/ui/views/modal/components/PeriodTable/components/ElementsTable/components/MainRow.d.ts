@@ -1,5 +1,5 @@
 export default MainRow;
-declare function MainRow({ row, caption, refer, onAtomSelect, onDoubleClick, currentEvents, atomClassNames, className }: {
+declare function MainRow({ row, caption, refer, onAtomSelect, onDoubleClick, currentEvents, atomClassNames, className, }: {
     row: any;
     caption: any;
     refer: any;
@@ -8,4 +8,4 @@ declare function MainRow({ row, caption, refer, onAtomSelect, onDoubleClick, cur
     currentEvents: any;
     atomClassNames: any;
     className: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

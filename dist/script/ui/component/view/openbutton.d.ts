@@ -3,7 +3,7 @@ declare class OpenButton extends Component<any, any, any> {
     constructor(props: any);
     state: {};
     open(ev: any): void;
-    render(): JSX.Element;
+    render(): import("react/jsx-runtime").JSX.Element;
     btn: HTMLInputElement | null | undefined;
 }
 import { Component } from "react";

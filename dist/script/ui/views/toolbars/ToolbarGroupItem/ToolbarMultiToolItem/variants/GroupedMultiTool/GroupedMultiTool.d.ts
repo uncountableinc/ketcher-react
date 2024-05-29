@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { MultiToolCallProps, MultiToolProps } from '../variants.types';
 declare type GroupedMultiToolProps = MultiToolProps;
 declare type GroupedMultiToolCallProps = MultiToolCallProps;
 declare type Props = GroupedMultiToolProps & GroupedMultiToolCallProps;
-declare const GroupedMultiTool: (props: Props) => JSX.Element | null;
+declare const GroupedMultiTool: (props: Props) => import("react/jsx-runtime").JSX.Element | null;
 export type { GroupedMultiToolProps, GroupedMultiToolCallProps };
 export { GroupedMultiTool };

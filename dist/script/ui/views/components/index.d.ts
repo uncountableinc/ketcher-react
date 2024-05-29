@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import Dialog from './Dialog';
+import { Dialog } from '../../../../components/Dialog';
 import { LoadingCircles } from './Spinner';
 import StructEditor from './StructEditor';
 export { Dialog, StructEditor, LoadingCircles };

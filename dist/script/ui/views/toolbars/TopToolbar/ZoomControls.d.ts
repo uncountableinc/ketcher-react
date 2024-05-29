@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ZoomProps {
     currentZoom: number;
     onZoom: (arg: number) => void;
@@ -25,5 +24,5 @@ interface ZoomProps {
         [key in string]: string;
     };
 }
-export declare const ZoomControls: ({ currentZoom, onZoom, onZoomIn, onZoomOut, disabledButtons, hiddenButtons, shortcuts }: ZoomProps) => JSX.Element;
+export declare const ZoomControls: ({ currentZoom, onZoom, onZoomIn, onZoomOut, disabledButtons, hiddenButtons, shortcuts, }: ZoomProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -23,4 +23,4 @@ export interface ZoomInputProps {
         [key in string]: string;
     };
 }
-export declare const ZoomInput: ({ onZoomSubmit, currentZoom, inputRef, shortcuts }: ZoomInputProps) => JSX.Element;
+export declare const ZoomInput: ({ onZoomSubmit, currentZoom, inputRef, shortcuts, }: ZoomInputProps) => import("react/jsx-runtime").JSX.Element;

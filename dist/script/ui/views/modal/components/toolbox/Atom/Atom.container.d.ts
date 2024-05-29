@@ -16,7 +16,9 @@
 /// <reference types="react" />
 declare const AtomContainer: import("react-redux").ConnectedComponent<import("react").FC<import("./Atom").AtomProps & {
     isMultipleAtoms?: boolean | undefined;
+    isRestoredModal: boolean;
 }>, import("react-redux").Omit<import("./Atom").AtomProps & {
     isMultipleAtoms?: boolean | undefined;
+    isRestoredModal: boolean;
 }, "formState">>;
 export default AtomContainer;

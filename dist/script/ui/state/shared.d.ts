@@ -16,8 +16,28 @@
 import { Struct } from 'ketcher-core';
 export declare function onAction(action: any): any;
 export declare function loadStruct(struct: any): (_dispatch: any, getState: any) => void;
+export declare function parseStruct(struct: string | Struct, server: any, options?: any): Promise<Struct>;
 export declare function removeStructAction(): {
     type: string;
     action?: Record<string, unknown>;
 };
+export declare const getSelectionFromStruct: (struct: any) => {};
 export declare function load(struct: Struct, options?: any): (dispatch: any, getState: any) => Promise<void>;
+export declare function openInfoModal(command: 'Paste' | 'Copy' | 'Cut'): {
+    type: 'MODAL_OPEN';
+    data: {
+        name: 'info-modal';
+        prop: {
+            message: 'Paste' | 'Copy' | 'Cut';
+        };
+    };
+};
+export declare function openInfoModalWithCustomMessage(message: string): {
+    type: 'MODAL_OPEN';
+    data: {
+        name: 'info-modal';
+        prop: {
+            customText: string;
+        };
+    };
+};

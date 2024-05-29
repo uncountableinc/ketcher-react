@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { TextCommand } from 'ketcher-core';
+import { IconName } from 'components';
 interface TextButtonProps {
     button: {
         command: TextCommand;
-        name: string;
+        name: IconName;
     };
     active: boolean;
 }
@@ -26,5 +26,5 @@ interface TextButtonPropsCallProps {
     toggleStyle: (command: TextCommand) => void;
 }
 declare type Props = TextButtonProps & TextButtonPropsCallProps;
-export declare const TextButton: (props: Props) => JSX.Element;
+export declare const TextButton: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

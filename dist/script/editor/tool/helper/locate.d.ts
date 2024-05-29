@@ -22,6 +22,7 @@ declare function getElementsInRectangle(restruct: any, p0: any, p1: any): {
     sgroupData: number[];
     simpleObjects: number[];
     texts: number[];
+    rgroupAttachmentPoints: number[];
 };
 declare function getElementsInPolygon(restruct: any, rr: any): {
     atoms: number[];
@@ -32,6 +33,7 @@ declare function getElementsInPolygon(restruct: any, rr: any): {
     sgroupData: number[];
     simpleObjects: number[];
     texts: number[];
+    rgroupAttachmentPoints: number[];
 };
 declare const _default: {
     inRectangle: typeof getElementsInRectangle;

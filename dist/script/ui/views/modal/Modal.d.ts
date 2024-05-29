@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { BaseCallProps } from './modal.types';
 interface ModalProps extends BaseCallProps {
     modal: {
@@ -23,6 +22,6 @@ interface ModalProps extends BaseCallProps {
     };
 }
 declare type Props = ModalProps & BaseCallProps;
-declare function Modal(props: Props): JSX.Element | null;
+declare function Modal(props: Props): import("react/jsx-runtime").JSX.Element | null;
 export type { ModalProps };
 export { Modal };

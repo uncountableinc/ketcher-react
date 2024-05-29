@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { LeftToolbarProps } from './LeftToolbar';
-declare const LeftToolbarContainer: import("react-redux").ConnectedComponent<(props: LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps) => JSX.Element, import("react-redux").Omit<LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps, "status" | "opened" | "disableableButtons" | "indigoVerification" | "vertical" | "onAction" | "onOpen">>;
+declare const LeftToolbarContainer: import("react-redux").ConnectedComponent<(props: LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps, "status" | "opened" | "disableableButtons" | "indigoVerification" | "vertical" | "dataTestId" | "onAction" | "onOpen">>;
 export { LeftToolbarContainer };

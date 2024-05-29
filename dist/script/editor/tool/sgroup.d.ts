@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+import Editor from '../Editor';
 import { Tool } from './Tool';
 declare class SGroupTool implements Tool {
     private readonly editor;
@@ -25,6 +26,6 @@ declare class SGroupTool implements Tool {
     mouseleave(event: any): void;
     mouseup(event: any): void;
     cancel(): void;
-    static sgroupDialog(editor: any, id: any): void;
+    static sgroupDialog(editor: Editor, id: number | null): void;
 }
 export default SGroupTool;

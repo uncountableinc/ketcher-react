@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { ToolbarGroupItemCallProps, ToolbarGroupItemProps } from '../../ToolbarGroupItem';
 interface RGroupProps extends Omit<ToolbarGroupItemProps, 'id' | 'options'> {
     height?: number;
 }
 declare type RGroupCallProps = ToolbarGroupItemCallProps;
 declare type Props = RGroupProps & RGroupCallProps;
-declare const RGroup: (props: Props) => JSX.Element;
+declare const RGroup: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { RGroupProps, RGroupCallProps };
 export { RGroup };

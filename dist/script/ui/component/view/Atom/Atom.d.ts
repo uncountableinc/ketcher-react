@@ -4,4 +4,4 @@ declare function Atom({ el, shortcut, selected, ...props }: {
     el: any;
     shortcut: any;
     selected: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

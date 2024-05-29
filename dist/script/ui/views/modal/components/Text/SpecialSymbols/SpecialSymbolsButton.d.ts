@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 declare const SpecialSymbolsButton: ({ editorState, setEditorState, styles }: {
     editorState: any;
     setEditorState: any;
     styles: any;
-}) => JSX.Element;
+}) => import("react/jsx-runtime").JSX.Element;
 export { SpecialSymbolsButton };

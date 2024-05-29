@@ -1,4 +1,4 @@
-import type { ElementLabel, AtomColor } from 'ketcher-core';
+import { type ElementLabel, type AtomColor } from 'ketcher-core';
 import Editor from './Editor';
 export declare class HoverIcon {
     element: any;
@@ -8,7 +8,7 @@ export declare class HoverIcon {
     /**
      Is required for the case, when mouse moved outside the canvas, then loading of structure
      happens and icon needs to be shown above loader.
-    */
+     */
     shouldBeShownWhenMouseBack: boolean;
     editor: Editor;
     constructor(editor: Editor);

@@ -2,4 +2,4 @@ export default FormulaInput;
 declare function FormulaInput({ value, contentEditable }: {
     value: any;
     contentEditable: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

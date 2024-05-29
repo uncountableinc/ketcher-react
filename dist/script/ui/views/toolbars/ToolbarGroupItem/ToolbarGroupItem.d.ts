@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { UiAction, UiActionAction } from '../../../action';
 import { ToolbarItem } from '../toolbar.types';
 interface ToolbarGroupItemProps extends ToolbarItem {
@@ -25,12 +24,13 @@ interface ToolbarGroupItemProps extends ToolbarItem {
     indigoVerification: boolean;
     className?: string;
     vertical?: boolean;
+    dataTestId?: string;
 }
 interface ToolbarGroupItemCallProps {
     onAction: (action: UiActionAction) => void;
     onOpen: (menuName: string, isSelected: boolean) => void;
 }
 declare type Props = ToolbarGroupItemProps & ToolbarGroupItemCallProps;
-declare const ToolbarGroupItem: (props: Props) => JSX.Element;
+declare const ToolbarGroupItem: (props: Props) => import("react/jsx-runtime").JSX.Element | null;
 export type { ToolbarGroupItemProps, ToolbarGroupItemCallProps };
 export { ToolbarGroupItem };

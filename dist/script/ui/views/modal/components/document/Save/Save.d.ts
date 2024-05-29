@@ -1,5 +1,5 @@
 export default Save;
-declare const Save: import("react-redux").ConnectedComponent<typeof SaveDialog, import("react-redux").Omit<any, "options" | "server" | "formState" | "struct" | "checkState" | "onCheck" | "moleculeErrors" | "ignoreChiralFlag" | "onTmplSave" | "onResetForm">>;
+declare const Save: import("react-redux").ConnectedComponent<typeof SaveDialog, import("react-redux").Omit<any, "server" | "options" | "bondThickness" | "formState" | "struct" | "editor" | "checkState" | "onCheck" | "moleculeErrors" | "ignoreChiralFlag" | "onTmplSave" | "onResetForm">>;
 declare class SaveDialog extends Component<any, any, any> {
     static contextType: import("react").Context<import("../../../../../../../contexts").IErrorsContext>;
     constructor(props: any);
@@ -36,10 +36,10 @@ declare class SaveDialog extends Component<any, any, any> {
     changeType: (type: any) => any;
     changeTab: (index: any) => void;
     getWarnings: (format: any) => any[];
-    renderForm: () => JSX.Element;
-    renderSaveFile: () => JSX.Element;
-    renderWarnings: () => JSX.Element | null;
-    getButtons: () => JSX.Element[];
-    render(): JSX.Element;
+    renderForm: () => import("react/jsx-runtime").JSX.Element;
+    renderSaveFile: () => import("react/jsx-runtime").JSX.Element;
+    renderWarnings: () => import("react/jsx-runtime").JSX.Element | null;
+    getButtons: () => import("react/jsx-runtime").JSX.Element[];
+    render(): import("react/jsx-runtime").JSX.Element;
 }
 import { Component } from "react";

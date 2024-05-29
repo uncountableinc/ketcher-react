@@ -13,6 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
-declare const RgroupLogicContainer: import("react-redux").ConnectedComponent<(props: import("./RgroupLogic").RgroupLogicProps & import("../../../modal.types").BaseCallProps) => JSX.Element, import("react-redux").Omit<import("./RgroupLogic").RgroupLogicProps & import("../../../modal.types").BaseCallProps, "formState">>;
+declare const RgroupLogicContainer: import("react-redux").ConnectedComponent<(props: import("./RgroupLogic").RgroupLogicProps & import("../../../modal.types").BaseCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<import("./RgroupLogic").RgroupLogicProps & import("../../../modal.types").BaseCallProps, "formState">>;
 export default RgroupLogicContainer;

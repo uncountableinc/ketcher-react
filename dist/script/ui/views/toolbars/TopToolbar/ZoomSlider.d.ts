@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface SliderProps {
     zoom: number;
     setZoom: (arg: any) => void;
 }
-export declare const ZoomSlider: ({ zoom, setZoom }: SliderProps) => JSX.Element;
+export declare const ZoomSlider: ({ zoom, setZoom }: SliderProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -1,4 +1,4 @@
-declare var _default: import("react-redux").ConnectedComponent<typeof Attach, import("react-redux").Omit<import("react").ClassAttributes<Attach> & {
+declare const _default: import("react-redux").ConnectedComponent<typeof Attach, import("react-redux").Omit<import("react").ClassAttributes<Attach> & {
     [x: string]: any;
     onInit: any;
 }, string | number>>;
@@ -28,6 +28,6 @@ declare class Attach extends Component<any, any, any> {
         };
     } | null;
     checkIsValidName(name: any): boolean;
-    render(): JSX.Element;
+    render(): import("react/jsx-runtime").JSX.Element;
 }
 import { Component } from "react";

@@ -1,4 +1,4 @@
 export default SDataFieldset;
 declare function SDataFieldset({ formState }: {
     formState: any;
-}): JSX.Element;
+}): import("react/jsx-runtime").JSX.Element;

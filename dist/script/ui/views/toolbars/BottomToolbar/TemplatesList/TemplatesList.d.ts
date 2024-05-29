@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { UiActionAction } from '../../../../action';
 interface TemplatesListProps {
     active?: {
@@ -29,6 +28,6 @@ interface TemplatesListCallProps {
     onAction: (action: UiActionAction) => void;
 }
 declare type Props = TemplatesListProps & TemplatesListCallProps;
-declare const TemplatesList: (props: Props) => JSX.Element;
+declare const TemplatesList: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { TemplatesListProps, TemplatesListCallProps };
 export { TemplatesList };

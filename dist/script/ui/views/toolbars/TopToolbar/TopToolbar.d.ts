@@ -47,9 +47,11 @@ export interface PanelProps {
     onCheck: VoidFunction;
     onAnalyse: VoidFunction;
     onMiew: VoidFunction;
+    onToggleExplicitHydrogens: VoidFunction;
     onFullscreen: VoidFunction;
     onAbout: VoidFunction;
     onHelp: VoidFunction;
+    togglerComponent?: JSX.Element;
 }
-export declare const TopToolbar: ({ className, disabledButtons, indigoVerification, hiddenButtons, shortcuts, onClear, onFileOpen, onSave, onUndo, onRedo, onCopy, onCopyMol, onCopyKet, onCopyImage, onCut, onPaste, currentZoom, onZoom, onZoomIn, onZoomOut, onSettingsOpen, onLayout, onClean, onAromatize, onDearomatize, onCalculate, onCheck, onAnalyse, onMiew, onFullscreen, onAbout, onHelp }: PanelProps) => JSX.Element;
+export declare const TopToolbar: ({ className, disabledButtons, indigoVerification, hiddenButtons, shortcuts, onClear, onFileOpen, onSave, onUndo, onRedo, onCopy, onCopyMol, onCopyKet, onCopyImage, onCut, onPaste, currentZoom, onZoom, onZoomIn, onZoomOut, onSettingsOpen, onLayout, onClean, onAromatize, onDearomatize, onCalculate, onCheck, onAnalyse, onMiew, onToggleExplicitHydrogens, onFullscreen, onAbout, onHelp, togglerComponent, }: PanelProps) => import("react/jsx-runtime").JSX.Element;
 export {};

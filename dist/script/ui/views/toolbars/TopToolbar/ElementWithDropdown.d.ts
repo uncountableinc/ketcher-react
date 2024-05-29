@@ -19,5 +19,5 @@ interface ElementWithDropdownProps {
     dropDownElements: JSX.Element[];
     onToolOpen: () => void;
 }
-export declare const ElementWithDropdown: import("react-redux").ConnectedComponent<({ topElement, dropDownElements, onToolOpen }: ElementWithDropdownProps) => JSX.Element, import("react-redux").Omit<ElementWithDropdownProps, "onToolOpen">>;
+export declare const ElementWithDropdown: import("react-redux").ConnectedComponent<({ topElement, dropDownElements, onToolOpen, }: ElementWithDropdownProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<ElementWithDropdownProps, "onToolOpen">>;
 export {};

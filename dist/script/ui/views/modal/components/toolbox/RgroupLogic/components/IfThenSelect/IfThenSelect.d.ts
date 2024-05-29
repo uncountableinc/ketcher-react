@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { RgroupLogicProps } from '../../RgroupLogic';
 declare type Props = Pick<RgroupLogicProps, 'label' | 'rgroupLabels' | 'name'>;
-declare const IfThenSelect: (props: Props) => JSX.Element;
+declare const IfThenSelect: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export default IfThenSelect;

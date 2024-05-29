@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import 'draft-js/dist/Draft.css';
-import { DialogParams } from '../../../components/Dialog/Dialog';
+import { DialogParams } from '../../../../../../components/Dialog/Dialog';
 interface TextProps extends DialogParams {
     formState: any;
     id?: any;
     content: string;
     position?: string;
 }
-declare const _default: import("react-redux").ConnectedComponent<(props: TextProps) => JSX.Element, import("react-redux").Omit<TextProps, "formState">>;
+declare const _default: import("react-redux").ConnectedComponent<(props: TextProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<TextProps, "formState">>;
 export default _default;
