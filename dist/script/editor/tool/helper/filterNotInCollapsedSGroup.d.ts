@@ -11,3 +11,10 @@ export declare function filterNotInContractedSGroup(itemsToFilter: {
     atoms: number[];
     bonds: number[];
 };
+export declare function filterNotPartOfSuperatomWithoutLabel(itemsToFilter: {
+    atoms?: number[];
+    bonds?: number[];
+}, struct: Struct): {
+    atoms: number[];
+    bonds: number[];
+};

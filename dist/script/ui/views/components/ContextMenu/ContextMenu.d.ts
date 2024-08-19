@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
+import React from 'react';
 import 'react-contexify/ReactContexify.css';
 declare const ContextMenu: React.FC;
 export default ContextMenu;

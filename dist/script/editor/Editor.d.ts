@@ -99,17 +99,17 @@ declare class Editor implements KetcherEditor {
         handler: any;
     };
     unsubscribe(eventName: any, subscriber: any): void;
-    findItem(event: any, maps: Array<string> | null, skip?: any): any;
+    findItem(event: any, maps: Array<string> | null, skip?: any): import(".").ClosestItemWithMap<unknown> | null;
     findMerge(srcItems: any, maps: any): {
-        atoms: Map<number, number>;
-        bonds: Map<number, number>;
-        atomToFunctionalGroup: Map<number, number> | null;
+        atoms: Map<any, any>;
+        atomToFunctionalGroup: Map<any, any>;
     };
     explicitSelected(): any;
     structSelected(): Struct;
     alignDescriptors(): void;
     setMacromoleculeConvertionError(errorMessage: string): void;
     clearMacromoleculeConvertionError(): void;
+    focusCliparea(): void;
 }
 export { Editor };
 export default Editor;

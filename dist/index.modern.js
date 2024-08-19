@@ -24,7 +24,7 @@ import _asyncToGenerator from '@babel/runtime/helpers/asyncToGenerator';
 import _regeneratorRuntime from '@babel/runtime/regenerator';
 import _classCallCheck$2 from '@babel/runtime/helpers/classCallCheck';
 import _createClass$2 from '@babel/runtime/helpers/createClass';
-import { KetSerializer, MolSerializer, KetcherLogger, Ketcher, defaultBondThickness, FormatterFactory, notifyRequestCompleted, isControlKey, StereLabelStyleType, StereoColoringType, ShowHydrogenLabels, ShowHydrogenLabelNames, SettingsManager, SdfSerializer, KETCHER_SAVED_OPTIONS_KEY, Bond as Bond$2, Elements, AtomList, getAtomType, StereoLabel, isAttachmentBond, Atom as Atom$2, findStereoAtoms, RxnArrowMode, SimpleObjectMode, SGroup as SGroup$1, Pile, getStereoAtomsMap, identifyStructFormat, SupportedFormat, ChemicalMimeType, RenderStruct, Struct, shortcutStr, MonomerMicromolecule, FunctionalGroupsProvider, SaltsAndSolventsProvider, KetcherAsyncEvents, ElementColor, generateMenuShortcuts, Vec2, Scale, fromMultipleMove, FunctionalGroup, fromSgroupDeletion, fromFragmentDeletion, mergeMapOfItemsToSet, vectorUtils, fromBondAddition, Action, fromAtomAddition, fromAtomsAttrs, checkOverlapping, fromSeveralSgroupAddition, expandSGroupWithMultipleAttachmentPoint, SgContexts, fromSgroupAction, fromItemsFuse, ReBond, setExpandSGroup, fromBondsAttrs, OperationType, ReStruct, fromSimpleObjectResizing, fromArrowResizing, getItemsToFuse, getHoverToFuse, fromTextDeletion, fromTextUpdating, CoordinateTransformation, fromTemplateOnCanvas, fromTemplateOnBondAction, fromTemplateOnAtom, BondAttr, AtomAttr, formatProperties, ketcherProvider, runAsyncAction, getStructure, initHotKeys, keyNorm, Fragment as Fragment$1, fromRGroupAttachmentPointUpdate, fromOneBondDeletion, bondChangingAction, fromChain, fromStereoFlagUpdate, fromOneAtomDeletion, fromArrowDeletion, fromPlusDeletion, fromSimpleObjectDeletion, fromRGroupAttachmentPointDeletion, notifyItemsToMergeInitializationComplete, fromPaste, RGroup as RGroup$2, fromRGroupFragment, fromUpdateIfThen, fromRGroupAttrs, fromArrowAddition, fromPlusAddition, fromRotate, fromFlip, fromSimpleObjectAddition, fromTextCreation, fromHighlightCreate, fromHighlightClear, provideEditorSettings, fromNewCanvas, Render, fromDescriptorsAlign, atomGetAttr, genericsList, getAtomCustomQuery, getFormatMimeTypeByFileName, getPropertiesByFormat, StereoFlag, getPropertiesByImgFormat, b64toBlob, Generics, TextCommand, DefaultStructServiceOptions } from 'ketcher-core';
+import { KetSerializer, MolSerializer, KetcherLogger, Ketcher, defaultBondThickness, FormatterFactory, isClipboardAPIAvailable, notifyCopyCut, notifyRequestCompleted, isControlKey, StereLabelStyleType, StereoColoringType, ShowHydrogenLabels, ShowHydrogenLabelNames, SettingsManager, SdfSerializer, KETCHER_SAVED_OPTIONS_KEY, Bond as Bond$2, Elements, AtomList, getAtomType, StereoLabel, isAttachmentBond, Atom as Atom$2, findStereoAtoms, RxnArrowMode, SimpleObjectMode, IMAGE_KEY, SGroup as SGroup$1, Pile, getStereoAtomsMap, identifyStructFormat, SupportedFormat, ChemicalMimeType, RenderStruct, Struct, shortcutStr, MonomerMicromolecule, UnresolvedMonomer, FunctionalGroupsProvider, SaltsAndSolventsProvider, KetcherAsyncEvents, ElementColor, generateMenuShortcuts, Vec2, Scale, fromMultipleMove, FunctionalGroup, fromSgroupDeletion, fromFragmentDeletion, mergeMapOfItemsToSet, vectorUtils, fromBondAddition, Action, fromAtomAddition, fromAtomsAttrs, checkOverlapping, fromSeveralSgroupAddition, expandSGroupWithMultipleAttachmentPoint, SgContexts, fromSgroupAction, fromItemsFuse, ReBond, setExpandSGroup, fromBondsAttrs, OperationType, ReStruct, CoordinateTransformation, fromImageResize, fromSimpleObjectResizing, fromArrowResizing, getItemsToFuse, getHoverToFuse, imageReferencePositionToCursor, fromTextDeletion, fromTextUpdating, fromTemplateOnCanvas, fromTemplateOnBondAction, fromTemplateOnAtom, BondAttr, AtomAttr, formatProperties, ketcherProvider, runAsyncAction, getStructStringFromClipboardData, getStructure, initHotKeys, keyNorm, Fragment as Fragment$1, fromRGroupAttachmentPointUpdate, fromOneBondDeletion, bondChangingAction, fromChain, fromStereoFlagUpdate, fromOneAtomDeletion, fromArrowDeletion, fromPlusDeletion, fromSimpleObjectDeletion, fromRGroupAttachmentPointDeletion, fromImageDeletion, notifyItemsToMergeInitializationComplete, fromPaste, RGroup as RGroup$2, fromRGroupFragment, fromUpdateIfThen, fromRGroupAttrs, fromArrowAddition, fromPlusAddition, fromRotate, fromFlip, fromSimpleObjectAddition, fromTextCreation, fromImageMove, fromImageCreation, fromHighlightCreate, fromHighlightClear, provideEditorSettings, fromNewCanvas, Render, fromDescriptorsAlign, fromSgroupAttachmentPointAddition, SGroupAttachmentPoint, fromSgroupAddition, atomGetAttr, genericsList, getAtomCustomQuery, getFormatMimeTypeByFileName, getPropertiesByFormat, StereoFlag, getPropertiesByImgFormat, b64toBlob, Generics, TextCommand, DefaultStructServiceOptions } from 'ketcher-core';
 import * as React from 'react';
 import React__default, { createRef, Component, useRef, useEffect, useLayoutEffect, useState, useMemo, createElement, forwardRef, useCallback, Fragment as Fragment$2, PureComponent, lazy, Suspense } from 'react';
 import _objectWithoutProperties from '@babel/runtime/helpers/objectWithoutProperties';
@@ -36,6 +36,7 @@ import _typeof$3 from '@babel/runtime/helpers/typeof';
 import t from 'querystring';
 import { pick, range as range$1, capitalize, without, omit, findLastIndex, findIndex, isEmpty, pickBy, isEqual, escapeRegExp, flow, filter, reduce, throttle, xor, debounce, upperFirst } from 'lodash/fp';
 import _toConsumableArray from '@babel/runtime/helpers/toConsumableArray';
+import _, { isNumber, throttle as throttle$1, debounce as debounce$1, intersection, difference, cloneDeep, isEqual as isEqual$1, capitalize as capitalize$1, range as range$2, isEmpty as isEmpty$1, uniqBy, uniqueId } from 'lodash';
 import styled from '@emotion/styled';
 import _taggedTemplateLiteral from '@babel/runtime/helpers/taggedTemplateLiteral';
 import * as KN from 'w3c-keyname';
@@ -43,7 +44,6 @@ import _slicedToArray$1 from '@babel/runtime/helpers/slicedToArray';
 import ReactDOM, { createPortal } from 'react-dom';
 import { connect, useDispatch, useSelector, Provider } from 'react-redux';
 import { combineReducers, createStore as createStore$1, applyMiddleware } from 'redux';
-import _, { throttle as throttle$1, debounce as debounce$1, intersection, difference, cloneDeep, isEqual as isEqual$1, capitalize as capitalize$1, range as range$2, isEmpty as isEmpty$1, uniqBy, uniqueId } from 'lodash';
 import * as CFB from 'cfb';
 import require$$0$2 from 'util';
 import 'redux-logger';
@@ -76,11 +76,12 @@ import 'draft-js/dist/Draft.css';
 import { Modifier, EditorState, convertFromRaw, RichUtils, Editor as Editor$4, convertToRaw, getDefaultKeyBinding } from 'draft-js';
 import createStyles from 'draft-js-custom-styles';
 import _objectDestructuringEmpty from '@babel/runtime/helpers/objectDestructuringEmpty';
-import _extends$3h from '@babel/runtime/helpers/extends';
+import _extends$3k from '@babel/runtime/helpers/extends';
 import MuiAutocomplete from '@mui/material/Autocomplete';
 import { createRoot } from 'react-dom/client';
 
 function createApi(structServiceProvider, defaultOptions) {
+  var _structService$destro;
   var structService = structServiceProvider.createStructService(defaultOptions);
   var info = structService.info();
   return Object.assign(info, {
@@ -97,7 +98,8 @@ function createApi(structServiceProvider, defaultOptions) {
     recognize: structService.recognize.bind(structService),
     generateImageAsBase64: structService.generateImageAsBase64.bind(structService),
     getInChIKey: structService.getInChIKey.bind(structService),
-    toggleExplicitHydrogens: structService.toggleExplicitHydrogens.bind(structService)
+    toggleExplicitHydrogens: structService.toggleExplicitHydrogens.bind(structService),
+    destroy: (_structService$destro = structService.destroy) === null || _structService$destro === void 0 ? void 0 : _structService$destro.bind(structService)
   });
 }
 
@@ -271,21 +273,12 @@ var debugObj = {
 
 var classes$R = {"cliparea":"cliparea-module_cliparea__GdPrN"};
 
-function isClipboardAPIAvailable() {
-  var _navigator, _navigator2;
-  return typeof ((_navigator = navigator) === null || _navigator === void 0 || (_navigator = _navigator.clipboard) === null || _navigator === void 0 ? void 0 : _navigator.writeText) === 'function' && typeof ((_navigator2 = navigator) === null || _navigator2 === void 0 || (_navigator2 = _navigator2.clipboard) === null || _navigator2 === void 0 ? void 0 : _navigator2.read) === 'function';
-}
-function notifyCopyCut() {
-  var event = new Event('copyOrCutComplete');
-  window.dispatchEvent(event);
-}
-
 function _createForOfIteratorHelper$f(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray$g(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray$g(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray$g(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$g(o, minLen); }
 function _arrayLikeToArray$g(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _callSuper$b(t, o, e) { return o = _getPrototypeOf$2(o), _possibleConstructorReturn$2(t, _isNativeReflectConstruct$d() ? Reflect.construct(o, e || [], _getPrototypeOf$2(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct$d() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct$d = function _isNativeReflectConstruct() { return !!t; })(); }
-var ieCb = window.clipboardData;
+var ieCb = typeof window !== 'undefined' ? window.clipboardData : {};
 var CLIP_AREA_BASE_CLASS = 'cliparea';
 var needSkipCopyEvent = false;
 var ClipArea = function (_Component) {
@@ -496,7 +489,7 @@ function _copy(_x3) {
 }
 function _copy2() {
   _copy2 = _asyncToGenerator( _regeneratorRuntime.mark(function _callee3(data) {
-    var clipboardItemData;
+    var clipboardItemData, clipboardItem, textData;
     return _regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
@@ -508,20 +501,36 @@ function _copy2() {
               type: mimeTypeToSet
             }));
           });
-          _context3.next = 5;
-          return navigator.clipboard.write([new ClipboardItem(clipboardItemData)]);
-        case 5:
-          _context3.next = 11;
+          clipboardItem = new ClipboardItem(clipboardItemData);
+          if (!(clipboardItem.presentationStyle && clipboardItem.presentationStyle === 'unspecified')) {
+            _context3.next = 11;
+            break;
+          }
+          if (!navigator.clipboard.writeText) {
+            _context3.next = 9;
+            break;
+          }
+          textData = data['text/plain'] || JSON.stringify(data);
+          _context3.next = 9;
+          return navigator.clipboard.writeText(textData);
+        case 9:
+          _context3.next = 13;
           break;
-        case 7:
-          _context3.prev = 7;
+        case 11:
+          _context3.next = 13;
+          return navigator.clipboard.write([clipboardItem]);
+        case 13:
+          _context3.next = 19;
+          break;
+        case 15:
+          _context3.prev = 15;
           _context3.t0 = _context3["catch"](0);
           KetcherLogger.error('cliparea.jsx::copy', _context3.t0);
-        case 11:
+        case 19:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 7]]);
+    }, _callee3, null, [[0, 15]]);
   }));
   return _copy2.apply(this, arguments);
 }
@@ -2461,8 +2470,8 @@ module.exports.validate = function (instance, schema, options) {
 };
 });
 
-function ownKeys$1o(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1o(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1o(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1o(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1p(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1p(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1p(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1p(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var editor = {
   resetToSelect: {
     title: 'Reset to Select Tool',
@@ -2717,7 +2726,7 @@ var optionsSchema = {
   title: 'Settings',
   type: 'object',
   required: [],
-  properties: _objectSpread$1o(_objectSpread$1o(_objectSpread$1o(_objectSpread$1o(_objectSpread$1o({}, editor), render), server), debug), miew)
+  properties: _objectSpread$1p(_objectSpread$1p(_objectSpread$1p(_objectSpread$1p(_objectSpread$1p({}, editor), render), server), debug), miew)
 };
 function getDefaultOptions() {
   if (!optionsSchema.properties) return {};
@@ -2893,8 +2902,8 @@ function prefetchRender(tmpls, baseUrl, cacheEl) {
   });
 }
 
-function ownKeys$1n(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1n(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1n(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1n(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1o(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1o(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1o(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1o(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initOptionsState = {
   app: {
     server: false,
@@ -2992,29 +3001,29 @@ function optionsReducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
   var type = action.type,
     data = action.data;
-  if (type === 'APP_OPTIONS') return _objectSpread$1n(_objectSpread$1n({}, state), {}, {
-    app: _objectSpread$1n(_objectSpread$1n({}, state.app), data)
+  if (type === 'APP_OPTIONS') return _objectSpread$1o(_objectSpread$1o({}, state), {}, {
+    app: _objectSpread$1o(_objectSpread$1o({}, state.app), data)
   });
   if (type === 'SAVE_SETTINGS') {
-    return _objectSpread$1n(_objectSpread$1n({}, state), {}, {
-      settings: _objectSpread$1n(_objectSpread$1n({}, state.settings), data)
+    return _objectSpread$1o(_objectSpread$1o({}, state), {}, {
+      settings: _objectSpread$1o(_objectSpread$1o({}, state.settings), data)
     });
   }
-  if (type === 'SAVE_CHECK_OPTS') return _objectSpread$1n(_objectSpread$1n({}, state), {}, {
+  if (type === 'SAVE_CHECK_OPTS') return _objectSpread$1o(_objectSpread$1o({}, state), {}, {
     check: data
   });
-  if (type === 'CHANGE_ANALYSE') return _objectSpread$1n(_objectSpread$1n({}, state), {}, {
-    analyse: _objectSpread$1n(_objectSpread$1n(_objectSpread$1n({}, state.analyse), data), {}, {
+  if (type === 'CHANGE_ANALYSE') return _objectSpread$1o(_objectSpread$1o({}, state), {}, {
+    analyse: _objectSpread$1o(_objectSpread$1o(_objectSpread$1o({}, state.analyse), data), {}, {
       loading: false
     })
   });
-  if (type === 'ANALYSE_LOADING') return _objectSpread$1n(_objectSpread$1n({}, state), {}, {
-    analyse: _objectSpread$1n(_objectSpread$1n({}, state.analyse), {}, {
+  if (type === 'ANALYSE_LOADING') return _objectSpread$1o(_objectSpread$1o({}, state), {}, {
+    analyse: _objectSpread$1o(_objectSpread$1o({}, state.analyse), {}, {
       loading: true
     })
   });
-  if (recognizeActions.includes(type)) return _objectSpread$1n(_objectSpread$1n({}, state), {}, {
-    recognize: _objectSpread$1n(_objectSpread$1n({}, state.recognize), data)
+  if (recognizeActions.includes(type)) return _objectSpread$1o(_objectSpread$1o({}, state), {}, {
+    recognize: _objectSpread$1o(_objectSpread$1o({}, state.recognize), data)
   });
   return state;
 }
@@ -3318,8 +3327,8 @@ function getSdataDefault() {
   return schema[context][fieldName] ? schema[context][fieldName].properties.fieldValue["default"] : '';
 }
 
-function ownKeys$1m(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1m(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1m(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1m(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1n(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1n(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1n(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1n(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initSdata = function initSdata(schema) {
   var isCustomShema = schema.key === 'Custom';
   var context = isCustomShema ? getSdataDefault(sdataCustomSchema, 'context') : getSdataDefault(sdataSchema);
@@ -3357,7 +3366,7 @@ var onContextChange = function onContextChange(state, payload) {
   var fValue = fieldValue;
   if (fValue === state.result.fieldValue) fValue = getSdataDefault(sdataCustomSchema, 'fieldValue');
   return {
-    result: _objectSpread$1m(_objectSpread$1m({}, payload), {}, {
+    result: _objectSpread$1n(_objectSpread$1n({}, payload), {}, {
       context: context,
       fieldName: fieldName,
       fieldValue: fValue
@@ -3371,7 +3380,7 @@ var onFieldNameChange = function onFieldNameChange(state, payload) {
   if (sdataSchema[context][fieldName]) fieldValue = getSdataDefault(sdataSchema, context, fieldName);
   if (fieldValue === state.result.fieldValue && sdataSchema[context][state.result.fieldName]) fieldValue = '';
   return {
-    result: _objectSpread$1m(_objectSpread$1m({}, payload), {}, {
+    result: _objectSpread$1n(_objectSpread$1n({}, payload), {}, {
       fieldName: fieldName,
       fieldValue: fieldValue
     })
@@ -3379,7 +3388,7 @@ var onFieldNameChange = function onFieldNameChange(state, payload) {
 };
 function sdataReducer(state, action) {
   if (action.data.result.init) {
-    return correctErrors(_objectSpread$1m(_objectSpread$1m({}, state), {}, {
+    return correctErrors(_objectSpread$1n(_objectSpread$1n({}, state), {}, {
       result: Object.assign({}, state.result, action.data.result)
     }), action.data);
   }
@@ -3387,7 +3396,7 @@ function sdataReducer(state, action) {
   var actionFieldName = action.data.result.fieldName;
   var newstate = null;
   if (actionContext !== state.result.context) newstate = onContextChange(state, action.data.result);else if (actionFieldName !== state.result.fieldName) newstate = onFieldNameChange(state, action.data.result);
-  newstate = newstate || _objectSpread$1m(_objectSpread$1m({}, state), {}, {
+  newstate = newstate || _objectSpread$1n(_objectSpread$1n({}, state), {}, {
     result: Object.assign({}, state.result, action.data.result)
   });
   return correctErrors(newstate, action.data);
@@ -3527,8 +3536,8 @@ function formReducer(state, action) {
 var INDIGO_VERIFICATION = 'INDIGO_VERIFICATION';
 var ANALYZING_FILE = 'ANALYZING_FILE';
 
-function ownKeys$1l(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1l(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1l(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1l(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1m(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1m(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1m(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1m(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function indigoVerification(data) {
   return {
     type: INDIGO_VERIFICATION,
@@ -3553,13 +3562,13 @@ function requestReducer () {
   switch (type) {
     case INDIGO_VERIFICATION:
       {
-        return _objectSpread$1l(_objectSpread$1l({}, state), {}, {
+        return _objectSpread$1m(_objectSpread$1m({}, state), {}, {
           indigoVerification: data
         });
       }
     case ANALYZING_FILE:
       {
-        return _objectSpread$1l(_objectSpread$1l({}, state), {}, {
+        return _objectSpread$1m(_objectSpread$1m({}, state), {}, {
           isAnalyzingFile: data
         });
       }
@@ -3577,8 +3586,8 @@ var supportedSGroupTypes = {
   queryComponent: 'queryComponent'
 };
 
-function ownKeys$1k(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1k(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1k(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1k(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1l(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1l(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1l(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1l(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var atom = {
   title: 'Atom',
   type: 'object',
@@ -3619,7 +3628,7 @@ var atom = {
     charge: {
       title: 'Charge',
       type: 'string',
-      pattern: '^([+-]?)([0-9]{1,3})([+-]?)$',
+      pattern: '^([+-]?)(1[0-5]|0|[0-9])([+-]?)$',
       maxLength: 4,
       "default": '',
       invalidMessage: 'Invalid charge value'
@@ -3810,7 +3819,7 @@ var sgroup = {
   title: 'SGroup',
   type: 'object',
   required: ['type'],
-  oneOf: [_objectSpread$1k({}, sdataCustomSchema), {
+  oneOf: [_objectSpread$1l({}, sdataCustomSchema), {
     key: 'MUL',
     title: 'Multiple group',
     type: 'object',
@@ -3915,14 +3924,19 @@ var attachSchema = {
   }
 };
 
+function matchCharge(charge) {
+  var regex = new RegExp(atom.properties.charge.pattern);
+  return regex.exec(charge);
+}
+
 var _excluded$z = ["aromaticity", "ringMembership", "ringSize", "connectivity", "chirality", "customQuery"],
   _excluded2$7 = ["type", "radiobuttons"];
-function ownKeys$1j(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1j(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1j(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1j(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1k(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1k(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1k(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1k(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var DefaultStereoGroupNumber = 1;
 function fromElement(selem) {
   if (selem.label === 'R#') {
-    return _objectSpread$1j({
+    return _objectSpread$1k({
       type: 'rlabel',
       values: fromRlabel(selem.rglabel)
     }, selem);
@@ -4015,21 +4029,21 @@ function fromAtom(satom) {
     customQuery: satom.queryProperties.customQuery === null ? '' : satom.queryProperties.customQuery.toString()
   };
 }
-function toAtom(atom$1) {
+function toAtom(atom) {
   var _restAtom$exactChange, _restAtom$unsaturated;
-  var _atom$aromaticity = atom$1.aromaticity,
+  var _atom$aromaticity = atom.aromaticity,
     aromaticity = _atom$aromaticity === void 0 ? null : _atom$aromaticity,
-    _atom$ringMembership = atom$1.ringMembership,
+    _atom$ringMembership = atom.ringMembership,
     ringMembership = _atom$ringMembership === void 0 ? null : _atom$ringMembership,
-    _atom$ringSize = atom$1.ringSize,
+    _atom$ringSize = atom.ringSize,
     ringSize = _atom$ringSize === void 0 ? null : _atom$ringSize,
-    _atom$connectivity = atom$1.connectivity,
+    _atom$connectivity = atom.connectivity,
     connectivity = _atom$connectivity === void 0 ? null : _atom$connectivity,
-    _atom$chirality = atom$1.chirality,
+    _atom$chirality = atom.chirality,
     chirality = _atom$chirality === void 0 ? null : _atom$chirality,
-    _atom$customQuery = atom$1.customQuery,
+    _atom$customQuery = atom.customQuery,
     customQuery = _atom$customQuery === void 0 ? '' : _atom$customQuery,
-    restAtom = _objectWithoutProperties(atom$1, _excluded$z);
+    restAtom = _objectWithoutProperties(atom, _excluded$z);
   if (customQuery && customQuery !== '') {
     return Object.assign({}, restAtom, {
       label: 'A',
@@ -4058,12 +4072,11 @@ function toAtom(atom$1) {
       exactChangeFlag: 0
     });
   }
-  var chargeRegexp = new RegExp(atom.properties.charge.pattern);
-  var pch = chargeRegexp.exec(restAtom.charge);
+  var pch = matchCharge(restAtom.charge);
   var charge = pch ? parseInt(pch[1] + pch[3] + pch[2]) : restAtom.charge;
   var conv = Object.assign({}, restAtom, {
     isotope: restAtom.isotope ? Number(restAtom.isotope) : null,
-    charge: restAtom.charge ? Number(charge) : null,
+    charge: restAtom.charge && charge !== 0 ? Number(charge) : null,
     alias: restAtom.alias || null,
     exactChangeFlag: +((_restAtom$exactChange = restAtom.exactChangeFlag) !== null && _restAtom$exactChange !== void 0 ? _restAtom$exactChange : false),
     unsaturatedAtom: +((_restAtom$unsaturated = restAtom.unsaturatedAtom) !== null && _restAtom$unsaturated !== void 0 ? _restAtom$unsaturated : false),
@@ -4179,7 +4192,7 @@ function fromBond(sbond) {
 }
 function toBond(bond) {
   var isCustomQuery = bond.customQuery !== '';
-  return _objectSpread$1j({
+  return _objectSpread$1k({
     topology: bond.topology,
     reactingCenterStatus: bond.center,
     customQuery: !isCustomQuery ? null : bond.customQuery
@@ -4275,7 +4288,7 @@ function toSgroup(sgroup) {
   var type = sgroup.type,
     radiobuttons = sgroup.radiobuttons,
     props = _objectWithoutProperties(sgroup, _excluded2$7);
-  var attrs = _objectSpread$1j({}, props);
+  var attrs = _objectSpread$1k({}, props);
   var absolute = 'absolute';
   var attached = 'attached';
   switch (radiobuttons) {
@@ -4369,7 +4382,7 @@ function isFlipDisabled(editor) {
   return getAmountOfAttachmentBonds() > 1;
 }
 
-var toolActions = {
+var toolActions = _defineProperty$1({
   hand: {
     title: 'Hand tool',
     shortcut: 'Mod+Alt+h',
@@ -4800,7 +4813,15 @@ var toolActions = {
       return isHidden(options, 'bonds');
     }
   }
-};
+}, IMAGE_KEY, {
+  title: 'Add Image',
+  action: {
+    tool: IMAGE_KEY
+  },
+  hidden: function hidden(options) {
+    return isHidden(options, IMAGE_KEY);
+  }
+});
 var bondCuts = {
   single: '1',
   "double": '2',
@@ -4830,8 +4851,8 @@ var tools = typeSchema$1["enum"].reduce(function (res, type, i) {
 
 var _excluded$y = ["rescale", "fragment"],
   _excluded2$6 = ["isPaste", "method"];
-function ownKeys$1i(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1i(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1i(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1i(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1j(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1j(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1j(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1j(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function onAction(action) {
   if (action && action.dialog) {
     return {
@@ -4891,7 +4912,7 @@ var getSelectionFromStruct = function getSelectionFromStruct(struct) {
 function load(struct, options) {
   return function () {
     var _ref = _asyncToGenerator( _regeneratorRuntime.mark(function _callee(dispatch, getState) {
-      var state, editor, server, errorHandler, _options2, isPaste, method, otherOptions, parsedStruct, _otherOptions, fragment, hasUnsupportedGroups, oldStruct, stereAtomsMap, isIndigoFunctionCalled;
+      var state, editor, server, errorHandler, _options2, isPaste, method, otherOptions, parsedStruct, _otherOptions, fragment, hasUnsupportedGroups, hasMoleculeToMonomerConnections, oldStruct, stereAtomsMap, isIndigoFunctionCalled;
       return _regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -4901,7 +4922,7 @@ function load(struct, options) {
             errorHandler = editor.errorHandler;
             options = options || {};
             _options2 = options, isPaste = _options2.isPaste, method = _options2.method, otherOptions = _objectWithoutProperties(_options2, _excluded2$6);
-            otherOptions = _objectSpread$1i(_objectSpread$1i({}, otherOptions), {}, {
+            otherOptions = _objectSpread$1j(_objectSpread$1j({}, otherOptions), {}, {
               'dearomatize-on-load': editor.options()['dearomatize-on-load'],
               ignoreChiralFlag: editor.options().ignoreChiralFlag
             });
@@ -4915,18 +4936,23 @@ function load(struct, options) {
             hasUnsupportedGroups = parsedStruct.sgroups.some(function (sGroup) {
               return !supportedSGroupTypes[sGroup.type];
             });
+            hasMoleculeToMonomerConnections = parsedStruct.bonds.find(function (_, bond) {
+              return isNumber(bond.beginSuperatomAttachmentPointNumber) || isNumber(bond.endSuperatomAttachmentPointNumber);
+            });
             if (!hasUnsupportedGroups) {
-              _context.next = 18;
+              _context.next = 19;
               break;
             }
-            _context.next = 17;
+            _context.next = 18;
             return editor.event.confirm.dispatch();
-          case 17:
+          case 18:
             parsedStruct.sgroups = parsedStruct.sgroups.filter(function (_key, sGroup) {
               return supportedSGroupTypes[sGroup.type];
             });
-          case 18:
-            parsedStruct.rescale();
+          case 19:
+            if (!hasMoleculeToMonomerConnections) {
+              parsedStruct.rescale();
+            }
             if (editor.struct().atoms.size) {
               oldStruct = editor.struct().clone();
               parsedStruct.sgroups.forEach(function (sg, sgId) {
@@ -4980,23 +5006,23 @@ function load(struct, options) {
             dispatch({
               type: 'MODAL_CLOSE'
             });
-            _context.next = 40;
+            _context.next = 41;
             break;
-          case 35:
-            _context.prev = 35;
+          case 36:
+            _context.prev = 36;
             _context.t0 = _context["catch"](8);
             KetcherLogger.error('shared.ts::load', _context.t0);
             dispatch(setAnalyzingFile(false));
             _context.t0 && errorHandler && errorHandler(_context.t0.message);
-          case 40:
-            _context.prev = 40;
+          case 41:
+            _context.prev = 41;
             notifyRequestCompleted();
-            return _context.finish(40);
-          case 43:
+            return _context.finish(41);
+          case 44:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[8, 35, 40, 43]]);
+      }, _callee, null, [[8, 36, 41, 44]]);
     }));
     return function (_x, _x2) {
       return _ref.apply(this, arguments);
@@ -5026,8 +5052,8 @@ function openInfoModalWithCustomMessage(message) {
   };
 }
 
-function ownKeys$1h(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1h(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1h(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1h(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1i(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1i(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1i(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1i(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function checkServer() {
   return function (dispatch, getState) {
     var _getState = getState(),
@@ -5154,7 +5180,7 @@ function serverCall(editor, server, method, options, struct) {
   var selectedBonds = [];
   var aidMap = new Map();
   var bidMap = new Map();
-  var currentStruct = (struct || editor.struct()).clone(null, null, false, aidMap, null, null, null, bidMap);
+  var currentStruct = (struct || editor.struct()).clone(null, null, false, aidMap, null, null, null, null, bidMap);
   var expSel = editor.explicitSelected();
   if (selection) {
     selectedAtoms = (selection.atoms ? selection.atoms : expSel.atoms).map(function (aid) {
@@ -5168,7 +5194,7 @@ function serverCall(editor, server, method, options, struct) {
     resetStereoFlagsPosition(currentStruct);
   }
   var ketSerializer = new KetSerializer();
-  var serializedStruct = ketSerializer.serialize(currentStruct, undefined, _objectSpread$1h(_objectSpread$1h({}, selection), {}, {
+  var serializedStruct = ketSerializer.serialize(currentStruct, undefined, _objectSpread$1i(_objectSpread$1i({}, selection), {}, {
     atoms: selectedAtoms,
     bonds: selectedBonds
   }));
@@ -5420,7 +5446,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.20.0-unc20\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc20\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -5435,9 +5461,8 @@ var help = {
 };
 
 var ketcherInitEventName = function ketcherInitEventName(ketcherId) {
-  return "ketcher-init-".concat(ketcherId);
+  return ketcherId ? "ketcher-init-".concat(ketcherId) : 'ketcher-init';
 };
-var KETCHER_INIT_EVENT_NAME = 'ketcher-init';
 var MODES = {
   FG: 'fg'
 };
@@ -5449,6 +5474,8 @@ var KETCHER_ROOT_NODE_CLASS_NAME = 'Ketcher-root';
 var KETCHER_ROOT_NODE_CSS_SELECTOR = ".".concat(KETCHER_ROOT_NODE_CLASS_NAME);
 var EditorClassName = 'Ketcher-polymer-editor-root';
 var KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR = ".".concat(EditorClassName);
+var STRUCT_SERVICE_NO_RENDER_INITIALIZED_EVENT = 'struct-service-no-render-initialized';
+var STRUCT_SERVICE_INITIALIZED_EVENT = 'struct-service-initialized';
 
 var functionalGroupsLib = {
   'functional-groups': {
@@ -5497,9 +5524,9 @@ var fullscreen = {
   }
 };
 
-function ownKeys$1g(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1g(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1g(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1g(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-var config = _objectSpread$1g(_objectSpread$1g(_objectSpread$1g(_objectSpread$1g(_objectSpread$1g(_objectSpread$1g(_objectSpread$1g(_objectSpread$1g(_objectSpread$1g({
+function ownKeys$1h(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1h(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1h(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1h(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var config = _objectSpread$1h(_objectSpread$1h(_objectSpread$1h(_objectSpread$1h(_objectSpread$1h(_objectSpread$1h(_objectSpread$1h(_objectSpread$1h(_objectSpread$1h({
   clear: {
     shortcut: ['Mod+Delete', 'Mod+Backspace'],
     title: 'Clear Canvas',
@@ -5809,16 +5836,16 @@ function hasSelection(editor) {
 
 var classes$Q = {"button-common-styles":"ActionButton-module_button-common-styles__y-hng","scrollbar":"ActionButton-module_scrollbar__lD3MH","button":"ActionButton-module_button__nfoWQ","selected":"ActionButton-module_selected__kPCxA"};
 
-var _path$3a, _rect$4, _rect2$3;
-function _extends$3g() { _extends$3g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3g.apply(this, arguments); }
+var _path$3d, _rect$4, _rect2$3;
+function _extends$3j() { _extends$3j = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3j.apply(this, arguments); }
 function SvgAbout(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$3g({
+  return /*#__PURE__*/React.createElement("svg", _extends$3j({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$3a || (_path$3a = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$3d || (_path$3d = /*#__PURE__*/React.createElement("path", {
     d: "M12 4.5a7.5 7.5 0 100 15 7.5 7.5 0 000-15zM12 18c-3.307 0-6-2.693-6-6s2.693-6 6-6 6 2.693 6 6-2.693 6-6 6z",
     fill: "currentcolor"
   })), _rect$4 || (_rect$4 = /*#__PURE__*/React.createElement("rect", {
@@ -5838,16 +5865,30 @@ function SvgAbout(props) {
   })));
 }
 
-var _path$39;
-function _extends$3f() { _extends$3f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3f.apply(this, arguments); }
+var _path$3c;
+function _extends$3i() { _extends$3i = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3i.apply(this, arguments); }
+function SvgAddImage(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$3i({
+    width: 16,
+    height: 16,
+    viewBox: "0 0 16 16",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$3c || (_path$3c = /*#__PURE__*/React.createElement("path", {
+    d: "M12.19 14.476H1.524V3.81H8.38V2.286H1.524C.686 2.286 0 2.97 0 3.81v10.666C0 15.314.686 16 1.524 16H12.19c.839 0 1.524-.686 1.524-1.524V7.62H12.19v6.857zm-5.935-2.415l-1.493-1.798-2.095 2.69h8.38L8.35 9.362l-2.095 2.698zm7.46-9.775V0H12.19v2.286H9.905c.007.007 0 1.524 0 1.524h2.286v2.278c.007.007 1.523 0 1.523 0V3.81H16V2.286h-2.286z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$3b;
+function _extends$3h() { _extends$3h = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3h.apply(this, arguments); }
 function SvgAnalyse(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$3f({
+  return /*#__PURE__*/React.createElement("svg", _extends$3h({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$39 || (_path$39 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$3b || (_path$3b = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M14.877 5.655h-.847v2.812l.393.663a4.5 4.5 0 014.377 7.43c.694 1.597-.498 3.44-2.344 3.44h-8.91c-1.918 0-3.146-2-2.244-3.655 1.307-2.396 3.232-5.948 4.213-7.851V5.655h-.847V4h6.21v1.655zm2.42 11.972a4.5 4.5 0 01-4.411-7.79l-.549-.925V5.655h-1.129v3.23l-.09.175c-.96 1.876-2.977 5.598-4.321 8.063-.302.553.109 1.222.75 1.222h8.909a.84.84 0 00.84-.718zm1.24-4.127a3.037 3.037 0 11-6.074 0 3.037 3.037 0 016.075 0z",
@@ -5855,16 +5896,16 @@ function SvgAnalyse(props) {
   })));
 }
 
-var _path$38;
-function _extends$3e() { _extends$3e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3e.apply(this, arguments); }
+var _path$3a;
+function _extends$3g() { _extends$3g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3g.apply(this, arguments); }
 function SvgArom(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$3e({
+  return /*#__PURE__*/React.createElement("svg", _extends$3g({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$38 || (_path$38 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$3a || (_path$3a = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M8.613 7.547L4.396 3.331l-1.06 1.06 4.223 4.223h-2.97v1.5h5.524V4.589h-1.5v2.958zm-.565 9.047V11.76h2v3.68l3.962 2.288 3.963-2.288v-4.575L14.01 8.576l-2.267 1.309v-2.31l2.267-1.309 5.963 3.443v6.885l-5.963 3.443-5.962-3.443zm4.872-3.442a1.09 1.09 0 112.18 0 1.09 1.09 0 01-2.18 0zm1.09-2.59a2.59 2.59 0 100 5.18 2.59 2.59 0 000-5.18z",
@@ -5872,31 +5913,31 @@ function SvgArom(props) {
   })));
 }
 
-var _path$37;
-function _extends$3d() { _extends$3d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3d.apply(this, arguments); }
+var _path$39;
+function _extends$3f() { _extends$3f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3f.apply(this, arguments); }
 function SvgArrowUpward(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$3d({
+  return /*#__PURE__*/React.createElement("svg", _extends$3f({
     width: 21,
     height: 27,
     viewBox: "0 0 21 27",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$37 || (_path$37 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$39 || (_path$39 = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M.898 8.972L9.54.395a1.365 1.365 0 011.92 0l8.642 8.577c.53.527.53 1.38 0 1.906-.53.527-1.39.527-1.92 0l-6.324-6.276V26.5H9.142V4.602l-6.324 6.276c-.53.527-1.39.527-1.92 0a1.34 1.34 0 010-1.906z"
   })));
 }
 
-var _path$36;
-function _extends$3c() { _extends$3c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3c.apply(this, arguments); }
+var _path$38;
+function _extends$3e() { _extends$3e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3e.apply(this, arguments); }
 function SvgBondAny(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$3c({
+  return /*#__PURE__*/React.createElement("svg", _extends$3e({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$36 || (_path$36 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$38 || (_path$38 = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M15.942 32.078a2 2 0 01-.02 2.828l-3.646 3.595a2 2 0 01-2.808-2.85l3.646-3.593a2 2 0 012.828.02zM23.457 24.538a2 2 0 01-.02 2.829l-3.647 3.592a2 2 0 11-2.807-2.85l3.646-3.592a2 2 0 012.828.021zM31.013 17.036a2 2 0 01-.021 2.829l-3.646 3.592a2 2 0 11-2.807-2.85l3.646-3.592a2 2 0 012.828.021zM38.553 9.52a2 2 0 01-.02 2.828l-3.647 3.594a2 2 0 11-2.808-2.848L35.724 9.5a2 2 0 012.829.02z",
@@ -5904,9 +5945,39 @@ function SvgBondAny(props) {
   })));
 }
 
+var _path$37;
+function _extends$3d() { _extends$3d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3d.apply(this, arguments); }
+function SvgBondAromatic(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$3d({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$37 || (_path$37 = /*#__PURE__*/React.createElement("path", {
+    d: "M15.886 40.04a2 2 0 01-1.4-3.424l19.6-19.324a2 2 0 012.8 2.85l-19.6 19.322a2 2 0 01-1.4.576zM17.456 27.214l-3.544 3.494a1.998 1.998 0 01-2.896.045 2 2 0 01.095-2.895l3.544-3.494a1.998 1.998 0 012.896-.044 2 2 0 01-.095 2.894zM28.568 15.454a2 2 0 01-1.4-3.424l3.546-3.494a2 2 0 012.8 2.848l-3.542 3.494a2 2 0 01-1.404.576zM20.539 23.368a1.999 1.999 0 01-1.4-3.424l3.542-3.494a2.001 2.001 0 013.286 2.203 2 2 0 01-.486.645L21.943 22.8a2 2 0 01-1.404.568z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$36;
+function _extends$3c() { _extends$3c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3c.apply(this, arguments); }
+function SvgBondCrossed(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$3c({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$36 || (_path$36 = /*#__PURE__*/React.createElement("path", {
+    d: "M39.563 18.718l-14.098 6.8-7.25 13.866a2 2 0 01-3.546-1.852l4.762-9.11-9.26 4.464a2.001 2.001 0 11-1.735-3.6l14.098-6.8 7.25-13.87a2 2 0 113.546 1.852l-4.762 9.11 9.26-4.464a2 2 0 111.735 3.6v.004z",
+    fill: "currentColor"
+  })));
+}
+
 var _path$35;
 function _extends$3b() { _extends$3b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3b.apply(this, arguments); }
-function SvgBondAromatic(props) {
+function SvgBondDative(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$3b({
     width: 48,
     height: 48,
@@ -5914,14 +5985,14 @@ function SvgBondAromatic(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$35 || (_path$35 = /*#__PURE__*/React.createElement("path", {
-    d: "M15.886 40.04a2 2 0 01-1.4-3.424l19.6-19.324a2 2 0 012.8 2.85l-19.6 19.322a2 2 0 01-1.4.576zM17.456 27.214l-3.544 3.494a1.998 1.998 0 01-2.896.045 2 2 0 01.095-2.895l3.544-3.494a1.998 1.998 0 012.896-.044 2 2 0 01-.095 2.894zM28.568 15.454a2 2 0 01-1.4-3.424l3.546-3.494a2 2 0 012.8 2.848l-3.542 3.494a2 2 0 01-1.404.576zM20.539 23.368a1.999 1.999 0 01-1.4-3.424l3.542-3.494a2.001 2.001 0 013.286 2.203 2 2 0 01-.486.645L21.943 22.8a2 2 0 01-1.404.568z",
+    d: "M38.2 11.278l-5.554 11.76c-.234.494-.914.558-1.346.126l-1.65-1.65-15.278 15.054a2.001 2.001 0 01-3.468-1.423 2.002 2.002 0 01.668-1.427l15.252-15.032-1.728-1.728c-.432-.434-.368-1.112.126-1.346l11.76-5.554c.708-.338 1.55.504 1.218 1.22z",
     fill: "currentColor"
   })));
 }
 
 var _path$34;
 function _extends$3a() { _extends$3a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3a.apply(this, arguments); }
-function SvgBondCrossed(props) {
+function SvgBondDoublearomatic(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$3a({
     width: 48,
     height: 48,
@@ -5929,14 +6000,14 @@ function SvgBondCrossed(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$34 || (_path$34 = /*#__PURE__*/React.createElement("path", {
-    d: "M39.563 18.718l-14.098 6.8-7.25 13.866a2 2 0 01-3.546-1.852l4.762-9.11-9.26 4.464a2.001 2.001 0 11-1.735-3.6l14.098-6.8 7.25-13.87a2 2 0 113.546 1.852l-4.762 9.11 9.26-4.464a2 2 0 111.735 3.6v.004z",
+    d: "M17.572 27.342l-3.544 3.494a2 2 0 11-2.8-2.85l3.544-3.494a1.999 1.999 0 112.8 2.85zM24.427 19.6a1.999 1.999 0 01-1.4-3.424l3.544-3.494a2 2 0 012.8 2.848l-3.54 3.502a2 2 0 01-1.404.568zM32.102 11.96a2 2 0 100-4 2 2 0 000 4zM20.298 23.762a2 2 0 100-4 2 2 0 000 4zM20.888 36.036l-3.544 3.494a2 2 0 11-2.8-2.85l3.536-3.494a1.999 1.999 0 112.8 2.85h.008zM27.744 28.302a2 2 0 01-1.4-3.424l3.544-3.494a2 2 0 112.8 2.848l-3.544 3.494a2 2 0 01-1.4.576zM35.418 20.654a2 2 0 100-4 2 2 0 000 4zM23.614 32.456a2 2 0 100-4 2 2 0 000 4z",
     fill: "currentColor"
   })));
 }
 
 var _path$33;
 function _extends$39() { _extends$39 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$39.apply(this, arguments); }
-function SvgBondDative(props) {
+function SvgBondDouble(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$39({
     width: 48,
     height: 48,
@@ -5944,36 +6015,6 @@ function SvgBondDative(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$33 || (_path$33 = /*#__PURE__*/React.createElement("path", {
-    d: "M38.2 11.278l-5.554 11.76c-.234.494-.914.558-1.346.126l-1.65-1.65-15.278 15.054a2.001 2.001 0 01-3.468-1.423 2.002 2.002 0 01.668-1.427l15.252-15.032-1.728-1.728c-.432-.434-.368-1.112.126-1.346l11.76-5.554c.708-.338 1.55.504 1.218 1.22z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$32;
-function _extends$38() { _extends$38 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$38.apply(this, arguments); }
-function SvgBondDoublearomatic(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$38({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$32 || (_path$32 = /*#__PURE__*/React.createElement("path", {
-    d: "M17.572 27.342l-3.544 3.494a2 2 0 11-2.8-2.85l3.544-3.494a1.999 1.999 0 112.8 2.85zM24.427 19.6a1.999 1.999 0 01-1.4-3.424l3.544-3.494a2 2 0 012.8 2.848l-3.54 3.502a2 2 0 01-1.404.568zM32.102 11.96a2 2 0 100-4 2 2 0 000 4zM20.298 23.762a2 2 0 100-4 2 2 0 000 4zM20.888 36.036l-3.544 3.494a2 2 0 11-2.8-2.85l3.536-3.494a1.999 1.999 0 112.8 2.85h.008zM27.744 28.302a2 2 0 01-1.4-3.424l3.544-3.494a2 2 0 112.8 2.848l-3.544 3.494a2 2 0 01-1.4.576zM35.418 20.654a2 2 0 100-4 2 2 0 000 4zM23.614 32.456a2 2 0 100-4 2 2 0 000 4z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$31;
-function _extends$37() { _extends$37 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$37.apply(this, arguments); }
-function SvgBondDouble(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$37({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$31 || (_path$31 = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M36.916 17.314a2 2 0 01-.02 2.828L17.29 39.465a2 2 0 01-2.808-2.85l19.606-19.322a2 2 0 012.828.021zM33.538 8.556a2 2 0 01-.02 2.829L13.912 30.706a2 2 0 01-2.808-2.85L30.71 8.536a2 2 0 012.828.021z",
@@ -5981,24 +6022,54 @@ function SvgBondDouble(props) {
   })));
 }
 
-var _path$30;
-function _extends$36() { _extends$36 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$36.apply(this, arguments); }
+var _path$32;
+function _extends$38() { _extends$38 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$38.apply(this, arguments); }
 function SvgBondDown(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$36({
+  return /*#__PURE__*/React.createElement("svg", _extends$38({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$30 || (_path$30 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$32 || (_path$32 = /*#__PURE__*/React.createElement("path", {
     d: "M17.31 11.954l1.593-.937a.5.5 0 00.1-.784l-6.086-6.087a.5.5 0 00-.784.1l-.937 1.593 6.115 6.115zM9.344 8.987l1.047-1.78 5.552 5.551-1.78 1.048-4.82-4.819zM7.492 12.136l1.048-1.781 4.255 4.255-1.78 1.048-3.523-3.522zM5.64 15.284l1.048-1.781 2.959 2.96-1.78 1.047-2.227-2.226zM6.499 18.314l-1.213.713c-.756.445-1.608-.407-1.163-1.163l.713-1.213 1.663 1.663z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$31;
+function _extends$37() { _extends$37 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$37.apply(this, arguments); }
+function SvgBondHydrogen(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$37({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$31 || (_path$31 = /*#__PURE__*/React.createElement("path", {
+    d: "M14.261 35.726a2 2 0 01-1.4-3.424l1.012-1a2 2 0 112.8 2.848l-1.012 1a2 2 0 01-1.4.576zM18.875 31.108a2 2 0 01-1.4-3.424l1.012-1a2 2 0 012.8 2.85l-1 1a2 2 0 01-1.412.574zM23.486 26.49a2 2 0 01-1.4-3.426l1-1a2 2 0 012.8 2.848l-1 1a2 2 0 01-1.4.578zM28.112 21.886a2 2 0 01-1.4-3.426l1.01-1a2 2 0 112.8 2.848l-1 1a2 2 0 01-1.41.578zM32.726 17.27a2 2 0 01-1.4-3.424l1.012-1a2 2 0 012.8 2.85l-1.012 1a2 2 0 01-1.4.574z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$30;
+function _extends$36() { _extends$36 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$36.apply(this, arguments); }
+function SvgBondSinglearomatic(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$36({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$30 || (_path$30 = /*#__PURE__*/React.createElement("path", {
+    d: "M15.886 40.04a2 2 0 01-1.4-3.424l19.6-19.324a2 2 0 112.8 2.85l-19.6 19.322a2 2 0 01-1.4.576zM17.584 27.342l-3.544 3.494a2 2 0 11-2.8-2.85l3.544-3.494a1.998 1.998 0 012.896-.044 1.998 1.998 0 01-.096 2.894zM24.441 19.6a2 2 0 01-1.4-3.424l3.54-3.486a1.998 1.998 0 013.343.623 2.001 2.001 0 01-.543 2.225l-3.536 3.494a2 2 0 01-1.404.568zM32.113 11.96a2 2 0 100-4 2 2 0 000 4zM20.31 23.762a2 2 0 100-4 2 2 0 000 4z",
     fill: "currentColor"
   })));
 }
 
 var _path$2$;
 function _extends$35() { _extends$35 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$35.apply(this, arguments); }
-function SvgBondHydrogen(props) {
+function SvgBondSingledouble(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$35({
     width: 48,
     height: 48,
@@ -6006,14 +6077,14 @@ function SvgBondHydrogen(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2$ || (_path$2$ = /*#__PURE__*/React.createElement("path", {
-    d: "M14.261 35.726a2 2 0 01-1.4-3.424l1.012-1a2 2 0 112.8 2.848l-1.012 1a2 2 0 01-1.4.576zM18.875 31.108a2 2 0 01-1.4-3.424l1.012-1a2 2 0 012.8 2.85l-1 1a2 2 0 01-1.412.574zM23.486 26.49a2 2 0 01-1.4-3.426l1-1a2 2 0 012.8 2.848l-1 1a2 2 0 01-1.4.578zM28.112 21.886a2 2 0 01-1.4-3.426l1.01-1a2 2 0 112.8 2.848l-1 1a2 2 0 01-1.41.578zM32.726 17.27a2 2 0 01-1.4-3.424l1.012-1a2 2 0 012.8 2.85l-1.012 1a2 2 0 01-1.4.574z",
+    d: "M19.078 31.6l-3.544 3.488a2 2 0 11-2.8-2.85l3.543-3.494a2 2 0 112.8 2.85v.006zM30.2 19.832a2 2 0 01-1.4-3.424l3.545-3.494a2 2 0 112.8 2.85L31.6 19.258a2 2 0 01-1.4.574zM22.16 27.748a2 2 0 01-1.4-3.426l3.544-3.494a2 2 0 012.8 2.85l-3.544 3.494a2 2 0 01-1.4.576zM22.4 16.352a2 2 0 01-1.4-3.424l3.544-3.494a2 2 0 112.8 2.848L23.8 15.776a2 2 0 01-1.4.576zM14.372 24.266a2 2 0 01-1.4-3.424l3.54-3.494A2.001 2.001 0 1119.32 20.2l-3.544 3.49a2 2 0 01-1.404.576zM29.946 31.228a2 2 0 01-1.4-3.424l3.546-3.494a2 2 0 112.8 2.848l-3.546 3.494a2 2 0 01-1.4.576zM21.916 39.142a2 2 0 01-1.4-3.424l3.547-3.494a2 2 0 112.8 2.848l-3.543 3.494a2 2 0 01-1.404.576z",
     fill: "currentColor"
   })));
 }
 
 var _path$2_;
 function _extends$34() { _extends$34 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$34.apply(this, arguments); }
-function SvgBondSinglearomatic(props) {
+function SvgBondSingle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$34({
     width: 48,
     height: 48,
@@ -6021,36 +6092,6 @@ function SvgBondSinglearomatic(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2_ || (_path$2_ = /*#__PURE__*/React.createElement("path", {
-    d: "M15.886 40.04a2 2 0 01-1.4-3.424l19.6-19.324a2 2 0 112.8 2.85l-19.6 19.322a2 2 0 01-1.4.576zM17.584 27.342l-3.544 3.494a2 2 0 11-2.8-2.85l3.544-3.494a1.998 1.998 0 012.896-.044 1.998 1.998 0 01-.096 2.894zM24.441 19.6a2 2 0 01-1.4-3.424l3.54-3.486a1.998 1.998 0 013.343.623 2.001 2.001 0 01-.543 2.225l-3.536 3.494a2 2 0 01-1.404.568zM32.113 11.96a2 2 0 100-4 2 2 0 000 4zM20.31 23.762a2 2 0 100-4 2 2 0 000 4z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$2Z;
-function _extends$33() { _extends$33 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$33.apply(this, arguments); }
-function SvgBondSingledouble(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$33({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2Z || (_path$2Z = /*#__PURE__*/React.createElement("path", {
-    d: "M19.078 31.6l-3.544 3.488a2 2 0 11-2.8-2.85l3.543-3.494a2 2 0 112.8 2.85v.006zM30.2 19.832a2 2 0 01-1.4-3.424l3.545-3.494a2 2 0 112.8 2.85L31.6 19.258a2 2 0 01-1.4.574zM22.16 27.748a2 2 0 01-1.4-3.426l3.544-3.494a2 2 0 012.8 2.85l-3.544 3.494a2 2 0 01-1.4.576zM22.4 16.352a2 2 0 01-1.4-3.424l3.544-3.494a2 2 0 112.8 2.848L23.8 15.776a2 2 0 01-1.4.576zM14.372 24.266a2 2 0 01-1.4-3.424l3.54-3.494A2.001 2.001 0 1119.32 20.2l-3.544 3.49a2 2 0 01-1.404.576zM29.946 31.228a2 2 0 01-1.4-3.424l3.546-3.494a2 2 0 112.8 2.848l-3.546 3.494a2 2 0 01-1.4.576zM21.916 39.142a2 2 0 01-1.4-3.424l3.547-3.494a2 2 0 112.8 2.848l-3.543 3.494a2 2 0 01-1.404.576z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$2Y;
-function _extends$32() { _extends$32 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$32.apply(this, arguments); }
-function SvgBondSingle(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$32({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2Y || (_path$2Y = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M35.227 12.934a2 2 0 01-.02 2.829L15.601 35.087a2 2 0 11-2.808-2.85l19.604-19.323a2 2 0 012.829.02z",
@@ -6058,16 +6099,16 @@ function SvgBondSingle(props) {
   })));
 }
 
-var _path$2X;
-function _extends$31() { _extends$31 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$31.apply(this, arguments); }
+var _path$2Z;
+function _extends$33() { _extends$33 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$33.apply(this, arguments); }
 function SvgBondTriple(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$31({
+  return /*#__PURE__*/React.createElement("svg", _extends$33({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2X || (_path$2X = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2Z || (_path$2Z = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M35.158 12.928a2 2 0 01-.02 2.829L15.532 35.078a2 2 0 11-2.808-2.849L32.33 12.908a2 2 0 012.828.021zM31.306 5.49a2 2 0 01-.02 2.829L11.678 27.64a2 2 0 11-2.807-2.849L28.477 5.47a2 2 0 012.829.02zM39.013 20.366a2 2 0 01-.02 2.829L19.385 42.517a2 2 0 01-2.807-2.85l19.606-19.322a2 2 0 012.828.021z",
@@ -6075,31 +6116,31 @@ function SvgBondTriple(props) {
   })));
 }
 
-var _path$2W;
-function _extends$30() { _extends$30 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$30.apply(this, arguments); }
+var _path$2Y;
+function _extends$32() { _extends$32 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$32.apply(this, arguments); }
 function SvgBondUp(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$30({
+  return /*#__PURE__*/React.createElement("svg", _extends$32({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$2W || (_path$2W = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2Y || (_path$2Y = /*#__PURE__*/React.createElement("path", {
     d: "M18.763 10.83L4.701 18.971a.468.468 0 01-.64-.637l8.107-14.1a.467.467 0 01.736-.098l5.956 5.953a.467.467 0 01-.097.74z",
     fill: "currentColor"
   })));
 }
 
-var _path$2V;
-function _extends$2$() { _extends$2$ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2$.apply(this, arguments); }
+var _path$2X;
+function _extends$31() { _extends$31 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$31.apply(this, arguments); }
 function SvgBondUpdown(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2$({
+  return /*#__PURE__*/React.createElement("svg", _extends$31({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$2V || (_path$2V = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2X || (_path$2X = /*#__PURE__*/React.createElement("path", {
     className: "bond-updown_svg__stroke",
     d: "M5 18.5L7 15l4 1.5-1.5-5 5 2.5-3-6 7.5 3.5L13 5",
     stroke: "currentColor",
@@ -6109,29 +6150,29 @@ function SvgBondUpdown(props) {
   })));
 }
 
-var _path$2U;
-function _extends$2_() { _extends$2_ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2_.apply(this, arguments); }
+var _path$2W;
+function _extends$30() { _extends$30 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$30.apply(this, arguments); }
 function SvgCapitalT(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2_({
+  return /*#__PURE__*/React.createElement("svg", _extends$30({
     width: 22,
     height: 23,
     viewBox: "0 0 22 23",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2U || (_path$2U = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2W || (_path$2W = /*#__PURE__*/React.createElement("path", {
     d: "M.5 0v4.5h8.25v18h4.5v-18h8.25V0H.5z"
   })));
 }
 
-var _path$2T;
-function _extends$2Z() { _extends$2Z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2Z.apply(this, arguments); }
+var _path$2V;
+function _extends$2$() { _extends$2$ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2$.apply(this, arguments); }
 function SvgChain(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2Z({
+  return /*#__PURE__*/React.createElement("svg", _extends$2$({
     width: 32,
     height: 32,
     viewBox: "0 0 32 32",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2T || (_path$2T = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2V || (_path$2V = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M26.323 10.62c.517.525.51 1.369-.014 1.886l-5.414 5.336c-.33.324-.804.455-1.254.345l-6.996-1.715-4.993 4.92a1.333 1.333 0 01-1.872-1.899l5.523-5.443c.33-.324.804-.455 1.253-.345l6.997 1.715 4.885-4.814a1.333 1.333 0 011.885.014z",
@@ -6139,45 +6180,45 @@ function SvgChain(props) {
   })));
 }
 
-var _path$2S;
-function _extends$2Y() { _extends$2Y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2Y.apply(this, arguments); }
+var _path$2U;
+function _extends$2_() { _extends$2_ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2_.apply(this, arguments); }
 function SvgChargeMinus(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2Y({
+  return /*#__PURE__*/React.createElement("svg", _extends$2_({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2S || (_path$2S = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2U || (_path$2U = /*#__PURE__*/React.createElement("path", {
     d: "M20 4h-8v2h8V4zM5.82 19.32a1 1 0 01-.948.68h-.45a1 1 0 01-.942-1.338l3.228-9A1 1 0 017.65 9h1.707a1 1 0 01.941.663l3.224 9A1 1 0 0112.58 20h-.451a1 1 0 01-.948-.68l-2.62-7.764a.062.062 0 00-.117 0L5.819 19.32zm-.392-2.736c0-.501.406-.908.907-.908h4.302a.908.908 0 010 1.816H6.335a.908.908 0 01-.907-.908z",
     fill: "currentColor"
   })));
 }
 
-var _path$2R;
-function _extends$2X() { _extends$2X = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2X.apply(this, arguments); }
+var _path$2T;
+function _extends$2Z() { _extends$2Z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2Z.apply(this, arguments); }
 function SvgChargePlus(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2X({
+  return /*#__PURE__*/React.createElement("svg", _extends$2Z({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2R || (_path$2R = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2T || (_path$2T = /*#__PURE__*/React.createElement("path", {
     d: "M21.5 6.499v2h-4V12.5h-2V8.499h-4v-2h4V2.5h2v3.999h4zM5.82 19.32a1 1 0 01-.948.68h-.45a1 1 0 01-.942-1.338l3.228-9A1 1 0 017.65 9h1.707a1 1 0 01.941.663l3.224 9A1 1 0 0112.58 20h-.451a1 1 0 01-.948-.68l-2.62-7.764a.062.062 0 00-.117 0L5.819 19.32zm-.392-2.736c0-.501.406-.908.907-.908h4.302a.908.908 0 010 1.816H6.335a.908.908 0 01-.907-.908z",
     fill: "currentColor"
   })));
 }
 
-var _path$2Q, _path2$G;
-function _extends$2W() { _extends$2W = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2W.apply(this, arguments); }
+var _path$2S, _path2$G;
+function _extends$2Y() { _extends$2Y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2Y.apply(this, arguments); }
 function SvgCheck(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2W({
+  return /*#__PURE__*/React.createElement("svg", _extends$2Y({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2Q || (_path$2Q = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2S || (_path$2S = /*#__PURE__*/React.createElement("path", {
     d: "M12 5a7 7 0 11-7 7 7.008 7.008 0 017-7zm0-2a9 9 0 100 18 9 9 0 000-18z",
     fill: "currentcolor"
   })), _path2$G || (_path2$G = /*#__PURE__*/React.createElement("path", {
@@ -6188,89 +6229,89 @@ function SvgCheck(props) {
   })));
 }
 
-var _path$2P;
-function _extends$2V() { _extends$2V = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2V.apply(this, arguments); }
+var _path$2R;
+function _extends$2X() { _extends$2X = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2X.apply(this, arguments); }
 function SvgCheckmark(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2V({
+  return /*#__PURE__*/React.createElement("svg", _extends$2X({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2P || (_path$2P = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2R || (_path$2R = /*#__PURE__*/React.createElement("path", {
     d: "M19.01 35.424L7.276 22.894l2.92-2.734 8.908 9.514L37.85 10.928l2.828 2.828L19.01 35.424z",
     fill: "#231F20"
   })));
 }
 
-var _path$2O, _path2$F;
-function _extends$2U() { _extends$2U = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2U.apply(this, arguments); }
+var _path$2Q, _path2$F;
+function _extends$2W() { _extends$2W = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2W.apply(this, arguments); }
 function SvgChiralFlag(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2U({
+  return /*#__PURE__*/React.createElement("svg", _extends$2W({
     "data-name": "Layer 1",
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 -5 70 35"
-  }, props), _path$2O || (_path$2O = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2Q || (_path$2Q = /*#__PURE__*/React.createElement("path", {
     d: "M0 25h69V0H0zM68 1v23H1V1z"
   })), _path2$F || (_path2$F = /*#__PURE__*/React.createElement("path", {
     d: "M21 18.14a3.85 3.85 0 002.71-.93 3.07 3.07 0 001-2.43H23.1a2.09 2.09 0 01-.53 1.54 2.09 2.09 0 01-1.55.53 1.94 1.94 0 01-1.64-.8 3.31 3.31 0 01-.6-2v-1.98a3.33 3.33 0 01.59-2 1.89 1.89 0 011.6-.8 2.18 2.18 0 011.59.53 2 2 0 01.54 1.53h1.61a3 3 0 00-1-2.45A4 4 0 0021 7.9a3.58 3.58 0 00-2.78 1.18 4.3 4.3 0 00-1.07 3V14a4.25 4.25 0 001.08 3A3.65 3.65 0 0021 18.14zM27.77 12.54a1.67 1.67 0 01.64-.52 2.09 2.09 0 01.92-.19 1.26 1.26 0 011 .39 1.91 1.91 0 01.34 1.26V18h1.66v-4.51a3.36 3.36 0 00-.66-2.29 2.33 2.33 0 00-1.84-.74 2.42 2.42 0 00-1.17.29 2.63 2.63 0 00-.9.81V7.34h-1.65V18h1.66zM34.16 7.34h1.66V8.8h-1.66zM34.16 10.6h1.66V18h-1.66zM39.32 12.86a1.35 1.35 0 01.5-.58 1.49 1.49 0 01.81-.21h.71l.2-1.55-.24-.06h-.28a1.68 1.68 0 00-1 .32 2.38 2.38 0 00-.72.89l-.11-1.07h-1.53V18h1.66zM45.49 13.65a4.08 4.08 0 00-2.39.6 1.93 1.93 0 00-.85 1.67 2.16 2.16 0 00.62 1.63 2.46 2.46 0 001.77.59 2.3 2.3 0 001.25-.35 2.85 2.85 0 00.9-.87 4 4 0 00.08.53q.06.27.15.55h1.68a4.59 4.59 0 01-.2-.82 6 6 0 01-.06-.88V13a2.31 2.31 0 00-.79-1.89 3.17 3.17 0 00-2.08-.66 3.32 3.32 0 00-2.16.68 1.83 1.83 0 00-.78 1.55h1.6a.86.86 0 01.33-.7 1.39 1.39 0 01.9-.27 1.35 1.35 0 011 .33 1.21 1.21 0 01.34.91v.65zm1.29 2.13a1.59 1.59 0 01-.67.72 2.07 2.07 0 01-1.12.31 1.15 1.15 0 01-.8-.25.86.86 0 01-.28-.67 1.09 1.09 0 01.41-.84 1.67 1.67 0 011.13-.36h1.32zM50.27 7.34h1.66V18h-1.66z"
   })));
 }
 
-var _path$2N;
-function _extends$2T() { _extends$2T = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2T.apply(this, arguments); }
+var _path$2P;
+function _extends$2V() { _extends$2V = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2V.apply(this, arguments); }
 function SvgCip(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2T({
+  return /*#__PURE__*/React.createElement("svg", _extends$2V({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$2N || (_path$2N = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2P || (_path$2P = /*#__PURE__*/React.createElement("path", {
     d: "M12.01 19.54l1.91-14.36c.04-.33.38-.52.69-.4l4.85 2.02c.29.12.4.47.23.73l-7.68 12v.01zM8.78 6.67l.85 6.36-3.4-5.29 2.54-1.06m.83-1.93c-.06 0-.13.01-.19.04L4.56 6.81c-.29.12-.4.47-.23.73l7.68 12-1.92-14.36a.495.495 0 00-.49-.43z",
     fill: "currentColor"
   })));
 }
 
-var _path$2M;
-function _extends$2S() { _extends$2S = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2S.apply(this, arguments); }
+var _path$2O;
+function _extends$2U() { _extends$2U = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2U.apply(this, arguments); }
 function SvgClean(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2S({
+  return /*#__PURE__*/React.createElement("svg", _extends$2U({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2M || (_path$2M = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2O || (_path$2O = /*#__PURE__*/React.createElement("path", {
     d: "M19.848 16.312a2.437 2.437 0 11-4.843-.386l-1.987-1.147-1-.578-1 .577-1.687.974a2.437 2.437 0 11-1.234-1.596l1.922-1.109 1-.578V9.16a2.437 2.437 0 112 0v3.31l1 .577 2.09 1.207a2.436 2.436 0 013.741 2.058h-.002z",
     fill: "currentcolor"
   })));
 }
 
-var _path$2L;
-function _extends$2R() { _extends$2R = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2R.apply(this, arguments); }
+var _path$2N;
+function _extends$2T() { _extends$2T = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2T.apply(this, arguments); }
 function SvgCopy(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2R({
+  return /*#__PURE__*/React.createElement("svg", _extends$2T({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2L || (_path$2L = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2N || (_path$2N = /*#__PURE__*/React.createElement("path", {
     d: "M17.25 18.75H9V8.25h8.25v10.5zm0-12H9a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h8.25a1.5 1.5 0 001.5-1.5V8.25a1.5 1.5 0 00-1.5-1.5zm-2.25-3H6a1.5 1.5 0 00-1.5 1.5v10.5H6V5.25h9v-1.5z",
     fill: "currentcolor"
   })));
 }
 
-var _path$2K, _path2$E, _path3$8;
-function _extends$2Q() { _extends$2Q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2Q.apply(this, arguments); }
+var _path$2M, _path2$E, _path3$8;
+function _extends$2S() { _extends$2S = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2S.apply(this, arguments); }
 function SvgCopyImage(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2Q({
+  return /*#__PURE__*/React.createElement("svg", _extends$2S({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2K || (_path$2K = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2M || (_path$2M = /*#__PURE__*/React.createElement("path", {
     d: "M17.25 18.75H9V8.25h8.25v10.5zm0-12H9a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h8.25a1.5 1.5 0 001.5-1.5V8.25a1.5 1.5 0 00-1.5-1.5zm-2.25-3H6a1.5 1.5 0 00-1.5 1.5v10.5H6V5.25h9v-1.5z",
     fill: "currentColor"
   })), _path2$E || (_path2$E = /*#__PURE__*/React.createElement("path", {
@@ -6284,16 +6325,16 @@ function SvgCopyImage(props) {
   })));
 }
 
-var _path$2J, _path2$D;
-function _extends$2P() { _extends$2P = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2P.apply(this, arguments); }
+var _path$2L, _path2$D;
+function _extends$2R() { _extends$2R = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2R.apply(this, arguments); }
 function SvgCopyKet(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2P({
+  return /*#__PURE__*/React.createElement("svg", _extends$2R({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2J || (_path$2J = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2L || (_path$2L = /*#__PURE__*/React.createElement("path", {
     d: "M17.25 18.75H9V8.25h8.25v10.5zm0-12H9a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h8.25a1.5 1.5 0 001.5-1.5V8.25a1.5 1.5 0 00-1.5-1.5zm-2.25-3H6a1.5 1.5 0 00-1.5 1.5v10.5H6V5.25h9v-1.5z",
     fill: "currentColor"
   })), _path2$D || (_path2$D = /*#__PURE__*/React.createElement("path", {
@@ -6302,16 +6343,16 @@ function SvgCopyKet(props) {
   })));
 }
 
-var _path$2I, _path2$C;
-function _extends$2O() { _extends$2O = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2O.apply(this, arguments); }
+var _path$2K, _path2$C;
+function _extends$2Q() { _extends$2Q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2Q.apply(this, arguments); }
 function SvgCopyMol(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2O({
+  return /*#__PURE__*/React.createElement("svg", _extends$2Q({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2I || (_path$2I = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2K || (_path$2K = /*#__PURE__*/React.createElement("path", {
     d: "M17.25 18.75H9V8.25h8.25v10.5zm0-12H9a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h8.25a1.5 1.5 0 001.5-1.5V8.25a1.5 1.5 0 00-1.5-1.5zm-2.25-3H6a1.5 1.5 0 00-1.5 1.5v10.5H6V5.25h9v-1.5z",
     fill: "currentColor"
   })), _path2$C || (_path2$C = /*#__PURE__*/React.createElement("path", {
@@ -6320,31 +6361,31 @@ function SvgCopyMol(props) {
   })));
 }
 
-var _path$2H;
-function _extends$2N() { _extends$2N = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2N.apply(this, arguments); }
+var _path$2J;
+function _extends$2P() { _extends$2P = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2P.apply(this, arguments); }
 function SvgCut(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2N({
+  return /*#__PURE__*/React.createElement("svg", _extends$2P({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2H || (_path$2H = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2J || (_path$2J = /*#__PURE__*/React.createElement("path", {
     d: "M17.25 5.25l-4.5 4.5 1.5 1.5L19.5 6v-.75h-2.25zM12 12.375a.375.375 0 110-.75.375.375 0 010 .75zM7.5 18a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0-9a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm2.73-.27c.172-.375.27-.788.27-1.23a3 3 0 10-3 3c.442 0 .855-.098 1.23-.27L10.5 12l-1.77 1.77a2.923 2.923 0 00-1.23-.27 3 3 0 103 3c0-.442-.098-.855-.27-1.23L12 13.5l5.25 5.25h2.25V18l-9.27-9.27z",
     fill: "currentcolor"
   })));
 }
 
-var _path$2G;
-function _extends$2M() { _extends$2M = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2M.apply(this, arguments); }
+var _path$2I;
+function _extends$2O() { _extends$2O = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2O.apply(this, arguments); }
 function SvgDearom(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2M({
+  return /*#__PURE__*/React.createElement("svg", _extends$2O({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2G || (_path$2G = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2I || (_path$2I = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M12.257 14.115l-2.267 1.31-3.963-2.289V8.561L9.99 6.273l3.962 2.288v3.68h2V7.406L9.99 3.963 4.027 7.406v6.885l5.963 3.443 2.267-1.31v-2.309zm1.63-.229h5.525v1.5h-2.97l4.222 4.223-1.06 1.06-4.217-4.216v2.958h-1.5v-5.525zm-3.649-5.414V7.23l-.38.23-2.596 1.583-.35.213 1.02.621 2.306-1.405zm2.598 4.405V8.813l-1.04.632v2.8l1.04.632zm-2.598.349l-2.307-1.419-1.015.631 3.322 2.03v-1.242z",
@@ -6352,9 +6393,37 @@ function SvgDearom(props) {
   })));
 }
 
+var _path$2H;
+function _extends$2N() { _extends$2N = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2N.apply(this, arguments); }
+function SvgDelete(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2N({
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$2H || (_path$2H = /*#__PURE__*/React.createElement("path", {
+    d: "M15.813 20.483h-7.63a1.8 1.8 0 01-1.8-1.8V7.357h11.23v11.326a1.8 1.8 0 01-1.8 1.8zm-7.43-2h7.23V9.357h-7.23v9.126zM19.305 4.613v2H4.695v-2h3.433l1.034-1.13h5.676l1.034 1.13h3.433z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$2G;
+function _extends$2M() { _extends$2M = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2M.apply(this, arguments); }
+function SvgDropdown(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2M({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: 1000,
+    height: 1000,
+    viewBox: "0 0 1000 1000"
+  }, props), _path$2G || (_path$2G = /*#__PURE__*/React.createElement("path", {
+    d: "M876.337 751.055c0 70.936-57.736 128.672-128.672 128.672H201.297c-70.936 0-128.557-57.736-128.557-128.672L747.55 76.36c70.936 0 128.672 57.506 128.672 128.557v546.138z"
+  })));
+}
+
 var _path$2F;
 function _extends$2L() { _extends$2L = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2L.apply(this, arguments); }
-function SvgDelete(props) {
+function SvgEnhancedStereo(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2L({
     width: 24,
     height: 24,
@@ -6362,34 +6431,6 @@ function SvgDelete(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2F || (_path$2F = /*#__PURE__*/React.createElement("path", {
-    d: "M15.813 20.483h-7.63a1.8 1.8 0 01-1.8-1.8V7.357h11.23v11.326a1.8 1.8 0 01-1.8 1.8zm-7.43-2h7.23V9.357h-7.23v9.126zM19.305 4.613v2H4.695v-2h3.433l1.034-1.13h5.676l1.034 1.13h3.433z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$2E;
-function _extends$2K() { _extends$2K = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2K.apply(this, arguments); }
-function SvgDropdown(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2K({
-    xmlns: "http://www.w3.org/2000/svg",
-    width: 1000,
-    height: 1000,
-    viewBox: "0 0 1000 1000"
-  }, props), _path$2E || (_path$2E = /*#__PURE__*/React.createElement("path", {
-    d: "M876.337 751.055c0 70.936-57.736 128.672-128.672 128.672H201.297c-70.936 0-128.557-57.736-128.557-128.672L747.55 76.36c70.936 0 128.672 57.506 128.672 128.557v546.138z"
-  })));
-}
-
-var _path$2D;
-function _extends$2J() { _extends$2J = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2J.apply(this, arguments); }
-function SvgEnhancedStereo(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2J({
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2D || (_path$2D = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M14 4.5c0 1.138-.76 2.098-1.8 2.4v2.963a2.53 2.53 0 011.54 1.333l1.766-.758A1.501 1.501 0 1118.5 10.3a1.5 1.5 0 01-2.417 1.187l-2.084.894c-.003.301-.057.59-.152.858l1.476 1.273a3 3 0 11-.988 1.108l-1.367-1.18a2.433 2.433 0 01-2.656.184l-2.35 1.442a2.5 2.5 0 11-.683-1.322l1.993-1.223A2.649 2.649 0 019 12.347c0-1.14.711-2.107 1.7-2.452V6.87A2.501 2.501 0 1114 4.5zm-3.635 0a1.134 1.134 0 102.27 0 1.134 1.134 0 00-2.27 0zm1.135 8.955c-.592 0-1.071-.496-1.071-1.108 0-.612.48-1.108 1.07-1.108.592 0 1.072.496 1.072 1.108 0 .612-.48 1.108-1.071 1.108zM4.298 16.5a1.201 1.201 0 102.403 0 1.201 1.201 0 00-2.403 0zM17 18.513a1.513 1.513 0 110-3.026 1.513 1.513 0 010 3.026zM17 11a.7.7 0 110-1.398.7.7 0 010 1.398z",
@@ -6397,76 +6438,76 @@ function SvgEnhancedStereo(props) {
   })));
 }
 
-var _path$2C;
-function _extends$2I() { _extends$2I = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2I.apply(this, arguments); }
+var _path$2E;
+function _extends$2K() { _extends$2K = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2K.apply(this, arguments); }
 function SvgEdit(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2I({
+  return /*#__PURE__*/React.createElement("svg", _extends$2K({
     width: 18,
     height: 18,
     viewBox: "0 0 18 18",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2C || (_path$2C = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2E || (_path$2E = /*#__PURE__*/React.createElement("path", {
     d: "M11.796 7.265l-1.06-1.06L3.75 13.19v1.06h1.06l6.986-6.985zm1.06-1.06l1.061-1.061-1.06-1.06-1.061 1.06 1.06 1.06zM5.432 15.75H2.25v-3.182L12.326 2.492a.75.75 0 011.06 0l2.123 2.121a.75.75 0 010 1.06L5.431 15.75z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$2D;
+function _extends$2J() { _extends$2J = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2J.apply(this, arguments); }
+function SvgElementsGroup(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2J({
+    width: 18,
+    height: 15,
+    viewBox: "0 0 18 15",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$2D || (_path$2D = /*#__PURE__*/React.createElement("path", {
+    d: "M16.2 2.579H8.705L7.026.899H.768A.768.768 0 000 1.669v11.207a1.8 1.8 0 001.8 1.8h14.4a1.8 1.8 0 001.8-1.8v-8.5a1.8 1.8 0 00-1.8-1.796zm-.2 10.1H2v-8.1h14v8.1z",
+    fill: "currentcolor"
+  })));
+}
+
+var _path$2C;
+function _extends$2I() { _extends$2I = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2I.apply(this, arguments); }
+function SvgErase(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2I({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$2C || (_path$2C = /*#__PURE__*/React.createElement("path", {
+    d: "M40.284 18.458L30.37 8.546a2 2 0 00-2.828 0L7.716 28.372a2 2 0 000 2.828l7.084 7.082a6.001 6.001 0 008.488 0l17-17a2 2 0 000-2.828l-.004.004zm-19.824 17a2 2 0 01-2.832 0l-5.67-5.672 7.824-7.824 7.084 7.086-6.406 6.41z",
     fill: "currentColor"
   })));
 }
 
 var _path$2B;
 function _extends$2H() { _extends$2H = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2H.apply(this, arguments); }
-function SvgElementsGroup(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2H({
-    width: 18,
-    height: 15,
-    viewBox: "0 0 18 15",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2B || (_path$2B = /*#__PURE__*/React.createElement("path", {
-    d: "M16.2 2.579H8.705L7.026.899H.768A.768.768 0 000 1.669v11.207a1.8 1.8 0 001.8 1.8h14.4a1.8 1.8 0 001.8-1.8v-8.5a1.8 1.8 0 00-1.8-1.796zm-.2 10.1H2v-8.1h14v8.1z",
-    fill: "currentcolor"
-  })));
-}
-
-var _path$2A;
-function _extends$2G() { _extends$2G = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2G.apply(this, arguments); }
-function SvgErase(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2G({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2A || (_path$2A = /*#__PURE__*/React.createElement("path", {
-    d: "M40.284 18.458L30.37 8.546a2 2 0 00-2.828 0L7.716 28.372a2 2 0 000 2.828l7.084 7.082a6.001 6.001 0 008.488 0l17-17a2 2 0 000-2.828l-.004.004zm-19.824 17a2 2 0 01-2.832 0l-5.67-5.672 7.824-7.824 7.084 7.086-6.406 6.41z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$2z;
-function _extends$2F() { _extends$2F = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2F.apply(this, arguments); }
 function SvgExtendedTable(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2F({
+  return /*#__PURE__*/React.createElement("svg", _extends$2H({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2z || (_path$2z = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2B || (_path$2B = /*#__PURE__*/React.createElement("path", {
     d: "M7.445 15.5H4.146c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM13.652 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM19.855 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM5 13.5a.5.5 0 01-.5-.5V5a.5.5 0 01.5-.5h5.296a.5.5 0 01.5.5v.767a.5.5 0 01-.5.5H7.183a.5.5 0 00-.5.5v.845a.5.5 0 00.5.5h2.791a.5.5 0 01.5.5v.771a.5.5 0 01-.5.5H7.183a.5.5 0 00-.5.5v.85a.5.5 0 00.5.5h3.113a.5.5 0 01.5.5V13a.5.5 0 01-.5.5H5zM12.368 6.267a.5.5 0 01-.5-.5V5a.5.5 0 01.5-.5H19a.5.5 0 01.5.5v.767a.5.5 0 01-.5.5h-1.738a.5.5 0 00-.5.5V13a.5.5 0 01-.5.5H15.11a.5.5 0 01-.5-.5V6.767a.5.5 0 00-.5-.5h-1.742z",
     fill: "currentColor"
   })));
 }
 
-var _path$2y, _path2$B, _circle$7, _circle2$7, _circle3$5;
-function _extends$2E() { _extends$2E = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2E.apply(this, arguments); }
+var _path$2A, _path2$B, _circle$7, _circle2$7, _circle3$5;
+function _extends$2G() { _extends$2G = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2G.apply(this, arguments); }
 function SvgFileThumbnail(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2E({
+  return /*#__PURE__*/React.createElement("svg", _extends$2G({
     width: 29,
     height: 37,
     viewBox: "0 0 29 37",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2y || (_path$2y = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2A || (_path$2A = /*#__PURE__*/React.createElement("path", {
     d: "M19.872.583H3.747A3.594 3.594 0 00.164 4.167v28.666a3.594 3.594 0 003.583 3.584h21.5a3.594 3.594 0 003.584-3.584V9.543L19.872.583zM3.747 32.833V4.168h14.334v7.167h7.166v21.5h-21.5z",
     fill: "#005662"
   })), _path2$B || (_path2$B = /*#__PURE__*/React.createElement("path", {
@@ -6491,44 +6532,44 @@ function SvgFileThumbnail(props) {
   })));
 }
 
-var _path$2x;
-function _extends$2D() { _extends$2D = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2D.apply(this, arguments); }
+var _path$2z;
+function _extends$2F() { _extends$2F = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2F.apply(this, arguments); }
 function SvgGenericGroups(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2D({
+  return /*#__PURE__*/React.createElement("svg", _extends$2F({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 750 750",
     height: 1000,
     width: 1000
-  }, props), _path$2x || (_path$2x = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2z || (_path$2z = /*#__PURE__*/React.createElement("path", {
     d: "M73.129 209.914v403.543h403.226v73.371H62.133c-34.418 0-62.317-27.922-62.317-62.367V209.914zM304.07 343.45l103.004-103.086-48.754-49.89c-10.734-10.73-28.12-10.73-38.855 0l-63.05 64.199c-10.72 10.742-10.72 28.144 0 38.887zm132.696-73.37L334.859 373.53l311.95 313.297 103.375-103.086zm186.218 123.265V136.543c0-53.195-19.43-73.371-73.316-73.371H183.102c-56.454 0-73.317 16.875-73.317 73.371v366.855c0 54.297 16.863 73.372 73.317 73.372h293.253l-73.312-73.372H183.102V136.543h366.566v183.43zm0 0"
   })));
 }
 
-var _path$2w;
-function _extends$2C() { _extends$2C = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2C.apply(this, arguments); }
+var _path$2y;
+function _extends$2E() { _extends$2E = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2E.apply(this, arguments); }
 function SvgHand(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2C({
+  return /*#__PURE__*/React.createElement("svg", _extends$2E({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2w || (_path$2w = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2y || (_path$2y = /*#__PURE__*/React.createElement("path", {
     d: "M20.434 7.673c-.1-.6-.713-1.731-2.32-1.731-.126 0-.252.007-.377.023v-.79a1.01 1.01 0 00-.045-.3c-.177-.564-.876-1.631-2.262-1.631a2.599 2.599 0 00-.676.086 2.394 2.394 0 00-.146-.23c-.453-.645-1.186-1-2.063-1-.877 0-1.584.36-2.025 1.017a2.461 2.461 0 00-.361.85 2.663 2.663 0 00-.408-.03c-1.474 0-2.124 1.15-2.262 1.757a1.034 1.034 0 00-.024.222V11.1l-.13-.1c-.588-.5-2.034-1.121-3.391.029-1.357 1.15-1.015 2.664-.431 3.452.453.773 4.512 7.425 10.223 7.425 3.25 0 4.91-1.512 5.729-2.781a6.291 6.291 0 00.98-2.8V7.838c.001-.056-.003-.11-.011-.165zm-1.986 8.542a4.474 4.474 0 01-.7 1.887c-.805 1.2-2.153 1.8-4.008 1.8-4.768 0-8.484-6.412-8.52-6.476a.669.669 0 00-.09-.126c-.294-.408 0-.655.107-.748.267-.227.54-.237.81-.031l1.77 1.452a1 1 0 001.644-.763V6.08a.287.287 0 01.29-.148.44.44 0 01.372.16v4.7a1 1 0 102 0v-6.45c.068-.248.3-.248.422-.248.2 0 .414.032.482.255v6.44a1 1 0 102 0v-5.2a.75.75 0 01.074-.19c.049-.081.108-.15.325-.15a.35.35 0 01.307.15v5.39a1 1 0 102 0V8.047a.583.583 0 01.377-.1c.065 0 .258.006.334.078l.004 8.19z",
     fill: "currentcolor"
   })));
 }
 
-var _path$2v, _path2$A;
-function _extends$2B() { _extends$2B = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2B.apply(this, arguments); }
+var _path$2x, _path2$A;
+function _extends$2D() { _extends$2D = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2D.apply(this, arguments); }
 function SvgCompressedHand(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2B({
+  return /*#__PURE__*/React.createElement("svg", _extends$2D({
     width: 24,
     height: 24,
     viewBox: "0 0 30 30",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2v || (_path$2v = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2x || (_path$2x = /*#__PURE__*/React.createElement("path", {
     d: "M10.744 3C8.89 3 7.384 4.525 7.384 6.4v.22h-.012c-1.997 0-3.622 1.602-3.622 3.568l.001 7.02c0 1.77 1.512 3.515 3.112 5.361.72.83 1.919 2.216 2.034 2.731v1.522h13.442v-1.554c0-.59.618-1.77 1.163-2.81.938-1.789 1.998-3.815 1.998-5.991 0-3.258-.01-6.248-.01-6.248 0-1.696-1.39-3.08-3.1-3.08-.203 0-.4.02-.592.057a3.65 3.65 0 00-3.033-1.607c-.367 0-.72.053-1.055.153a3.636 3.636 0 00-3.09-1.705c-.444 0-.87.08-1.264.225A3.345 3.345 0 0010.744 3z",
     fill: "#fff"
   })), _path2$A || (_path2$A = /*#__PURE__*/React.createElement("path", {
@@ -6537,30 +6578,30 @@ function SvgCompressedHand(props) {
   })));
 }
 
-var _path$2u;
-function _extends$2A() { _extends$2A = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2A.apply(this, arguments); }
+var _path$2w;
+function _extends$2C() { _extends$2C = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2C.apply(this, arguments); }
 function SvgHelp(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2A({
+  return /*#__PURE__*/React.createElement("svg", _extends$2C({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2u || (_path$2u = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2w || (_path$2w = /*#__PURE__*/React.createElement("path", {
     d: "M11.25 16.5h1.5V15h-1.5v1.5zm.75-12a7.5 7.5 0 100 15 7.5 7.5 0 000-15zM12 18c-3.307 0-6-2.693-6-6s2.693-6 6-6 6 2.693 6 6-2.693 6-6 6zm0-10.5a3 3 0 00-3 3h1.5a1.5 1.5 0 113 0c0 1.5-2.25 1.313-2.25 3.75h1.5c0-1.688 2.25-1.875 2.25-3.75a3 3 0 00-3-3z",
     fill: "currentcolor"
   })));
 }
 
-var _path$2t, _path2$z, _path3$7;
-function _extends$2z() { _extends$2z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2z.apply(this, arguments); }
+var _path$2v, _path2$z, _path3$7;
+function _extends$2B() { _extends$2B = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2B.apply(this, arguments); }
 function SvgHistory(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2z({
+  return /*#__PURE__*/React.createElement("svg", _extends$2B({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2t || (_path$2t = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2v || (_path$2v = /*#__PURE__*/React.createElement("path", {
     d: "M17.814 16.537a3.452 3.452 0 00.416-1.649 3.492 3.492 0 00-5.13-3.078 3.48 3.48 0 00-1.422 1.406 3.457 3.457 0 00-.428 1.672 3.492 3.492 0 003.488 3.488c.58.001 1.15-.144 1.66-.422l2.328 2.337 1.417-1.412-2.329-2.342zm-1.586-1.592a1.487 1.487 0 01-1.4 1.427h-.085a1.49 1.49 0 01-1.488-1.488v-.09a1.49 1.49 0 011.432-1.4h.053a1.49 1.49 0 011.488 1.551z",
     fill: "currentcolor"
   })), _path2$z || (_path2$z = /*#__PURE__*/React.createElement("path", {
@@ -6572,16 +6613,16 @@ function SvgHistory(props) {
   })));
 }
 
-var _path$2s, _path2$y, _path3$6, _path4$2, _path5;
-function _extends$2y() { _extends$2y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2y.apply(this, arguments); }
+var _path$2u, _path2$y, _path3$6, _path4$2, _path5;
+function _extends$2A() { _extends$2A = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2A.apply(this, arguments); }
 function SvgImageFrame(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2y({
+  return /*#__PURE__*/React.createElement("svg", _extends$2A({
     width: 47,
     height: 38,
     viewBox: "0 0 47 38",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2s || (_path$2s = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2u || (_path$2u = /*#__PURE__*/React.createElement("path", {
     d: "M0 33.778A4.228 4.228 0 004.222 38h38c2.333 0 4.222-1.9 4.222-4.222V4.222A4.228 4.228 0 0042.222 0h-38A4.228 4.228 0 000 4.222v29.555z",
     fill: "#EFF2F5"
   })), _path2$y || (_path2$y = /*#__PURE__*/React.createElement("path", {
@@ -6599,15 +6640,15 @@ function SvgImageFrame(props) {
   })));
 }
 
-var _path$2r, _path2$x;
-function _extends$2x() { _extends$2x = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2x.apply(this, arguments); }
+var _path$2t, _path2$x;
+function _extends$2z() { _extends$2z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2z.apply(this, arguments); }
 function SvgLayout(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2x({
+  return /*#__PURE__*/React.createElement("svg", _extends$2z({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2r || (_path$2r = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2t || (_path$2t = /*#__PURE__*/React.createElement("path", {
     d: "M20.055 15.057a2.153 2.153 0 11-4.307 0c0-.115.009-.229.028-.341L14.02 13.7l-.884-.511-.883.51-1.491.86a2.151 2.151 0 11-1.091-1.406l1.7-.98.884-.51V8.739a2.154 2.154 0 111.767 0v2.925l.883.509 1.847 1.067a2.152 2.152 0 013.3 1.818h.003z",
     fill: "currentcolor"
   })), _path2$x || (_path2$x = /*#__PURE__*/React.createElement("path", {
@@ -6618,37 +6659,37 @@ function SvgLayout(props) {
   })));
 }
 
-var _path$2q;
-function _extends$2w() { _extends$2w = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2w.apply(this, arguments); }
+var _path$2s;
+function _extends$2y() { _extends$2y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2y.apply(this, arguments); }
 function SvgLogo$1(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2w({
+  return /*#__PURE__*/React.createElement("svg", _extends$2y({
     xmlns: "http://www.w3.org/2000/svg",
     width: 1000,
     height: 1000
-  }, props), _path$2q || (_path$2q = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2s || (_path$2s = /*#__PURE__*/React.createElement("path", {
     d: "M26.773 102.744h181.755c-.074 123.9-8.793 247.613-8.866 371.514 89.984-124.193 181.422-247.321 271.406-371.514H692.64C590.987 240.298 444.471 342.58 363.684 495.732c77.74 155.676 224.317 259.543 320.493 402.076h-215.4c-70.105-101.553-117.732-223.956-219.713-299.423-39.122-14.846-40.087 60.14-46.238 87.253-5.736 70.546-2.166 141.45-3.164 212.17H25c.007-265.023 1.766-530.041 1.773-795.064zm424.242 392.988c102.855-141.27 241.813-251.718 344.669-392.988 59.768-.743 119.55-1.267 179.316 0C872.393 239.74 719.748 333.773 632.325 482.93c-7.765 45.896 45.968 88.282 71.47 126.581 86.444 99.165 194.622 178.714 269.432 288.074-63.035-.013-126.069.437-189.104.437-100.95-142.27-232.05-260.11-333.108-402.29z"
   })));
 }
 
-var _path$2p;
-function _extends$2v() { _extends$2v = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2v.apply(this, arguments); }
+var _path$2r;
+function _extends$2x() { _extends$2x = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2x.apply(this, arguments); }
 function SvgMiew(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2v({
+  return /*#__PURE__*/React.createElement("svg", _extends$2x({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$2p || (_path$2p = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2r || (_path$2r = /*#__PURE__*/React.createElement("path", {
     d: "M8.365 12.51c-.604 0-1.142-.104-1.614-.312-.469-.21-.84-.498-1.112-.865a2.176 2.176 0 01-.417-1.278h1.764a.92.92 0 00.198.534c.124.15.289.268.494.352.204.083.435.125.691.125.267 0 .503-.047.708-.142.205-.094.365-.225.481-.392a.99.99 0 00.174-.578.969.969 0 00-.186-.587 1.19 1.19 0 00-.526-.404 2.045 2.045 0 00-.809-.146H7.44V7.531h.772c.265 0 .498-.046.7-.138.205-.091.364-.218.477-.38a.988.988 0 00.17-.574.993.993 0 00-.562-.918 1.341 1.341 0 00-.615-.134c-.237 0-.454.043-.65.13a1.138 1.138 0 00-.474.36.947.947 0 00-.19.55H5.388c.008-.477.144-.898.409-1.262.264-.364.62-.649 1.068-.854A3.6 3.6 0 018.389 4c.572 0 1.072.104 1.501.311.429.208.762.488.999.842.24.35.359.744.356 1.18.003.465-.142.851-.433 1.162-.288.31-.664.507-1.128.59v.065c.61.078 1.073.29 1.391.635.32.342.48.771.477 1.286.003.472-.133.891-.408 1.258-.273.367-.649.655-1.129.865-.48.21-1.03.316-1.65.316zM15.34 12.397h-2.936V4.113h2.96c.834 0 1.551.166 2.153.498a3.356 3.356 0 011.387 1.42c.326.617.49 1.356.49 2.216 0 .863-.164 1.604-.49 2.225a3.363 3.363 0 01-1.395 1.427c-.605.332-1.327.498-2.168.498zm-1.184-1.5h1.112c.518 0 .953-.092 1.306-.276a1.77 1.77 0 00.801-.861c.18-.391.271-.896.271-1.513 0-.612-.09-1.112-.271-1.5a1.754 1.754 0 00-.797-.858c-.353-.184-.788-.275-1.306-.275h-1.117v5.282zM20.222 10v1.5c1.5 0 4 5.7-6 6.5v1.5c12.5-1 9-9.5 6-9.5zM8.107 16.33l-.385 1.391c-7.5-1.221-5.5-5.721-4-6.221V10c-2 0-6.5 7 3.755 8.951l-.199 1.207a.2.2 0 00.268.22l3.363-1.269a.2.2 0 00.071-.328l-2.538-2.538a.2.2 0 00-.335.088z",
     fill: "currentColor"
   })));
 }
 
 var _g, _defs$2;
-function _extends$2u() { _extends$2u = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2u.apply(this, arguments); }
+function _extends$2w() { _extends$2w = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2w.apply(this, arguments); }
 function SvgMacromoleculesMode(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2u({
+  return /*#__PURE__*/React.createElement("svg", _extends$2w({
     width: 25,
     height: 26,
     viewBox: "3 3 20 21",
@@ -6679,16 +6720,16 @@ function SvgMacromoleculesMode(props) {
   })))));
 }
 
-var _path$2o, _circle$6, _circle2$6, _circle3$4, _circle4$3, _circle5$2;
-function _extends$2t() { _extends$2t = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2t.apply(this, arguments); }
+var _path$2q, _circle$6, _circle2$6, _circle3$4, _circle4$3, _circle5$2;
+function _extends$2v() { _extends$2v = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2v.apply(this, arguments); }
 function SvgMoleculesMode(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2t({
+  return /*#__PURE__*/React.createElement("svg", _extends$2v({
     width: 25,
     height: 25,
     viewBox: "3 3 20 20",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2o || (_path$2o = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2q || (_path$2q = /*#__PURE__*/React.createElement("path", {
     d: "M13.448 13.614v-7M13.299 13.894l-3.82 6.095M13.299 13.894l-6.82.095M13.48 13.754l5 2.235",
     stroke: "#333",
     strokeLinecap: "round",
@@ -6721,15 +6762,15 @@ function SvgMoleculesMode(props) {
   })));
 }
 
-var _path$2n, _path2$w;
-function _extends$2s() { _extends$2s = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2s.apply(this, arguments); }
+var _path$2p, _path2$w;
+function _extends$2u() { _extends$2u = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2u.apply(this, arguments); }
 function SvgClear(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2s({
+  return /*#__PURE__*/React.createElement("svg", _extends$2u({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2n || (_path$2n = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2p || (_path$2p = /*#__PURE__*/React.createElement("path", {
     d: "M18.655 7.529L15.02 3.893a1 1 0 00-.707-.293H6.398a1 1 0 00-1 1v14.548a1 1 0 001 1h11.55a.999.999 0 001-1V8.236a1 1 0 00-.293-.707zm-1.707 10.615h-9.55V5.596h5.952v3.6h3.6l-.002 8.948z",
     fill: "currentcolor"
   })), _path2$w || (_path2$w = /*#__PURE__*/React.createElement("path", {
@@ -6738,16 +6779,16 @@ function SvgClear(props) {
   })));
 }
 
-var _path$2m, _path2$v;
-function _extends$2r() { _extends$2r = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2r.apply(this, arguments); }
+var _path$2o, _path2$v;
+function _extends$2t() { _extends$2t = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2t.apply(this, arguments); }
 function SvgNotFound(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2r({
+  return /*#__PURE__*/React.createElement("svg", _extends$2t({
     width: 85,
     height: 85,
     viewBox: "0 0 85 85",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2m || (_path$2m = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2o || (_path$2o = /*#__PURE__*/React.createElement("path", {
     d: "M33.494 0a33 33 0 0125.362 54.12l24.762 24.757a3 3 0 01-3.828 4.59l-.42-.342-24.756-24.762A33 33 0 1133.494 0zm0 6a27 27 0 100 54 27 27 0 000-54z",
     fill: "#525252",
     fillOpacity: 0.4
@@ -6759,46 +6800,46 @@ function SvgNotFound(props) {
   })));
 }
 
-var _path$2l;
-function _extends$2q() { _extends$2q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2q.apply(this, arguments); }
+var _path$2n;
+function _extends$2s() { _extends$2s = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2s.apply(this, arguments); }
 function SvgOpen(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2q({
+  return /*#__PURE__*/React.createElement("svg", _extends$2s({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$2l || (_path$2l = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2n || (_path$2n = /*#__PURE__*/React.createElement("path", {
     d: "M7.075 9.5l-1.575 8V8h12.75a1.5 1.5 0 00-1.5-1.5H11.5L10 5H5.5A1.5 1.5 0 004 6.5v11A1.5 1.5 0 005.5 19h11.25c.675 0 1.275-.45 1.425-1.125L19.9 9.5H7.075zm9.675 8H7L8.2 11h9.75l-1.2 6.5z",
     fill: "currentColor"
   })));
 }
 
-var _path$2k;
-function _extends$2p() { _extends$2p = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2p.apply(this, arguments); }
+var _path$2m;
+function _extends$2r() { _extends$2r = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2r.apply(this, arguments); }
 function SvgPaste(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2p({
+  return /*#__PURE__*/React.createElement("svg", _extends$2r({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2k || (_path$2k = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2m || (_path$2m = /*#__PURE__*/React.createElement("path", {
     d: "M17.25 18H6.75V6h1.5v2.25h7.5V6h1.5v12zM12 4.5A.75.75 0 1112 6a.75.75 0 010-1.5zm5.25 0h-3.135A2.258 2.258 0 0012 3c-.975 0-1.8.63-2.115 1.5H6.75A1.5 1.5 0 005.25 6v12a1.5 1.5 0 001.5 1.5h10.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5z",
     fill: "currentcolor"
   })));
 }
 
-var _path$2j, _path2$u, _path3$5;
-function _extends$2o() { _extends$2o = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2o.apply(this, arguments); }
+var _path$2l, _path2$u, _path3$5;
+function _extends$2q() { _extends$2q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2q.apply(this, arguments); }
 function SvgOpenWindowPasteIcon(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2o({
+  return /*#__PURE__*/React.createElement("svg", _extends$2q({
     width: 40,
     height: 40,
     viewBox: "0 0 40 40",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2j || (_path$2j = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2l || (_path$2l = /*#__PURE__*/React.createElement("path", {
     d: "M33.973 40H6.027A6.027 6.027 0 010 33.973V6.027A6.027 6.027 0 016.027 0h27.946A6.027 6.027 0 0140 6.027v27.946A6.027 6.027 0 0133.973 40z",
     fill: "#EFF2F5"
   })), _path2$u || (_path2$u = /*#__PURE__*/React.createElement("path", {
@@ -6812,16 +6853,16 @@ function SvgOpenWindowPasteIcon(props) {
   })));
 }
 
-var _path$2i, _path2$t;
-function _extends$2n() { _extends$2n = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2n.apply(this, arguments); }
+var _path$2k, _path2$t;
+function _extends$2p() { _extends$2p = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2p.apply(this, arguments); }
 function SvgOpenWindowUploadIcon(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2n({
+  return /*#__PURE__*/React.createElement("svg", _extends$2p({
     width: 40,
     height: 40,
     viewBox: "0 0 40 40",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2i || (_path$2i = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2k || (_path$2k = /*#__PURE__*/React.createElement("path", {
     d: "M33.973 40H6.027A6.027 6.027 0 010 33.973V6.027A6.027 6.027 0 016.027 0h27.946A6.027 6.027 0 0140 6.027v27.946A6.027 6.027 0 0133.973 40z",
     fill: "#EFF2F5"
   })), _path2$t || (_path2$t = /*#__PURE__*/React.createElement("path", {
@@ -6830,46 +6871,46 @@ function SvgOpenWindowUploadIcon(props) {
   })));
 }
 
-var _path$2h;
-function _extends$2m() { _extends$2m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2m.apply(this, arguments); }
+var _path$2j;
+function _extends$2o() { _extends$2o = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2o.apply(this, arguments); }
 function SvgPeriodTable(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2m({
+  return /*#__PURE__*/React.createElement("svg", _extends$2o({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2h || (_path$2h = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2j || (_path$2j = /*#__PURE__*/React.createElement("path", {
     d: "M7.445 15.5H4.146c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM13.652 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM19.855 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM5 13.5a.5.5 0 01-.5-.5V5a.5.5 0 01.5-.5h3.125c.657 0 1.224.132 1.7.396.48.26.85.625 1.11 1.094.26.466.39 1.008.39 1.626 0 .62-.133 1.164-.398 1.63A2.7 2.7 0 019.8 10.323c-.489.255-1.068.382-1.74.382H6.324a.5.5 0 01-.5-.5v-.714a.5.5 0 01.5-.5h1.342c.32 0 .587-.057.801-.171a1.16 1.16 0 00.493-.48c.112-.207.167-.449.167-.724 0-.279-.055-.519-.167-.721a1.134 1.134 0 00-.493-.475c-.217-.11-.484-.167-.8-.167H7.12a.5.5 0 00-.5.5V13a.5.5 0 01-.5.5H5zM12.584 6.267a.5.5 0 01-.5-.5V5a.5.5 0 01.5-.5H19a.5.5 0 01.5.5v.767a.5.5 0 01-.5.5h-1.66a.5.5 0 00-.5.5V13a.5.5 0 01-.5.5h-1.091a.5.5 0 01-.5-.5V6.767a.5.5 0 00-.5-.5h-1.665z",
     fill: "currentColor"
   })));
 }
 
-var _path$2g;
-function _extends$2l() { _extends$2l = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2l.apply(this, arguments); }
+var _path$2i;
+function _extends$2n() { _extends$2n = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2n.apply(this, arguments); }
 function SvgReactionArrowBothEndsFilledTriangle(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2l({
+  return /*#__PURE__*/React.createElement("svg", _extends$2n({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2g || (_path$2g = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2i || (_path$2i = /*#__PURE__*/React.createElement("path", {
     d: "M29.876 32.824v-6.81H18.124v6.81L9.3 24l8.824-8.822v6.838h11.752v-6.838L38.7 24l-8.824 8.824z",
     fill: "currentColor"
   })));
 }
 
-var _path$2f, _path2$s;
-function _extends$2k() { _extends$2k = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2k.apply(this, arguments); }
+var _path$2h, _path2$s;
+function _extends$2m() { _extends$2m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2m.apply(this, arguments); }
 function SvgReactionArrowDashedOpenAngle(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2k({
+  return /*#__PURE__*/React.createElement("svg", _extends$2m({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$2f || (_path$2f = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$2h || (_path$2h = /*#__PURE__*/React.createElement("path", {
     d: "M15.32 22h-4.6v4h4.6v-4zM22.045 22h-4.6v4h4.6v-4zM28.77 22h-4.6v4h4.6v-4z",
     fill: "currentColor"
   })), _path2$s || (_path2$s = /*#__PURE__*/React.createElement("path", {
@@ -6878,9 +6919,39 @@ function SvgReactionArrowDashedOpenAngle(props) {
   })));
 }
 
+var _path$2g;
+function _extends$2l() { _extends$2l = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2l.apply(this, arguments); }
+function SvgReactionArrowEllipticalArcArrowFilledBow(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2l({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$2g || (_path$2g = /*#__PURE__*/React.createElement("path", {
+    d: "M39.6 26.298l-5.735 8.8-3.336-1.4c-.098-4.894-1.702-18.814-7.568-18.814h-.066c-1.948.034-4.67 1.614-6.572 8.95a52.695 52.695 0 00-1.464 9.894l-4-.142c.178-3.63.71-7.232 1.588-10.758C13.855 17.452 16.8 11 22.833 10.898c6.116-.11 8.966 6.388 10.286 11.856.4 1.656.688 3.306.894 4.8l2.24-3.44 3.346 2.184z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$2f;
+function _extends$2k() { _extends$2k = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2k.apply(this, arguments); }
+function SvgReactionArrowEllipticalArcArrowFilledTriangle(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2k({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$2f || (_path$2f = /*#__PURE__*/React.createElement("path", {
+    d: "M35.867 26.424l-3.332 7.248-4.612-6.51 1.958-.182c-.716-4.42-2.582-12.084-6.914-12.084h-.066c-1.948.034-4.67 1.614-6.572 8.95a52.71 52.71 0 00-1.464 9.894l-4-.142c.178-3.629.71-7.232 1.588-10.758C13.855 17.452 16.8 11 22.833 10.898h.144c3.934 0 8.906 2.8 10.896 15.714l1.994-.188z",
+    fill: "currentColor"
+  })));
+}
+
 var _path$2e;
 function _extends$2j() { _extends$2j = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2j.apply(this, arguments); }
-function SvgReactionArrowEllipticalArcArrowFilledBow(props) {
+function SvgReactionArrowEllipticalArcArrowOpenAngle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2j({
     width: 48,
     height: 48,
@@ -6888,14 +6959,14 @@ function SvgReactionArrowEllipticalArcArrowFilledBow(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2e || (_path$2e = /*#__PURE__*/React.createElement("path", {
-    d: "M39.6 26.298l-5.735 8.8-3.336-1.4c-.098-4.894-1.702-18.814-7.568-18.814h-.066c-1.948.034-4.67 1.614-6.572 8.95a52.695 52.695 0 00-1.464 9.894l-4-.142c.178-3.63.71-7.232 1.588-10.758C13.855 17.452 16.8 11 22.833 10.898c6.116-.11 8.966 6.388 10.286 11.856.4 1.656.688 3.306.894 4.8l2.24-3.44 3.346 2.184z",
+    d: "M37.54 25.236l-4.329 12-7.136-10.356 1.646-1.134 2.484 3.6C29.491 23.314 27.503 15 22.967 15h-.066c-6 .104-7.858 14-8.036 18.846l-4-.144c.178-3.629.71-7.231 1.588-10.756 1.4-5.4 4.334-11.84 10.376-11.946 6.116-.106 8.966 6.388 10.286 11.856a50.963 50.963 0 011.032 5.88l1.506-4.172 1.886.672z",
     fill: "currentColor"
   })));
 }
 
 var _path$2d;
 function _extends$2i() { _extends$2i = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2i.apply(this, arguments); }
-function SvgReactionArrowEllipticalArcArrowFilledTriangle(props) {
+function SvgReactionArrowEllipticalArcArrowOpenHalfAngle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2i({
     width: 48,
     height: 48,
@@ -6903,14 +6974,14 @@ function SvgReactionArrowEllipticalArcArrowFilledTriangle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2d || (_path$2d = /*#__PURE__*/React.createElement("path", {
-    d: "M35.867 26.424l-3.332 7.248-4.612-6.51 1.958-.182c-.716-4.42-2.582-12.084-6.914-12.084h-.066c-1.948.034-4.67 1.614-6.572 8.95a52.71 52.71 0 00-1.464 9.894l-4-.142c.178-3.629.71-7.232 1.588-10.758C13.855 17.452 16.8 11 22.833 10.898h.144c3.934 0 8.906 2.8 10.896 15.714l1.994-.188z",
+    d: "M39.764 27.682l-5.252 5.252-.4.4-.312.312-1.128 1.128-1.472-1.076-.156-.114-.512-.372-6.014-4.366 1.174-1.618 4.666 3.386c-.564-6.054-2.492-15.718-7.38-15.718h-.066c-1.948.034-4.67 1.614-6.572 8.95a52.695 52.695 0 00-1.464 9.894l-4-.142c.178-3.63.71-7.232 1.588-10.758C13.856 17.452 16.8 11 22.834 10.898c6.116-.11 8.966 6.388 10.286 11.856.578 2.48.979 4.999 1.2 7.536l4.022-4.022 1.422 1.414z",
     fill: "currentColor"
   })));
 }
 
 var _path$2c;
 function _extends$2h() { _extends$2h = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2h.apply(this, arguments); }
-function SvgReactionArrowEllipticalArcArrowOpenAngle(props) {
+function SvgReactionArrowEquilibriumFilledHalfBow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2h({
     width: 48,
     height: 48,
@@ -6918,14 +6989,14 @@ function SvgReactionArrowEllipticalArcArrowOpenAngle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2c || (_path$2c = /*#__PURE__*/React.createElement("path", {
-    d: "M37.54 25.236l-4.329 12-7.136-10.356 1.646-1.134 2.484 3.6C29.491 23.314 27.503 15 22.967 15h-.066c-6 .104-7.858 14-8.036 18.846l-4-.144c.178-3.629.71-7.231 1.588-10.756 1.4-5.4 4.334-11.84 10.376-11.946 6.116-.106 8.966 6.388 10.286 11.856a50.963 50.963 0 011.032 5.88l1.506-4.172 1.886.672z",
+    d: "M36.915 21.6H11.083v-4l17.882.086a8.487 8.487 0 00-.866-3.774l-1.3-2.66L36.915 21.6zM11.083 26.4h25.832v4l-17.882-.086c-.006 1.308.29 2.6.866 3.774l1.3 2.66L11.083 26.4z",
     fill: "currentColor"
   })));
 }
 
 var _path$2b;
 function _extends$2g() { _extends$2g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2g.apply(this, arguments); }
-function SvgReactionArrowEllipticalArcArrowOpenHalfAngle(props) {
+function SvgReactionArrowEquilibriumFilledTriangle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2g({
     width: 48,
     height: 48,
@@ -6933,14 +7004,14 @@ function SvgReactionArrowEllipticalArcArrowOpenHalfAngle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2b || (_path$2b = /*#__PURE__*/React.createElement("path", {
-    d: "M39.764 27.682l-5.252 5.252-.4.4-.312.312-1.128 1.128-1.472-1.076-.156-.114-.512-.372-6.014-4.366 1.174-1.618 4.666 3.386c-.564-6.054-2.492-15.718-7.38-15.718h-.066c-1.948.034-4.67 1.614-6.572 8.95a52.695 52.695 0 00-1.464 9.894l-4-.142c.178-3.63.71-7.232 1.588-10.758C13.856 17.452 16.8 11 22.834 10.898c6.116-.11 8.966 6.388 10.286 11.856.578 2.48.979 4.999 1.2 7.536l4.022-4.022 1.422 1.414z",
+    d: "M11.667 17.028v4h15.788v3.146l9.762-5.146-9.762-5.148v3.148H11.667zM36.334 27.012v4H20.546v3.146l-9.762-5.146 9.762-5.148v3.148h15.788z",
     fill: "currentColor"
   })));
 }
 
 var _path$2a;
 function _extends$2f() { _extends$2f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2f.apply(this, arguments); }
-function SvgReactionArrowEquilibriumFilledHalfBow(props) {
+function SvgReactionArrowEquilibriumOpenAngle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2f({
     width: 48,
     height: 48,
@@ -6948,14 +7019,14 @@ function SvgReactionArrowEquilibriumFilledHalfBow(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$2a || (_path$2a = /*#__PURE__*/React.createElement("path", {
-    d: "M36.915 21.6H11.083v-4l17.882.086a8.487 8.487 0 00-.866-3.774l-1.3-2.66L36.915 21.6zM11.083 26.4h25.832v4l-17.882-.086c-.006 1.308.29 2.6.866 3.774l1.3 2.66L11.083 26.4z",
+    d: "M36.478 21.6H11.522v-4h17.279l-5.042-3.39 2.23-3.32 10.49 7.05v3.66zM22.012 37.11l-10.49-7.05V26.4h24.956v4H19.201l5.041 3.39-2.23 3.32z",
     fill: "currentColor"
   })));
 }
 
 var _path$29;
 function _extends$2e() { _extends$2e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2e.apply(this, arguments); }
-function SvgReactionArrowEquilibriumFilledTriangle(props) {
+function SvgReactionArrowFailed(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2e({
     width: 48,
     height: 48,
@@ -6963,14 +7034,14 @@ function SvgReactionArrowEquilibriumFilledTriangle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$29 || (_path$29 = /*#__PURE__*/React.createElement("path", {
-    d: "M11.667 17.028v4h15.788v3.146l9.762-5.146-9.762-5.148v3.148H11.667zM36.334 27.012v4H20.546v3.146l-9.762-5.146 9.762-5.148v3.148h15.788z",
+    d: "M27.471 28.774c.37-.895.653-1.824.844-2.774H24.43l2.022 2.022-1.414 1.414L21.6 26h-1.172L17 29.436l-1.414-1.414L17.6 26h-5.07v-4h5.07l-2.02-2.022L17 18.564 20.43 22h1.17l3.436-3.436 1.414 1.414L24.43 22h3.97a18.504 18.504 0 00-1.102-3.982l-3.01-7 12.98 12.98-12.98 12.98 3.184-8.204z",
     fill: "currentColor"
   })));
 }
 
 var _path$28;
 function _extends$2d() { _extends$2d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2d.apply(this, arguments); }
-function SvgReactionArrowEquilibriumOpenAngle(props) {
+function SvgReactionArrowFilledBow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2d({
     width: 48,
     height: 48,
@@ -6978,14 +7049,14 @@ function SvgReactionArrowEquilibriumOpenAngle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$28 || (_path$28 = /*#__PURE__*/React.createElement("path", {
-    d: "M36.478 21.6H11.522v-4h17.279l-5.042-3.39 2.23-3.32 10.49 7.05v3.66zM22.012 37.11l-10.49-7.05V26.4h24.956v4H19.201l5.041 3.39-2.23 3.32z",
+    d: "M25.14 28.774c.37-.895.653-1.824.844-2.774H10.2v-4h15.876a18.504 18.504 0 00-1.102-3.982l-3-7 12.98 12.98-12.98 12.98 3.166-8.204z",
     fill: "currentColor"
   })));
 }
 
 var _path$27;
 function _extends$2c() { _extends$2c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2c.apply(this, arguments); }
-function SvgReactionArrowFailed(props) {
+function SvgReactionArrowFilledTriangle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2c({
     width: 48,
     height: 48,
@@ -6993,14 +7064,14 @@ function SvgReactionArrowFailed(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$27 || (_path$27 = /*#__PURE__*/React.createElement("path", {
-    d: "M27.471 28.774c.37-.895.653-1.824.844-2.774H24.43l2.022 2.022-1.414 1.414L21.6 26h-1.172L17 29.436l-1.414-1.414L17.6 26h-5.07v-4h5.07l-2.02-2.022L17 18.564 20.43 22h1.17l3.436-3.436 1.414 1.414L24.43 22h3.97a18.504 18.504 0 00-1.102-3.982l-3.01-7 12.98 12.98-12.98 12.98 3.184-8.204z",
+    d: "M34.941 23.986l-1.244 1.244-.784.784L21.947 36.98V26.014h-11.75v-4h11.75V11.048l.028-.028L32.97 22.014l.728.728 1.244 1.244z",
     fill: "currentColor"
   })));
 }
 
 var _path$26;
 function _extends$2b() { _extends$2b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2b.apply(this, arguments); }
-function SvgReactionArrowFilledBow(props) {
+function SvgReactionArrowOpenAngle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2b({
     width: 48,
     height: 48,
@@ -7008,14 +7079,14 @@ function SvgReactionArrowFilledBow(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$26 || (_path$26 = /*#__PURE__*/React.createElement("path", {
-    d: "M25.14 28.774c.37-.895.653-1.824.844-2.774H10.2v-4h15.876a18.504 18.504 0 00-1.102-3.982l-3-7 12.98 12.98-12.98 12.98 3.166-8.204z",
+    d: "M35.967 24l-.67.67-1.33 1.33-10.94 10.94-2.828-2.828 2.828-2.828 3.212-3.214L28.31 26H10.197v-4H28.31l-4.162-4.162-1.12-1.12L20.2 13.89l2.828-2.83L35.967 24z",
     fill: "currentColor"
   })));
 }
 
 var _path$25;
 function _extends$2a() { _extends$2a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2a.apply(this, arguments); }
-function SvgReactionArrowFilledTriangle(props) {
+function SvgReactionArrowUnbalancedEquilibriumFilledHalfBow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$2a({
     width: 48,
     height: 48,
@@ -7023,14 +7094,14 @@ function SvgReactionArrowFilledTriangle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$25 || (_path$25 = /*#__PURE__*/React.createElement("path", {
-    d: "M34.941 23.986l-1.244 1.244-.784.784L21.947 36.98V26.014h-11.75v-4h11.75V11.048l.028-.028L32.97 22.014l.728.728 1.244 1.244z",
+    d: "M36.289 21.6H12.513v-4l15.826.086a8.487 8.487 0 00-.866-3.774l-1.3-2.66L36.289 21.6zM31.368 30.4L23 30.236c.066.944.325 1.864.76 2.704l1.17 2.26-9.1-8.8h15.536l.002 4z",
     fill: "currentColor"
   })));
 }
 
 var _path$24;
 function _extends$29() { _extends$29 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$29.apply(this, arguments); }
-function SvgReactionArrowOpenAngle(props) {
+function SvgReactionArrowUnbalancedEquilibriumFilledHalfTriangle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$29({
     width: 48,
     height: 48,
@@ -7038,14 +7109,14 @@ function SvgReactionArrowOpenAngle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$24 || (_path$24 = /*#__PURE__*/React.createElement("path", {
-    d: "M35.967 24l-.67.67-1.33 1.33-10.94 10.94-2.828-2.828 2.828-2.828 3.212-3.214L28.31 26H10.197v-4H28.31l-4.162-4.162-1.12-1.12L20.2 13.89l2.828-2.83L35.967 24z",
+    d: "M32.928 26.4v4H22.644v4.024l-8.06-8.024h18.344zM36.313 21.6H11.688v-4h15.176v-5.41l9.448 9.41z",
     fill: "currentColor"
   })));
 }
 
 var _path$23;
 function _extends$28() { _extends$28 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$28.apply(this, arguments); }
-function SvgReactionArrowUnbalancedEquilibriumFilledHalfBow(props) {
+function SvgReactionArrowUnbalancedEquilibriumLargeFilledHalfBow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$28({
     width: 48,
     height: 48,
@@ -7053,14 +7124,14 @@ function SvgReactionArrowUnbalancedEquilibriumFilledHalfBow(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$23 || (_path$23 = /*#__PURE__*/React.createElement("path", {
-    d: "M36.289 21.6H12.513v-4l15.826.086a8.487 8.487 0 00-.866-3.774l-1.3-2.66L36.289 21.6zM31.368 30.4L23 30.236c.066.944.325 1.864.76 2.704l1.17 2.26-9.1-8.8h15.536l.002 4z",
+    d: "M39.234 21.6H9.2v-4l22.084.086a8.487 8.487 0 00-.866-3.774l-1.3-2.66L39.234 21.6zM33.022 30.4l-12.074-.164a6.94 6.94 0 00.762 2.704l1.168 2.26-9.1-8.8h19.244v4z",
     fill: "currentColor"
   })));
 }
 
 var _path$22;
 function _extends$27() { _extends$27 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$27.apply(this, arguments); }
-function SvgReactionArrowUnbalancedEquilibriumFilledHalfTriangle(props) {
+function SvgReactionArrowUnbalancedEquilibriumOpenHalfAngle(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$27({
     width: 48,
     height: 48,
@@ -7068,14 +7139,14 @@ function SvgReactionArrowUnbalancedEquilibriumFilledHalfTriangle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$22 || (_path$22 = /*#__PURE__*/React.createElement("path", {
-    d: "M32.928 26.4v4H22.644v4.024l-8.06-8.024h18.344zM36.313 21.6H11.688v-4h15.176v-5.41l9.448 9.41z",
+    d: "M36.478 21.6H11.522v-4h17.279l-5.042-3.39 2.23-3.32 10.49 7.05v3.66zM22.012 37.11l-10.49-7.05V26.4h24.956v4H19.201l5.041 3.39-2.23 3.32z",
     fill: "currentColor"
   })));
 }
 
 var _path$21;
 function _extends$26() { _extends$26 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$26.apply(this, arguments); }
-function SvgReactionArrowUnbalancedEquilibriumLargeFilledHalfBow(props) {
+function SvgReactionAutomap(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$26({
     width: 48,
     height: 48,
@@ -7083,36 +7154,6 @@ function SvgReactionArrowUnbalancedEquilibriumLargeFilledHalfBow(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$21 || (_path$21 = /*#__PURE__*/React.createElement("path", {
-    d: "M39.234 21.6H9.2v-4l22.084.086a8.487 8.487 0 00-.866-3.774l-1.3-2.66L39.234 21.6zM33.022 30.4l-12.074-.164a6.94 6.94 0 00.762 2.704l1.168 2.26-9.1-8.8h19.244v4z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$20;
-function _extends$25() { _extends$25 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$25.apply(this, arguments); }
-function SvgReactionArrowUnbalancedEquilibriumOpenHalfAngle(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$25({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$20 || (_path$20 = /*#__PURE__*/React.createElement("path", {
-    d: "M36.478 21.6H11.522v-4h17.279l-5.042-3.39 2.23-3.32 10.49 7.05v3.66zM22.012 37.11l-10.49-7.05V26.4h24.956v4H19.201l5.041 3.39-2.23 3.32z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$1$;
-function _extends$24() { _extends$24 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$24.apply(this, arguments); }
-function SvgReactionAutomap(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$24({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1$ || (_path$1$ = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M27.405 23.2v-2.86l4.858 4.86-4.858 4.86V27.2h-9.543v-4h9.543zM11.233 18.122H7.62v-4h7.614v20.156h-4V18.122zM35.874 18.122h-3.612v-4h7.612v20.156h-4V18.122z",
@@ -7120,16 +7161,16 @@ function SvgReactionAutomap(props) {
   })));
 }
 
-var _path$1_, _path2$r;
-function _extends$23() { _extends$23 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$23.apply(this, arguments); }
+var _path$20, _path2$r;
+function _extends$25() { _extends$25 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$25.apply(this, arguments); }
 function SvgReactionMap(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$23({
+  return /*#__PURE__*/React.createElement("svg", _extends$25({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1_ || (_path$1_ = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$20 || (_path$20 = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M22.236 16.21h-5.154v-4h9.154v25.14h-4V16.21z",
@@ -7140,31 +7181,31 @@ function SvgReactionMap(props) {
   })));
 }
 
-var _path$1Z;
-function _extends$22() { _extends$22 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$22.apply(this, arguments); }
+var _path$1$;
+function _extends$24() { _extends$24 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$24.apply(this, arguments); }
 function SvgReactionPlus(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$22({
+  return /*#__PURE__*/React.createElement("svg", _extends$24({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1Z || (_path$1Z = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1$ || (_path$1$ = /*#__PURE__*/React.createElement("path", {
     d: "M22 12h4v10h10v4H26v10h-4V26H12v-4h10V12z",
     fill: "currentColor"
   })));
 }
 
-var _path$1Y, _path2$q;
-function _extends$21() { _extends$21 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$21.apply(this, arguments); }
+var _path$1_, _path2$q;
+function _extends$23() { _extends$23 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$23.apply(this, arguments); }
 function SvgReactionUnmap(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$21({
+  return /*#__PURE__*/React.createElement("svg", _extends$23({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1Y || (_path$1Y = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1_ || (_path$1_ = /*#__PURE__*/React.createElement("path", {
     d: "M26.236 12.21v10.084l-4-3.998V16.21H20.15l-3.068-3.068v-.932h9.154zM18.312 27.086h-7.034v4h7.034v-4zM37.311 27.086v4h-2.284l-4-4h6.284z",
     fill: "currentColor"
   })), _path2$q || (_path2$q = /*#__PURE__*/React.createElement("path", {
@@ -7173,46 +7214,46 @@ function SvgReactionUnmap(props) {
   })));
 }
 
-var _path$1X;
-function _extends$20() { _extends$20 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$20.apply(this, arguments); }
+var _path$1Z;
+function _extends$22() { _extends$22 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$22.apply(this, arguments); }
 function SvgRecognize(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$20({
+  return /*#__PURE__*/React.createElement("svg", _extends$22({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1X || (_path$1X = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1Z || (_path$1Z = /*#__PURE__*/React.createElement("path", {
     d: "M34.742 18.918L12.364 41.294H6.708v-5.656L29.084 13.26l5.658 5.658zM36.767 7.842l3.394 3.394a1.6 1.6 0 010 2.262l-3.648 3.65-5.657-5.658 3.648-3.648a1.6 1.6 0 012.263 0zM22.828 8.702l2.702 1.476-2.702 1.478-1.476 2.702-1.478-2.702-2.702-1.478 2.702-1.476L21.352 6l1.476 2.702zM11.318 17.126l1.13-3.866 1.132 3.866 3.864 1.13-3.864 1.13-1.132 3.866-1.13-3.866-3.864-1.13 3.864-1.13z",
     fill: "#231F20"
   })));
 }
 
-var _path$1W;
-function _extends$1$() { _extends$1$ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1$.apply(this, arguments); }
+var _path$1Y;
+function _extends$21() { _extends$21 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$21.apply(this, arguments); }
 function SvgRedo(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1$({
+  return /*#__PURE__*/React.createElement("svg", _extends$21({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1W || (_path$1W = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1Y || (_path$1Y = /*#__PURE__*/React.createElement("path", {
     d: "M16.801 10.95C15.414 9.75 13.614 9 11.626 9c-3.487 0-6.435 2.273-7.47 5.415l1.77.585a6.002 6.002 0 015.7-4.125 5.98 5.98 0 013.84 1.41L12.751 15h6.75V8.25l-2.7 2.7z",
     fill: "currentcolor"
   })));
 }
 
-var _path$1V, _path2$p, _path3$4;
-function _extends$1_() { _extends$1_ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1_.apply(this, arguments); }
+var _path$1X, _path2$p, _path3$4;
+function _extends$20() { _extends$20 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$20.apply(this, arguments); }
 function SvgRgroupAttpoints(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1_({
+  return /*#__PURE__*/React.createElement("svg", _extends$20({
     width: 32,
     height: 32,
     viewBox: "0 0 32 32",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1V || (_path$1V = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1X || (_path$1X = /*#__PURE__*/React.createElement("path", {
     d: "M24.963 13.335h-1.6v-4.26h-.764V7.473h2.364v5.862zM21.467 10.979a1.793 1.793 0 00.914-1.556c0-.934-.694-1.95-2.217-1.95h-2.43v5.867h1.6v-2.007h.542l.944 2h1.77l-1.123-2.354zm-2.134-1.246v-.666h.84c.144 0 .618.025.618.349 0 .203-.374.303-.639.31-.179.007-.51.007-.819.007z",
     fill: "currentColor"
   })), _path2$p || (_path2$p = /*#__PURE__*/React.createElement("path", {
@@ -7224,16 +7265,16 @@ function SvgRgroupAttpoints(props) {
   })));
 }
 
-var _path$1U, _path2$o;
-function _extends$1Z() { _extends$1Z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1Z.apply(this, arguments); }
+var _path$1W, _path2$o;
+function _extends$1$() { _extends$1$ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1$.apply(this, arguments); }
 function SvgRgroupFragment(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1Z({
+  return /*#__PURE__*/React.createElement("svg", _extends$1$({
     width: 32,
     height: 32,
     viewBox: "0 0 32 32",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1U || (_path$1U = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1W || (_path$1W = /*#__PURE__*/React.createElement("path", {
     d: "M24.267 19.801h-2v-6.389h-1.284v-2h3.284v8.39zM19.115 16.292c.852-.457 1.386-1.253 1.386-2.203a2.466 2.466 0 00-1.29-2.232 3.435 3.435 0 00-1.044-.373 3.977 3.977 0 00-.736-.072h-3.393v8.39h2v-3.085h1.067l1.458 3.086h2.211l-1.659-3.511zm-3.077-1.576v-1.304h1.393c.278-.002.552.062.8.187a.48.48 0 01.274.49c0 .435-.656.61-1.096.622-.287.008-.86.008-1.37.005zM5.17 19.515l-1.885-1.886 1.947-1.948-1.947-1.948 1.885-1.885 3.834 3.833-3.834 3.834z",
     fill: "currentColor"
   })), _path2$o || (_path2$o = /*#__PURE__*/React.createElement("path", {
@@ -7242,31 +7283,31 @@ function SvgRgroupFragment(props) {
   })));
 }
 
-var _path$1T;
-function _extends$1Y() { _extends$1Y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1Y.apply(this, arguments); }
+var _path$1V;
+function _extends$1_() { _extends$1_ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1_.apply(this, arguments); }
 function SvgRgroupLabel(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1Y({
+  return /*#__PURE__*/React.createElement("svg", _extends$1_({
     width: 32,
     height: 32,
     viewBox: "0 0 32 32",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1T || (_path$1T = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1V || (_path$1V = /*#__PURE__*/React.createElement("path", {
     d: "M27.927 22.052h-2.666v-10.77h-2.409V8.614h5.075v13.437zM19.396 16.176c1.458-.667 2.362-1.923 2.362-3.481 0-1.467-.696-2.678-1.958-3.391-1.1-.621-2.301-.688-2.765-.688H11.78v13.436h2.667v-5.359h2.244l2.533 5.362h2.95l-2.778-5.879zm-4.95-2.15v-2.743h2.589a3.163 3.163 0 011.452.342c.43.243.604.552.604 1.067 0 1.003-1.368 1.304-2.092 1.323a92.9 92.9 0 01-2.552.012zM6.35 19.137l-1.886-1.886 1.948-1.947-1.948-1.948 1.885-1.887 3.833 3.835-3.833 3.833z",
     fill: "currentColor"
   })));
 }
 
-var _path$1S;
-function _extends$1X() { _extends$1X = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1X.apply(this, arguments); }
+var _path$1U;
+function _extends$1Z() { _extends$1Z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1Z.apply(this, arguments); }
 function SvgSave(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1X({
+  return /*#__PURE__*/React.createElement("svg", _extends$1Z({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$1S || (_path$1S = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1U || (_path$1U = /*#__PURE__*/React.createElement("path", {
     d: "M17.833 18.208h.375V8.37l-.11-.11-2.358-2.358-.11-.11H5.792v12.416h12.041zM6.167 4.875h9.844l3.114 3.114v9.844c0 .71-.582 1.292-1.292 1.292H6.167c-.717 0-1.292-.58-1.292-1.292V6.167c0-.711.575-1.292 1.292-1.292zm1.625 2.917h5.916v1.75H7.792v-1.75zm5.5 6.708a1.292 1.292 0 11-2.584 0 1.292 1.292 0 012.584 0z",
     fill: "currentColor",
     stroke: "currentColor",
@@ -7274,31 +7315,31 @@ function SvgSave(props) {
   })));
 }
 
-var _path$1R;
-function _extends$1W() { _extends$1W = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1W.apply(this, arguments); }
+var _path$1T;
+function _extends$1Y() { _extends$1Y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1Y.apply(this, arguments); }
 function SvgSearch(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1W({
+  return /*#__PURE__*/React.createElement("svg", _extends$1Y({
     width: 28,
     height: 28,
     viewBox: "0 0 28 28",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1R || (_path$1R = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1T || (_path$1T = /*#__PURE__*/React.createElement("path", {
     d: "M22.697 21.492l-5.68-5.68a6.503 6.503 0 001.358-4c0-1.754-.685-3.399-1.923-4.64a6.514 6.514 0 00-4.64-1.922 6.523 6.523 0 00-4.64 1.923 6.51 6.51 0 00-1.922 4.64c0 1.752.685 3.401 1.923 4.64a6.51 6.51 0 004.64 1.922 6.509 6.509 0 003.996-1.356l5.68 5.678a.18.18 0 00.255 0l.953-.951a.18.18 0 000-.254zm-7.42-6.215a4.874 4.874 0 01-3.464 1.435 4.874 4.874 0 01-3.466-1.434 4.874 4.874 0 01-1.435-3.466c0-1.308.51-2.54 1.435-3.465a4.874 4.874 0 013.466-1.435c1.308 0 2.54.508 3.464 1.435a4.874 4.874 0 011.435 3.466 4.87 4.87 0 01-1.434 3.464z",
     fill: "currentColor"
   })));
 }
 
-var _path$1Q, _path2$n;
-function _extends$1V() { _extends$1V = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1V.apply(this, arguments); }
+var _path$1S, _path2$n;
+function _extends$1X() { _extends$1X = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1X.apply(this, arguments); }
 function SvgSelectFragment(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1V({
+  return /*#__PURE__*/React.createElement("svg", _extends$1X({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1Q || (_path$1Q = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1S || (_path$1S = /*#__PURE__*/React.createElement("path", {
     d: "M36.085 41.896a.85.85 0 01-1.182-.458l-1.938-4.6-2.232 1.962a.8.8 0 01-.55.214.85.85 0 01-.628-.284 1.02 1.02 0 01-.262-.688V23.464c-.002-.254.092-.5.262-.688a.85.85 0 01.628-.284.86.86 0 01.568.224h.01l10.212 9.366a1.038 1.038 0 01.116 1.37.867.867 0 01-.508.33l-2.8.6 1.956 4.6a.978.978 0 01-.428 1.284l-3.224 1.63z",
     fill: "currentColor"
   })), _path2$n || (_path2$n = /*#__PURE__*/React.createElement("path", {
@@ -7307,16 +7348,16 @@ function SvgSelectFragment(props) {
   })));
 }
 
-var _path$1P, _path2$m;
-function _extends$1U() { _extends$1U = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1U.apply(this, arguments); }
+var _path$1R, _path2$m;
+function _extends$1W() { _extends$1W = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1W.apply(this, arguments); }
 function SvgSelectLasso(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1U({
+  return /*#__PURE__*/React.createElement("svg", _extends$1W({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1P || (_path$1P = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1R || (_path$1R = /*#__PURE__*/React.createElement("path", {
     d: "M36.209 42.244a.85.85 0 01-1.182-.456l-1.938-4.6-2.23 1.962a.81.81 0 01-.552.214.849.849 0 01-.628-.284 1.023 1.023 0 01-.26-.688v-14.58a1.028 1.028 0 01.26-.688.851.851 0 01.628-.284c.21.003.414.082.57.224l10.212 9.366a1.036 1.036 0 01.116 1.37.87.87 0 01-.506.33l-2.8.6 1.956 4.6a.976.976 0 01-.426 1.282l-3.22 1.632zM30.673 8.504a2 2 0 00-1.174-.982 22.044 22.044 0 00-4.96-.942 2.012 2.012 0 00-2.14 1.848v.154a2 2 0 001.854 1.988 17.996 17.996 0 014.058.77 2 2 0 002.372-2.836h-.01zm-12.08.4a2 2 0 00-1.878-1.314c-.234 0-.466.042-.686.124a16.25 16.25 0 00-4.568 2.522 2 2 0 002.492 3.128 12.261 12.261 0 013.446-1.9 1.997 1.997 0 001.2-2.566l-.006.006zm21.51 7.252a14.249 14.249 0 00-3.118-4.306 2.001 2.001 0 10-2.77 2.884c.939.881 1.703 1.93 2.254 3.094a2 2 0 003.634-1.672zm-28.74 5.964a7.384 7.384 0 01-.546-2.748c0-.263.015-.526.044-.788a2 2 0 10-3.972-.456c-.048.413-.072.828-.072 1.244.005 1.45.288 2.885.834 4.228a2 2 0 003.712-1.488v.008zm27.866.6a2 2 0 00-2.634 1.032 7.638 7.638 0 01-.922 1.564l2.956 2.712a11.663 11.663 0 001.632-2.676 2 2 0 00-1.032-2.632zm-21.756 5.4a14.372 14.372 0 01-3.36-2.214 2 2 0 10-2.664 2.982 18.365 18.365 0 004.292 2.838 1.966 1.966 0 001.927-.11 2.01 2.01 0 00.937-1.692 2.014 2.014 0 00-1.132-1.806v.002z",
     fill: "currentColor"
   })), _path2$m || (_path2$m = /*#__PURE__*/React.createElement("path", {
@@ -7325,9 +7366,39 @@ function SvgSelectLasso(props) {
   })));
 }
 
+var _path$1Q;
+function _extends$1V() { _extends$1V = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1V.apply(this, arguments); }
+function SvgSelectRectangle(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1V({
+    width: 48,
+    height: 48,
+    viewBox: "0 0 48 48",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1Q || (_path$1Q = /*#__PURE__*/React.createElement("path", {
+    d: "M36.21 42.244a.85.85 0 01-1.181-.456l-1.938-4.6-2.23 1.962a.81.81 0 01-.552.214.851.851 0 01-.628-.284 1.024 1.024 0 01-.26-.688v-14.58a1.028 1.028 0 01.26-.688.85.85 0 01.628-.284.866.866 0 01.57.224L41.09 32.43a1.036 1.036 0 01.116 1.37.87.87 0 01-.506.33l-2.8.6 1.956 4.6a.977.977 0 01-.426 1.282l-3.22 1.632zM8.56 20.102v5.478h4v-5.478h-4zm11.38 12.86v4h5.48v-4h-5.48zM31.526 8.72h-2.105v4h2.105A1.277 1.277 0 0132.8 14v2.102h4V14a5.282 5.282 0 00-5.273-5.28zm-17.69 0A5.282 5.282 0 008.562 14v2.102h4V14a1.276 1.276 0 011.275-1.276h2.104v-4l-2.104-.004zm6.104 0v4h5.48v-4h-5.48zM32.8 20.102V21.8l4 3.668v-5.366h-4zm-18.963 12.86a1.276 1.276 0 01-1.277-1.276V29.58h-4v2.106a5.282 5.282 0 005.276 5.276h2.104v-4h-2.104z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$1P;
+function _extends$1U() { _extends$1U = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1U.apply(this, arguments); }
+function SvgSettings(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1U({
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1P || (_path$1P = /*#__PURE__*/React.createElement("path", {
+    d: "M12 9a3 3 0 110 6 3 3 0 010-6zm0 1.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-1.5 9a.38.38 0 01-.375-.315l-.277-1.987a5.209 5.209 0 01-1.268-.743l-1.867.758a.377.377 0 01-.458-.166l-1.5-2.595a.37.37 0 01.09-.48l1.583-1.245L6.375 12l.053-.75-1.583-1.223a.37.37 0 01-.09-.48l1.5-2.595c.09-.165.293-.232.458-.165l1.867.75c.39-.292.795-.547 1.268-.734l.277-1.988A.38.38 0 0110.5 4.5h3a.38.38 0 01.375.315l.278 1.987c.472.188.877.443 1.267.736l1.868-.75a.369.369 0 01.457.164l1.5 2.595a.37.37 0 01-.09.48l-1.582 1.223.052.75-.052.75 1.582 1.223a.37.37 0 01.09.48l-1.5 2.595a.369.369 0 01-.457.165l-1.868-.75c-.39.292-.795.547-1.267.735l-.278 1.987a.38.38 0 01-.375.315h-3zM11.438 6l-.278 1.957a4.12 4.12 0 00-2.272 1.336l-1.808-.78-.562.975L8.1 10.65c-.3.877-.3 1.83 0 2.7l-1.59 1.17.563.975 1.822-.78a4.083 4.083 0 002.258 1.32L11.43 18h1.14l.278-1.957a4.138 4.138 0 002.257-1.328l1.823.78.562-.975-1.59-1.162c.3-.878.3-1.83 0-2.708l1.583-1.162-.563-.976-1.807.78a4.065 4.065 0 00-2.273-1.327L12.563 6h-1.125z",
+    fill: "currentcolor"
+  })));
+}
+
 var _path$1O;
 function _extends$1T() { _extends$1T = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1T.apply(this, arguments); }
-function SvgSelectRectangle(props) {
+function SvgSgroup(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1T({
     width: 48,
     height: 48,
@@ -7335,51 +7406,21 @@ function SvgSelectRectangle(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1O || (_path$1O = /*#__PURE__*/React.createElement("path", {
-    d: "M36.21 42.244a.85.85 0 01-1.181-.456l-1.938-4.6-2.23 1.962a.81.81 0 01-.552.214.851.851 0 01-.628-.284 1.024 1.024 0 01-.26-.688v-14.58a1.028 1.028 0 01.26-.688.85.85 0 01.628-.284.866.866 0 01.57.224L41.09 32.43a1.036 1.036 0 01.116 1.37.87.87 0 01-.506.33l-2.8.6 1.956 4.6a.977.977 0 01-.426 1.282l-3.22 1.632zM8.56 20.102v5.478h4v-5.478h-4zm11.38 12.86v4h5.48v-4h-5.48zM31.526 8.72h-2.105v4h2.105A1.277 1.277 0 0132.8 14v2.102h4V14a5.282 5.282 0 00-5.273-5.28zm-17.69 0A5.282 5.282 0 008.562 14v2.102h4V14a1.276 1.276 0 011.275-1.276h2.104v-4l-2.104-.004zm6.104 0v4h5.48v-4h-5.48zM32.8 20.102V21.8l4 3.668v-5.366h-4zm-18.963 12.86a1.276 1.276 0 01-1.277-1.276V29.58h-4v2.106a5.282 5.282 0 005.276 5.276h2.104v-4h-2.104z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$1N;
-function _extends$1S() { _extends$1S = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1S.apply(this, arguments); }
-function SvgSettings(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1S({
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1N || (_path$1N = /*#__PURE__*/React.createElement("path", {
-    d: "M12 9a3 3 0 110 6 3 3 0 010-6zm0 1.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-1.5 9a.38.38 0 01-.375-.315l-.277-1.987a5.209 5.209 0 01-1.268-.743l-1.867.758a.377.377 0 01-.458-.166l-1.5-2.595a.37.37 0 01.09-.48l1.583-1.245L6.375 12l.053-.75-1.583-1.223a.37.37 0 01-.09-.48l1.5-2.595c.09-.165.293-.232.458-.165l1.867.75c.39-.292.795-.547 1.268-.734l.277-1.988A.38.38 0 0110.5 4.5h3a.38.38 0 01.375.315l.278 1.987c.472.188.877.443 1.267.736l1.868-.75a.369.369 0 01.457.164l1.5 2.595a.37.37 0 01-.09.48l-1.582 1.223.052.75-.052.75 1.582 1.223a.37.37 0 01.09.48l-1.5 2.595a.369.369 0 01-.457.165l-1.868-.75c-.39.292-.795.547-1.267.735l-.278 1.987a.38.38 0 01-.375.315h-3zM11.438 6l-.278 1.957a4.12 4.12 0 00-2.272 1.336l-1.808-.78-.562.975L8.1 10.65c-.3.877-.3 1.83 0 2.7l-1.59 1.17.563.975 1.822-.78a4.083 4.083 0 002.258 1.32L11.43 18h1.14l.278-1.957a4.138 4.138 0 002.257-1.328l1.823.78.562-.975-1.59-1.162c.3-.878.3-1.83 0-2.708l1.583-1.162-.563-.976-1.807.78a4.065 4.065 0 00-2.273-1.327L12.563 6h-1.125z",
-    fill: "currentcolor"
-  })));
-}
-
-var _path$1M;
-function _extends$1R() { _extends$1R = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1R.apply(this, arguments); }
-function SvgSgroup(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1R({
-    width: 48,
-    height: 48,
-    viewBox: "0 0 48 48",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1M || (_path$1M = /*#__PURE__*/React.createElement("path", {
     d: "M16 40h-4.4A3.6 3.6 0 018 36.4V11.6A3.6 3.6 0 0111.6 8H16v4h-4v24h4v4zM36.627 40h-4.4v-4h4V12h-4V8h4.4a3.6 3.6 0 013.6 3.6v24.8a3.6 3.6 0 01-3.6 3.6zM24.134 32.276a7.671 7.671 0 01-5.918-2.818l3.068-2.566c1.4 1.678 3.528 1.616 4.458.93.256-.2.644-.476.066-1.37-.148-.222-.882-.776-1.876-1.24-.084-.038-.328-.124-.524-.2-1.182-.42-3.162-1.124-4.17-2.736-1.32-2.11-.6-4.77.812-6.306a5.73 5.73 0 014.15-1.816h.052c1.814.018 3.814.898 5.08 1.718l-2.168 3.358c-.964-.63-2.18-1.07-2.948-1.076A1.674 1.674 0 0023 18.68c-.386.422-.572 1.158-.37 1.48.27.432 1.566.892 2.12 1.088.332.118.618.22.872.34.966.448 2.708 1.4 3.546 2.692 1.568 2.424 1.146 5.142-1.05 6.762a6.756 6.756 0 01-3.984 1.234z",
     fill: "currentColor"
   })));
 }
 
-var _path$1L, _path2$l;
-function _extends$1Q() { _extends$1Q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1Q.apply(this, arguments); }
+var _path$1N, _path2$l;
+function _extends$1S() { _extends$1S = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1S.apply(this, arguments); }
 function SvgShapeEllipse(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1Q({
+  return /*#__PURE__*/React.createElement("svg", _extends$1S({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1L || (_path$1L = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1N || (_path$1N = /*#__PURE__*/React.createElement("path", {
     d: "M40.718 13.822v4H35.9v4.818h-4v-4.818h-4.818v-4H31.9V9.004h4v4.818h4.818z",
     fill: "currentColor"
   })), _path2$l || (_path2$l = /*#__PURE__*/React.createElement("path", {
@@ -7390,16 +7431,16 @@ function SvgShapeEllipse(props) {
   })));
 }
 
-var _path$1K, _path2$k;
-function _extends$1P() { _extends$1P = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1P.apply(this, arguments); }
+var _path$1M, _path2$k;
+function _extends$1R() { _extends$1R = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1R.apply(this, arguments); }
 function SvgShapeLine(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1P({
+  return /*#__PURE__*/React.createElement("svg", _extends$1R({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1K || (_path$1K = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1M || (_path$1M = /*#__PURE__*/React.createElement("path", {
     d: "M41.9 12.916v4h-4.818v4.818h-4v-4.818h-4.818v-4h4.818V8.098h4v4.818H41.9z",
     fill: "currentColor"
   })), _path2$k || (_path2$k = /*#__PURE__*/React.createElement("path", {
@@ -7410,15 +7451,15 @@ function SvgShapeLine(props) {
   })));
 }
 
-var _path$1J;
-function _extends$1O() { _extends$1O = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1O.apply(this, arguments); }
+var _path$1L;
+function _extends$1Q() { _extends$1Q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1Q.apply(this, arguments); }
 function SvgShapePolyline(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1O({
+  return /*#__PURE__*/React.createElement("svg", _extends$1Q({
     xmlns: "http://www.w3.org/2000/svg",
     width: 1000,
     height: 1000,
     viewBox: "0 0 1000 1000"
-  }, props), _path$1J || (_path$1J = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1L || (_path$1L = /*#__PURE__*/React.createElement("path", {
     d: "M200 210l100 590 80-600 140 600h180l150-650",
     fill: "#fff",
     stroke: "#000",
@@ -7426,31 +7467,31 @@ function SvgShapePolyline(props) {
   })));
 }
 
-var _path$1I;
-function _extends$1N() { _extends$1N = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1N.apply(this, arguments); }
+var _path$1K;
+function _extends$1P() { _extends$1P = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1P.apply(this, arguments); }
 function SvgShapeRectangle(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1N({
+  return /*#__PURE__*/React.createElement("svg", _extends$1P({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1I || (_path$1I = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1K || (_path$1K = /*#__PURE__*/React.createElement("path", {
     d: "M43.961 12.61v4h-4.818v4.818h-4V16.61h-4.818v-4h4.818V7.792h4v4.818h4.818zM35.14 25.43v5.97H12.86V16.61h13.462v-4H8.86V35.4h30.28v-9.96l-4-.01z",
     fill: "currentColor"
   })));
 }
 
-var _path$1H, _path2$j;
-function _extends$1M() { _extends$1M = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1M.apply(this, arguments); }
+var _path$1J, _path2$j;
+function _extends$1O() { _extends$1O = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1O.apply(this, arguments); }
 function SvgTemplate0(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1M({
+  return /*#__PURE__*/React.createElement("svg", _extends$1O({
     width: 32,
     height: 32,
     viewBox: "0 0 32 32",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1H || (_path$1H = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1J || (_path$1J = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M15.333 4.536c.412-.238.92-.238 1.333 0l8.928 5.155c.413.238.667.678.667 1.154v10.31c0 .476-.254.916-.667 1.154l-8.928 5.155c-.412.238-.92.238-1.333 0L6.405 22.31a1.333 1.333 0 01-.667-1.155v-10.31c0-.476.254-.916.667-1.154l8.928-5.155zm-6.928 7.08v8.769L16 24.77l7.594-4.385v-8.77L16 7.23l-7.595 4.385z",
@@ -7461,16 +7502,16 @@ function SvgTemplate0(props) {
   })));
 }
 
-var _path$1G, _path2$i;
-function _extends$1L() { _extends$1L = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1L.apply(this, arguments); }
+var _path$1I, _path2$i;
+function _extends$1N() { _extends$1N = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1N.apply(this, arguments); }
 function SvgTemplate1(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1L({
+  return /*#__PURE__*/React.createElement("svg", _extends$1N({
     width: 32,
     height: 32,
     viewBox: "0 0 32 32",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1G || (_path$1G = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1I || (_path$1I = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M15.216 5.416c.467-.34 1.1-.34 1.567 0l9.153 6.65c.468.34.663.942.485 1.491l-3.496 10.76c-.179.55-.69.922-1.268.922H10.342c-.578 0-1.09-.372-1.268-.922l-3.496-10.76a1.333 1.333 0 01.484-1.49l9.154-6.651zm-6.802 8.239l2.897 8.917h9.377l2.897-8.917L16 8.143l-7.585 5.512z",
@@ -7483,9 +7524,43 @@ function SvgTemplate1(props) {
   })));
 }
 
+var _path$1H;
+function _extends$1M() { _extends$1M = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1M.apply(this, arguments); }
+function SvgTemplate2(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1M({
+    width: 32,
+    height: 32,
+    viewBox: "0 0 32 32",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1H || (_path$1H = /*#__PURE__*/React.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M15.333 4.536c.412-.238.92-.238 1.333 0l8.928 5.155c.413.238.667.678.667 1.154v10.31c0 .476-.254.916-.667 1.154l-8.928 5.155c-.412.238-.92.238-1.333 0L6.405 22.31a1.333 1.333 0 01-.667-1.155v-10.31c0-.476.254-.916.667-1.154l8.928-5.155zm-6.928 7.08v8.769L16 24.77l7.594-4.385v-8.77L16 7.23l-7.595 4.385z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$1G;
+function _extends$1L() { _extends$1L = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1L.apply(this, arguments); }
+function SvgTemplate3(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1L({
+    width: 32,
+    height: 32,
+    viewBox: "0 0 32 32",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1G || (_path$1G = /*#__PURE__*/React.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M15.216 6.216c.467-.34 1.1-.34 1.567 0l9.153 6.65c.468.34.663.942.485 1.491l-3.496 10.76c-.179.55-.69.922-1.268.922H10.342c-.578 0-1.09-.372-1.268-.922l-3.496-10.76a1.333 1.333 0 01.484-1.49l9.154-6.651zm-6.802 8.239l2.897 8.917h9.377l2.897-8.917L16 8.943l-7.585 5.512z",
+    fill: "currentColor"
+  })));
+}
+
 var _path$1F;
 function _extends$1K() { _extends$1K = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1K.apply(this, arguments); }
-function SvgTemplate2(props) {
+function SvgTemplate4(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1K({
     width: 32,
     height: 32,
@@ -7495,14 +7570,14 @@ function SvgTemplate2(props) {
   }, props), _path$1F || (_path$1F = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
-    d: "M15.333 4.536c.412-.238.92-.238 1.333 0l8.928 5.155c.413.238.667.678.667 1.154v10.31c0 .476-.254.916-.667 1.154l-8.928 5.155c-.412.238-.92.238-1.333 0L6.405 22.31a1.333 1.333 0 01-.667-1.155v-10.31c0-.476.254-.916.667-1.154l8.928-5.155zm-6.928 7.08v8.769L16 24.77l7.594-4.385v-8.77L16 7.23l-7.595 4.385z",
+    d: "M16 6.71c.476 0 .916.255 1.154.667l8.662 15.003a1.333 1.333 0 01-1.155 2H7.338a1.333 1.333 0 01-1.154-2l8.66-15.003A1.333 1.333 0 0116 6.711zm0 4L9.647 21.714h12.704l-6.353-11.002z",
     fill: "currentColor"
   })));
 }
 
 var _path$1E;
 function _extends$1J() { _extends$1J = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1J.apply(this, arguments); }
-function SvgTemplate3(props) {
+function SvgTemplate5(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1J({
     width: 32,
     height: 32,
@@ -7512,14 +7587,14 @@ function SvgTemplate3(props) {
   }, props), _path$1E || (_path$1E = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
-    d: "M15.216 6.216c.467-.34 1.1-.34 1.567 0l9.153 6.65c.468.34.663.942.485 1.491l-3.496 10.76c-.179.55-.69.922-1.268.922H10.342c-.578 0-1.09-.372-1.268-.922l-3.496-10.76a1.333 1.333 0 01.484-1.49l9.154-6.651zm-6.802 8.239l2.897 8.917h9.377l2.897-8.917L16 8.943l-7.585 5.512z",
+    d: "M5.328 6.661c0-.736.597-1.333 1.333-1.333h18.68c.735 0 1.332.597 1.332 1.333V25.34c0 .736-.596 1.333-1.333 1.333H6.661a1.333 1.333 0 01-1.333-1.333V6.66zm2.667 1.334v16.012h16.012V7.995H7.995z",
     fill: "currentColor"
   })));
 }
 
 var _path$1D;
 function _extends$1I() { _extends$1I = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1I.apply(this, arguments); }
-function SvgTemplate4(props) {
+function SvgTemplate6(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1I({
     width: 32,
     height: 32,
@@ -7529,14 +7604,14 @@ function SvgTemplate4(props) {
   }, props), _path$1D || (_path$1D = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
-    d: "M16 6.71c.476 0 .916.255 1.154.667l8.662 15.003a1.333 1.333 0 01-1.155 2H7.338a1.333 1.333 0 01-1.154-2l8.66-15.003A1.333 1.333 0 0116 6.711zm0 4L9.647 21.714h12.704l-6.353-11.002z",
+    d: "M15.422 5.625a1.333 1.333 0 011.157 0l7.436 3.58c.365.176.63.51.721.905l1.837 8.048c.09.395-.004.81-.257 1.128l-5.147 6.453a1.333 1.333 0 01-1.042.502h-8.253c-.406 0-.79-.184-1.043-.502l-5.147-6.453a1.333 1.333 0 01-.257-1.128l1.837-8.048c.09-.396.356-.729.722-.905l7.436-3.58zm-5.7 5.704L8.17 18.125l4.346 5.45h6.969l4.346-5.45-1.552-6.796L16 8.306 9.721 11.33z",
     fill: "currentColor"
   })));
 }
 
 var _path$1C;
 function _extends$1H() { _extends$1H = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1H.apply(this, arguments); }
-function SvgTemplate5(props) {
+function SvgTemplate7(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1H({
     width: 32,
     height: 32,
@@ -7546,55 +7621,21 @@ function SvgTemplate5(props) {
   }, props), _path$1C || (_path$1C = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
-    d: "M5.328 6.661c0-.736.597-1.333 1.333-1.333h18.68c.735 0 1.332.597 1.332 1.333V25.34c0 .736-.596 1.333-1.333 1.333H6.661a1.333 1.333 0 01-1.333-1.333V6.66zm2.667 1.334v16.012h16.012V7.995H7.995z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$1B;
-function _extends$1G() { _extends$1G = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1G.apply(this, arguments); }
-function SvgTemplate6(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1G({
-    width: 32,
-    height: 32,
-    viewBox: "0 0 32 32",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1B || (_path$1B = /*#__PURE__*/React.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M15.422 5.625a1.333 1.333 0 011.157 0l7.436 3.58c.365.176.63.51.721.905l1.837 8.048c.09.395-.004.81-.257 1.128l-5.147 6.453a1.333 1.333 0 01-1.042.502h-8.253c-.406 0-.79-.184-1.043-.502l-5.147-6.453a1.333 1.333 0 01-.257-1.128l1.837-8.048c.09-.396.356-.729.722-.905l7.436-3.58zm-5.7 5.704L8.17 18.125l4.346 5.45h6.969l4.346-5.45-1.552-6.796L16 8.306 9.721 11.33z",
-    fill: "currentColor"
-  })));
-}
-
-var _path$1A;
-function _extends$1F() { _extends$1F = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1F.apply(this, arguments); }
-function SvgTemplate7(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1F({
-    width: 32,
-    height: 32,
-    viewBox: "0 0 32 32",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1A || (_path$1A = /*#__PURE__*/React.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
     d: "M11.357 6.125c.25-.25.59-.39.943-.39h7.4c.353 0 .692.14.942.39l5.233 5.232c.25.25.39.59.39.943v7.4c0 .354-.14.693-.39.943l-5.233 5.232c-.25.25-.589.39-.942.39h-7.4c-.354 0-.693-.14-.943-.39l-5.232-5.232c-.25-.25-.39-.59-.39-.943v-7.4c0-.354.14-.693.39-.943l5.232-5.232zm1.495 2.276l-4.451 4.451v6.296l4.451 4.45h6.295l4.451-4.45v-6.296l-4.45-4.45h-6.296z",
     fill: "currentColor"
   })));
 }
 
-var _path$1z, _path2$h;
-function _extends$1E() { _extends$1E = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1E.apply(this, arguments); }
+var _path$1B, _path2$h;
+function _extends$1G() { _extends$1G = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1G.apply(this, arguments); }
 function SvgTemplateDialog(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1E({
+  return /*#__PURE__*/React.createElement("svg", _extends$1G({
     width: 18,
     height: 18,
     viewBox: "0 0 18 18",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1z || (_path$1z = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1B || (_path$1B = /*#__PURE__*/React.createElement("path", {
     d: "M3.675 12.101l5.345 3.086.004-.002v-.794l-.004.003-4.658-2.69-.687.397zM13.69 11.69V6.31l.688-.397v6.174l-.687-.397zM9.024 2.815l-.004-.002-5.358 3.093.687.397 4.67-2.697.005.003v-.794z",
     fill: "currentColor"
   })), _path2$h || (_path2$h = /*#__PURE__*/React.createElement("path", {
@@ -7605,9 +7646,38 @@ function SvgTemplateDialog(props) {
   })));
 }
 
+var _path$1A;
+function _extends$1F() { _extends$1F = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1F.apply(this, arguments); }
+function SvgTemplateLib(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1F({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24",
+    fill: "none"
+  }, props), _path$1A || (_path$1A = /*#__PURE__*/React.createElement("path", {
+    d: "M7.445 15.5H4.146c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM13.652 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM19.855 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM10.805 7c-.26 0-.46-.214-.59-.44a.849.849 0 00-.191-.225c-.188-.159-.473-.238-.857-.238-.244 0-.445.03-.6.09a.723.723 0 00-.342.233.58.58 0 00-.115.341.56.56 0 00.056.286.691.691 0 00.213.226c.096.065.22.125.37.179.151.054.33.102.537.145l.716.153c.483.102.897.237 1.24.405.344.167.625.365.844.592.219.225.38.477.482.759.105.281.159.588.162.92-.003.574-.147 1.06-.43 1.458-.285.397-.691.7-1.22.907-.525.208-1.157.311-1.896.311-.758 0-1.42-.112-1.986-.336-.562-.225-1-.57-1.312-1.036-.236-.357-.383-.789-.44-1.297-.032-.275.196-.501.473-.501h1.274c.266 0 .471.215.567.463a1.115 1.115 0 00.61.624c.219.093.479.14.78.14.253 0 .464-.031.635-.094.17-.062.3-.149.388-.26a.613.613 0 00.136-.379.539.539 0 00-.132-.35c-.082-.102-.219-.192-.41-.272a4.352 4.352 0 00-.77-.23l-.87-.188c-.772-.167-1.382-.447-1.828-.84-.443-.394-.663-.932-.66-1.614-.003-.554.145-1.038.443-1.453.301-.418.717-.743 1.248-.976.534-.233 1.147-.35 1.837-.35.705 0 1.314.118 1.828.354s.91.568 1.19.997c.195.297.323.629.384.996.045.273-.184.5-.461.5h-1.303zM14.13 13a.5.5 0 01-.5-.5V4.773a.5.5 0 01.5-.5h1.37a.5.5 0 01.5.5v5.818a.5.5 0 00.5.5h2.529a.5.5 0 01.5.5v.909a.5.5 0 01-.5.5H14.13z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$1z;
+function _extends$1E() { _extends$1E = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1E.apply(this, arguments); }
+function SvgTextBold(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1E({
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24",
+    fill: "currentColor",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1z || (_path$1z = /*#__PURE__*/React.createElement("path", {
+    d: "M9 18.87a1 1 0 01-1-1V6a1 1 0 011-1h3.465c1.406 0 2.527.323 3.363.969.836.633 1.254 1.495 1.254 2.584 0 .608-.146 1.14-.437 1.596-.279.456-.659.81-1.14 1.064-.469.253-.982.38-1.539.38v.057a3.71 3.71 0 011.691.342c.52.24.937.602 1.254 1.083.317.481.475 1.077.475 1.786 0 .81-.196 1.52-.589 2.128-.38.595-.925 1.058-1.634 1.387-.71.33-1.552.494-2.527.494H9zm1.755-2.299h1.767c.62 0 1.108-.165 1.463-.494.355-.33.532-.785.532-1.368 0-.583-.177-1.039-.532-1.368-.355-.342-.842-.513-1.463-.513h-1.767v3.743zm0-5.985h1.672c.557 0 .994-.146 1.311-.437.317-.304.475-.71.475-1.216 0-.52-.158-.918-.475-1.197-.317-.291-.754-.437-1.311-.437h-1.672v3.287z"
+  })));
+}
+
 var _path$1y;
 function _extends$1D() { _extends$1D = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1D.apply(this, arguments); }
-function SvgTemplateLib(props) {
+function SvgText(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1D({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
@@ -7615,14 +7685,14 @@ function SvgTemplateLib(props) {
     viewBox: "0 0 24 24",
     fill: "none"
   }, props), _path$1y || (_path$1y = /*#__PURE__*/React.createElement("path", {
-    d: "M7.445 15.5H4.146c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM13.652 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM19.855 15.5h-3.299c-.357 0-.646.269-.646.6v3.062c0 .331.29.6.646.6h3.299c.357 0 .646-.269.646-.6V16.1c0-.331-.29-.6-.646-.6zM10.805 7c-.26 0-.46-.214-.59-.44a.849.849 0 00-.191-.225c-.188-.159-.473-.238-.857-.238-.244 0-.445.03-.6.09a.723.723 0 00-.342.233.58.58 0 00-.115.341.56.56 0 00.056.286.691.691 0 00.213.226c.096.065.22.125.37.179.151.054.33.102.537.145l.716.153c.483.102.897.237 1.24.405.344.167.625.365.844.592.219.225.38.477.482.759.105.281.159.588.162.92-.003.574-.147 1.06-.43 1.458-.285.397-.691.7-1.22.907-.525.208-1.157.311-1.896.311-.758 0-1.42-.112-1.986-.336-.562-.225-1-.57-1.312-1.036-.236-.357-.383-.789-.44-1.297-.032-.275.196-.501.473-.501h1.274c.266 0 .471.215.567.463a1.115 1.115 0 00.61.624c.219.093.479.14.78.14.253 0 .464-.031.635-.094.17-.062.3-.149.388-.26a.613.613 0 00.136-.379.539.539 0 00-.132-.35c-.082-.102-.219-.192-.41-.272a4.352 4.352 0 00-.77-.23l-.87-.188c-.772-.167-1.382-.447-1.828-.84-.443-.394-.663-.932-.66-1.614-.003-.554.145-1.038.443-1.453.301-.418.717-.743 1.248-.976.534-.233 1.147-.35 1.837-.35.705 0 1.314.118 1.828.354s.91.568 1.19.997c.195.297.323.629.384.996.045.273-.184.5-.461.5h-1.303zM14.13 13a.5.5 0 01-.5-.5V4.773a.5.5 0 01.5-.5h1.37a.5.5 0 01.5.5v5.818a.5.5 0 00.5.5h2.529a.5.5 0 01.5.5v.909a.5.5 0 01-.5.5H14.13z",
+    d: "M18 6H6v3.357h1.714V7.714h3.429v9.429h-1.5v1.714h4.714v-1.714h-1.5V7.714h3.429v1.643H18V6z",
     fill: "currentColor"
   })));
 }
 
 var _path$1x;
 function _extends$1C() { _extends$1C = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1C.apply(this, arguments); }
-function SvgTextBold(props) {
+function SvgTextItalic(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1C({
     width: 24,
     height: 24,
@@ -7630,28 +7700,27 @@ function SvgTextBold(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1x || (_path$1x = /*#__PURE__*/React.createElement("path", {
-    d: "M9 18.87a1 1 0 01-1-1V6a1 1 0 011-1h3.465c1.406 0 2.527.323 3.363.969.836.633 1.254 1.495 1.254 2.584 0 .608-.146 1.14-.437 1.596-.279.456-.659.81-1.14 1.064-.469.253-.982.38-1.539.38v.057a3.71 3.71 0 011.691.342c.52.24.937.602 1.254 1.083.317.481.475 1.077.475 1.786 0 .81-.196 1.52-.589 2.128-.38.595-.925 1.058-1.634 1.387-.71.33-1.552.494-2.527.494H9zm1.755-2.299h1.767c.62 0 1.108-.165 1.463-.494.355-.33.532-.785.532-1.368 0-.583-.177-1.039-.532-1.368-.355-.342-.842-.513-1.463-.513h-1.767v3.743zm0-5.985h1.672c.557 0 .994-.146 1.311-.437.317-.304.475-.71.475-1.216 0-.52-.158-.918-.475-1.197-.317-.291-.754-.437-1.311-.437h-1.672v3.287z"
+    d: "M8.066 18.87a.912.912 0 010-1.824h2.031l1.615-10.222H9.977a.912.912 0 110-1.824h5.837a.912.912 0 010 1.824h-2.031l-1.615 10.222h1.735a.912.912 0 110 1.824H8.066z"
   })));
 }
 
 var _path$1w;
 function _extends$1B() { _extends$1B = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1B.apply(this, arguments); }
-function SvgText(props) {
+function SvgTextSubscript(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1B({
-    xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
-    fill: "none"
+    fill: "currentColor",
+    xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1w || (_path$1w = /*#__PURE__*/React.createElement("path", {
-    d: "M18 6H6v3.357h1.714V7.714h3.429v9.429h-1.5v1.714h4.714v-1.714h-1.5V7.714h3.429v1.643H18V6z",
-    fill: "currentColor"
+    d: "M16.65 20.735c-.061 0-.118-.091-.17-.274a1.927 1.927 0 01-.074-.493c0-.055.008-.099.025-.132l2.197-2.685c.221-.277.332-.555.332-.835 0-.225-.075-.397-.225-.518-.15-.123-.345-.185-.586-.185-.16 0-.3.024-.424.073-.12.049-.245.114-.372.195a1 1 0 01-.122.074.23.23 0 01-.097.029.378.378 0 01-.244-.098.739.739 0 01-.181-.239.602.602 0 01-.068-.259c0-.163.084-.304.254-.425a1.78 1.78 0 01.649-.278 3.47 3.47 0 01.825-.098c.397 0 .737.074 1.02.22.287.143.504.344.65.6.146.255.22.548.22.88 0 .267-.047.519-.142.757-.091.237-.22.457-.386.659l-1.63 2.016h2.002c.09 0 .157.036.2.108.042.068.063.177.063.327v.146c0 .15-.02.26-.063.332-.043.069-.11.103-.2.103H16.65zM7.03 17.615c-.687 0-1.03-.105-1.03-.315 0-.105.053-.241.158-.408l3.404-5.326-3.024-4.833c-.105-.192-.158-.331-.158-.418 0-.092.087-.167.26-.222C6.82 6.03 7.082 6 7.43 6h.677c.532 0 .86.105.983.315l1.884 3.071 1.976-3.07a.68.68 0 01.37-.251c.162-.043.375-.065.641-.065h.64c.693 0 1.04.105 1.04.315 0 .118-.053.257-.159.418l-3.117 4.87 3.294 5.289c.099.154.148.29.148.408 0 .21-.346.315-1.039.315h-.64c-.266 0-.48-.021-.64-.065a.524.524 0 01-.343-.25l-2.2-3.544L8.664 17.3a.563.563 0 01-.353.269 3.317 3.317 0 01-.65.046h-.63z"
   })));
 }
 
 var _path$1v;
 function _extends$1A() { _extends$1A = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1A.apply(this, arguments); }
-function SvgTextItalic(props) {
+function SvgTextSuperscript(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1A({
     width: 24,
     height: 24,
@@ -7659,72 +7728,44 @@ function SvgTextItalic(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1v || (_path$1v = /*#__PURE__*/React.createElement("path", {
-    d: "M8.066 18.87a.912.912 0 010-1.824h2.031l1.615-10.222H9.977a.912.912 0 110-1.824h5.837a.912.912 0 010 1.824h-2.031l-1.615 10.222h1.735a.912.912 0 110 1.824H8.066z"
+    d: "M7.03 17.615c-.687 0-1.03-.105-1.03-.315 0-.105.053-.241.158-.408l3.404-5.326-3.024-4.833c-.105-.192-.158-.331-.158-.418 0-.092.087-.167.26-.222C6.82 6.03 7.082 6 7.43 6h.677c.532 0 .86.105.983.315l1.884 3.071 1.976-3.07a.68.68 0 01.37-.251c.162-.043.375-.065.641-.065h.64c.693 0 1.04.105 1.04.315 0 .118-.053.257-.159.418l-3.117 4.87 3.294 5.289c.099.154.148.29.148.408 0 .21-.346.315-1.039.315h-.64c-.266 0-.48-.021-.64-.065a.524.524 0 01-.343-.25l-2.2-3.544L8.664 17.3a.563.563 0 01-.353.269 3.317 3.317 0 01-.65.046h-.63zM16.65 9.147c-.061 0-.118-.09-.17-.273a1.927 1.927 0 01-.074-.493c0-.055.008-.1.025-.132l2.197-2.686c.221-.276.332-.555.332-.834 0-.225-.075-.398-.225-.518-.15-.124-.345-.186-.586-.186-.16 0-.3.025-.424.074a2.28 2.28 0 00-.372.195c-.042.03-.083.054-.122.073a.23.23 0 01-.097.03.378.378 0 01-.244-.098.739.739 0 01-.181-.24.602.602 0 01-.068-.258c0-.163.084-.305.254-.425a1.78 1.78 0 01.649-.278A3.47 3.47 0 0118.369 3c.397 0 .737.073 1.02.22.287.143.504.343.65.6.146.254.22.547.22.88 0 .266-.047.518-.142.756-.091.238-.22.457-.386.66l-1.63 2.016h2.002c.09 0 .157.036.2.107.042.069.063.178.063.327v.147c0 .15-.02.26-.063.332-.043.068-.11.102-.2.102H16.65z"
   })));
 }
 
 var _path$1u;
 function _extends$1z() { _extends$1z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1z.apply(this, arguments); }
-function SvgTextSubscript(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1z({
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "currentColor",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1u || (_path$1u = /*#__PURE__*/React.createElement("path", {
-    d: "M16.65 20.735c-.061 0-.118-.091-.17-.274a1.927 1.927 0 01-.074-.493c0-.055.008-.099.025-.132l2.197-2.685c.221-.277.332-.555.332-.835 0-.225-.075-.397-.225-.518-.15-.123-.345-.185-.586-.185-.16 0-.3.024-.424.073-.12.049-.245.114-.372.195a1 1 0 01-.122.074.23.23 0 01-.097.029.378.378 0 01-.244-.098.739.739 0 01-.181-.239.602.602 0 01-.068-.259c0-.163.084-.304.254-.425a1.78 1.78 0 01.649-.278 3.47 3.47 0 01.825-.098c.397 0 .737.074 1.02.22.287.143.504.344.65.6.146.255.22.548.22.88 0 .267-.047.519-.142.757-.091.237-.22.457-.386.659l-1.63 2.016h2.002c.09 0 .157.036.2.108.042.068.063.177.063.327v.146c0 .15-.02.26-.063.332-.043.069-.11.103-.2.103H16.65zM7.03 17.615c-.687 0-1.03-.105-1.03-.315 0-.105.053-.241.158-.408l3.404-5.326-3.024-4.833c-.105-.192-.158-.331-.158-.418 0-.092.087-.167.26-.222C6.82 6.03 7.082 6 7.43 6h.677c.532 0 .86.105.983.315l1.884 3.071 1.976-3.07a.68.68 0 01.37-.251c.162-.043.375-.065.641-.065h.64c.693 0 1.04.105 1.04.315 0 .118-.053.257-.159.418l-3.117 4.87 3.294 5.289c.099.154.148.29.148.408 0 .21-.346.315-1.039.315h-.64c-.266 0-.48-.021-.64-.065a.524.524 0 01-.343-.25l-2.2-3.544L8.664 17.3a.563.563 0 01-.353.269 3.317 3.317 0 01-.65.046h-.63z"
-  })));
-}
-
-var _path$1t;
-function _extends$1y() { _extends$1y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1y.apply(this, arguments); }
-function SvgTextSuperscript(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1y({
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24",
-    fill: "currentColor",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1t || (_path$1t = /*#__PURE__*/React.createElement("path", {
-    d: "M7.03 17.615c-.687 0-1.03-.105-1.03-.315 0-.105.053-.241.158-.408l3.404-5.326-3.024-4.833c-.105-.192-.158-.331-.158-.418 0-.092.087-.167.26-.222C6.82 6.03 7.082 6 7.43 6h.677c.532 0 .86.105.983.315l1.884 3.071 1.976-3.07a.68.68 0 01.37-.251c.162-.043.375-.065.641-.065h.64c.693 0 1.04.105 1.04.315 0 .118-.053.257-.159.418l-3.117 4.87 3.294 5.289c.099.154.148.29.148.408 0 .21-.346.315-1.039.315h-.64c-.266 0-.48-.021-.64-.065a.524.524 0 01-.343-.25l-2.2-3.544L8.664 17.3a.563.563 0 01-.353.269 3.317 3.317 0 01-.65.046h-.63zM16.65 9.147c-.061 0-.118-.09-.17-.273a1.927 1.927 0 01-.074-.493c0-.055.008-.1.025-.132l2.197-2.686c.221-.276.332-.555.332-.834 0-.225-.075-.398-.225-.518-.15-.124-.345-.186-.586-.186-.16 0-.3.025-.424.074a2.28 2.28 0 00-.372.195c-.042.03-.083.054-.122.073a.23.23 0 01-.097.03.378.378 0 01-.244-.098.739.739 0 01-.181-.24.602.602 0 01-.068-.258c0-.163.084-.305.254-.425a1.78 1.78 0 01.649-.278A3.47 3.47 0 0118.369 3c.397 0 .737.073 1.02.22.287.143.504.343.65.6.146.254.22.547.22.88 0 .266-.047.518-.142.756-.091.238-.22.457-.386.66l-1.63 2.016h2.002c.09 0 .157.036.2.107.042.069.063.178.063.327v.147c0 .15-.02.26-.063.332-.043.068-.11.102-.2.102H16.65z"
-  })));
-}
-
-var _path$1s;
-function _extends$1x() { _extends$1x = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1x.apply(this, arguments); }
 function SvgTransformFlipH(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1x({
+  return /*#__PURE__*/React.createElement("svg", _extends$1z({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1s || (_path$1s = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1u || (_path$1u = /*#__PURE__*/React.createElement("path", {
     d: "M22.001 6v36h4V6h-4zM18.271 40h-6.67a3.6 3.6 0 01-3.6-3.6V11.6a3.6 3.6 0 013.6-3.6h6.67v4h-6.27v24h6.27v4zM36.001 8h.4a3.6 3.6 0 013.6 3.6v.4h-4V8zM40.001 36v.4a3.6 3.6 0 01-3.6 3.6h-.4v-4h4zM34.535 36h-4.534v4h4.534v-4zM34.535 8h-4.534v4h4.534V8zM36.001 14.598v4.534h4v-4.534h-4zM36.001 21.732v4.534h4v-4.534h-4zM36.001 28.866V33.4h4v-4.534h-4z",
     fill: "currentColor"
   })));
 }
 
-var _path$1r;
-function _extends$1w() { _extends$1w = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1w.apply(this, arguments); }
+var _path$1t;
+function _extends$1y() { _extends$1y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1y.apply(this, arguments); }
 function SvgTransformFlipV(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1w({
+  return /*#__PURE__*/React.createElement("svg", _extends$1y({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1r || (_path$1r = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1t || (_path$1t = /*#__PURE__*/React.createElement("path", {
     d: "M42 22H6v4h36v-4zM40 18.27h-4V12H12v6.27H8V11.6A3.6 3.6 0 0111.6 8h24.8a3.6 3.6 0 013.6 3.6v6.67zM40 36.016v.4a3.6 3.6 0 01-3.6 3.6H36v-4h4zM12 40.016h-.4a3.6 3.6 0 01-3.6-3.6v-.4h4v4zM12 34.55v-4.534H8v4.534h4zM40 34.55v-4.534h-4v4.534h4zM33.4 36.016h-4.535v4H33.4v-4zM26.267 36.016h-4.534v4h4.534v-4zM19.135 36.016H14.6v4h4.534v-4z",
     fill: "currentColor"
   })));
 }
 
-var _circle$5, _circle2$5, _path$1q, _path2$g;
-function _extends$1v() { _extends$1v = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1v.apply(this, arguments); }
+var _circle$5, _circle2$5, _path$1s, _path2$g;
+function _extends$1x() { _extends$1x = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1x.apply(this, arguments); }
 function SvgSnakeMode(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1v({
+  return /*#__PURE__*/React.createElement("svg", _extends$1x({
     width: 28,
     height: 28,
     viewBox: "0 0 28 28",
@@ -7740,7 +7781,7 @@ function SvgSnakeMode(props) {
     cy: 8.5,
     r: 2.5,
     fill: "currentColor"
-  })), _path$1q || (_path$1q = /*#__PURE__*/React.createElement("path", {
+  })), _path$1s || (_path$1s = /*#__PURE__*/React.createElement("path", {
     fill: "currentColor",
     d: "M9.5 13.25h9v1.5h-9z"
   })), _path2$g || (_path2$g = /*#__PURE__*/React.createElement("path", {
@@ -7750,149 +7791,149 @@ function SvgSnakeMode(props) {
   })));
 }
 
-var _path$1p;
-function _extends$1u() { _extends$1u = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1u.apply(this, arguments); }
+var _path$1r;
+function _extends$1w() { _extends$1w = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1w.apply(this, arguments); }
 function SvgUndo(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1u({
+  return /*#__PURE__*/React.createElement("svg", _extends$1w({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1p || (_path$1p = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1r || (_path$1r = /*#__PURE__*/React.createElement("path", {
     d: "M12.375 9c-1.988 0-3.787.75-5.175 1.95l-2.7-2.7V15h6.75l-2.715-2.715a5.965 5.965 0 013.84-1.41 6.009 6.009 0 015.7 4.125l1.777-.585C18.81 11.273 15.862 9 12.375 9z",
+    fill: "currentcolor"
+  })));
+}
+
+var _path$1q;
+function _extends$1v() { _extends$1v = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1v.apply(this, arguments); }
+function SvgZoomIn(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1v({
+    width: 16,
+    height: 16,
+    viewBox: "0 0 16 16",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1q || (_path$1q = /*#__PURE__*/React.createElement("path", {
+    d: "M12.665 8.667h-4v4H7.332v-4h-4V7.334h4v-4h1.333v4h4v1.333z",
+    fill: "currentcolor"
+  })));
+}
+
+var _path$1p;
+function _extends$1u() { _extends$1u = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1u.apply(this, arguments); }
+function SvgZoomOut(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1u({
+    width: 16,
+    height: 16,
+    viewBox: "0 0 16 16",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1p || (_path$1p = /*#__PURE__*/React.createElement("path", {
+    d: "M12.665 8.667H3.332V7.334h9.333v1.333z",
     fill: "currentcolor"
   })));
 }
 
 var _path$1o;
 function _extends$1t() { _extends$1t = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1t.apply(this, arguments); }
-function SvgZoomIn(props) {
+function SvgZoomReset(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1t({
+    className: "zoom-reset_svg__icon",
+    viewBox: "0 0 1024 1024",
+    xmlns: "http://www.w3.org/2000/svg",
     width: 16,
-    height: 16,
-    viewBox: "0 0 16 16",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
+    height: 16
   }, props), _path$1o || (_path$1o = /*#__PURE__*/React.createElement("path", {
-    d: "M12.665 8.667h-4v4H7.332v-4h-4V7.334h4v-4h1.333v4h4v1.333z",
+    d: "M921.728 654.4a428.352 428.352 0 10-647.04 203.264 7.967 7.967 0 0010.24-.896l43.2-43.2a8 8 0 00-1.28-12.352 352.256 352.256 0 11462.592-67.968l-70.4-69.76a8 8 0 00-13.632 4.608l-27.904 219.776a8 8 0 009.024 8.96l219.52-29.952a8 8 0 004.48-13.632L843.52 786.88a431.36 431.36 0 0078.208-132.48z",
     fill: "currentcolor"
   })));
 }
 
 var _path$1n;
 function _extends$1s() { _extends$1s = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1s.apply(this, arguments); }
-function SvgZoomOut(props) {
+function SvgTextSpecialSymbols(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1s({
-    width: 16,
-    height: 16,
-    viewBox: "0 0 16 16",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
+    xmlns: "http://www.w3.org/2000/svg",
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24"
   }, props), _path$1n || (_path$1n = /*#__PURE__*/React.createElement("path", {
-    d: "M12.665 8.667H3.332V7.334h9.333v1.333z",
-    fill: "currentcolor"
+    d: "M19.15 19h-5.76v-2.13c2.11-1.62 3.2-3.63 3.2-6.03 0-1.5-.43-2.68-1.27-3.55C14.47 6.42 13.37 6 12.03 6c-1.35 0-2.46.42-3.32 1.3-.87.87-1.3 2.07-1.3 3.58 0 2.38 1.09 4.38 3.2 5.99V19H4.85v-2.13h3.56c-2.37-1.55-3.56-3.64-3.56-6.27 0-2.1.65-3.74 1.96-4.94 1.31-1.21 3.03-1.81 5.16-1.81 2.18 0 3.92.6 5.22 1.79 1.31 1.19 1.96 2.86 1.96 4.94 0 2.63-1.2 4.73-3.6 6.29h3.6V19z"
   })));
 }
 
 var _path$1m;
 function _extends$1r() { _extends$1r = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1r.apply(this, arguments); }
-function SvgZoomReset(props) {
+function SvgSave1(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1r({
-    className: "zoom-reset_svg__icon",
-    viewBox: "0 0 1024 1024",
-    xmlns: "http://www.w3.org/2000/svg",
-    width: 16,
-    height: 16
+    width: 10,
+    height: 12,
+    viewBox: "0 0 10 12",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1m || (_path$1m = /*#__PURE__*/React.createElement("path", {
-    d: "M921.728 654.4a428.352 428.352 0 10-647.04 203.264 7.967 7.967 0 0010.24-.896l43.2-43.2a8 8 0 00-1.28-12.352 352.256 352.256 0 11462.592-67.968l-70.4-69.76a8 8 0 00-13.632 4.608l-27.904 219.776a8 8 0 009.024 8.96l219.52-29.952a8 8 0 004.48-13.632L843.52 786.88a431.36 431.36 0 0078.208-132.48z",
+    d: "M9.667 4H7.001V0H3v4H.334l4.667 4.667L9.667 4zM.334 10v1.333h9.333V10H.334z",
     fill: "currentcolor"
   })));
 }
 
 var _path$1l;
 function _extends$1q() { _extends$1q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1q.apply(this, arguments); }
-function SvgTextSpecialSymbols(props) {
+function SvgOpen1(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1q({
-    xmlns: "http://www.w3.org/2000/svg",
-    width: 24,
-    height: 24,
-    viewBox: "0 0 24 24"
+    width: 14,
+    height: 12,
+    viewBox: "0 0 14 12",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1l || (_path$1l = /*#__PURE__*/React.createElement("path", {
-    d: "M19.15 19h-5.76v-2.13c2.11-1.62 3.2-3.63 3.2-6.03 0-1.5-.43-2.68-1.27-3.55C14.47 6.42 13.37 6 12.03 6c-1.35 0-2.46.42-3.32 1.3-.87.87-1.3 2.07-1.3 3.58 0 2.38 1.09 4.38 3.2 5.99V19H4.85v-2.13h3.56c-2.37-1.55-3.56-3.64-3.56-6.27 0-2.1.65-3.74 1.96-4.94 1.31-1.21 3.03-1.81 5.16-1.81 2.18 0 3.92.6 5.22 1.79 1.31 1.19 1.96 2.86 1.96 4.94 0 2.63-1.2 4.73-3.6 6.29h3.6V19z"
+    d: "M13.665 2H7L5.665.667H.332v10.666h13.333V2zm-1.333 8H1.665V3.333h10.667V10z",
+    fill: "currentcolor"
   })));
 }
 
 var _path$1k;
 function _extends$1p() { _extends$1p = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1p.apply(this, arguments); }
-function SvgSave1(props) {
+function SvgReset(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$1p({
-    width: 10,
+    width: 15,
     height: 12,
-    viewBox: "0 0 10 12",
+    viewBox: "0 0 15 12",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$1k || (_path$1k = /*#__PURE__*/React.createElement("path", {
-    d: "M9.667 4H7.001V0H3v4H.334l4.667 4.667L9.667 4zM.334 10v1.333h9.333V10H.334z",
+    d: "M8.666 0a6 6 0 00-6 6h-2l2.667 2.66L5.999 6H4a4.663 4.663 0 014.667-4.667A4.663 4.663 0 0113.333 6a4.663 4.663 0 01-4.667 4.667 4.63 4.63 0 01-3.293-1.374l-.947.947A5.97 5.97 0 008.666 12a6 6 0 000-12zm-.667 3.333v3.334l2.834 1.68.513-.854L8.999 6.1V3.333H8z",
     fill: "currentcolor"
   })));
 }
 
 var _path$1j;
 function _extends$1o() { _extends$1o = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1o.apply(this, arguments); }
-function SvgOpen1(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1o({
-    width: 14,
-    height: 12,
-    viewBox: "0 0 14 12",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1j || (_path$1j = /*#__PURE__*/React.createElement("path", {
-    d: "M13.665 2H7L5.665.667H.332v10.666h13.333V2zm-1.333 8H1.665V3.333h10.667V10z",
-    fill: "currentcolor"
-  })));
-}
-
-var _path$1i;
-function _extends$1n() { _extends$1n = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1n.apply(this, arguments); }
-function SvgReset(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1n({
-    width: 15,
-    height: 12,
-    viewBox: "0 0 15 12",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1i || (_path$1i = /*#__PURE__*/React.createElement("path", {
-    d: "M8.666 0a6 6 0 00-6 6h-2l2.667 2.66L5.999 6H4a4.663 4.663 0 014.667-4.667A4.663 4.663 0 0113.333 6a4.663 4.663 0 01-4.667 4.667 4.63 4.63 0 01-3.293-1.374l-.947.947A5.97 5.97 0 008.666 12a6 6 0 000-12zm-.667 3.333v3.334l2.834 1.68.513-.854L8.999 6.1V3.333H8z",
-    fill: "currentcolor"
-  })));
-}
-
-var _path$1h;
-function _extends$1m() { _extends$1m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1m.apply(this, arguments); }
 function SvgClose(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1m({
+  return /*#__PURE__*/React.createElement("svg", _extends$1o({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1h || (_path$1h = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1j || (_path$1j = /*#__PURE__*/React.createElement("path", {
     d: "M13.462 12.046l6.37 6.37-1.413 1.415-6.371-6.371-6.327 6.326-1.414-1.414 6.327-6.326-6.372-6.372L5.676 4.26l6.372 6.372 6.417-6.418 1.414 1.414-6.417 6.418z",
     fill: "currentColor"
   })));
 }
 
-var _path$1g;
-function _extends$1l() { _extends$1l = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1l.apply(this, arguments); }
+var _path$1i;
+function _extends$1n() { _extends$1n = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1n.apply(this, arguments); }
 function SvgGeneral(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1l({
+  return /*#__PURE__*/React.createElement("svg", _extends$1n({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1g || (_path$1g = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1i || (_path$1i = /*#__PURE__*/React.createElement("path", {
     d: "M4.5 6.25H2a.5.5 0 00-.5.5v2.5a.5.5 0 00.5.5h2.5a.5.5 0 00.5-.5v-2.5a.5.5 0 00-.5-.5zM13.5 2.5h-3a.5.5 0 00-.5.5v3a.5.5 0 00.5.5h3A.5.5 0 0014 6V3a.5.5 0 00-.5-.5zM13.5 9.5h-3a.5.5 0 00-.5.5v3a.5.5 0 00.5.5h3a.5.5 0 00.5-.5v-3a.5.5 0 00-.5-.5zM5 8h2.5M10 11.5H9A1.5 1.5 0 017.5 10V6A1.5 1.5 0 019 4.5h1",
     stroke: "#5B6077",
     strokeLinecap: "round",
@@ -7900,16 +7941,16 @@ function SvgGeneral(props) {
   })));
 }
 
-var _path$1f;
-function _extends$1k() { _extends$1k = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1k.apply(this, arguments); }
+var _path$1h;
+function _extends$1m() { _extends$1m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1m.apply(this, arguments); }
 function SvgGeneralWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1k({
+  return /*#__PURE__*/React.createElement("svg", _extends$1m({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1f || (_path$1f = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1h || (_path$1h = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M32.57 11.839v5.466h5.466v-5.466H32.57zm-4-1.2a2.8 2.8 0 012.8-2.8h7.866a2.8 2.8 0 012.8 2.8v7.866a2.8 2.8 0 01-2.8 2.8H31.37a2.8 2.8 0 01-2.8-2.8V16.57H26V26h-.009l-.023 5.422h2.602v-1.926a2.8 2.8 0 012.8-2.8h7.866a2.8 2.8 0 012.8 2.8v7.866a2.8 2.8 0 01-2.8 2.8H31.37a2.8 2.8 0 01-2.8-2.8v-1.94h-3.004a3.6 3.6 0 01-3.6-3.6v-.005l.025-5.817h-2.569v1.932a2.8 2.8 0 01-2.8 2.8H8.756a2.8 2.8 0 01-2.8-2.8v-7.866a2.8 2.8 0 012.8-2.8h7.866a2.8 2.8 0 012.8 2.8V22h2.579v-5.83a3.6 3.6 0 013.6-3.6h2.969v-1.932zM9.956 21.267v5.466h5.466v-5.466H9.956zM32.57 36.163v-5.466h5.466v5.466H32.57z",
@@ -7917,17 +7958,17 @@ function SvgGeneralWhite(props) {
   })));
 }
 
-var _path$1e, _defs$1;
-function _extends$1j() { _extends$1j = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1j.apply(this, arguments); }
+var _path$1g, _defs$1;
+function _extends$1l() { _extends$1l = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1l.apply(this, arguments); }
 function SvgStereo(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1j({
+  return /*#__PURE__*/React.createElement("svg", _extends$1l({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg",
     xmlnsXlink: "http://www.w3.org/1999/xlink"
-  }, props), _path$1e || (_path$1e = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1g || (_path$1g = /*#__PURE__*/React.createElement("path", {
     fill: "url(#stereo_svg__pattern0)",
     d: "M0 0h16v16H0z"
   })), _defs$1 || (_defs$1 = /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
@@ -7946,16 +7987,16 @@ function SvgStereo(props) {
   }))));
 }
 
-var _path$1d, _path2$f, _path3$3, _path4$1, _circle$4, _circle2$4, _circle3$3, _circle4$2, _circle5$1;
-function _extends$1i() { _extends$1i = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1i.apply(this, arguments); }
+var _path$1f, _path2$f, _path3$3, _path4$1, _circle$4, _circle2$4, _circle3$3, _circle4$2, _circle5$1;
+function _extends$1k() { _extends$1k = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1k.apply(this, arguments); }
 function SvgStereoWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1i({
+  return /*#__PURE__*/React.createElement("svg", _extends$1k({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1d || (_path$1d = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1f || (_path$1f = /*#__PURE__*/React.createElement("path", {
     d: "M6.269 3.233l1.733 1m0 0l1.767-1m-1.767 1v1.234M2.97 9.433l1.533.867m0 0l1.067-.633m-1.067.633v1.767",
     stroke: "#fff",
     strokeWidth: 0.667,
@@ -8005,16 +8046,16 @@ function SvgStereoWhite(props) {
   })));
 }
 
-var _path$1c, _path2$e;
-function _extends$1h() { _extends$1h = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1h.apply(this, arguments); }
+var _path$1e, _path2$e;
+function _extends$1j() { _extends$1j = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1j.apply(this, arguments); }
 function SvgAtoms(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1h({
+  return /*#__PURE__*/React.createElement("svg", _extends$1j({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1c || (_path$1c = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1e || (_path$1e = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M10.082 24c-1.306-1.944-2.363-3.86-3.132-5.673-.885-2.086-1.432-4.132-1.474-5.986-.042-1.86.428-3.71 1.791-5.073 1.364-1.363 3.213-1.833 5.073-1.79 1.854.042 3.9.588 5.986 1.473 1.813.77 3.729 1.826 5.673 3.132 1.944-1.306 3.86-2.363 5.673-3.132 2.085-.885 4.132-1.431 5.985-1.474 1.86-.042 3.71.428 5.073 1.791 1.364 1.364 1.834 3.213 1.791 5.073-.042 1.854-.588 3.9-1.473 5.986-.77 1.813-1.826 3.729-3.132 5.673 1.306 1.944 2.363 3.86 3.132 5.673.885 2.086 1.431 4.132 1.473 5.986.043 1.86-.427 3.71-1.79 5.073-1.364 1.363-3.213 1.833-5.074 1.79-1.853-.042-3.9-.588-5.985-1.473-1.813-.77-3.729-1.826-5.673-3.132-1.944 1.306-3.86 2.363-5.673 3.132-2.086.885-4.133 1.431-5.986 1.474-1.86.042-3.71-.428-5.073-1.791-1.363-1.364-1.833-3.213-1.79-5.073.041-1.854.588-3.9 1.473-5.986.769-1.813 1.826-3.729 3.132-5.673zm2.545-3.433a28.55 28.55 0 01-1.995-3.802c-.767-1.807-1.13-3.337-1.157-4.515-.026-1.17.275-1.807.62-2.153.347-.346.983-.647 2.154-.62 1.178.026 2.708.39 4.514 1.156 1.2.51 2.48 1.178 3.803 1.995a54.476 54.476 0 00-4.171 3.768 54.458 54.458 0 00-3.768 4.171zm7.939 14.805a28.557 28.557 0 01-3.802 1.995c-1.807.767-3.337 1.13-4.515 1.157-1.171.026-1.807-.275-2.153-.62-.346-.347-.647-.983-.62-2.154.026-1.178.39-2.708 1.156-4.515.51-1.2 1.178-2.479 1.995-3.802a54.457 54.457 0 003.768 4.171 54.457 54.457 0 004.17 3.768zm3.433-2.384a49.694 49.694 0 01-4.776-4.212A49.694 49.694 0 0115.011 24a49.694 49.694 0 014.212-4.776 49.708 49.708 0 014.776-4.212 49.708 49.708 0 014.776 4.212A49.708 49.708 0 0132.987 24a49.708 49.708 0 01-4.212 4.776 49.694 49.694 0 01-4.776 4.212zm3.433 2.384a28.55 28.55 0 003.802 1.995c1.806.767 3.337 1.13 4.514 1.157 1.172.026 1.808-.275 2.154-.62.346-.347.647-.983.62-2.154-.026-1.178-.39-2.708-1.156-4.515a28.556 28.556 0 00-1.995-3.802 54.5 54.5 0 01-3.768 4.171 54.458 54.458 0 01-4.171 3.768zm7.939-14.805a28.563 28.563 0 001.995-3.802c.766-1.807 1.13-3.337 1.156-4.515.027-1.17-.274-1.807-.62-2.153-.346-.346-.983-.647-2.154-.62-1.177.026-2.708.39-4.514 1.156-1.2.51-2.479 1.178-3.802 1.995a54.457 54.457 0 014.171 3.768 54.5 54.5 0 013.767 4.171z",
@@ -8025,16 +8066,16 @@ function SvgAtoms(props) {
   })));
 }
 
-var _path$1b, _path2$d;
-function _extends$1g() { _extends$1g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1g.apply(this, arguments); }
+var _path$1d, _path2$d;
+function _extends$1i() { _extends$1i = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1i.apply(this, arguments); }
 function SvgAtomsWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1g({
+  return /*#__PURE__*/React.createElement("svg", _extends$1i({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1b || (_path$1b = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1d || (_path$1d = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M10.082 24c-1.306-1.944-2.363-3.86-3.132-5.673-.885-2.086-1.432-4.132-1.474-5.986-.042-1.86.428-3.71 1.791-5.073 1.364-1.363 3.213-1.833 5.073-1.79 1.854.042 3.9.588 5.986 1.473 1.813.77 3.729 1.826 5.673 3.132 1.944-1.306 3.86-2.363 5.673-3.132 2.085-.885 4.132-1.431 5.985-1.474 1.86-.042 3.71.428 5.073 1.791 1.364 1.364 1.834 3.213 1.791 5.073-.042 1.854-.588 3.9-1.473 5.986-.77 1.813-1.826 3.729-3.132 5.673 1.306 1.944 2.363 3.86 3.132 5.673.885 2.086 1.431 4.132 1.473 5.986.043 1.86-.427 3.71-1.79 5.073-1.364 1.363-3.213 1.833-5.074 1.79-1.853-.042-3.9-.588-5.985-1.473-1.813-.77-3.729-1.826-5.673-3.132-1.944 1.306-3.86 2.363-5.673 3.132-2.086.885-4.133 1.431-5.986 1.474-1.86.042-3.71-.428-5.073-1.791-1.363-1.364-1.833-3.213-1.79-5.073.041-1.854.588-3.9 1.473-5.986.769-1.813 1.826-3.729 3.132-5.673zm2.545-3.433a28.55 28.55 0 01-1.995-3.802c-.767-1.807-1.13-3.337-1.157-4.515-.026-1.17.275-1.807.62-2.153.347-.346.983-.647 2.154-.62 1.178.026 2.708.39 4.514 1.156 1.2.51 2.48 1.178 3.803 1.995a54.476 54.476 0 00-4.171 3.768 54.458 54.458 0 00-3.768 4.171zm7.939 14.805a28.557 28.557 0 01-3.802 1.995c-1.807.767-3.337 1.13-4.515 1.157-1.171.026-1.807-.275-2.153-.62-.346-.347-.647-.983-.62-2.154.026-1.178.39-2.708 1.156-4.515.51-1.2 1.178-2.479 1.995-3.802a54.457 54.457 0 003.768 4.171 54.457 54.457 0 004.17 3.768zm3.433-2.384a49.694 49.694 0 01-4.776-4.212A49.694 49.694 0 0115.011 24a49.694 49.694 0 014.212-4.776 49.708 49.708 0 014.776-4.212 49.708 49.708 0 014.776 4.212A49.708 49.708 0 0132.987 24a49.708 49.708 0 01-4.212 4.776 49.694 49.694 0 01-4.776 4.212zm3.433 2.384a28.55 28.55 0 003.802 1.995c1.806.767 3.337 1.13 4.514 1.157 1.172.026 1.808-.275 2.154-.62.346-.347.647-.983.62-2.154-.026-1.178-.39-2.708-1.156-4.515a28.556 28.556 0 00-1.995-3.802 54.5 54.5 0 01-3.768 4.171 54.458 54.458 0 01-4.171 3.768zm7.939-14.805a28.563 28.563 0 001.995-3.802c.766-1.807 1.13-3.337 1.156-4.515.027-1.17-.274-1.807-.62-2.153-.346-.346-.983-.647-2.154-.62-1.177.026-2.708.39-4.514 1.156-1.2.51-2.479 1.178-3.802 1.995a54.457 54.457 0 014.171 3.768 54.5 54.5 0 013.767 4.171z",
@@ -8045,16 +8086,16 @@ function SvgAtomsWhite(props) {
   })));
 }
 
-var _path$1a;
-function _extends$1f() { _extends$1f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1f.apply(this, arguments); }
+var _path$1c;
+function _extends$1h() { _extends$1h = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1h.apply(this, arguments); }
 function SvgBonds(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1f({
+  return /*#__PURE__*/React.createElement("svg", _extends$1h({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1a || (_path$1a = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1c || (_path$1c = /*#__PURE__*/React.createElement("path", {
     d: "M8 2.5v11M3.238 5.25l9.527 5.5M3.238 10.75l9.527-5.5",
     stroke: "#5B6077",
     strokeLinecap: "round",
@@ -8062,16 +8103,16 @@ function SvgBonds(props) {
   })));
 }
 
-var _path$19;
-function _extends$1e() { _extends$1e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1e.apply(this, arguments); }
+var _path$1b;
+function _extends$1g() { _extends$1g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1g.apply(this, arguments); }
 function SvgBondsWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1e({
+  return /*#__PURE__*/React.createElement("svg", _extends$1g({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$19 || (_path$19 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1b || (_path$1b = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M24 6.044a2 2 0 012 2v12.492l10.818-6.246a2 2 0 112 3.464L28 24l10.818 6.246a2 2 0 01-2 3.464L26 27.464v12.492a2 2 0 01-4 0V27.464L11.182 33.71a2 2 0 01-2-3.464L20 24 9.182 17.754a2 2 0 012-3.464L22 20.536V8.044a2 2 0 012-2z",
@@ -8079,16 +8120,16 @@ function SvgBondsWhite(props) {
   })));
 }
 
-var _path$18, _path2$c, _path3$2;
-function _extends$1d() { _extends$1d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1d.apply(this, arguments); }
+var _path$1a, _path2$c, _path3$2;
+function _extends$1f() { _extends$1f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1f.apply(this, arguments); }
 function SvgServer(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1d({
+  return /*#__PURE__*/React.createElement("svg", _extends$1f({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$18 || (_path$18 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$1a || (_path$1a = /*#__PURE__*/React.createElement("path", {
     d: "M8 8c3.038 0 5.5-1.343 5.5-3S11.038 2 8 2 2.5 3.343 2.5 5 4.962 8 8 8z",
     stroke: "#5B6077",
     strokeLinecap: "round",
@@ -8106,16 +8147,16 @@ function SvgServer(props) {
   })));
 }
 
-var _path$17, _path2$b, _path3$1;
-function _extends$1c() { _extends$1c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1c.apply(this, arguments); }
+var _path$19, _path2$b, _path3$1;
+function _extends$1e() { _extends$1e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1e.apply(this, arguments); }
 function SvgServerWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1c({
+  return /*#__PURE__*/React.createElement("svg", _extends$1e({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$17 || (_path$17 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$19 || (_path$19 = /*#__PURE__*/React.createElement("path", {
     d: "M8 8c3.038 0 5.5-1.343 5.5-3S11.038 2 8 2 2.5 3.343 2.5 5 4.962 8 8 8z",
     stroke: "#fff",
     strokeWidth: 0.667,
@@ -8136,31 +8177,31 @@ function SvgServerWhite(props) {
   })));
 }
 
-var _path$16;
-function _extends$1b() { _extends$1b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1b.apply(this, arguments); }
+var _path$18;
+function _extends$1d() { _extends$1d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1d.apply(this, arguments); }
 function Svg3D(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1b({
+  return /*#__PURE__*/React.createElement("svg", _extends$1d({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none"
-  }, props), _path$16 || (_path$16 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$18 || (_path$18 = /*#__PURE__*/React.createElement("path", {
     d: "M8.365 12.51c-.604 0-1.142-.104-1.614-.312-.469-.21-.84-.498-1.112-.865a2.176 2.176 0 01-.417-1.278h1.764a.92.92 0 00.198.534c.124.15.289.268.494.352.204.083.435.125.691.125.267 0 .503-.047.708-.142.205-.094.365-.225.481-.392a.99.99 0 00.174-.578.969.969 0 00-.186-.587 1.19 1.19 0 00-.526-.404 2.045 2.045 0 00-.809-.146H7.44V7.531h.772c.265 0 .498-.046.7-.138.205-.091.364-.218.477-.38a.988.988 0 00.17-.574.993.993 0 00-.562-.918 1.341 1.341 0 00-.615-.134c-.237 0-.454.043-.65.13a1.138 1.138 0 00-.474.36.947.947 0 00-.19.55H5.388c.008-.477.144-.898.409-1.262.264-.364.62-.649 1.068-.854A3.6 3.6 0 018.389 4c.572 0 1.072.104 1.501.311.429.208.762.488.999.842.24.35.359.744.356 1.18.003.465-.142.851-.433 1.162-.288.31-.664.507-1.128.59v.065c.61.078 1.073.29 1.391.635.32.342.48.771.477 1.286.003.472-.133.891-.408 1.258-.273.367-.649.655-1.129.865-.48.21-1.03.316-1.65.316zM15.34 12.397h-2.936V4.113h2.96c.834 0 1.551.166 2.153.498a3.356 3.356 0 011.387 1.42c.326.617.49 1.356.49 2.216 0 .863-.164 1.604-.49 2.225a3.363 3.363 0 01-1.395 1.427c-.605.332-1.327.498-2.168.498zm-1.184-1.5h1.112c.518 0 .953-.092 1.306-.276a1.77 1.77 0 00.801-.861c.18-.391.271-.896.271-1.513 0-.612-.09-1.112-.271-1.5a1.754 1.754 0 00-.797-.858c-.353-.184-.788-.275-1.306-.275h-1.117v5.282zM20.222 10v1.5c1.5 0 4 5.7-6 6.5v1.5c12.5-1 9-9.5 6-9.5zM8.107 16.33l-.385 1.391c-7.5-1.221-5.5-5.721-4-6.221V10c-2 0-6.5 7 3.755 8.951l-.199 1.207a.2.2 0 00.268.22l3.363-1.269a.2.2 0 00.071-.328l-2.538-2.538a.2.2 0 00-.335.088z",
     fill: "#333"
   })));
 }
 
-var _path$15, _path2$a;
-function _extends$1a() { _extends$1a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1a.apply(this, arguments); }
+var _path$17, _path2$a;
+function _extends$1c() { _extends$1c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1c.apply(this, arguments); }
 function Svg3DWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1a({
+  return /*#__PURE__*/React.createElement("svg", _extends$1c({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$15 || (_path$15 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$17 || (_path$17 = /*#__PURE__*/React.createElement("path", {
     d: "M14 11.081V4.916a.5.5 0 00-.255-.436l-5.5-3.094a.5.5 0 00-.49 0l-5.5 3.094A.5.5 0 002 4.916v6.165a.5.5 0 00.255.436l5.5 3.094a.5.5 0 00.49 0l5.5-3.094a.5.5 0 00.255-.436z",
     stroke: "#fff",
     strokeLinecap: "round",
@@ -8173,16 +8214,16 @@ function Svg3DWhite(props) {
   })));
 }
 
-var _path$14;
-function _extends$19() { _extends$19 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$19.apply(this, arguments); }
+var _path$16;
+function _extends$1b() { _extends$1b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1b.apply(this, arguments); }
 function SvgDebugging(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$19({
+  return /*#__PURE__*/React.createElement("svg", _extends$1b({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$14 || (_path$14 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$16 || (_path$16 = /*#__PURE__*/React.createElement("path", {
     d: "M8 2h0a4.5 4.5 0 00-4.5 4.5v3A4.5 4.5 0 008 14h0a4.5 4.5 0 004.5-4.5v-3A4.5 4.5 0 008 2zM12.5 8.5H14M2 8.5h1.5M2 10.5h1.612M2 6.5h12M8 8.5V14M12.389 10.5H14M3.496 1.75l1.485 1.413M12.495 1.75l-1.481 1.409",
     stroke: "#5B6077",
     strokeLinecap: "round",
@@ -8190,16 +8231,16 @@ function SvgDebugging(props) {
   })));
 }
 
-var _path$13;
-function _extends$18() { _extends$18 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$18.apply(this, arguments); }
+var _path$15;
+function _extends$1a() { _extends$1a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1a.apply(this, arguments); }
 function SvgDebuggingWhite(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$18({
+  return /*#__PURE__*/React.createElement("svg", _extends$1a({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$13 || (_path$13 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$15 || (_path$15 = /*#__PURE__*/React.createElement("path", {
     d: "M8 2h0a4.5 4.5 0 00-4.5 4.5v3A4.5 4.5 0 008 14h0a4.5 4.5 0 004.5-4.5v-3A4.5 4.5 0 008 2zM12.5 8.5H14M2 8.5h1.5M2 10.5h1.612M2 6.5h12M8 8.5V14M12.389 10.5H14M3.496 1.75l1.485 1.413M12.495 1.75l-1.481 1.409",
     stroke: "#fff",
     strokeLinecap: "round",
@@ -8207,69 +8248,97 @@ function SvgDebuggingWhite(props) {
   })));
 }
 
-var _path$12;
-function _extends$17() { _extends$17 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$17.apply(this, arguments); }
+var _path$14;
+function _extends$19() { _extends$19 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$19.apply(this, arguments); }
 function SvgDropdownIndicator(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$17({
+  return /*#__PURE__*/React.createElement("svg", _extends$19({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$12 || (_path$12 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$14 || (_path$14 = /*#__PURE__*/React.createElement("path", {
     d: "M4.94 5.727L8 8.78l3.06-3.053.94.94-4 4-4-4 .94-.94z",
     fill: "#5B6077"
   })));
 }
 
-var _path$11;
-function _extends$16() { _extends$16 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$16.apply(this, arguments); }
+var _path$13;
+function _extends$18() { _extends$18 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$18.apply(this, arguments); }
 function SvgChevron(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$16({
+  return /*#__PURE__*/React.createElement("svg", _extends$18({
     width: 48,
     height: 48,
     viewBox: "0 0 48 48",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$11 || (_path$11 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$13 || (_path$13 = /*#__PURE__*/React.createElement("path", {
     d: "M24 33.23L9.782 19.012l2.828-2.828L24 27.574l11.388-11.39 2.83 2.828L24 33.23z",
     fill: "#231F20"
   })));
 }
 
-var _path$10;
-function _extends$15() { _extends$15 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$15.apply(this, arguments); }
+var _path$12;
+function _extends$17() { _extends$17 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$17.apply(this, arguments); }
 function SvgFullscreenEnter(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$15({
+  return /*#__PURE__*/React.createElement("svg", _extends$17({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$10 || (_path$10 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$12 || (_path$12 = /*#__PURE__*/React.createElement("path", {
     d: "M8.75 3.75h-5v5h1.5V6.312L9 10.063l1-1.124L6.312 5.25H8.75v-1.5zM15.25 3.75h5v5h-1.5V6.312L15 10.063l-1-1.124 3.688-3.688H15.25v-1.5zM15.25 20.25h5v-5h-1.5v2.438L15 13.938l-1 1.124 3.688 3.688H15.25v1.5zM8.75 20.25h-5v-5h1.5v2.438L9 13.938l1 1.124-3.688 3.688H8.75v1.5z",
     fill: "currentColor"
   })));
 }
 
-var _path$$;
-function _extends$14() { _extends$14 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$14.apply(this, arguments); }
+var _path$11;
+function _extends$16() { _extends$16 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$16.apply(this, arguments); }
 function SvgFullscreenExit(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$14({
+  return /*#__PURE__*/React.createElement("svg", _extends$16({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$$ || (_path$$ = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$11 || (_path$11 = /*#__PURE__*/React.createElement("path", {
     d: "M19.25 14.25h-5v5h1.5v-2.438l3.75 3.75 1-1.125-3.688-3.687h2.438v-1.5zM5 14.25h5v5H8.5v-2.438l-3.75 3.75-1-1.125 3.688-3.687H5v-1.5zM5 10.063h5v-5H8.5V7.5L4.75 3.75l-1 1.125 3.688 3.688H5v1.5zM19.25 10.063h-5v-5h1.5V7.5l3.75-3.75 1 1.125-3.688 3.688h2.438v1.5z",
     fill: "currentColor"
   })));
 }
 
+var _path$10;
+function _extends$15() { _extends$15 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$15.apply(this, arguments); }
+function Svg$n(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$15({
+    width: 16,
+    height: 16,
+    viewBox: "0 0 16 16",
+    fill: "currentColor",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$10 || (_path$10 = /*#__PURE__*/React.createElement("path", {
+    d: "M7.744 11.136a2.48 2.48 0 01-1.436-.443c-.412-.29-.733-.69-.963-1.202C5.115 8.98 5 8.391 5 7.727c0-.659.12-1.24.362-1.743A2.9 2.9 0 016.355 4.8c.423-.287.905-.43 1.445-.43.383 0 .72.072 1.01.216.29.143.537.341.741.597.208.256.378.553.511.89h.444l.251 1.637.835 3.29h-1.09l-.785-3.29a6.215 6.215 0 00-.191-.703 3.787 3.787 0 00-.337-.742 1.898 1.898 0 00-.528-.583 1.259 1.259 0 00-.763-.23c-.327 0-.614.098-.861.294a1.868 1.868 0 00-.575.805 3.195 3.195 0 00-.205 1.185c0 .437.065.83.196 1.18.134.35.318.625.554.827.236.199.511.298.827.298.287 0 .538-.078.754-.234.216-.157.4-.355.55-.597.15-.241.273-.493.366-.754.097-.264.168-.502.213-.712l.704-3.29h1.086l-.75 3.29-.251 1.658H10.1c-.137.338-.313.639-.529.903a2.268 2.268 0 01-.775.614c-.301.148-.652.22-1.053.217z"
+  })));
+}
+
+var _path$$;
+function _extends$14() { _extends$14 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$14.apply(this, arguments); }
+function Svg$m(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$14({
+    width: 16,
+    height: 16,
+    viewBox: "0 0 16 16",
+    fill: "currentColor",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$$ || (_path$$ = /*#__PURE__*/React.createElement("path", {
+    d: "M7.237 6.954h.84c.6 0 1.093.124 1.483.371.392.245.683.561.873.95.19.387.286.795.286 1.223 0 .498-.117.944-.35 1.339a2.53 2.53 0 01-.954.933c-.404.227-.862.34-1.377.34a2.75 2.75 0 01-.912-.157c-.298-.108-.568-.308-.81-.6l-.063.029V9.507c0 .264.064.508.192.733.127.224.31.403.545.537.236.133.517.2.844.2.338 0 .628-.07.87-.209.243-.142.432-.328.566-.558.133-.233.2-.487.2-.763 0-.272-.064-.522-.192-.75a1.44 1.44 0 00-1.3-.759h-.74v-.984zm.465-3.8c.397 0 .758.062 1.082.187.324.122.602.291.835.507.233.213.412.459.537.737.125.279.188.573.188.882 0 .375-.095.745-.286 1.108a2.313 2.313 0 01-.852.904c-.378.238-.852.358-1.423.358h-.546v-.96h.443c.316 0 .579-.063.789-.191.21-.13.368-.295.473-.494.105-.202.157-.41.157-.627a1.16 1.16 0 00-.4-.903c-.264-.239-.597-.358-.997-.358-.267 0-.51.055-.729.166-.219.11-.393.269-.524.473-.13.202-.196.438-.196.707v8.804H5V5.617c0-.483.118-.909.354-1.278.235-.372.557-.662.963-.87.409-.21.87-.315 1.385-.315z"
+  })));
+}
+
 var _path$_;
 function _extends$13() { _extends$13 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$13.apply(this, arguments); }
-function Svg$n(props) {
+function Svg$l(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$13({
     width: 16,
     height: 16,
@@ -8277,13 +8346,13 @@ function Svg$n(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$_ || (_path$_ = /*#__PURE__*/React.createElement("path", {
-    d: "M7.744 11.136a2.48 2.48 0 01-1.436-.443c-.412-.29-.733-.69-.963-1.202C5.115 8.98 5 8.391 5 7.727c0-.659.12-1.24.362-1.743A2.9 2.9 0 016.355 4.8c.423-.287.905-.43 1.445-.43.383 0 .72.072 1.01.216.29.143.537.341.741.597.208.256.378.553.511.89h.444l.251 1.637.835 3.29h-1.09l-.785-3.29a6.215 6.215 0 00-.191-.703 3.787 3.787 0 00-.337-.742 1.898 1.898 0 00-.528-.583 1.259 1.259 0 00-.763-.23c-.327 0-.614.098-.861.294a1.868 1.868 0 00-.575.805 3.195 3.195 0 00-.205 1.185c0 .437.065.83.196 1.18.134.35.318.625.554.827.236.199.511.298.827.298.287 0 .538-.078.754-.234.216-.157.4-.355.55-.597.15-.241.273-.493.366-.754.097-.264.168-.502.213-.712l.704-3.29h1.086l-.75 3.29-.251 1.658H10.1c-.137.338-.313.639-.529.903a2.268 2.268 0 01-.775.614c-.301.148-.652.22-1.053.217z"
+    d: "M5 4h1.338l1.573 4.828L9.44 4h1.337L8.52 10.435V13H7.276v-2.565L5 4z"
   })));
 }
 
 var _path$Z;
 function _extends$12() { _extends$12 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$12.apply(this, arguments); }
-function Svg$m(props) {
+function Svg$k(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$12({
     width: 16,
     height: 16,
@@ -8291,13 +8360,13 @@ function Svg$m(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$Z || (_path$Z = /*#__PURE__*/React.createElement("path", {
-    d: "M7.237 6.954h.84c.6 0 1.093.124 1.483.371.392.245.683.561.873.95.19.387.286.795.286 1.223 0 .498-.117.944-.35 1.339a2.53 2.53 0 01-.954.933c-.404.227-.862.34-1.377.34a2.75 2.75 0 01-.912-.157c-.298-.108-.568-.308-.81-.6l-.063.029V9.507c0 .264.064.508.192.733.127.224.31.403.545.537.236.133.517.2.844.2.338 0 .628-.07.87-.209.243-.142.432-.328.566-.558.133-.233.2-.487.2-.763 0-.272-.064-.522-.192-.75a1.44 1.44 0 00-1.3-.759h-.74v-.984zm.465-3.8c.397 0 .758.062 1.082.187.324.122.602.291.835.507.233.213.412.459.537.737.125.279.188.573.188.882 0 .375-.095.745-.286 1.108a2.313 2.313 0 01-.852.904c-.378.238-.852.358-1.423.358h-.546v-.96h.443c.316 0 .579-.063.789-.191.21-.13.368-.295.473-.494.105-.202.157-.41.157-.627a1.16 1.16 0 00-.4-.903c-.264-.239-.597-.358-.997-.358-.267 0-.51.055-.729.166-.219.11-.393.269-.524.473-.13.202-.196.438-.196.707v8.804H5V5.617c0-.483.118-.909.354-1.278.235-.372.557-.662.963-.87.409-.21.87-.315 1.385-.315z"
+    d: "M6.271 4.585a1.474 1.474 0 01.614-1.244c.415-.313.983-.469 1.704-.469.299 0 .57.026.814.077.245.048.502.12.772.217v1.12a5.532 5.532 0 00-.678-.208 3.45 3.45 0 00-.848-.107c-.332 0-.585.057-.758.171a.517.517 0 00-.162.746c.062.105.177.214.345.328.167.11.41.223.729.336.897.313 1.555.745 1.973 1.296.417.551.626 1.223.626 2.016v.119c0 .6-.118 1.136-.354 1.61a2.693 2.693 0 01-1.005 1.117c-.435.273-.954.41-1.556.41-.616 0-1.145-.136-1.585-.406a2.67 2.67 0 01-1.006-1.108c-.233-.468-.35-.998-.35-1.589v-.12c0-.443.086-.85.257-1.222.17-.373.399-.686.686-.942.29-.256.609-.426.958-.511l-.004-.035a2.157 2.157 0 01-.86-.647 1.533 1.533 0 01-.312-.955zm.652 4.253v.11c0 .384.056.732.166 1.045.114.312.286.562.516.75.233.184.527.277.882.277.35 0 .638-.092.865-.277a1.67 1.67 0 00.507-.75c.111-.313.167-.66.167-1.044v-.111c0-.307-.064-.607-.192-.9a2.221 2.221 0 00-.541-.758 1.648 1.648 0 00-.806-.413c-.355 0-.648.095-.878.285-.23.188-.402.438-.515.75a3.01 3.01 0 00-.17 1.036z"
   })));
 }
 
 var _path$Y;
 function _extends$11() { _extends$11 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$11.apply(this, arguments); }
-function Svg$l(props) {
+function Svg$j(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$11({
     width: 16,
     height: 16,
@@ -8305,13 +8374,13 @@ function Svg$l(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$Y || (_path$Y = /*#__PURE__*/React.createElement("path", {
-    d: "M5 4h1.338l1.573 4.828L9.44 4h1.337L8.52 10.435V13H7.276v-2.565L5 4z"
+    d: "M8.06 8.582h1.027v.55h-.831c-.276 0-.52.043-.733.128-.21.085-.377.203-.499.353a.802.802 0 00-.179.52c0 .27.135.493.405.67.27.173.635.26 1.095.26.452 0 .797-.08 1.036-.24.238-.158.392-.4.46-.724h1.283a1.955 1.955 0 01-.269.844c-.148.25-.345.463-.592.64-.245.172-.53.306-.857.4-.324.09-.679.136-1.065.136a4.065 4.065 0 01-1.423-.234c-.418-.156-.749-.377-.993-.66a1.498 1.498 0 01-.362-1.002c0-.193.038-.387.115-.58.08-.193.211-.369.396-.528.187-.16.442-.287.763-.384.324-.1.731-.149 1.223-.149zm1.027.269H8.06c-.472 0-.863-.047-1.172-.141-.31-.094-.553-.216-.729-.366a1.332 1.332 0 01-.375-.508 1.557 1.557 0 01-.106-.554c0-.403.112-.747.336-1.03.225-.288.536-.506.933-.657.398-.15.858-.226 1.381-.226.503 0 .948.077 1.334.23.39.15.7.37.933.656.233.285.37.627.413 1.027H9.723a.957.957 0 00-.456-.634c-.245-.157-.567-.235-.968-.235-.42 0-.751.087-.993.26-.241.173-.363.392-.366.656.003.248.115.446.337.597.221.148.548.222.98.222h.83v.703z"
   })));
 }
 
 var _path$X;
 function _extends$10() { _extends$10 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$10.apply(this, arguments); }
-function Svg$k(props) {
+function Svg$i(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$10({
     width: 16,
     height: 16,
@@ -8319,13 +8388,13 @@ function Svg$k(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$X || (_path$X = /*#__PURE__*/React.createElement("path", {
-    d: "M6.271 4.585a1.474 1.474 0 01.614-1.244c.415-.313.983-.469 1.704-.469.299 0 .57.026.814.077.245.048.502.12.772.217v1.12a5.532 5.532 0 00-.678-.208 3.45 3.45 0 00-.848-.107c-.332 0-.585.057-.758.171a.517.517 0 00-.162.746c.062.105.177.214.345.328.167.11.41.223.729.336.897.313 1.555.745 1.973 1.296.417.551.626 1.223.626 2.016v.119c0 .6-.118 1.136-.354 1.61a2.693 2.693 0 01-1.005 1.117c-.435.273-.954.41-1.556.41-.616 0-1.145-.136-1.585-.406a2.67 2.67 0 01-1.006-1.108c-.233-.468-.35-.998-.35-1.589v-.12c0-.443.086-.85.257-1.222.17-.373.399-.686.686-.942.29-.256.609-.426.958-.511l-.004-.035a2.157 2.157 0 01-.86-.647 1.533 1.533 0 01-.312-.955zm.652 4.253v.11c0 .384.056.732.166 1.045.114.312.286.562.516.75.233.184.527.277.882.277.35 0 .638-.092.865-.277a1.67 1.67 0 00.507-.75c.111-.313.167-.66.167-1.044v-.111c0-.307-.064-.607-.192-.9a2.221 2.221 0 00-.541-.758 1.648 1.648 0 00-.806-.413c-.355 0-.648.095-.878.285-.23.188-.402.438-.515.75a3.01 3.01 0 00-.17 1.036z"
+    d: "M10.04 3.273h.711v.835L8.69 6.746c-.299.386-.556.726-.772 1.018a3.98 3.98 0 00-.494.87c-.114.29-.17.628-.17 1.014 0 .281.085.526.255.733.17.204.408.35.712.439l.677.204c.515.154.914.354 1.198.601.284.245.426.514.426.81 0 .295-.105.604-.315.925-.21.32-.499.622-.865.903l-.712-.58c.176-.19.31-.374.4-.553.094-.18.143-.333.145-.46.003-.114-.068-.225-.213-.333a1.833 1.833 0 00-.596-.264l-.499-.141c-.6-.165-1.065-.439-1.398-.822a2.003 2.003 0 01-.498-1.356c0-.366.037-.7.11-1 .077-.305.187-.595.329-.87.142-.276.315-.55.52-.823.204-.275.437-.568.698-.878l2.412-2.91zm-4.505 0h4.709v1.13H5.535v-1.13z"
   })));
 }
 
 var _path$W;
 function _extends$$() { _extends$$ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$$.apply(this, arguments); }
-function Svg$j(props) {
+function Svg$h(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$$({
     width: 16,
     height: 16,
@@ -8333,13 +8402,13 @@ function Svg$j(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$W || (_path$W = /*#__PURE__*/React.createElement("path", {
-    d: "M8.06 8.582h1.027v.55h-.831c-.276 0-.52.043-.733.128-.21.085-.377.203-.499.353a.802.802 0 00-.179.52c0 .27.135.493.405.67.27.173.635.26 1.095.26.452 0 .797-.08 1.036-.24.238-.158.392-.4.46-.724h1.283a1.955 1.955 0 01-.269.844c-.148.25-.345.463-.592.64-.245.172-.53.306-.857.4-.324.09-.679.136-1.065.136a4.065 4.065 0 01-1.423-.234c-.418-.156-.749-.377-.993-.66a1.498 1.498 0 01-.362-1.002c0-.193.038-.387.115-.58.08-.193.211-.369.396-.528.187-.16.442-.287.763-.384.324-.1.731-.149 1.223-.149zm1.027.269H8.06c-.472 0-.863-.047-1.172-.141-.31-.094-.553-.216-.729-.366a1.332 1.332 0 01-.375-.508 1.557 1.557 0 01-.106-.554c0-.403.112-.747.336-1.03.225-.288.536-.506.933-.657.398-.15.858-.226 1.381-.226.503 0 .948.077 1.334.23.39.15.7.37.933.656.233.285.37.627.413 1.027H9.723a.957.957 0 00-.456-.634c-.245-.157-.567-.235-.968-.235-.42 0-.751.087-.993.26-.241.173-.363.392-.366.656.003.248.115.446.337.597.221.148.548.222.98.222h.83v.703z"
+    d: "M6.13 7.113V11H4.855V4.454h1.223V5.52h.081c.154-.35.391-.628.712-.836.321-.21.727-.315 1.219-.315.449 0 .84.094 1.172.281.335.185.595.46.78.827.184.367.277.82.277 1.36v6.617H9.043V6.99c0-.475-.123-.845-.37-1.112-.245-.27-.584-.405-1.019-.405-.292 0-.554.064-.784.192a1.37 1.37 0 00-.545.562c-.131.244-.196.54-.196.886z"
   })));
 }
 
 var _path$V;
 function _extends$_() { _extends$_ = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$_.apply(this, arguments); }
-function Svg$i(props) {
+function Svg$g(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$_({
     width: 16,
     height: 16,
@@ -8347,13 +8416,13 @@ function Svg$i(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$V || (_path$V = /*#__PURE__*/React.createElement("path", {
-    d: "M10.04 3.273h.711v.835L8.69 6.746c-.299.386-.556.726-.772 1.018a3.98 3.98 0 00-.494.87c-.114.29-.17.628-.17 1.014 0 .281.085.526.255.733.17.204.408.35.712.439l.677.204c.515.154.914.354 1.198.601.284.245.426.514.426.81 0 .295-.105.604-.315.925-.21.32-.499.622-.865.903l-.712-.58c.176-.19.31-.374.4-.553.094-.18.143-.333.145-.46.003-.114-.068-.225-.213-.333a1.833 1.833 0 00-.596-.264l-.499-.141c-.6-.165-1.065-.439-1.398-.822a2.003 2.003 0 01-.498-1.356c0-.366.037-.7.11-1 .077-.305.187-.595.329-.87.142-.276.315-.55.52-.823.204-.275.437-.568.698-.878l2.412-2.91zm-4.505 0h4.709v1.13H5.535v-1.13z"
+    d: "M10.611 7.172v1.082H6.388V7.172h4.223zm.66-.09v1.193c0 .878-.116 1.601-.349 2.17-.23.568-.554.99-.971 1.265-.418.273-.907.41-1.466.41-.56 0-1.051-.137-1.475-.41-.423-.276-.753-.697-.988-1.266-.236-.568-.354-1.29-.354-2.169V7.082c0-.87.116-1.584.35-2.143.232-.56.56-.975.98-1.245.42-.27.91-.404 1.47-.404.565 0 1.056.134 1.474.404.42.27.747.685.98 1.245.233.56.35 1.274.35 2.143zm-1.27 1.398V6.873c0-.55-.063-1.011-.191-1.38-.128-.372-.307-.65-.537-.836a1.237 1.237 0 00-.805-.28c-.46 0-.833.212-1.117.638-.284.427-.426 1.046-.426 1.858V8.48c0 .818.144 1.447.43 1.888.29.44.667.66 1.13.66.307 0 .572-.096.797-.29.227-.193.403-.478.528-.856.128-.38.192-.848.192-1.402z"
   })));
 }
 
 var _path$U;
 function _extends$Z() { _extends$Z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$Z.apply(this, arguments); }
-function Svg$h(props) {
+function Svg$f(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$Z({
     width: 16,
     height: 16,
@@ -8361,13 +8430,13 @@ function Svg$h(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$U || (_path$U = /*#__PURE__*/React.createElement("path", {
-    d: "M6.13 7.113V11H4.855V4.454h1.223V5.52h.081c.154-.35.391-.628.712-.836.321-.21.727-.315 1.219-.315.449 0 .84.094 1.172.281.335.185.595.46.78.827.184.367.277.82.277 1.36v6.617H9.043V6.99c0-.475-.123-.845-.37-1.112-.245-.27-.584-.405-1.019-.405-.292 0-.554.064-.784.192a1.37 1.37 0 00-.545.562c-.131.244-.196.54-.196.886z"
+    d: "M6.875 5.455h1.257l-.008 4.78c.002.293.076.484.221.572.148.085.318.128.512.128.093 0 .187-.009.28-.026a4.19 4.19 0 00.218-.043v1.079a3.083 3.083 0 01-.925.136c-.457 0-.83-.133-1.12-.4-.29-.268-.435-.725-.435-1.373V5.455z"
   })));
 }
 
 var _path$T;
 function _extends$Y() { _extends$Y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$Y.apply(this, arguments); }
-function Svg$g(props) {
+function Svg$e(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$Y({
     width: 16,
     height: 16,
@@ -8375,13 +8444,13 @@ function Svg$g(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$T || (_path$T = /*#__PURE__*/React.createElement("path", {
-    d: "M10.611 7.172v1.082H6.388V7.172h4.223zm.66-.09v1.193c0 .878-.116 1.601-.349 2.17-.23.568-.554.99-.971 1.265-.418.273-.907.41-1.466.41-.56 0-1.051-.137-1.475-.41-.423-.276-.753-.697-.988-1.266-.236-.568-.354-1.29-.354-2.169V7.082c0-.87.116-1.584.35-2.143.232-.56.56-.975.98-1.245.42-.27.91-.404 1.47-.404.565 0 1.056.134 1.474.404.42.27.747.685.98 1.245.233.56.35 1.274.35 2.143zm-1.27 1.398V6.873c0-.55-.063-1.011-.191-1.38-.128-.372-.307-.65-.537-.836a1.237 1.237 0 00-.805-.28c-.46 0-.833.212-1.117.638-.284.427-.426 1.046-.426 1.858V8.48c0 .818.144 1.447.43 1.888.29.44.667.66 1.13.66.307 0 .572-.096.797-.29.227-.193.403-.478.528-.856.128-.38.192-.848.192-1.402z"
+    d: "M6.354 5.455V12H4.969V5.455h1.385zm4.423 0L7.611 9.324H5.987l-.196-1.24h1.16l2.121-2.63h1.705zM9.009 12L6.805 9.226l1.002-.86L10.76 12H9.009z"
   })));
 }
 
 var _path$S;
 function _extends$X() { _extends$X = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$X.apply(this, arguments); }
-function Svg$f(props) {
+function Svg$d(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$X({
     width: 16,
     height: 16,
@@ -8389,13 +8458,13 @@ function Svg$f(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$S || (_path$S = /*#__PURE__*/React.createElement("path", {
-    d: "M6.875 5.455h1.257l-.008 4.78c.002.293.076.484.221.572.148.085.318.128.512.128.093 0 .187-.009.28-.026a4.19 4.19 0 00.218-.043v1.079a3.083 3.083 0 01-.925.136c-.457 0-.83-.133-1.12-.4-.29-.268-.435-.725-.435-1.373V5.455z"
+    d: "M10.18 12.094c-.35 0-.657-.097-.921-.29-.261-.196-.465-.492-.61-.886L7.236 6.873 6.792 5.8l-.252-.648c-.11-.281-.227-.492-.35-.63a.698.698 0 00-.447-.244c-.176-.022-.4.002-.673.073L4.763 3.29a2.02 2.02 0 01.337-.094c.142-.028.3-.043.477-.043.492 0 .908.128 1.249.384.34.253.606.632.797 1.138l2.151 5.774c.06.156.124.288.192.396.068.108.186.162.354.162.031 0 .07-.001.115-.004l.102-.013.205 1.035c-.083.023-.175.04-.277.052-.1.014-.195.02-.286.017zM4.37 12l2.57-6.916.652 2.267h-.265L5.722 12h-1.35z"
   })));
 }
 
 var _path$R;
 function _extends$W() { _extends$W = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$W.apply(this, arguments); }
-function Svg$e(props) {
+function Svg$c(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$W({
     width: 16,
     height: 16,
@@ -8403,13 +8472,13 @@ function Svg$e(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$R || (_path$R = /*#__PURE__*/React.createElement("path", {
-    d: "M6.354 5.455V12H4.969V5.455h1.385zm4.423 0L7.611 9.324H5.987l-.196-1.24h1.16l2.121-2.63h1.705zM9.009 12L6.805 9.226l1.002-.86L10.76 12H9.009z"
+    d: "M4.855 14.429V5.455H6.13v3.83c0 .324.07.61.208.857.142.247.34.44.593.58.255.136.552.204.89.204.338 0 .634-.07.887-.209.255-.139.453-.33.592-.575.142-.247.213-.533.213-.856V5.455h1.274V12H9.534v-.959h-.05c-.16.324-.388.573-.687.746-.298.17-.623.256-.976.256-.352 0-.677-.086-.975-.256a1.774 1.774 0 01-.69-.746h-.052v3.388H4.855z"
   })));
 }
 
 var _path$Q;
 function _extends$V() { _extends$V = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$V.apply(this, arguments); }
-function Svg$d(props) {
+function Svg$b(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$V({
     width: 16,
     height: 16,
@@ -8417,13 +8486,13 @@ function Svg$d(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$Q || (_path$Q = /*#__PURE__*/React.createElement("path", {
-    d: "M10.18 12.094c-.35 0-.657-.097-.921-.29-.261-.196-.465-.492-.61-.886L7.236 6.873 6.792 5.8l-.252-.648c-.11-.281-.227-.492-.35-.63a.698.698 0 00-.447-.244c-.176-.022-.4.002-.673.073L4.763 3.29a2.02 2.02 0 01.337-.094c.142-.028.3-.043.477-.043.492 0 .908.128 1.249.384.34.253.606.632.797 1.138l2.151 5.774c.06.156.124.288.192.396.068.108.186.162.354.162.031 0 .07-.001.115-.004l.102-.013.205 1.035c-.083.023-.175.04-.277.052-.1.014-.195.02-.286.017zM4.37 12l2.57-6.916.652 2.267h-.265L5.722 12h-1.35z"
+    d: "M6.804 12L4.371 5.455h1.355l1.794 5.237h.068c.33-.529.6-1.013.81-1.453a8.19 8.19 0 00.494-1.27c.12-.406.205-.813.256-1.219.054-.406.09-.838.107-1.295h1.257a9.816 9.816 0 01-.631 3.34C9.471 9.913 8.867 10.98 8.066 12H6.804z"
   })));
 }
 
 var _path$P;
 function _extends$U() { _extends$U = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$U.apply(this, arguments); }
-function Svg$c(props) {
+function Svg$a(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$U({
     width: 16,
     height: 16,
@@ -8431,13 +8500,13 @@ function Svg$c(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$P || (_path$P = /*#__PURE__*/React.createElement("path", {
-    d: "M4.855 14.429V5.455H6.13v3.83c0 .324.07.61.208.857.142.247.34.44.593.58.255.136.552.204.89.204.338 0 .634-.07.887-.209.255-.139.453-.33.592-.575.142-.247.213-.533.213-.856V5.455h1.274V12H9.534v-.959h-.05c-.16.324-.388.573-.687.746-.298.17-.623.256-.976.256-.352 0-.677-.086-.975-.256a1.774 1.774 0 01-.69-.746h-.052v3.388H4.855z"
+    d: "M10.635 3.418l-.204 1.073c-.517-.147-.969-.221-1.355-.221-.324 0-.601.041-.831.123-.23.083-.407.205-.529.367a.945.945 0 00-.179.584c0 .36.147.636.44.826.292.19.707.286 1.244.286h.86v.805h-.89c-.628 0-1.17-.08-1.624-.238-.452-.162-.8-.392-1.044-.69a1.664 1.664 0 01-.366-1.083c0-.42.119-.787.358-1.1.241-.315.576-.56 1.005-.732.432-.177.933-.265 1.505-.265.3 0 .59.023.869.068.281.046.528.111.741.197zM9.203 6.784h.878v.793h-.843c-.458 0-.846.065-1.164.196-.315.127-.554.32-.716.575-.162.253-.243.57-.243.954 0 .42.127.77.38 1.049.255.278.633.476 1.133.592l.678.154c.568.13.974.298 1.219.502a.982.982 0 01.366.789c-.006.21-.058.429-.158.656a2.838 2.838 0 01-.405.665c-.173.219-.375.42-.605.605l-.758-.567c.238-.253.395-.459.469-.618a.963.963 0 00.11-.392.462.462 0 00-.183-.388c-.122-.093-.33-.173-.622-.238l-.575-.167c-.841-.193-1.458-.49-1.85-.89-.389-.4-.584-.938-.584-1.61 0-.873.297-1.534.891-1.982.597-.452 1.457-.678 2.582-.678z"
   })));
 }
 
 var _path$O;
 function _extends$T() { _extends$T = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$T.apply(this, arguments); }
-function Svg$b(props) {
+function Svg$9(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$T({
     width: 16,
     height: 16,
@@ -8445,13 +8514,13 @@ function Svg$b(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$O || (_path$O = /*#__PURE__*/React.createElement("path", {
-    d: "M6.804 12L4.371 5.455h1.355l1.794 5.237h.068c.33-.529.6-1.013.81-1.453a8.19 8.19 0 00.494-1.27c.12-.406.205-.813.256-1.219.054-.406.09-.838.107-1.295h1.257a9.816 9.816 0 01-.631 3.34C9.471 9.913 8.867 10.98 8.066 12H6.804z"
+    d: "M7.614 12.132c-.614 0-1.15-.14-1.607-.422a2.845 2.845 0 01-1.065-1.18c-.253-.506-.38-1.097-.38-1.773 0-.68.127-1.273.38-1.781A2.84 2.84 0 016.007 5.79c.457-.281.993-.422 1.607-.422.613 0 1.149.14 1.606.422.458.281.813.676 1.066 1.185.252.508.379 1.102.379 1.78 0 .677-.127 1.268-.38 1.774-.252.505-.607.899-1.065 1.18-.457.281-.993.422-1.606.422zm.004-1.07c.398 0 .727-.105.989-.315.26-.21.454-.49.58-.84.127-.349.19-.734.19-1.154 0-.418-.063-.801-.19-1.15a1.874 1.874 0 00-.58-.849c-.262-.213-.591-.32-.99-.32-.4 0-.732.107-.996.32a1.904 1.904 0 00-.584.848c-.125.35-.188.733-.188 1.15 0 .421.063.806.188 1.155.128.35.322.63.584.84.264.21.596.315.997.315z"
   })));
 }
 
 var _path$N;
 function _extends$S() { _extends$S = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$S.apply(this, arguments); }
-function Svg$a(props) {
+function Svg$8(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$S({
     width: 16,
     height: 16,
@@ -8459,13 +8528,13 @@ function Svg$a(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$N || (_path$N = /*#__PURE__*/React.createElement("path", {
-    d: "M10.635 3.418l-.204 1.073c-.517-.147-.969-.221-1.355-.221-.324 0-.601.041-.831.123-.23.083-.407.205-.529.367a.945.945 0 00-.179.584c0 .36.147.636.44.826.292.19.707.286 1.244.286h.86v.805h-.89c-.628 0-1.17-.08-1.624-.238-.452-.162-.8-.392-1.044-.69a1.664 1.664 0 01-.366-1.083c0-.42.119-.787.358-1.1.241-.315.576-.56 1.005-.732.432-.177.933-.265 1.505-.265.3 0 .59.023.869.068.281.046.528.111.741.197zM9.203 6.784h.878v.793h-.843c-.458 0-.846.065-1.164.196-.315.127-.554.32-.716.575-.162.253-.243.57-.243.954 0 .42.127.77.38 1.049.255.278.633.476 1.133.592l.678.154c.568.13.974.298 1.219.502a.982.982 0 01.366.789c-.006.21-.058.429-.158.656a2.838 2.838 0 01-.405.665c-.173.219-.375.42-.605.605l-.758-.567c.238-.253.395-.459.469-.618a.963.963 0 00.11-.392.462.462 0 00-.183-.388c-.122-.093-.33-.173-.622-.238l-.575-.167c-.841-.193-1.458-.49-1.85-.89-.389-.4-.584-.938-.584-1.61 0-.873.297-1.534.891-1.982.597-.452 1.457-.678 2.582-.678z"
+    d: "M11.251 5.455v1.07H4.535v-1.07h6.716zm-4.457 0V12H5.537V5.455h1.257zm2.224 0h1.257v4.78c0 .197.033.345.098.444.068.1.157.168.264.205.111.034.23.05.358.05.094 0 .188-.008.282-.025.096-.017.173-.031.23-.043v1.07c-.108.031-.24.063-.397.094a2.579 2.579 0 01-.545.051c-.457 0-.83-.133-1.116-.4-.285-.268-.428-.725-.43-1.373V5.455z"
   })));
 }
 
 var _path$M;
 function _extends$R() { _extends$R = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$R.apply(this, arguments); }
-function Svg$9(props) {
+function Svg$7(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$R({
     width: 16,
     height: 16,
@@ -8473,13 +8542,13 @@ function Svg$9(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$M || (_path$M = /*#__PURE__*/React.createElement("path", {
-    d: "M7.614 12.132c-.614 0-1.15-.14-1.607-.422a2.845 2.845 0 01-1.065-1.18c-.253-.506-.38-1.097-.38-1.773 0-.68.127-1.273.38-1.781A2.84 2.84 0 016.007 5.79c.457-.281.993-.422 1.607-.422.613 0 1.149.14 1.606.422.458.281.813.676 1.066 1.185.252.508.379 1.102.379 1.78 0 .677-.127 1.268-.38 1.774-.252.505-.607.899-1.065 1.18-.457.281-.993.422-1.606.422zm.004-1.07c.398 0 .727-.105.989-.315.26-.21.454-.49.58-.84.127-.349.19-.734.19-1.154 0-.418-.063-.801-.19-1.15a1.874 1.874 0 00-.58-.849c-.262-.213-.591-.32-.99-.32-.4 0-.732.107-.996.32a1.904 1.904 0 00-.584.848c-.125.35-.188.733-.188 1.15 0 .421.063.806.188 1.155.128.35.322.63.584.84.264.21.596.315.997.315z"
+    d: "M5.805 14.437v-5.83c0-.715.116-1.313.35-1.793.235-.48.56-.841.975-1.083.415-.241.89-.362 1.423-.362.469 0 .878.087 1.228.26.349.17.642.413.877.729.236.315.412.689.529 1.12.12.43.179.902.179 1.42v.119c0 .608-.107 1.145-.32 1.61-.213.467-.517.832-.912 1.096-.392.264-.86.396-1.406.396-.466 0-.852-.1-1.16-.298a2.274 2.274 0 01-.75-.84 6.241 6.241 0 01-.498-1.274l.716-.66c0 .204.024.422.073.652.048.23.13.446.247.647.116.202.273.368.469.499.198.128.447.192.745.192.358 0 .648-.095.87-.286.224-.19.387-.439.49-.745.102-.307.153-.637.153-.99v-.118c0-.45-.054-.856-.162-1.22-.105-.363-.271-.651-.498-.864-.228-.213-.523-.32-.887-.32-.358 0-.649.107-.873.32-.222.21-.382.48-.482.81-.1.329-.148.671-.145 1.026l.026 5.787H5.805z"
   })));
 }
 
 var _path$L;
 function _extends$Q() { _extends$Q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$Q.apply(this, arguments); }
-function Svg$8(props) {
+function Svg$6(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$Q({
     width: 16,
     height: 16,
@@ -8487,13 +8556,13 @@ function Svg$8(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$L || (_path$L = /*#__PURE__*/React.createElement("path", {
-    d: "M11.251 5.455v1.07H4.535v-1.07h6.716zm-4.457 0V12H5.537V5.455h1.257zm2.224 0h1.257v4.78c0 .197.033.345.098.444.068.1.157.168.264.205.111.034.23.05.358.05.094 0 .188-.008.282-.025.096-.017.173-.031.23-.043v1.07c-.108.031-.24.063-.397.094a2.579 2.579 0 01-.545.051c-.457 0-.83-.133-1.116-.4-.285-.268-.428-.725-.43-1.373V5.455z"
+    d: "M4.715 8.898V8.76c0-.585.115-1.112.345-1.58.23-.47.563-.84.997-1.113.435-.272.959-.409 1.573-.409a.659.659 0 01.315.18c.1.09.214.19.345.302.13.108.301.2.511.277.336.13.633.32.891.57.261.25.466.549.614.896.148.343.221.721.221 1.133v.12a3.25 3.25 0 01-.34 1.474 2.737 2.737 0 01-.98 1.095c-.43.276-.95.413-1.56.413-.62 0-1.148-.142-1.586-.426a2.79 2.79 0 01-1.001-1.155 3.786 3.786 0 01-.345-1.64zM6.1 8.76v.137c0 .383.05.736.153 1.057.105.32.271.58.499.775.227.193.525.29.895.29.355 0 .642-.097.86-.29.222-.196.383-.454.482-.775.102-.321.153-.674.153-1.057V8.76c0-.357-.05-.688-.153-.992a1.546 1.546 0 00-.486-.733c-.221-.185-.513-.277-.873-.277-.361 0-.654.092-.878.277-.225.184-.39.429-.495.733a3.02 3.02 0 00-.157.992zm4.913-3.102v1.1H7.63v-1.1h3.383z"
   })));
 }
 
 var _path$K;
 function _extends$P() { _extends$P = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$P.apply(this, arguments); }
-function Svg$7(props) {
+function Svg$5(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$P({
     width: 16,
     height: 16,
@@ -8501,13 +8570,13 @@ function Svg$7(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$K || (_path$K = /*#__PURE__*/React.createElement("path", {
-    d: "M5.805 14.437v-5.83c0-.715.116-1.313.35-1.793.235-.48.56-.841.975-1.083.415-.241.89-.362 1.423-.362.469 0 .878.087 1.228.26.349.17.642.413.877.729.236.315.412.689.529 1.12.12.43.179.902.179 1.42v.119c0 .608-.107 1.145-.32 1.61-.213.467-.517.832-.912 1.096-.392.264-.86.396-1.406.396-.466 0-.852-.1-1.16-.298a2.274 2.274 0 01-.75-.84 6.241 6.241 0 01-.498-1.274l.716-.66c0 .204.024.422.073.652.048.23.13.446.247.647.116.202.273.368.469.499.198.128.447.192.745.192.358 0 .648-.095.87-.286.224-.19.387-.439.49-.745.102-.307.153-.637.153-.99v-.118c0-.45-.054-.856-.162-1.22-.105-.363-.271-.651-.498-.864-.228-.213-.523-.32-.887-.32-.358 0-.649.107-.873.32-.222.21-.382.48-.482.81-.1.329-.148.671-.145 1.026l.026 5.787H5.805z"
+    d: "M10.769 5.455v1.099H5.246v-1.1h5.523zm-3.456 0H8.57v4.828c0 .224.031.388.094.49.062.1.14.163.234.191.097.026.195.039.294.039a.868.868 0 00.307-.051c.09-.034.172-.068.243-.102l.243.98c-.193.122-.378.2-.554.234a2.7 2.7 0 01-.563.055c-.503 0-.888-.147-1.155-.443-.267-.295-.4-.773-.4-1.432v-4.79z"
   })));
 }
 
 var _path$J;
 function _extends$O() { _extends$O = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$O.apply(this, arguments); }
-function Svg$6(props) {
+function Svg$4(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$O({
     width: 16,
     height: 16,
@@ -8515,13 +8584,13 @@ function Svg$6(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$J || (_path$J = /*#__PURE__*/React.createElement("path", {
-    d: "M4.715 8.898V8.76c0-.585.115-1.112.345-1.58.23-.47.563-.84.997-1.113.435-.272.959-.409 1.573-.409a.659.659 0 01.315.18c.1.09.214.19.345.302.13.108.301.2.511.277.336.13.633.32.891.57.261.25.466.549.614.896.148.343.221.721.221 1.133v.12a3.25 3.25 0 01-.34 1.474 2.737 2.737 0 01-.98 1.095c-.43.276-.95.413-1.56.413-.62 0-1.148-.142-1.586-.426a2.79 2.79 0 01-1.001-1.155 3.786 3.786 0 01-.345-1.64zM6.1 8.76v.137c0 .383.05.736.153 1.057.105.32.271.58.499.775.227.193.525.29.895.29.355 0 .642-.097.86-.29.222-.196.383-.454.482-.775.102-.321.153-.674.153-1.057V8.76c0-.357-.05-.688-.153-.992a1.546 1.546 0 00-.486-.733c-.221-.185-.513-.277-.873-.277-.361 0-.654.092-.878.277-.225.184-.39.429-.495.733a3.02 3.02 0 00-.157.992zm4.913-3.102v1.1H7.63v-1.1h3.383z"
+    d: "M4.855 5.455h1.258V9.51c0 .378.054.678.161.9.108.221.25.38.422.477.177.096.363.145.559.145.335 0 .629-.108.882-.324.253-.216.45-.502.592-.857.142-.358.213-.75.213-1.176a6.797 6.797 0 00-.106-1.057 11.837 11.837 0 00-.6-2.165h1.26c.122.24.234.536.337.891a8.5 8.5 0 01.345 2.331c0 .458-.056.894-.166 1.308a3.254 3.254 0 01-.512 1.104c-.233.318-.532.57-.899.754-.363.185-.798.277-1.304.277-.727 0-1.317-.21-1.768-.63-.45-.42-.674-1.086-.674-1.995v-4.04z"
   })));
 }
 
 var _path$I;
 function _extends$N() { _extends$N = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$N.apply(this, arguments); }
-function Svg$5(props) {
+function Svg$3(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$N({
     width: 16,
     height: 16,
@@ -8529,13 +8598,13 @@ function Svg$5(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$I || (_path$I = /*#__PURE__*/React.createElement("path", {
-    d: "M10.769 5.455v1.099H5.246v-1.1h5.523zm-3.456 0H8.57v4.828c0 .224.031.388.094.49.062.1.14.163.234.191.097.026.195.039.294.039a.868.868 0 00.307-.051c.09-.034.172-.068.243-.102l.243.98c-.193.122-.378.2-.554.234a2.7 2.7 0 01-.563.055c-.503 0-.888-.147-1.155-.443-.267-.295-.4-.773-.4-1.432v-4.79z"
+    d: "M6.945 13.454V5.861c0-.503.143-.877.43-1.121.29-.247.693-.37 1.21-.37.56 0 1.063.141 1.509.425.449.284.804.675 1.065 1.172.261.497.392 1.065.392 1.705 0 .451-.07.885-.213 1.3-.14.411-.364.78-.673 1.103-.31.324-.718.58-1.223.767-.506.185-1.124.277-1.854.277-.724 0-1.337-.095-1.837-.285-.5-.194-.903-.456-1.21-.789a3.037 3.037 0 01-.665-1.155 4.572 4.572 0 01-.204-1.376c0-.457.055-.884.166-1.278.114-.398.277-.755.49-1.07.216-.315.476-.581.78-.797l.805.814c-.207.196-.383.41-.528.644a2.99 2.99 0 00-.328.767c-.077.278-.12.585-.128.92 0 .438.087.848.26 1.232.173.38.454.688.844.924.389.233.907.35 1.555.35.642 0 1.162-.11 1.56-.328.397-.222.689-.512.873-.87.188-.358.282-.741.282-1.15a3.215 3.215 0 00-.222-1.121 1.906 1.906 0 00-.571-.805 1.352 1.352 0 00-.882-.303c-.15 0-.263.047-.337.14a.523.523 0 00-.11.342v7.53H6.944z"
   })));
 }
 
 var _path$H;
 function _extends$M() { _extends$M = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$M.apply(this, arguments); }
-function Svg$4(props) {
+function Svg$2(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$M({
     width: 16,
     height: 16,
@@ -8543,13 +8612,13 @@ function Svg$4(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$H || (_path$H = /*#__PURE__*/React.createElement("path", {
-    d: "M4.855 5.455h1.258V9.51c0 .378.054.678.161.9.108.221.25.38.422.477.177.096.363.145.559.145.335 0 .629-.108.882-.324.253-.216.45-.502.592-.857.142-.358.213-.75.213-1.176a6.797 6.797 0 00-.106-1.057 11.837 11.837 0 00-.6-2.165h1.26c.122.24.234.536.337.891a8.5 8.5 0 01.345 2.331c0 .458-.056.894-.166 1.308a3.254 3.254 0 01-.512 1.104c-.233.318-.532.57-.899.754-.363.185-.798.277-1.304.277-.727 0-1.317-.21-1.768-.63-.45-.42-.674-1.086-.674-1.995v-4.04z"
+    d: "M4.697 13.454L7.518 8.17h.533l1.841 3.584c.097.19.18.328.252.413.073.086.16.14.26.162.099.023.24.034.421.034h.294v1.091h-.294c-.352 0-.643-.03-.873-.093a1.3 1.3 0 01-.597-.35c-.165-.17-.33-.419-.498-.746l-1.083-2.143-1.76 3.332H4.697zM7.4 9.436L5.67 6.159a3.734 3.734 0 00-.277-.46.424.424 0 00-.243-.175 1.87 1.87 0 00-.417-.034h-.295V4.399h.295c.352 0 .64.034.865.102.227.066.423.19.588.37.167.18.34.438.52.777l1.082 2.08L9.55 4.453h1.317L8.166 9.436H7.4z"
   })));
 }
 
 var _path$G;
 function _extends$L() { _extends$L = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$L.apply(this, arguments); }
-function Svg$3(props) {
+function Svg$1(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$L({
     width: 16,
     height: 16,
@@ -8557,13 +8626,13 @@ function Svg$3(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$G || (_path$G = /*#__PURE__*/React.createElement("path", {
-    d: "M6.945 13.454V5.861c0-.503.143-.877.43-1.121.29-.247.693-.37 1.21-.37.56 0 1.063.141 1.509.425.449.284.804.675 1.065 1.172.261.497.392 1.065.392 1.705 0 .451-.07.885-.213 1.3-.14.411-.364.78-.673 1.103-.31.324-.718.58-1.223.767-.506.185-1.124.277-1.854.277-.724 0-1.337-.095-1.837-.285-.5-.194-.903-.456-1.21-.789a3.037 3.037 0 01-.665-1.155 4.572 4.572 0 01-.204-1.376c0-.457.055-.884.166-1.278.114-.398.277-.755.49-1.07.216-.315.476-.581.78-.797l.805.814c-.207.196-.383.41-.528.644a2.99 2.99 0 00-.328.767c-.077.278-.12.585-.128.92 0 .438.087.848.26 1.232.173.38.454.688.844.924.389.233.907.35 1.555.35.642 0 1.162-.11 1.56-.328.397-.222.689-.512.873-.87.188-.358.282-.741.282-1.15a3.215 3.215 0 00-.222-1.121 1.906 1.906 0 00-.571-.805 1.352 1.352 0 00-.882-.303c-.15 0-.263.047-.337.14a.523.523 0 00-.11.342v7.53H6.944z"
+    d: "M3.855 4.455h1.249v3.072c0 .61.115 1.1.345 1.466.233.364.543.626.93.788.386.16.809.239 1.27.239.644 0 1.167-.115 1.567-.345.4-.233.693-.533.878-.9.188-.369.281-.758.281-1.167a6.924 6.924 0 00-.064-.784 9.256 9.256 0 00-.37-1.62 9.22 9.22 0 00-.269-.75h1.244c.091.177.18.381.265.614.085.23.16.483.226.759.065.272.116.56.153.86.04.299.06.606.06.921 0 .46-.068.9-.205 1.321-.136.42-.356.795-.66 1.125-.302.33-.704.59-1.206.78-.5.19-1.115.285-1.846.285-.78 0-1.46-.125-2.036-.375a2.85 2.85 0 01-1.339-1.172c-.315-.53-.473-1.215-.473-2.053V4.455zm3.248 0h1.244v9.34H7.103v-9.34z"
   })));
 }
 
 var _path$F;
 function _extends$K() { _extends$K = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$K.apply(this, arguments); }
-function Svg$2(props) {
+function Svg(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$K({
     width: 16,
     height: 16,
@@ -8571,13 +8640,13 @@ function Svg$2(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$F || (_path$F = /*#__PURE__*/React.createElement("path", {
-    d: "M4.697 13.454L7.518 8.17h.533l1.841 3.584c.097.19.18.328.252.413.073.086.16.14.26.162.099.023.24.034.421.034h.294v1.091h-.294c-.352 0-.643-.03-.873-.093a1.3 1.3 0 01-.597-.35c-.165-.17-.33-.419-.498-.746l-1.083-2.143-1.76 3.332H4.697zM7.4 9.436L5.67 6.159a3.734 3.734 0 00-.277-.46.424.424 0 00-.243-.175 1.87 1.87 0 00-.417-.034h-.295V4.399h.295c.352 0 .64.034.865.102.227.066.423.19.588.37.167.18.34.438.52.777l1.082 2.08L9.55 4.453h1.317L8.166 9.436H7.4z"
+    d: "M4.7 5.455h1.325A9.026 9.026 0 005.42 6.69a5.55 5.55 0 00-.298 1.053c-.054.332-.081.67-.081 1.014 0 .71.109 1.264.328 1.662.218.398.522.597.912.597.34 0 .613-.155.818-.465.204-.312.307-.765.307-1.36V7.113h.975v2.02c0 .625-.083 1.16-.251 1.607-.165.446-.412.788-.741 1.027-.327.236-.73.353-1.21.353-.506 0-.941-.132-1.305-.396-.36-.267-.637-.655-.83-1.163-.194-.509-.289-1.128-.286-1.858 0-.594.078-1.162.234-1.705.16-.542.395-1.057.708-1.542zm5.505 0h1.326c.31.485.544 1 .703 1.542.159.543.238 1.111.238 1.705.003.73-.093 1.35-.29 1.858-.193.508-.471.896-.835 1.163-.36.264-.794.396-1.3.396-.477 0-.88-.117-1.21-.353-.326-.239-.573-.581-.741-1.027-.165-.446-.247-.982-.247-1.607v-2.02h.971v2.08c0 .594.104 1.047.311 1.36.208.309.48.464.819.464.258 0 .48-.09.664-.269.185-.179.327-.436.426-.771.1-.338.15-.744.15-1.219a6.01 6.01 0 00-.085-1.014 5.32 5.32 0 00-.295-1.053 9.016 9.016 0 00-.605-1.235z"
   })));
 }
 
 var _path$E;
 function _extends$J() { _extends$J = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$J.apply(this, arguments); }
-function Svg$1(props) {
+function SvgDegreeCelseus(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$J({
     width: 16,
     height: 16,
@@ -8585,13 +8654,13 @@ function Svg$1(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$E || (_path$E = /*#__PURE__*/React.createElement("path", {
-    d: "M3.855 4.455h1.249v3.072c0 .61.115 1.1.345 1.466.233.364.543.626.93.788.386.16.809.239 1.27.239.644 0 1.167-.115 1.567-.345.4-.233.693-.533.878-.9.188-.369.281-.758.281-1.167a6.924 6.924 0 00-.064-.784 9.256 9.256 0 00-.37-1.62 9.22 9.22 0 00-.269-.75h1.244c.091.177.18.381.265.614.085.23.16.483.226.759.065.272.116.56.153.86.04.299.06.606.06.921 0 .46-.068.9-.205 1.321-.136.42-.356.795-.66 1.125-.302.33-.704.59-1.206.78-.5.19-1.115.285-1.846.285-.78 0-1.46-.125-2.036-.375a2.85 2.85 0 01-1.339-1.172c-.315-.53-.473-1.215-.473-2.053V4.455zm3.248 0h1.244v9.34H7.103v-9.34z"
+    d: "M4.278 8.016c-.307 0-.588-.075-.841-.224a1.744 1.744 0 01-.604-.607 1.628 1.628 0 01-.224-.842c0-.308.075-.587.224-.838.152-.253.353-.454.604-.604.253-.151.534-.227.841-.227a1.677 1.677 0 011.445.831c.152.251.228.53.228.838 0 .308-.076.588-.227.842-.15.253-.35.455-.604.607-.253.15-.534.224-.842.224zm0-.81c.161 0 .307-.039.437-.117a.869.869 0 00.31-1.18.84.84 0 00-.31-.308.833.833 0 00-.437-.117.869.869 0 00-.746.426.846.846 0 00-.113.433.846.846 0 00.426.746c.13.078.275.117.433.117zm8.985-.114h-1.108a1.694 1.694 0 00-.664-1.083 1.836 1.836 0 00-.565-.284 2.204 2.204 0 00-.657-.096c-.419 0-.794.106-1.126.316-.329.211-.589.52-.78.927-.19.407-.285.905-.285 1.492 0 .592.095 1.091.284 1.498.192.408.454.715.785.924.331.208.704.312 1.119.312.23 0 .447-.03.653-.092.208-.064.397-.158.565-.28a1.718 1.718 0 00.67-1.07l1.109.004c-.06.357-.174.686-.345.987a2.725 2.725 0 01-.65.774 2.94 2.94 0 01-.902.501 3.338 3.338 0 01-1.107.178c-.63 0-1.191-.15-1.684-.448-.492-.3-.88-.73-1.164-1.289-.282-.559-.423-1.225-.423-2 0-.776.142-1.442.426-1.999.284-.558.672-.987 1.165-1.285a3.158 3.158 0 011.68-.451c.385 0 .745.056 1.08.167.335.109.637.27.905.483.267.21.489.469.664.774.175.303.293.65.355 1.04z"
   })));
 }
 
 var _path$D;
 function _extends$I() { _extends$I = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$I.apply(this, arguments); }
-function Svg(props) {
+function SvgDegreeFahreinheit(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$I({
     width: 16,
     height: 16,
@@ -8599,13 +8668,13 @@ function Svg(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$D || (_path$D = /*#__PURE__*/React.createElement("path", {
-    d: "M4.7 5.455h1.325A9.026 9.026 0 005.42 6.69a5.55 5.55 0 00-.298 1.053c-.054.332-.081.67-.081 1.014 0 .71.109 1.264.328 1.662.218.398.522.597.912.597.34 0 .613-.155.818-.465.204-.312.307-.765.307-1.36V7.113h.975v2.02c0 .625-.083 1.16-.251 1.607-.165.446-.412.788-.741 1.027-.327.236-.73.353-1.21.353-.506 0-.941-.132-1.305-.396-.36-.267-.637-.655-.83-1.163-.194-.509-.289-1.128-.286-1.858 0-.594.078-1.162.234-1.705.16-.542.395-1.057.708-1.542zm5.505 0h1.326c.31.485.544 1 .703 1.542.159.543.238 1.111.238 1.705.003.73-.093 1.35-.29 1.858-.193.508-.471.896-.835 1.163-.36.264-.794.396-1.3.396-.477 0-.88-.117-1.21-.353-.326-.239-.573-.581-.741-1.027-.165-.446-.247-.982-.247-1.607v-2.02h.971v2.08c0 .594.104 1.047.311 1.36.208.309.48.464.819.464.258 0 .48-.09.664-.269.185-.179.327-.436.426-.771.1-.338.15-.744.15-1.219a6.01 6.01 0 00-.085-1.014 5.32 5.32 0 00-.295-1.053 9.016 9.016 0 00-.605-1.235z"
+    d: "M5.278 8.015c-.307 0-.588-.074-.841-.223a1.744 1.744 0 01-.604-.608 1.628 1.628 0 01-.224-.841c0-.308.075-.587.224-.838.152-.254.353-.455.604-.604.253-.151.534-.227.841-.227a1.677 1.677 0 011.445.831c.152.25.228.53.228.838 0 .308-.076.588-.227.841-.15.254-.35.456-.604.608-.253.149-.534.223-.842.223zm0-.81c.161 0 .307-.038.437-.116a.868.868 0 00.31-1.18.84.84 0 00-.31-.308.833.833 0 00-.437-.118.869.869 0 00-.746.426.846.846 0 00-.113.434.846.846 0 00.426.746c.13.078.275.117.433.117zM8.361 12V4.727h4.51v.945H9.458v2.216h3.09v.94h-3.09V12H8.361z"
   })));
 }
 
 var _path$C;
 function _extends$H() { _extends$H = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$H.apply(this, arguments); }
-function SvgDegreeCelseus(props) {
+function SvgAngstrom(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$H({
     width: 16,
     height: 16,
@@ -8613,13 +8682,13 @@ function SvgDegreeCelseus(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$C || (_path$C = /*#__PURE__*/React.createElement("path", {
-    d: "M4.278 8.016c-.307 0-.588-.075-.841-.224a1.744 1.744 0 01-.604-.607 1.628 1.628 0 01-.224-.842c0-.308.075-.587.224-.838.152-.253.353-.454.604-.604.253-.151.534-.227.841-.227a1.677 1.677 0 011.445.831c.152.251.228.53.228.838 0 .308-.076.588-.227.842-.15.253-.35.455-.604.607-.253.15-.534.224-.842.224zm0-.81c.161 0 .307-.039.437-.117a.869.869 0 00.31-1.18.84.84 0 00-.31-.308.833.833 0 00-.437-.117.869.869 0 00-.746.426.846.846 0 00-.113.433.846.846 0 00.426.746c.13.078.275.117.433.117zm8.985-.114h-1.108a1.694 1.694 0 00-.664-1.083 1.836 1.836 0 00-.565-.284 2.204 2.204 0 00-.657-.096c-.419 0-.794.106-1.126.316-.329.211-.589.52-.78.927-.19.407-.285.905-.285 1.492 0 .592.095 1.091.284 1.498.192.408.454.715.785.924.331.208.704.312 1.119.312.23 0 .447-.03.653-.092.208-.064.397-.158.565-.28a1.718 1.718 0 00.67-1.07l1.109.004c-.06.357-.174.686-.345.987a2.725 2.725 0 01-.65.774 2.94 2.94 0 01-.902.501 3.338 3.338 0 01-1.107.178c-.63 0-1.191-.15-1.684-.448-.492-.3-.88-.73-1.164-1.289-.282-.559-.423-1.225-.423-2 0-.776.142-1.442.426-1.999.284-.558.672-.987 1.165-1.285a3.158 3.158 0 011.68-.451c.385 0 .745.056 1.08.167.335.109.637.27.905.483.267.21.489.469.664.774.175.303.293.65.355 1.04z"
+    d: "M5.415 12H4.25l2.617-7.273h1.268L10.752 12H9.587L7.531 6.048h-.057L5.414 12zm.195-2.848h3.778v.923H5.61v-.923zm1.893-4.897c-.291 0-.54-.102-.746-.305a1.002 1.002 0 01-.305-.736 1.026 1.026 0 01.518-.902c.161-.094.339-.142.533-.142.192 0 .367.048.525.142.161.093.29.218.384.377.095.158.142.334.142.525 0 .192-.047.367-.142.526a1.082 1.082 0 01-.384.376 1.026 1.026 0 01-.525.139zm0-.543a.49.49 0 00.497-.5.485.485 0 00-.142-.353.476.476 0 00-.355-.145.487.487 0 00-.5.5c0 .138.046.256.141.356a.469.469 0 00.359.142z"
   })));
 }
 
 var _path$B;
 function _extends$G() { _extends$G = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$G.apply(this, arguments); }
-function SvgDegreeFahreinheit(props) {
+function SvgDegreeSymbol(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$G({
     width: 16,
     height: 16,
@@ -8627,13 +8696,13 @@ function SvgDegreeFahreinheit(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$B || (_path$B = /*#__PURE__*/React.createElement("path", {
-    d: "M5.278 8.015c-.307 0-.588-.074-.841-.223a1.744 1.744 0 01-.604-.608 1.628 1.628 0 01-.224-.841c0-.308.075-.587.224-.838.152-.254.353-.455.604-.604.253-.151.534-.227.841-.227a1.677 1.677 0 011.445.831c.152.25.228.53.228.838 0 .308-.076.588-.227.841-.15.254-.35.456-.604.608-.253.149-.534.223-.842.223zm0-.81c.161 0 .307-.038.437-.116a.868.868 0 00.31-1.18.84.84 0 00-.31-.308.833.833 0 00-.437-.118.869.869 0 00-.746.426.846.846 0 00-.113.434.846.846 0 00.426.746c.13.078.275.117.433.117zM8.361 12V4.727h4.51v.945H9.458v2.216h3.09v.94h-3.09V12H8.361z"
+    d: "M7.737 8.219c-.37 0-.706-.09-1.01-.269a2.093 2.093 0 01-.724-.728 1.954 1.954 0 01-.269-1.01c0-.37.09-.705.269-1.006.182-.304.423-.545.724-.724a1.93 1.93 0 011.01-.273c.37 0 .706.09 1.01.273.304.179.546.42.725.724.181.301.272.637.272 1.006 0 .37-.09.706-.272 1.01-.18.304-.42.547-.725.728-.304.18-.64.269-1.01.269zm0-.972a1 1 0 00.524-.14 1.042 1.042 0 00.371-1.415 1.009 1.009 0 00-.37-.37 1 1 0 00-.525-.141 1.042 1.042 0 00-.895.511c-.09.156-.136.33-.136.52a1.015 1.015 0 00.511.895c.157.093.33.14.52.14z"
   })));
 }
 
 var _path$A;
 function _extends$F() { _extends$F = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$F.apply(this, arguments); }
-function SvgAngstrom(props) {
+function SvgPlanckDiracConstant(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$F({
     width: 16,
     height: 16,
@@ -8641,13 +8710,13 @@ function SvgAngstrom(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$A || (_path$A = /*#__PURE__*/React.createElement("path", {
-    d: "M5.415 12H4.25l2.617-7.273h1.268L10.752 12H9.587L7.531 6.048h-.057L5.414 12zm.195-2.848h3.778v.923H5.61v-.923zm1.893-4.897c-.291 0-.54-.102-.746-.305a1.002 1.002 0 01-.305-.736 1.026 1.026 0 01.518-.902c.161-.094.339-.142.533-.142.192 0 .367.048.525.142.161.093.29.218.384.377.095.158.142.334.142.525 0 .192-.047.367-.142.526a1.082 1.082 0 01-.384.376 1.026 1.026 0 01-.525.139zm0-.543a.49.49 0 00.497-.5.485.485 0 00-.142-.353.476.476 0 00-.355-.145.487.487 0 00-.5.5c0 .138.046.256.141.356a.469.469 0 00.359.142z"
+    d: "M6.13 9.114V13H4.858V4.273h1.257V7.52h.08c.154-.352.388-.632.704-.84.315-.207.727-.31 1.236-.31.448 0 .84.092 1.176.277.338.184.6.46.784.826.187.364.281.818.281 1.364V13H9.101V8.99c0-.48-.124-.852-.37-1.116-.248-.267-.592-.4-1.032-.4-.301 0-.571.063-.81.191a1.383 1.383 0 00-.558.562c-.134.245-.2.54-.2.887zM3.532 5.833V4.95h3.916v.882H3.531z"
   })));
 }
 
 var _path$z;
 function _extends$E() { _extends$E = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$E.apply(this, arguments); }
-function SvgDegreeSymbol(props) {
+function SvgPlusMinus(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$E({
     width: 16,
     height: 16,
@@ -8655,13 +8724,13 @@ function SvgDegreeSymbol(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$z || (_path$z = /*#__PURE__*/React.createElement("path", {
-    d: "M7.737 8.219c-.37 0-.706-.09-1.01-.269a2.093 2.093 0 01-.724-.728 1.954 1.954 0 01-.269-1.01c0-.37.09-.705.269-1.006.182-.304.423-.545.724-.724a1.93 1.93 0 011.01-.273c.37 0 .706.09 1.01.273.304.179.546.42.725.724.181.301.272.637.272 1.006 0 .37-.09.706-.272 1.01-.18.304-.42.547-.725.728-.304.18-.64.269-1.01.269zm0-.972a1 1 0 00.524-.14 1.042 1.042 0 00.371-1.415 1.009 1.009 0 00-.37-.37 1 1 0 00-.525-.141 1.042 1.042 0 00-.895.511c-.09.156-.136.33-.136.52a1.015 1.015 0 00.511.895c.157.093.33.14.52.14z"
+    d: "M5.168 12.616V11.5h5.66v1.116h-5.66zm0-3.477V8.035h5.66V9.14h-5.66zm2.254 1.654V6.386H8.57v4.407H7.422z"
   })));
 }
 
 var _path$y;
 function _extends$D() { _extends$D = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$D.apply(this, arguments); }
-function SvgPlanckDiracConstant(props) {
+function SvgPromille(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$D({
     width: 16,
     height: 16,
@@ -8669,13 +8738,13 @@ function SvgPlanckDiracConstant(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$y || (_path$y = /*#__PURE__*/React.createElement("path", {
-    d: "M6.13 9.114V13H4.858V4.273h1.257V7.52h.08c.154-.352.388-.632.704-.84.315-.207.727-.31 1.236-.31.448 0 .84.092 1.176.277.338.184.6.46.784.826.187.364.281.818.281 1.364V13H9.101V8.99c0-.48-.124-.852-.37-1.116-.248-.267-.592-.4-1.032-.4-.301 0-.571.063-.81.191a1.383 1.383 0 00-.558.562c-.134.245-.2.54-.2.887zM3.532 5.833V4.95h3.916v.882H3.531z"
+    d: "M7.397 11.364v-.46c0-.325.074-.618.222-.883.15-.264.362-.476.635-.635.273-.159.595-.238.967-.238.344 0 .64.08.89.238.25.16.443.371.576.635.136.264.205.558.205.882v.46c0 .325-.069.619-.205.883a1.589 1.589 0 01-.575.635c-.25.159-.547.238-.89.238-.373 0-.695-.08-.968-.238a1.703 1.703 0 01-.635-.635 1.776 1.776 0 01-.222-.882zm.976-.46v.46c0 .244.071.46.213.647.142.188.354.282.635.282s.49-.094.627-.282c.136-.187.204-.403.204-.647v-.46c0-.245-.07-.46-.209-.648-.139-.188-.346-.282-.622-.282-.281 0-.493.094-.635.282a1.044 1.044 0 00-.213.647zm1.85.46v-.46c0-.325.068-.618.204-.883.14-.264.334-.476.584-.635.253-.159.551-.238.895-.238.375 0 .699.08.971.238.273.16.483.371.631.635.148.264.222.558.222.882v.46c0 .325-.074.619-.222.883a1.64 1.64 0 01-.626.635c-.27.159-.59.238-.96.238-.346 0-.647-.08-.902-.238a1.642 1.642 0 01-.588-.635 1.931 1.931 0 01-.21-.882zm.835-.46v.46c0 .244.074.46.222.647.147.188.362.282.643.282.275 0 .483-.094.622-.282.14-.187.209-.403.209-.647v-.46c0-.245-.071-.46-.213-.648-.14-.188-.351-.282-.635-.282-.273 0-.482.094-.627.282a1.05 1.05 0 00-.221.647zM3.004 6.368v-.46c0-.33.068-.632.204-.908.14-.275.341-.495.606-.66.267-.165.59-.247.967-.247.386 0 .71.082.971.247.262.165.46.385.593.66.133.276.2.579.2.908v.46c0 .33-.068.632-.204.908a1.608 1.608 0 01-.597.66c-.261.165-.582.248-.963.248-.386 0-.712-.083-.976-.248a1.648 1.648 0 01-.597-.66 2.018 2.018 0 01-.204-.908zM4 5.91v.46c0 .245.057.466.17.665.117.199.32.298.61.298.284 0 .483-.1.596-.298.117-.199.175-.42.175-.665v-.46c0-.244-.055-.466-.166-.665-.11-.199-.312-.298-.605-.298-.284 0-.486.1-.605.298A1.29 1.29 0 004 5.91zM3.426 13l6-8.727h1.018l-6 8.727H3.426z"
   })));
 }
 
 var _path$x;
 function _extends$C() { _extends$C = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$C.apply(this, arguments); }
-function SvgPlusMinus(props) {
+function SvgRootSymbol(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$C({
     width: 16,
     height: 16,
@@ -8683,13 +8752,13 @@ function SvgPlusMinus(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$x || (_path$x = /*#__PURE__*/React.createElement("path", {
-    d: "M5.168 12.616V11.5h5.66v1.116h-5.66zm0-3.477V8.035h5.66V9.14h-5.66zm2.254 1.654V6.386H8.57v4.407H7.422z"
+    d: "M7.494 11.611l2.484-7.338h1.27L8.201 13h-.89l.183-1.389zM6.65 8.449l1.112 3.196L7.958 13h-.852L5.351 8.45h1.3zM4.566 9.553V8.449h2.025v1.104H4.566z"
   })));
 }
 
 var _path$w;
 function _extends$B() { _extends$B = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$B.apply(this, arguments); }
-function SvgPromille(props) {
+function SvgLeftArrow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$B({
     width: 16,
     height: 16,
@@ -8697,13 +8766,13 @@ function SvgPromille(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$w || (_path$w = /*#__PURE__*/React.createElement("path", {
-    d: "M7.397 11.364v-.46c0-.325.074-.618.222-.883.15-.264.362-.476.635-.635.273-.159.595-.238.967-.238.344 0 .64.08.89.238.25.16.443.371.576.635.136.264.205.558.205.882v.46c0 .325-.069.619-.205.883a1.589 1.589 0 01-.575.635c-.25.159-.547.238-.89.238-.373 0-.695-.08-.968-.238a1.703 1.703 0 01-.635-.635 1.776 1.776 0 01-.222-.882zm.976-.46v.46c0 .244.071.46.213.647.142.188.354.282.635.282s.49-.094.627-.282c.136-.187.204-.403.204-.647v-.46c0-.245-.07-.46-.209-.648-.139-.188-.346-.282-.622-.282-.281 0-.493.094-.635.282a1.044 1.044 0 00-.213.647zm1.85.46v-.46c0-.325.068-.618.204-.883.14-.264.334-.476.584-.635.253-.159.551-.238.895-.238.375 0 .699.08.971.238.273.16.483.371.631.635.148.264.222.558.222.882v.46c0 .325-.074.619-.222.883a1.64 1.64 0 01-.626.635c-.27.159-.59.238-.96.238-.346 0-.647-.08-.902-.238a1.642 1.642 0 01-.588-.635 1.931 1.931 0 01-.21-.882zm.835-.46v.46c0 .244.074.46.222.647.147.188.362.282.643.282.275 0 .483-.094.622-.282.14-.187.209-.403.209-.647v-.46c0-.245-.071-.46-.213-.648-.14-.188-.351-.282-.635-.282-.273 0-.482.094-.627.282a1.05 1.05 0 00-.221.647zM3.004 6.368v-.46c0-.33.068-.632.204-.908.14-.275.341-.495.606-.66.267-.165.59-.247.967-.247.386 0 .71.082.971.247.262.165.46.385.593.66.133.276.2.579.2.908v.46c0 .33-.068.632-.204.908a1.608 1.608 0 01-.597.66c-.261.165-.582.248-.963.248-.386 0-.712-.083-.976-.248a1.648 1.648 0 01-.597-.66 2.018 2.018 0 01-.204-.908zM4 5.91v.46c0 .245.057.466.17.665.117.199.32.298.61.298.284 0 .483-.1.596-.298.117-.199.175-.42.175-.665v-.46c0-.244-.055-.466-.166-.665-.11-.199-.312-.298-.605-.298-.284 0-.486.1-.605.298A1.29 1.29 0 004 5.91zM3.426 13l6-8.727h1.018l-6 8.727H3.426z"
+    d: "M7.16 12.158L3.183 8.182l3.975-3.976.767.759-2.663 2.663h6.69v1.108h-6.69l2.663 2.659-.767.763z"
   })));
 }
 
 var _path$v;
 function _extends$A() { _extends$A = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$A.apply(this, arguments); }
-function SvgRootSymbol(props) {
+function SvgRightArrow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$A({
     width: 16,
     height: 16,
@@ -8711,13 +8780,13 @@ function SvgRootSymbol(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$v || (_path$v = /*#__PURE__*/React.createElement("path", {
-    d: "M7.494 11.611l2.484-7.338h1.27L8.201 13h-.89l.183-1.389zM6.65 8.449l1.112 3.196L7.958 13h-.852L5.351 8.45h1.3zM4.566 9.553V8.449h2.025v1.104H4.566z"
+    d: "M8.294 12.158l-.767-.759 2.663-2.663H3.5V7.628h6.69l-2.663-2.66.767-.762 3.976 3.976-3.976 3.976z"
   })));
 }
 
-var _path$u;
+var _path$u, _path2$9;
 function _extends$z() { _extends$z = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$z.apply(this, arguments); }
-function SvgLeftArrow(props) {
+function SvgLeftArrowCrossedOut(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$z({
     width: 16,
     height: 16,
@@ -8725,13 +8794,15 @@ function SvgLeftArrow(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$u || (_path$u = /*#__PURE__*/React.createElement("path", {
-    d: "M7.16 12.158L3.183 8.182l3.975-3.976.767.759-2.663 2.663h6.69v1.108h-6.69l2.663 2.659-.767.763z"
+    d: "M7.16 12.157L3.183 8.182l3.975-3.976.767.758-2.663 2.664h6.69v1.108h-6.69l2.663 2.659-.767.762z"
+  })), _path2$9 || (_path2$9 = /*#__PURE__*/React.createElement("path", {
+    d: "M11.665 3.102l-5.843 9.46h-.664L11 3.102h.665z"
   })));
 }
 
-var _path$t;
+var _path$t, _path2$8;
 function _extends$y() { _extends$y = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$y.apply(this, arguments); }
-function SvgRightArrow(props) {
+function SvgRightArrowCrossedOut(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$y({
     width: 16,
     height: 16,
@@ -8739,13 +8810,15 @@ function SvgRightArrow(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$t || (_path$t = /*#__PURE__*/React.createElement("path", {
-    d: "M8.294 12.158l-.767-.759 2.663-2.663H3.5V7.628h6.69l-2.663-2.66.767-.762 3.976 3.976-3.976 3.976z"
+    d: "M8.294 12.157l-.767-.758 2.663-2.663H3.5V7.628h6.69l-2.663-2.66.767-.762 3.976 3.976-3.976 3.975z"
+  })), _path2$8 || (_path2$8 = /*#__PURE__*/React.createElement("path", {
+    d: "M11.5 3.102l-5.842 9.46h-.665l5.842-9.46h.665z"
   })));
 }
 
-var _path$s, _path2$9;
+var _path$s;
 function _extends$x() { _extends$x = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$x.apply(this, arguments); }
-function SvgLeftArrowCrossedOut(props) {
+function SvgLeftAndRightArrow(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$x({
     width: 16,
     height: 16,
@@ -8753,15 +8826,13 @@ function SvgLeftArrowCrossedOut(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$s || (_path$s = /*#__PURE__*/React.createElement("path", {
-    d: "M7.16 12.157L3.183 8.182l3.975-3.976.767.758-2.663 2.664h6.69v1.108h-6.69l2.663 2.659-.767.762z"
-  })), _path2$9 || (_path2$9 = /*#__PURE__*/React.createElement("path", {
-    d: "M11.665 3.102l-5.843 9.46h-.664L11 3.102h.665z"
+    d: "M5.057 12.055L1.184 8.182l3.873-3.874.767.759-2.56 2.56h9.562l-2.561-2.56.767-.759 3.873 3.874-3.873 3.873-.767-.767 2.56-2.552H3.264l2.561 2.552-.767.767z"
   })));
 }
 
-var _path$r, _path2$8;
+var _path$r;
 function _extends$w() { _extends$w = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$w.apply(this, arguments); }
-function SvgRightArrowCrossedOut(props) {
+function SvgCapitalPi(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$w({
     width: 16,
     height: 16,
@@ -8769,15 +8840,13 @@ function SvgRightArrowCrossedOut(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$r || (_path$r = /*#__PURE__*/React.createElement("path", {
-    d: "M8.294 12.157l-.767-.758 2.663-2.663H3.5V7.628h6.69l-2.663-2.66.767-.762 3.976 3.976-3.976 3.975z"
-  })), _path2$8 || (_path2$8 = /*#__PURE__*/React.createElement("path", {
-    d: "M11.5 3.102l-5.842 9.46h-.665l5.842-9.46h.665z"
+    d: "M10.413 3.727v8.377H9.255V4.636H6.123v7.468H4.969V3.727h5.444z"
   })));
 }
 
 var _path$q;
 function _extends$v() { _extends$v = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$v.apply(this, arguments); }
-function SvgLeftAndRightArrow(props) {
+function SvgSumSymbol(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$v({
     width: 16,
     height: 16,
@@ -8785,13 +8854,13 @@ function SvgLeftAndRightArrow(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$q || (_path$q = /*#__PURE__*/React.createElement("path", {
-    d: "M5.057 12.055L1.184 8.182l3.873-3.874.767.759-2.56 2.56h9.562l-2.561-2.56.767-.759 3.873 3.874-3.873 3.873-.767-.767 2.56-2.552H3.264l2.561 2.552-.767.767z"
+    d: "M11.184 11.405v.916H5.978v-.916h5.206zm-.309-7.678v.92H5.889v-.92h4.986zM9.678 7.875v.295l-3.434 4.15h-.72v-.738L8.527 8.02 5.523 4.476v-.749h.721l3.434 4.148z"
   })));
 }
 
 var _path$p;
 function _extends$u() { _extends$u = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$u.apply(this, arguments); }
-function SvgCapitalPi(props) {
+function SvgInfinitySign(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$u({
     width: 16,
     height: 16,
@@ -8799,13 +8868,13 @@ function SvgCapitalPi(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$p || (_path$p = /*#__PURE__*/React.createElement("path", {
-    d: "M10.413 3.727v8.377H9.255V4.636H6.123v7.468H4.969V3.727h5.444z"
+    d: "M5.042 5.842c.324 0 .62.047.886.14.27.095.513.217.729.367.219.148.41.302.575.46.091.086.174.17.247.252.074.082.145.165.213.247.063-.082.127-.162.192-.238.068-.08.154-.167.256-.26.247-.242.554-.463.92-.665.37-.202.797-.303 1.283-.303.455 0 .868.111 1.24.333.375.218.672.512.89.882.222.37.333.778.333 1.227 0 .341-.064.66-.192.959a2.49 2.49 0 01-.528.78 2.455 2.455 0 01-1.743.712c-.324 0-.622-.046-.895-.137a3.256 3.256 0 01-.733-.358 4.588 4.588 0 01-.57-.447 6.736 6.736 0 01-.252-.265 7.034 7.034 0 01-.2-.251l-.218.251a5.09 5.09 0 01-.247.265 4.203 4.203 0 01-.571.447 3.27 3.27 0 01-.729.354 2.66 2.66 0 01-.886.14c-.46 0-.877-.109-1.249-.328a2.5 2.5 0 01-.89-.882 2.378 2.378 0 01-.333-1.24c0-.338.063-.653.188-.946.128-.295.304-.555.528-.78.227-.224.49-.399.789-.524a2.45 2.45 0 01.967-.192zM3.746 8.284c0 .236.059.45.175.644a1.3 1.3 0 001.12.63c.268 0 .514-.06.738-.179.225-.12.433-.27.627-.451a3.717 3.717 0 00.545-.644 6.678 6.678 0 00-.243-.303 2.94 2.94 0 00-.302-.323 2.64 2.64 0 00-.618-.452 1.538 1.538 0 00-.746-.188c-.239 0-.456.059-.652.175a1.3 1.3 0 00-.469.46c-.116.19-.175.4-.175.631zm7.875 0c0-.23-.058-.44-.174-.63a1.276 1.276 0 00-.46-.46 1.222 1.222 0 00-.644-.176c-.182 0-.355.029-.52.086-.165.056-.32.133-.464.23a2.7 2.7 0 00-.392.324c-.128.119-.24.241-.337.366-.097.122-.166.209-.209.26.071.1.15.203.239.311.088.105.19.216.307.333.19.181.397.332.622.451.227.12.479.18.754.18a1.276 1.276 0 001.104-.63c.116-.195.174-.41.174-.645z"
   })));
 }
 
 var _path$o;
 function _extends$t() { _extends$t = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$t.apply(this, arguments); }
-function SvgSumSymbol(props) {
+function SvgPartialDerivative(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$t({
     width: 16,
     height: 16,
@@ -8813,13 +8882,13 @@ function SvgSumSymbol(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$o || (_path$o = /*#__PURE__*/React.createElement("path", {
-    d: "M11.184 11.405v.916H5.978v-.916h5.206zm-.309-7.678v.92H5.889v-.92h4.986zM9.678 7.875v.295l-3.434 4.15h-.72v-.738L8.527 8.02 5.523 4.476v-.749h.721l3.434 4.148z"
+    d: "M7.723 6.983c.335 0 .655.064.959.192.304.127.567.31.788.545-.07-.508-.209-.943-.413-1.304a2.336 2.336 0 00-.754-.83 1.746 1.746 0 00-.968-.29c-.278 0-.544.026-.797.08-.25.054-.507.13-.771.226l-.158-1.048c.256-.11.522-.205.797-.281.276-.08.63-.12 1.061-.12.739 0 1.354.196 1.846.588.494.392.863.946 1.107 1.662.248.713.371 1.55.371 2.51v.341c.003.744-.113 1.408-.35 1.99-.232.583-.569 1.041-1.01 1.377-.437.332-.964.498-1.58.498-.602 0-1.12-.135-1.556-.405a2.69 2.69 0 01-.997-1.108c-.23-.468-.345-.998-.345-1.589v-.136c0-.56.11-1.057.328-1.492.219-.437.534-.781.946-1.031.415-.25.914-.375 1.496-.375zm.17 1.1c-.366 0-.666.082-.899.246-.23.165-.4.387-.511.665a2.504 2.504 0 00-.162.92v.129c0 .363.054.694.162.992.11.299.278.537.503.716.227.18.518.269.873.269.358 0 .65-.104.878-.311.23-.21.4-.497.512-.861a4.22 4.22 0 00.166-1.232v-.494a1.371 1.371 0 00-.218-.426 1.443 1.443 0 00-.485-.426c-.213-.125-.486-.188-.819-.188z"
   })));
 }
 
 var _path$n;
 function _extends$s() { _extends$s = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$s.apply(this, arguments); }
-function SvgInfinitySign(props) {
+function SvgDeltaSign(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$s({
     width: 16,
     height: 16,
@@ -8827,13 +8896,13 @@ function SvgInfinitySign(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$n || (_path$n = /*#__PURE__*/React.createElement("path", {
-    d: "M5.042 5.842c.324 0 .62.047.886.14.27.095.513.217.729.367.219.148.41.302.575.46.091.086.174.17.247.252.074.082.145.165.213.247.063-.082.127-.162.192-.238.068-.08.154-.167.256-.26.247-.242.554-.463.92-.665.37-.202.797-.303 1.283-.303.455 0 .868.111 1.24.333.375.218.672.512.89.882.222.37.333.778.333 1.227 0 .341-.064.66-.192.959a2.49 2.49 0 01-.528.78 2.455 2.455 0 01-1.743.712c-.324 0-.622-.046-.895-.137a3.256 3.256 0 01-.733-.358 4.588 4.588 0 01-.57-.447 6.736 6.736 0 01-.252-.265 7.034 7.034 0 01-.2-.251l-.218.251a5.09 5.09 0 01-.247.265 4.203 4.203 0 01-.571.447 3.27 3.27 0 01-.729.354 2.66 2.66 0 01-.886.14c-.46 0-.877-.109-1.249-.328a2.5 2.5 0 01-.89-.882 2.378 2.378 0 01-.333-1.24c0-.338.063-.653.188-.946.128-.295.304-.555.528-.78.227-.224.49-.399.789-.524a2.45 2.45 0 01.967-.192zM3.746 8.284c0 .236.059.45.175.644a1.3 1.3 0 001.12.63c.268 0 .514-.06.738-.179.225-.12.433-.27.627-.451a3.717 3.717 0 00.545-.644 6.678 6.678 0 00-.243-.303 2.94 2.94 0 00-.302-.323 2.64 2.64 0 00-.618-.452 1.538 1.538 0 00-.746-.188c-.239 0-.456.059-.652.175a1.3 1.3 0 00-.469.46c-.116.19-.175.4-.175.631zm7.875 0c0-.23-.058-.44-.174-.63a1.276 1.276 0 00-.46-.46 1.222 1.222 0 00-.644-.176c-.182 0-.355.029-.52.086-.165.056-.32.133-.464.23a2.7 2.7 0 00-.392.324c-.128.119-.24.241-.337.366-.097.122-.166.209-.209.26.071.1.15.203.239.311.088.105.19.216.307.333.19.181.397.332.622.451.227.12.479.18.754.18a1.276 1.276 0 001.104-.63c.116-.195.174-.41.174-.645z"
+    d: "M4.297 13l3.14-8.727H8.96L12.099 13H4.297zm1.79-1.133h4.227l-2.08-6.009h-.068l-2.08 6.009z"
   })));
 }
 
 var _path$m;
 function _extends$r() { _extends$r = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$r.apply(this, arguments); }
-function SvgPartialDerivative(props) {
+function SvgIntegral(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$r({
     width: 16,
     height: 16,
@@ -8841,13 +8910,13 @@ function SvgPartialDerivative(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$m || (_path$m = /*#__PURE__*/React.createElement("path", {
-    d: "M7.723 6.983c.335 0 .655.064.959.192.304.127.567.31.788.545-.07-.508-.209-.943-.413-1.304a2.336 2.336 0 00-.754-.83 1.746 1.746 0 00-.968-.29c-.278 0-.544.026-.797.08-.25.054-.507.13-.771.226l-.158-1.048c.256-.11.522-.205.797-.281.276-.08.63-.12 1.061-.12.739 0 1.354.196 1.846.588.494.392.863.946 1.107 1.662.248.713.371 1.55.371 2.51v.341c.003.744-.113 1.408-.35 1.99-.232.583-.569 1.041-1.01 1.377-.437.332-.964.498-1.58.498-.602 0-1.12-.135-1.556-.405a2.69 2.69 0 01-.997-1.108c-.23-.468-.345-.998-.345-1.589v-.136c0-.56.11-1.057.328-1.492.219-.437.534-.781.946-1.031.415-.25.914-.375 1.496-.375zm.17 1.1c-.366 0-.666.082-.899.246-.23.165-.4.387-.511.665a2.504 2.504 0 00-.162.92v.129c0 .363.054.694.162.992.11.299.278.537.503.716.227.18.518.269.873.269.358 0 .65-.104.878-.311.23-.21.4-.497.512-.861a4.22 4.22 0 00.166-1.232v-.494a1.371 1.371 0 00-.218-.426 1.443 1.443 0 00-.485-.426c-.213-.125-.486-.188-.819-.188z"
+    d: "M8.35 12.473c0 .673-.171 1.189-.512 1.547-.341.358-.833.537-1.475.537a2.815 2.815 0 01-.75-.098l.098-1.07c.066.017.16.033.282.047.122.014.221.021.298.021.278 0 .483-.078.613-.234.131-.154.197-.392.197-.716V5.114c0-.722.178-1.276.536-1.662.361-.387.88-.58 1.556-.58.145 0 .29.011.434.034.148.023.3.053.457.09L9.943 4.03a2.127 2.127 0 00-.328-.038 6.799 6.799 0 00-.397-.013c-.298 0-.518.087-.66.26-.14.17-.209.439-.209.805v7.428z"
   })));
 }
 
 var _path$l;
 function _extends$q() { _extends$q = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$q.apply(this, arguments); }
-function SvgDeltaSign(props) {
+function SvgApproximatelyEqual(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$q({
     width: 16,
     height: 16,
@@ -8855,13 +8924,13 @@ function SvgDeltaSign(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$l || (_path$l = /*#__PURE__*/React.createElement("path", {
-    d: "M4.297 13l3.14-8.727H8.96L12.099 13H4.297zm1.79-1.133h4.227l-2.08-6.009h-.068l-2.08 6.009z"
+    d: "M4.965 8.178c-.003-.495.074-.894.23-1.198.16-.307.37-.531.635-.673.267-.142.558-.213.874-.213.29 0 .55.06.784.183.235.12.505.305.81.558.204.17.369.291.494.362a.814.814 0 00.409.107c.236 0 .42-.085.554-.256.136-.17.201-.42.196-.75h1.078c.008.489-.068.888-.23 1.198-.16.307-.374.534-.644.682-.267.144-.56.217-.878.217-.28 0-.54-.058-.78-.175-.238-.116-.512-.308-.822-.575a3.4 3.4 0 00-.477-.358.793.793 0 00-.4-.102.709.709 0 00-.55.234c-.142.153-.21.406-.205.759H4.965zm0 2.642c-.003-.495.074-.894.23-1.198.16-.307.37-.531.635-.673.267-.142.558-.213.874-.213.29 0 .55.06.784.183.235.12.505.305.81.558.204.17.369.291.494.362a.814.814 0 00.409.107c.236 0 .42-.085.554-.256.136-.17.201-.42.196-.75h1.078c.008.489-.068.888-.23 1.198-.16.307-.374.534-.644.682-.267.144-.56.217-.878.217-.28 0-.54-.058-.78-.175-.238-.116-.512-.308-.822-.575a3.405 3.405 0 00-.477-.358.793.793 0 00-.4-.102.709.709 0 00-.55.234c-.142.153-.21.406-.205.759H4.965z"
   })));
 }
 
 var _path$k;
 function _extends$p() { _extends$p = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$p.apply(this, arguments); }
-function SvgIntegral(props) {
+function SvgNotEqual(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$p({
     width: 16,
     height: 16,
@@ -8869,13 +8938,13 @@ function SvgIntegral(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$k || (_path$k = /*#__PURE__*/React.createElement("path", {
-    d: "M8.35 12.473c0 .673-.171 1.189-.512 1.547-.341.358-.833.537-1.475.537a2.815 2.815 0 01-.75-.098l.098-1.07c.066.017.16.033.282.047.122.014.221.021.298.021.278 0 .483-.078.613-.234.131-.154.197-.392.197-.716V5.114c0-.722.178-1.276.536-1.662.361-.387.88-.58 1.556-.58.145 0 .29.011.434.034.148.023.3.053.457.09L9.943 4.03a2.127 2.127 0 00-.328-.038 6.799 6.799 0 00-.397-.013c-.298 0-.518.087-.66.26-.14.17-.209.439-.209.805v7.428z"
+    d: "M8.67 5.399h1.164l-2.502 6.328H6.17L8.67 5.4zM5.266 7.81V6.69h5.458v1.12H5.266zm0 2.625v-1.12h5.458v1.12H5.266z"
   })));
 }
 
 var _path$j;
 function _extends$o() { _extends$o = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$o.apply(this, arguments); }
-function SvgApproximatelyEqual(props) {
+function SvgLessOrEqual(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$o({
     width: 16,
     height: 16,
@@ -8883,13 +8952,13 @@ function SvgApproximatelyEqual(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$j || (_path$j = /*#__PURE__*/React.createElement("path", {
-    d: "M4.965 8.178c-.003-.495.074-.894.23-1.198.16-.307.37-.531.635-.673.267-.142.558-.213.874-.213.29 0 .55.06.784.183.235.12.505.305.81.558.204.17.369.291.494.362a.814.814 0 00.409.107c.236 0 .42-.085.554-.256.136-.17.201-.42.196-.75h1.078c.008.489-.068.888-.23 1.198-.16.307-.374.534-.644.682-.267.144-.56.217-.878.217-.28 0-.54-.058-.78-.175-.238-.116-.512-.308-.822-.575a3.4 3.4 0 00-.477-.358.793.793 0 00-.4-.102.709.709 0 00-.55.234c-.142.153-.21.406-.205.759H4.965zm0 2.642c-.003-.495.074-.894.23-1.198.16-.307.37-.531.635-.673.267-.142.558-.213.874-.213.29 0 .55.06.784.183.235.12.505.305.81.558.204.17.369.291.494.362a.814.814 0 00.409.107c.236 0 .42-.085.554-.256.136-.17.201-.42.196-.75h1.078c.008.489-.068.888-.23 1.198-.16.307-.374.534-.644.682-.267.144-.56.217-.878.217-.28 0-.54-.058-.78-.175-.238-.116-.512-.308-.822-.575a3.405 3.405 0 00-.477-.358.793.793 0 00-.4-.102.709.709 0 00-.55.234c-.142.153-.21.406-.205.759H4.965z"
+    d: "M10.827 11.616H5.168V10.5h5.66v1.116zm-5.659-3.57V7.09l5.66-1.858v1.159l-3.879 1.16.043-.078v.188l-.043-.077 3.878 1.16v1.158L5.168 8.045z"
   })));
 }
 
 var _path$i;
 function _extends$n() { _extends$n = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$n.apply(this, arguments); }
-function SvgNotEqual(props) {
+function SvgMoreOrEqual(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$n({
     width: 16,
     height: 16,
@@ -8897,48 +8966,20 @@ function SvgNotEqual(props) {
     fill: "currentColor",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$i || (_path$i = /*#__PURE__*/React.createElement("path", {
-    d: "M8.67 5.399h1.164l-2.502 6.328H6.17L8.67 5.4zM5.266 7.81V6.69h5.458v1.12H5.266zm0 2.625v-1.12h5.458v1.12H5.266z"
-  })));
-}
-
-var _path$h;
-function _extends$m() { _extends$m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$m.apply(this, arguments); }
-function SvgLessOrEqual(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$m({
-    width: 16,
-    height: 16,
-    viewBox: "0 0 16 16",
-    fill: "currentColor",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$h || (_path$h = /*#__PURE__*/React.createElement("path", {
-    d: "M10.827 11.616H5.168V10.5h5.66v1.116zm-5.659-3.57V7.09l5.66-1.858v1.159l-3.879 1.16.043-.078v.188l-.043-.077 3.878 1.16v1.158L5.168 8.045z"
-  })));
-}
-
-var _path$g;
-function _extends$l() { _extends$l = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$l.apply(this, arguments); }
-function SvgMoreOrEqual(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$l({
-    width: 16,
-    height: 16,
-    viewBox: "0 0 16 16",
-    fill: "currentColor",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$g || (_path$g = /*#__PURE__*/React.createElement("path", {
     d: "M5.168 11.616V10.5h5.66v1.116h-5.66zm5.66-3.57l-5.66 1.857V8.744l3.874-1.159-.039.077v-.188l.039.077-3.874-1.159v-1.16l5.66 1.859v.954z"
   })));
 }
 
-var _path$f, _path2$7;
-function _extends$k() { _extends$k = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$k.apply(this, arguments); }
+var _path$h, _path2$7;
+function _extends$m() { _extends$m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$m.apply(this, arguments); }
 function SvgAnyAtom(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$k({
+  return /*#__PURE__*/React.createElement("svg", _extends$m({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$f || (_path$f = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$h || (_path$h = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M3 22a.997.997 0 01-1-1v-6a1.5 1.5 0 011.5 1.5v4h4A1.5 1.5 0 019 22H3zM2 9a1.5 1.5 0 001.5-1.5v-4h4A1.5 1.5 0 009 2H3a.997.997 0 00-1 1v6zm13-7a1.5 1.5 0 001.5 1.5h4v4A1.5 1.5 0 0022 9V3a.997.997 0 00-1-1h-6zm7 13a1.5 1.5 0 00-1.5 1.5v4h-4A1.5 1.5 0 0015 22h6a.997.997 0 00.383-.076l.015-.006c.232-.101.419-.288.52-.52l.006-.015A.997.997 0 0022 21v-6z",
@@ -8949,38 +8990,66 @@ function SvgAnyAtom(props) {
   })));
 }
 
-var _path$e;
-function _extends$j() { _extends$j = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$j.apply(this, arguments); }
+var _path$g;
+function _extends$l() { _extends$l = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$l.apply(this, arguments); }
 function SvgBracket(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$j({
+  return /*#__PURE__*/React.createElement("svg", _extends$l({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$e || (_path$e = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$g || (_path$g = /*#__PURE__*/React.createElement("path", {
     d: "M15 4v2h3v12h-3v2h3a2 2 0 002-2V6a2 2 0 00-2-2h-3zM6 4a2 2 0 00-2 2v12a2 2 0 002 2h3v-2H6V6h3V4H6z",
     fill: "currentColor"
   })));
 }
 
-var _path$d;
-function _extends$i() { _extends$i = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$i.apply(this, arguments); }
+var _path$f;
+function _extends$k() { _extends$k = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$k.apply(this, arguments); }
 function SvgError(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$i({
+  return /*#__PURE__*/React.createElement("svg", _extends$k({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$d || (_path$d = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$f || (_path$f = /*#__PURE__*/React.createElement("path", {
     d: "M8.001 14a1.333 1.333 0 100-2.667 1.333 1.333 0 000 2.667zM6.668 2h2.667v8H6.668V2z",
     fill: "#FF4A4A"
   })));
 }
 
+var _path$e;
+function _extends$j() { _extends$j = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$j.apply(this, arguments); }
+function SvgRapLeftLink(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$j({
+    width: 27,
+    height: 18,
+    viewBox: "0 0 27 18",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$e || (_path$e = /*#__PURE__*/React.createElement("path", {
+    d: "M26 0v4.229a4 4 0 01-4 4H5a4 4 0 00-4 4V18"
+  })));
+}
+
+var _path$d;
+function _extends$i() { _extends$i = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$i.apply(this, arguments); }
+function SvgRapMiddleLink(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$i({
+    width: 2,
+    height: 16,
+    viewBox: "0 0 2 16",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$d || (_path$d = /*#__PURE__*/React.createElement("path", {
+    d: "M1 0v16"
+  })));
+}
+
 var _path$c;
 function _extends$h() { _extends$h = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$h.apply(this, arguments); }
-function SvgRapLeftLink(props) {
+function SvgRapRightLink(props) {
   return /*#__PURE__*/React.createElement("svg", _extends$h({
     width: 27,
     height: 18,
@@ -8988,48 +9057,20 @@ function SvgRapLeftLink(props) {
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$c || (_path$c = /*#__PURE__*/React.createElement("path", {
-    d: "M26 0v4.229a4 4 0 01-4 4H5a4 4 0 00-4 4V18"
-  })));
-}
-
-var _path$b;
-function _extends$g() { _extends$g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$g.apply(this, arguments); }
-function SvgRapMiddleLink(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$g({
-    width: 2,
-    height: 16,
-    viewBox: "0 0 2 16",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$b || (_path$b = /*#__PURE__*/React.createElement("path", {
-    d: "M1 0v16"
-  })));
-}
-
-var _path$a;
-function _extends$f() { _extends$f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$f.apply(this, arguments); }
-function SvgRapRightLink(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$f({
-    width: 27,
-    height: 18,
-    viewBox: "0 0 27 18",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$a || (_path$a = /*#__PURE__*/React.createElement("path", {
     d: "M1 0v4.229a4 4 0 004 4h17a4 4 0 014 4V18"
   })));
 }
 
-var _path$9, _path2$6;
-function _extends$e() { _extends$e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$e.apply(this, arguments); }
+var _path$b, _path2$6;
+function _extends$g() { _extends$g = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$g.apply(this, arguments); }
 function SvgArrowsLeft(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$e({
+  return /*#__PURE__*/React.createElement("svg", _extends$g({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$9 || (_path$9 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$b || (_path$b = /*#__PURE__*/React.createElement("path", {
     d: "M7.396 12.74L2.656 8l4.74-4.74.942.944L4.542 8l3.796 3.796-.942.943z",
     fill: "#fff"
   })), _path2$6 || (_path2$6 = /*#__PURE__*/React.createElement("path", {
@@ -9038,16 +9079,16 @@ function SvgArrowsLeft(props) {
   })));
 }
 
-var _path$8, _path2$5;
-function _extends$d() { _extends$d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$d.apply(this, arguments); }
+var _path$a, _path2$5;
+function _extends$f() { _extends$f = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$f.apply(this, arguments); }
 function SvgArrowsRight(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$d({
+  return /*#__PURE__*/React.createElement("svg", _extends$f({
     width: 12,
     height: 13,
     viewBox: "0 0 12 13",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$8 || (_path$8 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$a || (_path$a = /*#__PURE__*/React.createElement("path", {
     d: "M6.453 10.055l-.707-.708L8.593 6.5 5.746 3.653l.707-.707L10.008 6.5l-3.555 3.555z",
     fill: "#167782"
   })), _path2$5 || (_path2$5 = /*#__PURE__*/React.createElement("path", {
@@ -9057,9 +9098,9 @@ function SvgArrowsRight(props) {
 }
 
 var _rect$3;
-function _extends$c() { _extends$c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$c.apply(this, arguments); }
+function _extends$e() { _extends$e = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$e.apply(this, arguments); }
 function SvgSugar(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$c({
+  return /*#__PURE__*/React.createElement("svg", _extends$e({
     width: 20,
     height: 20,
     viewBox: "0 0 20 20",
@@ -9077,9 +9118,9 @@ function SvgSugar(props) {
 }
 
 var _rect$2, _rect2$2;
-function _extends$b() { _extends$b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$b.apply(this, arguments); }
+function _extends$d() { _extends$d = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$d.apply(this, arguments); }
 function SvgBase(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$b({
+  return /*#__PURE__*/React.createElement("svg", _extends$d({
     xmlns: "http://www.w3.org/2000/svg",
     width: 26,
     height: 25,
@@ -9107,9 +9148,9 @@ function SvgBase(props) {
 }
 
 var _rect$1, _rect2$1;
-function _extends$a() { _extends$a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$a.apply(this, arguments); }
+function _extends$c() { _extends$c = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$c.apply(this, arguments); }
 function SvgPhosphate(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$a({
+  return /*#__PURE__*/React.createElement("svg", _extends$c({
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
     height: 24,
@@ -9135,9 +9176,9 @@ function SvgPhosphate(props) {
 }
 
 var _rect, _rect2, _rect3;
-function _extends$9() { _extends$9 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$9.apply(this, arguments); }
+function _extends$b() { _extends$b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$b.apply(this, arguments); }
 function SvgPreset(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$9({
+  return /*#__PURE__*/React.createElement("svg", _extends$b({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
@@ -9166,25 +9207,25 @@ function SvgPreset(props) {
   })));
 }
 
-var _path$7;
-function _extends$8() { _extends$8 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$8.apply(this, arguments); }
+var _path$9;
+function _extends$a() { _extends$a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$a.apply(this, arguments); }
 function SvgEditFilled(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$8({
+  return /*#__PURE__*/React.createElement("svg", _extends$a({
     width: 28,
     height: 28,
     viewBox: "0 0 28 28",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$7 || (_path$7 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$9 || (_path$9 = /*#__PURE__*/React.createElement("path", {
     d: "M19.369 11.459L8.179 22.647H5.353v-2.828L16.54 8.629l2.829 2.83zM20.382 5.92l1.697 1.698a.8.8 0 010 1.131l-1.824 1.824-2.829-2.828 1.825-1.824a.8.8 0 011.131 0z",
     fill: "currentColor"
   })));
 }
 
 var _circle$3, _circle2$3, _circle3$2;
-function _extends$7() { _extends$7 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$7.apply(this, arguments); }
+function _extends$9() { _extends$9 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$9.apply(this, arguments); }
 function SvgVerticalDots(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$7({
+  return /*#__PURE__*/React.createElement("svg", _extends$9({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
@@ -9208,16 +9249,16 @@ function SvgVerticalDots(props) {
   })));
 }
 
-var _path$6, _path2$4;
-function _extends$6() { _extends$6 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$6.apply(this, arguments); }
+var _path$8, _path2$4;
+function _extends$8() { _extends$8 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$8.apply(this, arguments); }
 function SvgExpand(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$6({
+  return /*#__PURE__*/React.createElement("svg", _extends$8({
     width: 16,
     height: 16,
     viewBox: "0 0 16 16",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$6 || (_path$6 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$8 || (_path$8 = /*#__PURE__*/React.createElement("path", {
     d: "M2.664 3.33c0-.367.299-.666.667-.666h4.752a.667.667 0 010 1.333H3.997v8.006h8.006V8.167a.667.667 0 011.334 0v4.503a.667.667 0 01-.667.667H3.33a.667.667 0 01-.666-.667V3.33z",
     fill: "#333"
   })), _path2$4 || (_path2$4 = /*#__PURE__*/React.createElement("path", {
@@ -9226,16 +9267,16 @@ function SvgExpand(props) {
   })));
 }
 
-var _path$5, _path2$3;
-function _extends$5() { _extends$5 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$5.apply(this, arguments); }
+var _path$7, _path2$3;
+function _extends$7() { _extends$7 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$7.apply(this, arguments); }
 function SvgMinimizeExpantion(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$5({
+  return /*#__PURE__*/React.createElement("svg", _extends$7({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$5 || (_path$5 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$7 || (_path$7 = /*#__PURE__*/React.createElement("path", {
     d: "M3.996 4.996a1 1 0 011-1h7.129a1 1 0 110 2H5.996v12.01h12.01V12.25a1 1 0 112 0v6.755a1 1 0 01-1 1H4.995a1 1 0 01-1-1V4.996z",
     fill: "#585858"
   })), _path2$3 || (_path2$3 = /*#__PURE__*/React.createElement("path", {
@@ -9244,15 +9285,15 @@ function SvgMinimizeExpantion(props) {
   })));
 }
 
-var _path$4, _circle$2, _circle2$2, _path2$2;
-function _extends$4() { _extends$4 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$4.apply(this, arguments); }
+var _path$6, _circle$2, _circle2$2, _path2$2;
+function _extends$6() { _extends$6 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$6.apply(this, arguments); }
 function SvgExplicitHydrogens(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$4({
+  return /*#__PURE__*/React.createElement("svg", _extends$6({
     height: 24,
     width: 24,
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$4 || (_path$4 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$6 || (_path$6 = /*#__PURE__*/React.createElement("path", {
     d: "M1.98 6V1.636h.658v1.897h2.175V1.636h.66V6h-.66V4.097H2.638V6h-.659zM9.98 6V1.636h.658v1.897h2.175V1.636h.66V6h-.66V4.097h-2.175V6h-.659zM1.98 14V9.636h.658v1.897h2.175V9.636h.66V14h-.66v-1.903H2.638V14h-.659zM9.98 14V9.636h.658v1.897h2.175V9.636h.66V14h-.66v-1.903h-2.175V14h-.659zM15.486 6.886L19 10.4V3.371l-3.514 3.515zM15.486 17.985L19 21.5v-7.03l-3.514 3.515z",
     fill: "currentcolor",
     fillRule: "evenodd",
@@ -9279,16 +9320,16 @@ function SvgExplicitHydrogens(props) {
   })));
 }
 
-var _path$3, _circle$1, _circle2$1, _circle3$1, _circle4$1, _circle5;
-function _extends$3() { _extends$3 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3.apply(this, arguments); }
+var _path$5, _circle$1, _circle2$1, _circle3$1, _circle4$1, _circle5;
+function _extends$5() { _extends$5 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$5.apply(this, arguments); }
 function SvgFlexLayoutMode(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$3({
+  return /*#__PURE__*/React.createElement("svg", _extends$5({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$3 || (_path$3 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$5 || (_path$5 = /*#__PURE__*/React.createElement("path", {
     d: "M4 6.826L18 5 9 15l8 4v-7",
     stroke: "currentColor",
     strokeWidth: 1.5,
@@ -9322,10 +9363,10 @@ function SvgFlexLayoutMode(props) {
   })));
 }
 
-var _circle, _circle2, _circle3, _circle4, _path$2, _path2$1;
-function _extends$2() { _extends$2 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2.apply(this, arguments); }
+var _circle, _circle2, _circle3, _circle4, _path$4, _path2$1;
+function _extends$4() { _extends$4 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$4.apply(this, arguments); }
 function SvgSnakeLayoutMode(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$2({
+  return /*#__PURE__*/React.createElement("svg", _extends$4({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
@@ -9351,7 +9392,7 @@ function SvgSnakeLayoutMode(props) {
     cy: 17.5,
     r: 2.5,
     fill: "currentColor"
-  })), _path$2 || (_path$2 = /*#__PURE__*/React.createElement("path", {
+  })), _path$4 || (_path$4 = /*#__PURE__*/React.createElement("path", {
     fill: "currentColor",
     d: "M7.5 5.75h8v1.5h-8zM8.25 16.75h7v1.5h-7zM7.5 11.25h9v1.5h-9z"
   })), _path2$1 || (_path2$1 = /*#__PURE__*/React.createElement("path", {
@@ -9361,16 +9402,16 @@ function SvgSnakeLayoutMode(props) {
   })));
 }
 
-var _path$1;
-function _extends$1() { _extends$1 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1.apply(this, arguments); }
+var _path$3;
+function _extends$3() { _extends$3 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3.apply(this, arguments); }
 function SvgSequenceLayoutMode(props) {
-  return /*#__PURE__*/React.createElement("svg", _extends$1({
+  return /*#__PURE__*/React.createElement("svg", _extends$3({
     width: 24,
     height: 24,
     viewBox: "0 0 24 24",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, props), _path$1 || (_path$1 = /*#__PURE__*/React.createElement("path", {
+  }, props), _path$3 || (_path$3 = /*#__PURE__*/React.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M10.172 12.69h4.9l.483 1.23h-.492c-.486 0-.833.095-1.043.286a.923.923 0 00-.305.718c0 .302.101.548.305.738.21.184.557.276 1.043.276h2.716c.486 0 .83-.092 1.034-.276a.953.953 0 00.305-.728c0-.354-.151-.64-.453-.856-.151-.105-.463-.158-.935-.158l-4.015-9.91L9.355 4c-.486 0-.833.095-1.043.285-.204.184-.305.427-.305.729 0 .301.101.548.305.738.21.183.557.275 1.043.275h1.319l-3.17 7.893c-.498-.013-.856.076-1.072.266a.937.937 0 00-.325.738.95.95 0 00.315.738c.203.184.548.276 1.033.276h2.717c.485 0 .83-.092 1.033-.276a.94.94 0 00.315-.728.92.92 0 00-.315-.728c-.203-.19-.548-.286-1.033-.286H9.68l.492-1.23zm2.44-6.013l1.624 3.995H10.98l1.633-3.995zM6 17.737a1 1 0 100 2h13.997a1 1 0 100-2H6z",
@@ -9378,7 +9419,39 @@ function SvgSequenceLayoutMode(props) {
   })));
 }
 
-var iconNameToIcon = {
+var _path$2;
+function _extends$2() { _extends$2 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$2.apply(this, arguments); }
+function SvgQuestionMark(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$2({
+    width: 16,
+    height: 26,
+    viewBox: "0 0 16 26",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$2 || (_path$2 = /*#__PURE__*/React.createElement("path", {
+    opacity: 0.5,
+    d: "M6.326 17.797a1 1 0 01-1-1v-.314c.022-1.083.145-1.616.41-2.477.274-.862.66-1.554 1.16-2.077a8.9 8.9 0 011.822-1.461c.491-.306.93-.64 1.316-1.002.395-.37.705-.78.93-1.232a3.43 3.43 0 00.338-1.533c0-.636-.149-1.187-.447-1.654A3.03 3.03 0 009.648 3.96a3.605 3.605 0 00-1.678-.386c-.572 0-1.115.125-1.63.374a3.16 3.16 0 00-1.682 2.046c-.137.514-.558.936-1.09.936H1.245C.682 6.93.223 6.465.3 5.907.448 4.821.79 3.882 1.33 3.091A6.569 6.569 0 014.13.773C5.297.258 6.585 0 7.994 0c1.537 0 2.89.27 4.057.809 1.175.54 2.089 1.308 2.74 2.306.66.99.99 2.165.99 3.526 0 .917-.148 1.738-.446 2.463a5.98 5.98 0 01-1.244 1.932 9.096 9.096 0 01-1.92 1.509c-.651.402-1.187.82-1.605 1.255-.41.435-.73.752-.932 1.34-.142.326-.247.808-.288 1.343v.314a1 1 0 01-1 1h-2.02zm1.1 7.534a2.575 2.575 0 01-1.871-.773 2.543 2.543 0 01-.785-1.883c0-.725.262-1.345.785-1.86a2.575 2.575 0 011.872-.772c.716 0 1.336.257 1.859.772.531.515.797 1.135.797 1.86 0 .49-.125.938-.375 1.34a2.775 2.775 0 01-.965.966c-.395.233-.834.35-1.317.35z",
+    fill: "currentColor"
+  })));
+}
+
+var _path$1;
+function _extends$1() { _extends$1 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1.apply(this, arguments); }
+function SvgNucleotide(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends$1({
+    width: 16,
+    height: 15,
+    viewBox: "0 0 16 15",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$1 || (_path$1 = /*#__PURE__*/React.createElement("path", {
+    d: "M7.412 1.21a1 1 0 011.176 0l6.824 4.958a1 1 0 01.363 1.118L13.17 15.31a1 1 0 01-.951.691H3.782a1 1 0 01-.95-.691L.224 7.286a1 1 0 01.363-1.118L7.412 1.21z",
+    fill: "currentColor"
+  })));
+}
+
+var _iconNameToIcon;
+var iconNameToIcon = (_iconNameToIcon = {
   α: Svg$n,
   β: Svg$m,
   γ: Svg$l,
@@ -9530,65 +9603,8 @@ var iconNameToIcon = {
   'template-dialog': SvgTemplateDialog,
   'template-lib': SvgTemplateLib,
   'snake-mode': SvgSnakeMode,
-  text: SvgText,
-  'text-bold': SvgTextBold,
-  'text-italic': SvgTextItalic,
-  'text-subscript': SvgTextSubscript,
-  'text-superscript': SvgTextSuperscript,
-  'transform-flip-h': SvgTransformFlipH,
-  'transform-flip-v': SvgTransformFlipV,
-  undo: SvgUndo,
-  'zoom-in': SvgZoomIn,
-  'zoom-out': SvgZoomOut,
-  'zoom-reset': SvgZoomReset,
-  'shape-ellipse': SvgShapeEllipse,
-  'shape-rectangle': SvgShapeRectangle,
-  'shape-polyline': SvgShapePolyline,
-  'shape-line': SvgShapeLine,
-  'not-found': SvgNotFound,
-  'save-1': SvgSave1,
-  'open-1': SvgOpen1,
-  reset: SvgReset,
-  close: SvgClose,
-  general: SvgGeneral,
-  'general-white': SvgGeneralWhite,
-  stereo: SvgStereo,
-  'stereo-white': SvgStereoWhite,
-  atoms: SvgAtoms,
-  'atoms-white': SvgAtomsWhite,
-  bonds: SvgBonds,
-  'bonds-white': SvgBondsWhite,
-  server: SvgServer,
-  'server-white': SvgServerWhite,
-  '3dviewer': Svg3D,
-  '3dviewer-white': Svg3DWhite,
-  debugging: SvgDebugging,
-  'debugging-white': SvgDebuggingWhite,
-  'dropdown-indicator': SvgDropdownIndicator,
-  'text-special-symbols': SvgTextSpecialSymbols,
-  chevron: SvgChevron,
-  'open-window-paste-icon': SvgOpenWindowPasteIcon,
-  'open-window-upload-icon': SvgOpenWindowUploadIcon,
-  bracket: SvgBracket,
-  error: SvgError,
-  'rap-left-link': SvgRapLeftLink,
-  'rap-middle-link': SvgRapMiddleLink,
-  'rap-right-link': SvgRapRightLink,
-  'arrows-left': SvgArrowsLeft,
-  'arrows-right': SvgArrowsRight,
-  sugar: SvgSugar,
-  base: SvgBase,
-  phosphate: SvgPhosphate,
-  preset: SvgPreset,
-  'edit-filled': SvgEditFilled,
-  'vertical-dots': SvgVerticalDots,
-  expand: SvgExpand,
-  'minimize-expansion': SvgMinimizeExpantion,
-  'explicit-hydrogens': SvgExplicitHydrogens,
-  'flex-layout-mode': SvgFlexLayoutMode,
-  'snake-layout-mode': SvgSnakeLayoutMode,
-  'sequence-layout-mode': SvgSequenceLayoutMode
-};
+  text: SvgText
+}, _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_iconNameToIcon, IMAGE_KEY, SvgAddImage), 'text-bold', SvgTextBold), 'text-italic', SvgTextItalic), 'text-subscript', SvgTextSubscript), 'text-superscript', SvgTextSuperscript), 'transform-flip-h', SvgTransformFlipH), 'transform-flip-v', SvgTransformFlipV), "undo", SvgUndo), 'zoom-in', SvgZoomIn), 'zoom-out', SvgZoomOut), _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_iconNameToIcon, 'zoom-reset', SvgZoomReset), 'shape-ellipse', SvgShapeEllipse), 'shape-rectangle', SvgShapeRectangle), 'shape-polyline', SvgShapePolyline), 'shape-line', SvgShapeLine), 'not-found', SvgNotFound), 'save-1', SvgSave1), 'open-1', SvgOpen1), "reset", SvgReset), "close", SvgClose), _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_iconNameToIcon, "general", SvgGeneral), 'general-white', SvgGeneralWhite), "stereo", SvgStereo), 'stereo-white', SvgStereoWhite), "atoms", SvgAtoms), 'atoms-white', SvgAtomsWhite), "bonds", SvgBonds), 'bonds-white', SvgBondsWhite), "server", SvgServer), 'server-white', SvgServerWhite), _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_iconNameToIcon, '3dviewer', Svg3D), '3dviewer-white', Svg3DWhite), "debugging", SvgDebugging), 'debugging-white', SvgDebuggingWhite), 'dropdown-indicator', SvgDropdownIndicator), 'text-special-symbols', SvgTextSpecialSymbols), "chevron", SvgChevron), 'open-window-paste-icon', SvgOpenWindowPasteIcon), 'open-window-upload-icon', SvgOpenWindowUploadIcon), "bracket", SvgBracket), _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_iconNameToIcon, "error", SvgError), 'rap-left-link', SvgRapLeftLink), 'rap-middle-link', SvgRapMiddleLink), 'rap-right-link', SvgRapRightLink), 'arrows-left', SvgArrowsLeft), 'arrows-right', SvgArrowsRight), "sugar", SvgSugar), "base", SvgBase), "phosphate", SvgPhosphate), "preset", SvgPreset), _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_iconNameToIcon, "nucleotide", SvgNucleotide), 'edit-filled', SvgEditFilled), 'vertical-dots', SvgVerticalDots), "expand", SvgExpand), 'minimize-expansion', SvgMinimizeExpantion), 'explicit-hydrogens', SvgExplicitHydrogens), 'flex-layout-mode', SvgFlexLayoutMode), 'snake-layout-mode', SvgSnakeLayoutMode), 'sequence-layout-mode', SvgSequenceLayoutMode), "questionMark", SvgQuestionMark));
 
 var getIconByName = function getIconByName(name) {
   return iconNameToIcon[name];
@@ -9748,12 +9764,12 @@ var StyledButton = styled.button({
 });
 
 var _excluded$x = ["children"];
-function ownKeys$1f(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1f(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1f(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1f(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1g(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1g(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1g(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1g(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Button = function Button(_ref) {
   var children = _ref.children,
     props = _objectWithoutProperties(_ref, _excluded$x);
-  return jsx(StyledButton, _objectSpread$1f(_objectSpread$1f({}, props), {}, {
+  return jsx(StyledButton, _objectSpread$1g(_objectSpread$1g({}, props), {}, {
     children: children
   }));
 };
@@ -9811,10 +9827,10 @@ var StyledInput$1 = styled.input({
   }
 });
 
-function ownKeys$1e(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1e(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1e(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1e(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1f(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1f(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1f(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1f(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Input$2 = function Input(props) {
-  return jsx(StyledInput$1, _objectSpread$1e({}, props));
+  return jsx(StyledInput$1, _objectSpread$1f({}, props));
 };
 
 var Container = styled.div({
@@ -9903,8 +9919,8 @@ var InfoModal$1 = function InfoModal(_ref) {
 var styles$g = {"button-common-styles":"Dialog-module_button-common-styles__Xehyp","scrollbar":"Dialog-module_scrollbar__L8hUr","dialog":"Dialog-module_dialog__hiRBI","hide":"Dialog-module_hide__bbkvB","header":"Dialog-module_header__8QGek","btnContainer":"Dialog-module_btnContainer__ulrFM","buttonTop":"Dialog-module_buttonTop__91ha8","closeButton":"Dialog-module_closeButton__XyaAE","footer":"Dialog-module_footer__PliV0","ok":"Dialog-module_ok__BUQ6q","cancel":"Dialog-module_cancel__8d83c","withDivider":"Dialog-module_withDivider__YBKiQ","body":"Dialog-module_body__EWh4H","withMargin":"Dialog-module_withMargin__-zVS4"};
 
 var _excluded$w = ["children", "title", "params", "result", "valid", "buttons", "headerContent", "footerContent", "className", "buttonsNameMap", "needMargin", "withDivider", "focusable"];
-function ownKeys$1d(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1d(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1d(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1d(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1e(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1e(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1e(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1e(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Dialog = function Dialog(props) {
   var children = props.children,
     title = props.title,
@@ -9959,7 +9975,7 @@ var Dialog = function Dialog(props) {
       event.stopPropagation();
     }
   };
-  return jsxs("div", _objectSpread$1d(_objectSpread$1d({
+  return jsxs("div", _objectSpread$1e(_objectSpread$1e({
     ref: dialogRef,
     role: "dialog",
     onSubmit: function onSubmit(event) {
@@ -10285,8 +10301,8 @@ function usePortalStyle(_ref) {
   return [portalStyle];
 }
 
-function ownKeys$1c(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1c(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1c(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1c(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1d(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1d(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1d(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1d(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var ToolbarMultiToolItem = function ToolbarMultiToolItem(props) {
   var id = props.id,
     options = props.options,
@@ -10360,7 +10376,7 @@ var ToolbarMultiToolItem = function ToolbarMultiToolItem(props) {
     ref: ref,
     className: classes$O.root,
     "data-testid": "".concat(dataTestId || iconName, "-in-toolbar"),
-    children: [jsx(ActionButton, _objectSpread$1c(_objectSpread$1c({}, actionButtonProps), {}, {
+    children: [jsx(ActionButton, _objectSpread$1d(_objectSpread$1d({}, actionButtonProps), {}, {
       className: className,
       name: iconName,
       action: config[currentId],
@@ -10466,8 +10482,8 @@ var TemplatesList = function TemplatesList(props) {
 var classes$N = {"button-common-styles":"BottomToolbar-module_button-common-styles__PbtE9","scrollbar":"BottomToolbar-module_scrollbar__i1f8P","group":"BottomToolbar-module_group__b-pGt","root":"BottomToolbar-module_root__kjkSm"};
 
 var _excluded$v = ["className"];
-function ownKeys$1b(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1b(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1b(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1b(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1c(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1c(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1c(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1c(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Group$1 = function Group(_ref) {
   var children = _ref.children,
     className = _ref.className;
@@ -10492,22 +10508,22 @@ var BottomToolbar = function BottomToolbar(props) {
         indigoVerification: indigoVerification,
         disableableButtons: disableableButtons,
         onAction: onAction
-      }), jsx(ToolbarGroupItem, _objectSpread$1b({
+      }), jsx(ToolbarGroupItem, _objectSpread$1c({
         id: "template-lib"
       }, rest))]
     })
   });
 };
 
-function ownKeys$1a(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$1a(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1a(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1a(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1b(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1b(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1b(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1b(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function openDialog(dispatch, dialogName, props) {
   return new Promise(function (resolve, reject) {
     dispatch({
       type: 'MODAL_OPEN',
       data: {
         name: dialogName,
-        prop: _objectSpread$1a(_objectSpread$1a({}, props), {}, {
+        prop: _objectSpread$1b(_objectSpread$1b({}, props), {}, {
           onResult: resolve,
           onCancel: reject
         })
@@ -10526,14 +10542,14 @@ function modalReducer() {
       return null;
     }
     var formState = formReducer(state.form, action);
-    return _objectSpread$1a(_objectSpread$1a({}, state), {}, {
+    return _objectSpread$1b(_objectSpread$1b({}, state), {}, {
       form: formState
     });
   }
   switch (type) {
     case 'MODAL_CLOSE':
       if (state !== null && state !== void 0 && state.parentModal) {
-        state.parentModal.prop = _objectSpread$1a(_objectSpread$1a(_objectSpread$1a({}, state.parentModal.prop), state.parentModal.form.result), {}, {
+        state.parentModal.prop = _objectSpread$1b(_objectSpread$1b(_objectSpread$1b({}, state.parentModal.prop), state.parentModal.form.result), {}, {
           isRestoredModal: true
         });
         return state.parentModal;
@@ -10551,8 +10567,8 @@ function modalReducer() {
   }
 }
 
-function ownKeys$19(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$19(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$19(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$19(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$1a(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$1a(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1a(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1a(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function selectTmpl(tmpl) {
   return {
     type: 'TMPL_SELECT',
@@ -10660,7 +10676,7 @@ function saveUserTmpl(struct) {
       var name = _ref.name,
         attach = _ref.attach;
       tmpl.struct.name = name.trim();
-      tmpl.props = _objectSpread$19(_objectSpread$19({}, attach), {}, {
+      tmpl.props = _objectSpread$1a(_objectSpread$1a({}, attach), {}, {
         group: 'User Templates'
       });
       var lib = getState().templates.lib.concat(tmpl);
@@ -10700,7 +10716,7 @@ function templatesReducer() {
   if (tmplActions.includes(action.type)) return Object.assign({}, state, action.data);
   if (attachActions.includes(action.type)) {
     var attach = Object.assign({}, state.attach, action.data);
-    return _objectSpread$19(_objectSpread$19({}, state), {}, {
+    return _objectSpread$1a(_objectSpread$1a({}, state), {}, {
       attach: attach
     });
   }
@@ -10709,7 +10725,7 @@ function templatesReducer() {
     var lib = currentState.lib.filter(function (value) {
       return value !== action.data.tmpl;
     });
-    return _objectSpread$19(_objectSpread$19({}, currentState), {}, {
+    return _objectSpread$1a(_objectSpread$1a({}, currentState), {}, {
       lib: lib
     });
   }
@@ -10771,8 +10787,8 @@ function abbreviationLookupReducer() {
   }
 }
 
-function ownKeys$18(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$18(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$18(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$18(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$19(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$19(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$19(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$19(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initialState$3 = {
   cursorPosition: {
     x: 0,
@@ -10797,7 +10813,7 @@ function commonReducer() {
   switch (action.type) {
     case COMMON_ACTIONS.COMMON_UPDATE_CURSOR_POSITION:
       {
-        return _objectSpread$18(_objectSpread$18({}, state), {}, {
+        return _objectSpread$19(_objectSpread$19({}, state), {}, {
           cursorPosition: {
             x: action.data.x,
             y: action.data.y
@@ -10810,8 +10826,8 @@ function commonReducer() {
 }
 
 var _excluded$u = ["type", "action"];
-function ownKeys$17(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$17(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$17(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$17(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$18(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$18(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$18(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$18(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function execute(activeTool, _ref) {
   var action = _ref.action,
     editor = _ref.editor,
@@ -10869,7 +10885,7 @@ function actionStateReducer () {
       }
     case 'ACTION':
       {
-        activeTool = execute(state && state.activeTool, _objectSpread$17(_objectSpread$17({}, params), {}, {
+        activeTool = execute(state && state.activeTool, _objectSpread$18(_objectSpread$18({}, params), {}, {
           action: action
         }));
         if (activeTool.tool === 'select') {
@@ -13458,8 +13474,8 @@ var errors = {
 	codes: codes_1
 };
 
-function ownKeys$16(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$16(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$16(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$16(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$17(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$17(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$17(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$17(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -13887,7 +13903,7 @@ var AssertionError = /*#__PURE__*/function (_Error, _inspect$custom) {
       // the minimum depth. Otherwise those values would be too verbose compared
       // to the actual error message which contains a combined view of these two
       // input values.
-      return inspect(this, _objectSpread$16(_objectSpread$16({}, ctx), {}, {
+      return inspect(this, _objectSpread$17(_objectSpread$17({}, ctx), {}, {
         customInspect: false,
         depth: 0
       }));
@@ -15473,6 +15489,9 @@ function hideTooltip(editor) {
 }
 function showTooltip(editor, infoPanelData) {
   hideTooltip(editor);
+  if ((infoPanelData === null || infoPanelData === void 0 ? void 0 : infoPanelData.sGroup) instanceof MonomerMicromolecule && infoPanelData.sGroup.monomer instanceof UnresolvedMonomer) {
+    return;
+  }
   showTooltipTimer = setTimeout(function () {
     editor.event.showInfo.dispatch(infoPanelData);
   }, TOOLTIP_DELAY);
@@ -15507,8 +15526,8 @@ function setFunctionalGroupsTooltip(_ref) {
   showTooltip(editor, infoPanelData);
 }
 
-function ownKeys$15(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$15(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$15(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$15(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$16(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$16(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$16(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$16(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initialState$2 = {
   lib: [],
   functionalGroupInfo: null,
@@ -15521,9 +15540,9 @@ var functionalGroupsReducer = function functionalGroupsReducer() {
     payload = _ref.payload;
   switch (type) {
     case 'FG_INIT':
-      return _objectSpread$15(_objectSpread$15({}, state), payload);
+      return _objectSpread$16(_objectSpread$16({}, state), payload);
     case 'FG_HIGHLIGHT':
-      return _objectSpread$15(_objectSpread$15({}, state), {}, {
+      return _objectSpread$16(_objectSpread$16({}, state), {}, {
         functionalGroupInfo: payload
       });
     default:
@@ -15581,8 +15600,8 @@ function initFGTemplates() {
 
 var templatesRawData = "acetic acid\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.5143    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7848   -0.2357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8133   -0.2357    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5143    2.0143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 acetic acid\nM  END\n>  <name>\nacetic acid\n\n>  <abbreviation>\nacetic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\nacetic anhydride\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    0.5143    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7848   -0.2357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8133   -0.2357    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5143    2.0143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1123    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1124    2.0143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.4114   -0.2357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\n  3  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  5  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 acetic anhydride\nM  END\n>  <name>\nacetic anhydride\n\n>  <abbreviation>\nacetic anhydride\n\n>  <group>\nSalts and Solvents\n\n$$$$\nformic acid\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.5143    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7848   -0.2357    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8133   -0.2357    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5143    2.0143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 formic acid\nM  END\n>  <name>\nformic acid\n\n>  <abbreviation>\nformic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethane sulphonic acid\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.5143    0.5143    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5143    2.0143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5143   -0.9857    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0143    0.5143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.9857    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  2  0  0  0  0\n  1  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 methane sulphonic acid\nM  END\n>  <name>\nmethane sulphonic acid\n\n>  <abbreviation>\nmethane sulphonic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\npropionic acid\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.5143    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7848   -0.2357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8133   -0.2357    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5143    2.0143    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.0838    0.5143    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\n  2  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 propionic acid\nM  END\n>  <name>\npropionic acid\n\n>  <abbreviation>\npropionic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,2-propanediol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n   -3.3587   -3.5057    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.0597   -2.7557    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.0596   -1.2558    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7606   -3.5057    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5384   -2.7557    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 1,2-propanediol\nM  END\n>  <name>\n1,2-propanediol\n\n>  <abbreviation>\n1,2-propanediol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,3-propanediol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n   15.0779   -8.5508    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   16.3769   -9.3007    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   17.6759   -8.5507    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   18.9750   -9.3007    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   20.2740   -8.5507    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 1,3-propanediol\nM  END\n>  <name>\n1,3-propanediol\n\n>  <abbreviation>\n1,3-propanediol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,4-butanediol\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n   -0.3480    1.2991    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9509    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2500    1.2991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5491    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8481    1.2991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1472    2.0491    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 1,4-butanediol\nM  END\n>  <name>\n1,4-butanediol\n\n>  <abbreviation>\n1,4-butanediol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1-butanol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.1714    0.3286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4705    1.0786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    1.0786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    0.3286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7257    1.0786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 1-butanol\nM  END\n>  <name>\n1-butanol\n\n>  <abbreviation>\n1-butanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1-propanol\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.1714    1.2286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7257    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 1-propanol\nM  END\n>  <name>\n1-propanol\n\n>  <abbreviation>\n1-propanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-butanol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.1714    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4705    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.1714    2.7286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 2-butanol\nM  END\n>  <name>\n2-butanol\n\n>  <abbreviation>\n2-butanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-ethylhexanol\n  -INDIGO-11302219142D\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n   10.7337    0.4167    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1355    0.4167    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.8365   -0.3333    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5375    0.4167    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1355    1.9167    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.4345   -0.3333    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2384   -0.3333    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.4345    2.6667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9394    0.4167    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  6  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  5  1  0  0  0  0\n  2  6  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  7  1  0  0  0  0\n  5  8  1  0  0  0  0\n  7  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 2-ethylhexanol\nM  END\n>  <name>\n2-ethylhexanol\n\n>  <abbreviation>\n2-ethylhexanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nisopropanol\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.1714    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4705    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.1714    2.7286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 2-propanol\nM  END\n>  <name>\nisopropanol\n\n>  <abbreviation>\n2-propanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-methoxyethanol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.1714    0.3286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4705    1.0786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    1.0786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    0.3286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7257    1.0786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 2-methoxyethanol\nM  END\n>  <name>\n2-methoxyethanol\n\n>  <abbreviation>\n2-methoxyethanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-pentanol\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n   -5.1971   -3.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8980   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.5991   -3.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.0009   -3.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3000   -1.2500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 2-pentanol\nM  END\n>  <name>\n2-pentanol\n\n>  <abbreviation>\n2-pentanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nbenzyl alcohol\n  -INDIGO-11302219142D\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990    2.5000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\n  1  7  1  0  0  0  0\n  7  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 benzyl alcohol\nM  END\n>  <name>\nbenzyl alcohol\n\n>  <abbreviation>\nbenzyl alcohol\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncyclohexanol\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    4.2990    2.0175    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2990    0.5175    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -0.2325    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981   -0.2325    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -1.7325    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981   -1.7325    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2990   -2.4825    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  4  6  1  0  0  0  0\n  5  7  1  0  0  0  0\n  6  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 cyclohexanol\nM  END\n>  <name>\ncyclohexanol\n\n>  <abbreviation>\ncyclohexanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethanol\n  -INDIGO-11302219142D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n    0.1714    1.2286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  3   1   2   3\nM  SMT   1 ethyl alcohol\nM  END\n>  <name>\nethanol\n\n>  <abbreviation>\nethyl alcohol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethylene glycol\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.1714    1.2286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7256    0.4786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 ethane-1,2-diol\nM  END\n>  <name>\nethylene glycol\n\n>  <abbreviation>\nethane-1,2-diol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nglycerol\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    0.9915    2.6580    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2906    1.9080    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5896    2.6580    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5897    4.1580    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8887    1.9080    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1878    2.6580    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  5  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 glycerol\nM  END\n>  <name>\nglycerol\n\n>  <abbreviation>\nglycerol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nisoamyl alcohol\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    0.1714    0.3286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4705    1.0786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    1.0786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    0.3286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7257    1.0786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266   -1.1714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 isoamyl alcohol\nM  END\n>  <name>\nisoamyl alcohol\n\n>  <abbreviation>\nisoamyl alcohol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nisobutanol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.1714    1.2286    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1276    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    1.2286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7257    0.4786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4266    2.7286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  3  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 isobutanol\nM  END\n>  <name>\nisobutanol\n\n>  <abbreviation>\nisobutanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethanol\n  -INDIGO-11302219142D\n\n  2  1  0  0  0  0  0  0  0  0999 V2000\n    0.0709    0.8536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5710    0.8536    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  2   1   2\nM  SMT   1 methyl alcohol\nM  END\n>  <name>\nmethanol\n\n>  <abbreviation>\nmethyl alcohol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nt-butanol\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.0709    0.8536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5710    0.8536    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.4291    0.8536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0709    2.3536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0709   -0.6464    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 t-butanol\nM  END\n>  <name>\nt-butanol\n\n>  <abbreviation>\nt-butanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\nwater\n  -INDIGO-11302219142D\n\n  1  0  0  0  0  0  0  0  0  0999 V2000\n    0.7500    2.9500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  1   1\nM  SMT   1 water\nM  END\n>  <name>\nwater\n\n>  <abbreviation>\nwater\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncarbon dioxide\n  -INDIGO-11302219142D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n   -1.2000    0.8500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.7000    0.8500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3000    0.8500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  3   1   2   3\nM  SMT   1 carbon dioxide\nM  END\n>  <name>\ncarbon dioxide\n\n>  <abbreviation>\ncarbon dioxide\n\n>  <group>\nSalts and Solvents\n\n$$$$\nbenzene\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 benzene\nM  END\n>  <name>\nbenzene\n\n>  <abbreviation>\nbenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncumene\n  -INDIGO-11302219142D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    4.2989    1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2989    0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981    2.6250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    2.6250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981   -0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981   -1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2989   -2.6250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  2  5  2  0  0  0  0\n  2  6  1  0  0  0  0\n  5  7  1  0  0  0  0\n  6  8  2  0  0  0  0\n  7  9  2  0  0  0  0\n  8  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 cumene\nM  END\n>  <name>\ncumene\n\n>  <abbreviation>\ncumene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmesitylene\n  -INDIGO-11302219142D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    1.2991    3.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5980    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5980    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8971   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2991   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  2  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  7  9  2  0  0  0  0\n  2  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 mesitylene\nM  END\n>  <name>\nmesitylene\n\n>  <abbreviation>\nmesitylene\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntoluene\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\n  1  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 toluene\nM  END\n>  <name>\ntoluene\n\n>  <abbreviation>\ntoluene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nn,n-dimethylaniline\n  -INDIGO-11302219142D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    4.2989    1.8750    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2989    0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981   -0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981    2.6250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    2.6250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981   -1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2989   -2.6250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  5  1  0  0  0  0\n  1  6  1  0  0  0  0\n  2  3  2  0  0  0  0\n  2  4  1  0  0  0  0\n  3  7  1  0  0  0  0\n  4  8  2  0  0  0  0\n  7  9  2  0  0  0  0\n  8  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 N,N-dimethylaniline\nM  END\n>  <name>\nn,n-dimethylaniline\n\n>  <abbreviation>\nN,N-dimethylaniline\n\n>  <group>\nSalts and Solvents\n\n$$$$\npyridine\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 pyridine\nM  END\n>  <name>\npyridine\n\n>  <abbreviation>\npyridine\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntriethylamine\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    1.5000    0.0000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2010   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7990    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0980    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.0980    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  2  5  1  0  0  0  0\n  4  6  1  0  0  0  0\n  3  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 triethylamine\nM  END\n>  <name>\ntriethylamine\n\n>  <abbreviation>\ntriethylamine\n\n>  <group>\nSalts and Solvents\n\n$$$$\nacetonitrile\n  -INDIGO-11302219142D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n    1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    0.0000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  3  0  0  0  0\n  1  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  3   1   2   3\nM  SMT   1 acetonitrile\nM  END\n>  <name>\nacetonitrile\n\n>  <abbreviation>\nacetonitrile\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndimethyl acetamide\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    2.7990    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7990    1.5000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0980   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000   -0.7500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000   -2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2009    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 dimethyl acetamide\nM  END\n>  <name>\ndimethyl acetamide\n\n>  <abbreviation>\ndimethyl acetamide\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndimethyl formamide\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    2.7990    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7990    1.5000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0980   -0.7500    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000   -0.7500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000   -2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2009    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 DMF\nM  END\n>  <name>\ndimethyl formamide\n\n>  <abbreviation>\nDMF\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndimethyl sulfoxide\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    1.5000    0.0000    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2010   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    1.5000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 DMSO\nM  END\n>  <name>\ndimethyl sulfoxide\n\n>  <abbreviation>\nDMSO\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndimethylpropylene urea\n  -INDIGO-11302219142D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    3.4378    2.0544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1388    1.3044    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1387   -0.1955    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8397   -0.9455    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4593   -0.1956    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4593    1.3044    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.7584    2.0545    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8397    2.0544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8397    3.5545    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  6  8  1  0  0  0  0\n  2  8  1  0  0  0  0\n  8  9  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 dimethylpropylene urea\nM  END\n>  <name>\ndimethylpropylene urea\n\n>  <abbreviation>\ndimethylpropylene urea\n\n>  <group>\nSalts and Solvents\n\n$$$$\nformamide\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.2485   -6.0342    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5476   -5.2841    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5476   -3.7842    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8467   -6.0341    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  2  4  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 formamide\nM  END\n>  <name>\nformamide\n\n>  <abbreviation>\nformamide\n\n>  <group>\nSalts and Solvents\n\n$$$$\nn-methyl-2-pyrrolidone\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    0.7500    2.3100    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.9600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7500    3.8100    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3860    1.8953    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  3  2  1  0  0  0  0\n  2  1  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  3  1  0  0  0  0\n  1  6  1  0  0  0  0\n  4  7  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 N-methyl-2-pyrrolidone\nM  END\n>  <name>\nn-methyl-2-pyrrolidone\n\n>  <abbreviation>\nN-methyl-2-pyrrolidone\n\n>  <group>\nSalts and Solvents\n\n$$$$\nn-methylformamide\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.1009    0.5500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4000    1.3000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4000    2.8000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6990    0.5500    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1981    1.3000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  2  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 N-methylformamide\nM  END\n>  <name>\nn-methylformamide\n\n>  <abbreviation>\nN-methylformamide\n\n>  <group>\nSalts and Solvents\n\n$$$$\npropane nitrile\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    6.8971    0.7500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5981    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  4  3  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 propane nitrile\nM  END\n>  <name>\npropane nitrile\n\n>  <abbreviation>\npropane nitrile\n\n>  <group>\nSalts and Solvents\n\n$$$$\nsulfolane\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    0.7500    2.3100    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.9600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    3.6090    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.0673    3.5678    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  3  2  1  0  0  0  0\n  2  1  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  3  1  0  0  0  0\n  1  6  2  0  0  0  0\n  1  7  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 sulfolane\nM  END\n>  <name>\nsulfolane\n\n>  <abbreviation>\nsulfolane\n\n>  <group>\nSalts and Solvents\n\n$$$$\namyl acetate\n  -INDIGO-11302219142D\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n    5.8307    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.1297   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5316   -0.3786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.8307    1.8714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2326    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.9335   -0.3785    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.6345    0.3715    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.6646   -0.3785    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9636    0.3715    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\n  3  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 amyl acetate\nM  END\n>  <name>\namyl acetate\n\n>  <abbreviation>\namyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nbutyl acetate\n  -INDIGO-11302219142D\n\n  8  7  0  0  0  0  0  0  0  0999 V2000\n    7.5466    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    8.8456    2.2500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.9486    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.6495    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.2476    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3505    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.8456    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   10.1446    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  5  1  0  0  0  0\n  1  7  1  0  0  0  0\n  2  7  2  0  0  0  0\n  3  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  4  6  1  0  0  0  0\n  7  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 butyl acetate\nM  END\n>  <name>\nbutyl acetate\n\n>  <abbreviation>\nbutyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndimethyl carbonate\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    0.5429   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5429    1.1571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7562   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8419   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.0552   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1409   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 dimethyl carbonate\nM  END\n>  <name>\ndimethyl carbonate\n\n>  <abbreviation>\ndimethyl carbonate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethyl acetate\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    2.7079   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7079    1.1571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0070   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4089   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.1099   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.1891   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 ethyl acetate\nM  END\n>  <name>\nethyl acetate\n\n>  <abbreviation>\nethyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethyl formate\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    5.8087   -2.6404    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.8087   -1.1506    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5094   -3.4018    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2098   -2.6486    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.9103   -3.4018    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.1078   -3.3904    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  3  1  1  0  0  0  0\n  4  3  1  0  0  0  0\n  5  4  1  0  0  0  0\n  1  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 ethyl formate\nM  END\n>  <name>\nethyl formate\n\n>  <abbreviation>\nethyl formate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethyl lactate\n  -INDIGO-11302219142D\n\n  8  7  0  0  0  0  0  0  0  0999 V2000\n   -0.3480    1.2991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9509    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2500    1.2991    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5491    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5491    3.5491    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8480    1.2991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1471    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8480   -0.2009    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  4  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  6  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 ethyl lactate\nM  END\n>  <name>\nethyl lactate\n\n>  <abbreviation>\nethyl lactate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethyl propionate\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n   -0.3480    1.2991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9509    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2500    1.2991    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5491    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5491    3.5491    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8480    1.2991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1471    2.0491    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  4  6  1  0  0  0  0\n  6  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 ethyl propionate\nM  END\n>  <name>\nethyl propionate\n\n>  <abbreviation>\nethyl propionate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethylene carbonate\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    1.0323    3.5259    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0323    2.0259    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2458    1.1443    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7823   -0.2824    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2824   -0.2824    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.1813    1.1443    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  2  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 ethylene carbonate\nM  END\n>  <name>\nethylene carbonate\n\n>  <abbreviation>\nethylene carbonate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nisobutyl acetate\n  -INDIGO-11302219142D\n\n  8  7  0  0  0  0  0  0  0  0999 V2000\n    4.4399   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.4399    1.1571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.7390   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1409   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8419   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5429   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5429   -2.5929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7561   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  6  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 isobutyl acetate\nM  END\n>  <name>\nisobutyl acetate\n\n>  <abbreviation>\nisobutyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nisopropyl acetate\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    3.1409   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1409    1.1571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.4400   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8419   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5429   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7561   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5429    1.1571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 isopropyl acetate\nM  END\n>  <name>\nisopropyl acetate\n\n>  <abbreviation>\nisopropyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethyl acetate\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.5429   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5429    1.1571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7562   -1.0929    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8419   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1409   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 methyl acetate\nM  END\n>  <name>\nmethyl acetate\n\n>  <abbreviation>\nmethyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethyl formate\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    1.5821   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5821    1.1571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8812   -1.0929    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2831   -1.0929    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.0159   -0.3429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 methyl formate\nM  END\n>  <name>\nmethyl formate\n\n>  <abbreviation>\nmethyl formate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethyl lactate\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    7.6971   -2.1071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3980   -2.8571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0991   -2.1071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0991   -0.6071    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8000   -2.8571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5009   -2.1071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8000   -4.3571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  3  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 methyl lactate\nM  END\n>  <name>\nmethyl lactate\n\n>  <abbreviation>\nmethyl lactate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nn-octylacetate\n  -INDIGO-11302219142D\n\n 12 11  0  0  0  0  0  0  0  0999 V2000\n    7.7009    4.9462    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.0000    5.6962    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   10.2991    4.9462    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.5980    5.6962    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   12.8971    4.9462    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   14.1962    5.6962    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   15.4953    4.9462    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   16.7942    5.6962    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   18.0933    4.9462    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   19.3924    5.6962    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   20.6913    4.9462    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   19.3924    7.1962    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9 10  1  0  0  0  0\n 10 11  1  0  0  0  0\n 10 12  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  4   9  10  11  12\nM  SMT   1 n-octylacetate\nM  END\n>  <name>\nn-octylacetate\n\n>  <abbreviation>\nn-octylacetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\npropyl acetate\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    6.3403   -0.1607    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    7.6395    2.0893    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7423   -0.1607    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0413    0.5893    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.4433    0.5893    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.6395    0.5893    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.9385   -0.1607    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  4  1  0  0  0  0\n  1  6  1  0  0  0  0\n  2  6  2  0  0  0  0\n  3  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  6  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 propyl acetate\nM  END\n>  <name>\npropyl acetate\n\n>  <abbreviation>\npropyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\npropylene carbonate\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    0.5661   -1.8745    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5661   -0.3746    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.6474    0.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.1839    1.9338    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3160    1.9338    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1978    3.1472    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7797    0.5071    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  5  7  1  0  0  0  0\n  2  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 propylene carbonate\nM  END\n>  <name>\npropylene carbonate\n\n>  <abbreviation>\npropylene carbonate\n\n>  <group>\nSalts and Solvents\n\n$$$$\nt-butyl acetate\n  -INDIGO-11302219142D\n\n  8  7  0  0  0  0  0  0  0  0999 V2000\n    6.0125   -7.4927    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.7134   -6.7427    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.7134   -5.2428    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.4144   -7.4928    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1153   -6.7428    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8163   -5.9928    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3653   -8.0418    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8653   -5.4437    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  2  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\n  5  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 t-butyl acetate\nM  END\n>  <name>\nt-butyl acetate\n\n>  <abbreviation>\nt-butyl acetate\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,2-dimethoxyethane\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n   -0.0857    0.1714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2133   -0.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5124    0.1714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3848   -0.5786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8114   -0.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.6838    0.1714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 1,2-dimethoxyethane\nM  END\n>  <name>\n1,2-dimethoxyethane\n\n>  <abbreviation>\n1,2-dimethoxyethane\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,4-dioxane\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    3.9490   -2.3000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6500   -3.0500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6500   -4.5500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9490   -5.3000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2481   -4.5500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2481   -3.0500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  2  1  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  1  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 1,4-dioxane\nM  END\n>  <name>\n1,4-dioxane\n\n>  <abbreviation>\n1,4-dioxane\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-methyl tetrahydrofuran\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    0.7500    2.3100    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.9600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3860    1.8953    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  3  2  1  0  0  0  0\n  2  1  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  3  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 2-methyl tetrahydrofuran\nM  END\n>  <name>\n2-methyl tetrahydrofuran\n\n>  <abbreviation>\n2-methyl tetrahydrofuran\n\n>  <group>\nSalts and Solvents\n\n$$$$\nanisole\n  -INDIGO-11302219142D\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990    2.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\n  1  7  1  0  0  0  0\n  7  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 anisole\nM  END\n>  <name>\nanisole\n\n>  <abbreviation>\nanisole\n\n>  <group>\nSalts and Solvents\n\n$$$$\nbutyl carbitol\n  -INDIGO-11302219142D\n\n 11 10  0  0  0  0  0  0  0  0999 V2000\n   -0.2227   -3.0342    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0742   -3.7829    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3750   -3.0387    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.6719   -3.7875    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.9782   -3.0336    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    6.2751   -3.7823    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.5758   -3.0382    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.8728   -3.7870    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   10.1792   -3.0330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.4761   -3.7817    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   12.7768   -3.0376    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9 10  1  0  0  0  0\n 10 11  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  3   9  10  11\nM  SMT   1 butyl carbitol\nM  END\n>  <name>\nbutyl carbitol\n\n>  <abbreviation>\nbutyl carbitol\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncyclopentyl methyl ether\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    6.1000    1.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010    1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990    1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5053    1.7481    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3855    0.7467    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.4886   -0.4632    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9950   -0.6239    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  5  4  1  0  0  0  0\n  4  2  1  0  0  0  0\n  2  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 cyclopentyl methyl ether\nM  END\n>  <name>\ncyclopentyl methyl ether\n\n>  <abbreviation>\ncyclopentyl methyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndibutyl ether\n  -INDIGO-11302219142D\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n    5.4509    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.7500    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.0491    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.3480    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   10.6470    4.6471    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   11.9461    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   13.2452    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   14.5441    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   15.8432    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 dibutyl ether\nM  END\n>  <name>\ndibutyl ether\n\n>  <abbreviation>\ndibutyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndiethyl ether\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    6.1000    1.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990    2.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010    2.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5019    1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.6980    1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  2  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 ether\nM  END\n>  <name>\ndiethyl ether\n\n>  <abbreviation>\nether\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndiethylene glycol\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    7.7875   -1.4835    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4896   -2.2328    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1892   -1.4790    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8854   -2.2317    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5884   -1.4840    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2906   -2.2333    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    9.0845   -2.2313    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  7  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 diethylene glycol\nM  END\n>  <name>\ndiethylene glycol\n\n>  <abbreviation>\ndiethylene glycol\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndiglyme\n  -INDIGO-11302219142D\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n   -0.0857    0.1714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2133   -0.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5124    0.1714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3848   -0.5786    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8114   -0.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.6838    0.1714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.9828   -0.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -5.2818    0.1714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -6.5809   -0.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  4  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 diglyme\nM  END\n>  <name>\ndiethylene glycol dimethyl ether\n\n>  <abbreviation>\ndiglyme\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndiisopropyl ether\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    5.5971    2.8500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2980    3.6000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2980    5.1000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9991    2.8500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7000    3.6000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.4009    2.8500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7000    5.1000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 diisopropyl ether\nM  END\n>  <name>\ndiisopropyl ether\n\n>  <abbreviation>\ndiisopropyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndimethyl ether\n  -INDIGO-11302219142D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n    4.2989   -0.3750    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5980    0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9999    0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  3   1   2   3\nM  SMT   1 dimethyl ether\nM  END\n>  <name>\ndimethyl ether\n\n>  <abbreviation>\ndimethyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndiphenyl ether\n  -INDIGO-11302219142D\n\n 13 14  0  0  0  0  0  0  0  0999 V2000\n    7.1190    1.0305    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.8200    0.2805    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.8200   -1.2196    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5210   -1.9696    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2219   -1.2195    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2219    0.2805    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5209    1.0305    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.4181    0.2804    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.7171    1.0304    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.0161    0.2805    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.0161   -1.2194    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.7170   -1.9694    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.4180   -1.2195    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  2  0  0  0  0\n  2  7  1  0  0  0  0\n  1  8  1  0  0  0  0\n  8  9  2  0  0  0  0\n  9 10  1  0  0  0  0\n 10 11  2  0  0  0  0\n 11 12  1  0  0  0  0\n 12 13  2  0  0  0  0\n  8 13  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  5   9  10  11  12  13\nM  SMT   1 diphenyl ether\nM  END\n>  <name>\ndiphenyl ether\n\n>  <abbreviation>\ndiphenyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\nethoxybenzene\n  -INDIGO-11302219142D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    0.0000    6.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    4.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991    3.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5980    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5980    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  2  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  2  0  0  0  0\n  4  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 ethoxybenzene\nM  END\n>  <name>\nethoxybenzene\n\n>  <abbreviation>\nethoxybenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethyl t-butyl ether\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    6.1000    1.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010    1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990    1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5019    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0510    2.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5510   -0.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  0  0  0  0\n  2  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 methyl t-butyl ether\nM  END\n>  <name>\nmethyl t-butyl ether\n\n>  <abbreviation>\nmethyl t-butyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\nt-amyl methyl ether\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    6.8972    0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8482    1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3482   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1962    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  7  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  0  0  0  0\n  3  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 t-amyl methyl ether\nM  END\n>  <name>\nt-amyl methyl ether\n\n>  <abbreviation>\nt-amyl methyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\nt-butylethyl ether\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    2.3688   -7.1130    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0698   -7.8630    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.2293   -7.1129    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5283   -7.8629    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.8274   -8.6129    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.2783   -6.5639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7783   -9.1620    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\n  4  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 t-butylethyl ether\nM  END\n>  <name>\nt-butylethyl ether\n\n>  <abbreviation>\nt-butylethyl ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntetrahydrofuran\n  -INDIGO-11302219142D\n\n  5  5  0  0  0  0  0  0  0  0999 V2000\n    0.7500    2.3100    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.9600    1.4300    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  3  2  1  0  0  0  0\n  2  1  1  0  0  0  0\n  1  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 THF\nM  END\n>  <name>\ntetrahydrofuran\n\n>  <abbreviation>\nTHF\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntriethylene glycol\n  -INDIGO-11302219142D\n\n 10  9  0  0  0  0  0  0  0  0999 V2000\n    4.1520    3.8971    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.4509    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.7500    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.0491    4.6471    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    9.3480    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   10.6471    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.9462    3.8971    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   13.2453    4.6471    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   14.5442    3.8971    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   15.8433    4.6471    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9 10  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  2   9  10\nM  SMT   1 triethylene glycol\nM  END\n>  <name>\ntriethylene glycol\n\n>  <abbreviation>\ntriethylene glycol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,2,4-trichlorobenzene\n  -INDIGO-11302219142D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    2.2506   -3.8983    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9991   -2.5989    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2506   -1.2994    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7485   -1.2994    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -2.5989    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7485   -3.8983    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -5.1978    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    2.9991    0.0000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  6  2  0  0  0  0\n  2  3  2  0  0  0  0\n  3  4  1  0  0  0  0\n  3  9  1  0  0  0  0\n  4  5  2  0  0  0  0\n  4  8  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 1,2,4-trichlorobenzene\nM  END\n>  <name>\n1,2,4-trichlorobenzene\n\n>  <abbreviation>\n1,2,4-trichlorobenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,2-dichlorobenzene\n  -INDIGO-11302219142D\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n    0.9558   -0.8403    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.4581   -0.8408    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2048    0.4582    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.4555    1.7560    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9571    1.7589    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2065    0.4576    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2078    3.0567    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    3.2060    3.0573    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  6  2  0  0  0  0\n  2  3  2  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  4  8  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 1,2-dichlorobenzene\nM  END\n>  <name>\n1,2-dichlorobenzene\n\n>  <abbreviation>\n1,2-dichlorobenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,2-dichloroethane\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n   -0.2571    0.8286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0419    1.5786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3409    0.8286    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5562    1.5786    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  1  4  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 DCE\nM  END\n>  <name>\n1,2-dichloroethane\n\n>  <abbreviation>\nDCE\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2,2,2-trifluoroethanol\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    2.3661   -2.2500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0670   -1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0670    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0670    1.5000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4330    0.0000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5670    0.0000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  3  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 2,2,2-trifluoroethanol\nM  END\n>  <name>\n2,2,2-trifluoroethanol\n\n>  <abbreviation>\n2,2,2-trifluoroethanol\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2,3,4-trifluorotoluene\n  -INDIGO-11302219142D\n\n 10 10  0  0  0  0  0  0  0  0999 V2000\n    4.0898    1.7173    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0899    1.7173    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5899   -0.8808    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0898   -0.8807    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8398    0.4183    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8399   -2.1798    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3399    0.4182    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5898   -0.8807    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3399   -2.1798    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0899   -0.8808    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  5  1  0  0  0  0\n  2  7  1  0  0  0  0\n  3 10  1  0  0  0  0\n  4  5  2  0  0  0  0\n  4  6  1  0  0  0  0\n  4  8  1  0  0  0  0\n  5  7  1  0  0  0  0\n  6  9  2  0  0  0  0\n  7 10  2  0  0  0  0\n  9 10  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  2   9  10\nM  SMT   1 2,3,4-trifluorotoluene\nM  END\n>  <name>\n2,3,4-trifluorotoluene\n\n>  <abbreviation>\n2,3,4-trifluorotoluene\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncarbon tetrachloride\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -1.2500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    7.6000    0.2500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    4.6000    0.2500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 carbon tetrachloride\nM  END\n>  <name>\ncarbon tetrachloride\n\n>  <abbreviation>\ncarbon tetrachloride\n\n>  <group>\nSalts and Solvents\n\n$$$$\nchloroacetic acid\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    9.0626   -7.0246    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.0626   -5.5268    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   10.3632   -7.7759    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4658   -7.0246    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    7.7666   -7.7759    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  3  1  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  1  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 chloroacetic acid\nM  END\n>  <name>\nchloroacetic acid\n\n>  <abbreviation>\nchloroacetic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\nchlorobenzene\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\n  1  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 chlorobenzene\nM  END\n>  <name>\nchlorobenzene\n\n>  <abbreviation>\nchlorobenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nchloroform\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -1.2500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    7.6000    0.2500    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    4.6000    0.2500    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 chloroform\nM  END\n>  <name>\nchloroform\n\n>  <abbreviation>\nchloroform\n\n>  <group>\nSalts and Solvents\n\n$$$$\ndichloromethane\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    6.8500    1.5490    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    5.3500    1.5490    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  1  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 DCM\nM  END\n>  <name>\ndichloromethane\n\n>  <abbreviation>\nDCM\n\n>  <group>\nSalts and Solvents\n\n$$$$\nfluorobenzene\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    1.2991    3.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5980    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5980    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2991   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  2  0  0  0  0\n  2  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 fluorobenzene\nM  END\n>  <name>\nfluorobenzene\n\n>  <abbreviation>\nfluorobenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nperfluorocyclic ether\n  -INDIGO-11302219142D\n\n 25 25  0  0  0  0  0  0  0  0999 V2000\n   -1.9038   -6.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9038   -4.5746    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4038   -4.5746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9038   -3.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4038   -4.5746    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4038   -6.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4038   -3.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0962   -4.5746    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0962   -6.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0962   -3.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5962   -4.5746    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5962   -6.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5962   -3.0746    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0962   -4.5746    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9395   -6.0662    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9395   -3.0827    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.3099   -2.4726    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5598   -1.1736    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    6.5233   -1.5909    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3135   -3.5873    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3173   -2.4726    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.5271   -4.4689    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5635   -4.8864    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.7677   -5.7808    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.4224   -6.3797    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\n  5  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  8 10  1  0  0  0  0\n  8 11  1  0  0  0  0\n 11 12  1  0  0  0  0\n 11 13  1  0  0  0  0\n 11 14  1  0  0  0  0\n 14 15  1  0  0  0  0\n 14 16  1  0  0  0  0\n 16 17  1  0  0  0  0\n 17 18  1  0  0  0  0\n 17 19  1  0  0  0  0\n 17 20  1  0  0  0  0\n 20 21  1  0  0  0  0\n 20 22  1  0  0  0  0\n 20 23  1  0  0  0  0\n 14 23  1  0  0  0  0\n 23 24  1  0  0  0  0\n 23 25  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  8   9  10  11  12  13  14  15  16\nM  SAL   1  8  17  18  19  20  21  22  23  24\nM  SAL   1  1  25\nM  SMT   1 perfluorocyclic ether\nM  END\n>  <name>\nperfluorocyclic ether\n\n>  <abbreviation>\nperfluorocyclic ether\n\n>  <group>\nSalts and Solvents\n\n$$$$\nperfluorocyclohexane\n  -INDIGO-11302219142D\n\n 18 18  0  0  0  0  0  0  0  0999 V2000\n    7.8482    2.0490    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5982    0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    6.5491    2.7990    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0490    2.7990    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5982   -0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.8482   -2.0490    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7500    2.0490    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0490   -2.7990    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    6.5491   -2.7990    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7500   -2.0490    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0982    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.7991    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0982   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5000    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.7991   -1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.5000   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1 13  1  0  0  0  0\n  2 13  1  0  0  0  0\n  3 14  1  0  0  0  0\n  4 14  1  0  0  0  0\n  5 15  1  0  0  0  0\n  6 15  1  0  0  0  0\n  7 16  1  0  0  0  0\n  8 16  1  0  0  0  0\n  9 17  1  0  0  0  0\n 10 17  1  0  0  0  0\n 11 18  1  0  0  0  0\n 12 18  1  0  0  0  0\n 13 14  1  0  0  0  0\n 13 15  1  0  0  0  0\n 14 16  1  0  0  0  0\n 15 17  1  0  0  0  0\n 16 18  1  0  0  0  0\n 17 18  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  8   9  10  11  12  13  14  15  16\nM  SAL   1  2  17  18\nM  SMT   1 perfluorocyclohexane\nM  END\n>  <name>\nperfluorocyclohexane\n\n>  <abbreviation>\nperfluorocyclohexane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nperfluorohexane\n  -INDIGO-11302219142D\n\n 20 19  0  0  0  0  0  0  0  0999 V2000\n    6.1472    0.9240    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.6472   -1.6740    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.9463   -0.9240    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.4462    1.6740    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3482   -2.4240    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8482    0.1740    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.7453    2.4240    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   10.2453   -0.1740    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0491   -3.1740    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5490   -0.5760    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -2.6250    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   10.0444    3.1740    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   11.5444    0.5760    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   12.0935    2.6250    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    6.8972   -0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1963    0.3750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982   -1.1250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.4953    1.1250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2991   -1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   10.7944    1.8750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1 15  1  0  0  0  0\n  2 15  1  0  0  0  0\n  3 16  1  0  0  0  0\n  4 16  1  0  0  0  0\n  5 17  1  0  0  0  0\n  6 17  1  0  0  0  0\n  7 18  1  0  0  0  0\n  8 18  1  0  0  0  0\n  9 19  1  0  0  0  0\n 10 19  1  0  0  0  0\n 11 19  1  0  0  0  0\n 12 20  1  0  0  0  0\n 13 20  1  0  0  0  0\n 14 20  1  0  0  0  0\n 15 16  1  0  0  0  0\n 15 17  1  0  0  0  0\n 16 18  1  0  0  0  0\n 17 19  1  0  0  0  0\n 18 20  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  8   9  10  11  12  13  14  15  16\nM  SAL   1  4  17  18  19  20\nM  SMT   1 perfluorohexane\nM  END\n>  <name>\nperfluorohexane\n\n>  <abbreviation>\nperfluorohexane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nperfluorotoluene\n  -INDIGO-11302219142D\n\n 15 15  0  0  0  0  0  0  0  0999 V2000\n    3.0000    0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1962    0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982    3.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0982    2.2500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0982    2.2500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1962   -2.2500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -2.2500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982   -3.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2990    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.8972    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.8972   -1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2990   -1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5982   -2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1 10  1  0  0  0  0\n  2 11  1  0  0  0  0\n  3 12  1  0  0  0  0\n  4 12  1  0  0  0  0\n  5 12  1  0  0  0  0\n  6 13  1  0  0  0  0\n  7 14  1  0  0  0  0\n  8 15  1  0  0  0  0\n  9 10  2  0  0  0  0\n  9 11  1  0  0  0  0\n  9 12  1  0  0  0  0\n 10 14  1  0  0  0  0\n 11 13  2  0  0  0  0\n 13 15  1  0  0  0  0\n 14 15  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  7   9  10  11  12  13  14  15\nM  SMT   1 perfluorotoluene\nM  END\n>  <name>\nperfluorotoluene\n\n>  <abbreviation>\nperfluorotoluene\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntrichloroacetic acid\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    4.3154   -3.6247    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.6336   -2.8642    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.6336   -1.3688    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0543   -2.8010    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    3.1051   -4.3218    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    4.3090   -5.1835    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    6.9579   -3.6120    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0\n  3  2  2  0  0  0  0\n  4  1  1  0  0  0  0\n  5  1  1  0  0  0  0\n  6  1  1  0  0  0  0\n  7  2  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 trichloroacetic acid\nM  END\n>  <name>\ntrichloroacetic acid\n\n>  <abbreviation>\ntrichloroacetic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntrichloroacetonitrile\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    4.5000    0.0000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000    1.5000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    3.0000   -1.5000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  0  0  0  0\n  5  6  3  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 trichloroacetonitrile\nM  END\n>  <name>\ntrichloroacetonitrile\n\n>  <abbreviation>\ntrichloroacetonitrile\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntrifluoroacetic acid\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    1.0500   -4.9991    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3000   -3.7000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0500   -2.4009    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2000   -3.7000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.7000   -3.7000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2000   -2.2000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2000   -5.2000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  2  0  0  0  0\n  2  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\n  4  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 trifluoroacetic acid\nM  END\n>  <name>\ntrifluoroacetic acid\n\n>  <abbreviation>\ntrifluoroacetic acid\n\n>  <group>\nSalts and Solvents\n\n$$$$\ntrifluoromethylbenzene\n  -INDIGO-11302219142D\n\n 10 10  0  0  0  0  0  0  0  0999 V2000\n    6.1000    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8010   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000   -2.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.3990   -2.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    1.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1000    3.2500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    4.6000    1.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    7.6000    1.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  2  0  0  0  0\n  2  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  3  1  0  0  0  0\n  1  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  7  9  1  0  0  0  0\n  7 10  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  2   9  10\nM  SMT   1 trifluoromethylbenzene\nM  END\n>  <name>\ntrifluoromethylbenzene\n\n>  <abbreviation>\ntrifluoromethylbenzene\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-methylpentane\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    0.5471   -1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7520   -0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.0509   -1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.3500   -0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.6491   -1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.3500    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 2-methylpentane\nM  END\n>  <name>\n2-methylpentane\n\n>  <abbreviation>\n2-methylpentane\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncis-decalin\n  -INDIGO-11302219142D\n\n 12 13  0  0  1  0  0  0  0  0999 V2000\n    2.6130   -0.7481    0.0000 C   0  0  2  0  0  0  0  0  0  0  0  0\n    2.6130   -2.2234    0.0000 C   0  0  1  0  0  0  0  0  0  0  0  0\n    1.3195   -3.0026    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3195    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8754    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8754   -2.9714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -0.7481    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1948   -0.7481    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1948   -2.2234    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -2.2234    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5583    0.8018    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6130   -3.6988    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  4  1  0  0  0  0\n  1  5  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  6  1  0  0  0  0\n  3 10  1  0  0  0  0\n  4  7  1  0  0  0  0\n  5  8  1  0  0  0  0\n  6  9  1  0  0  0  0\n  7 10  1  0  0  0  0\n  8  9  1  0  0  0  0\n  1 11  1  1  0  0  0\n  2 12  1  1  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  4   9  10  11  12\nM  SMT   1 cis-decalin\nM  END\n>  <name>\ncis-decalin\n\n>  <abbreviation>\ncis-decalin\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncyclohexane\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    3.9490   -2.3000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6500   -3.0500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6500   -4.5500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9490   -5.3000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2481   -4.5500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2481   -3.0500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  2  1  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  1  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 cyclohexane\nM  END\n>  <name>\ncyclohexane\n\n>  <abbreviation>\ncyclohexane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nisooctane\n  -INDIGO-11302219142D\n\n  8  7  0  0  0  0  0  0  0  0999 V2000\n    4.6062   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.9052   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.2043   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5033   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.8023   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1552   -0.4581    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.6552   -0.4580    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5033   -0.2571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  2  6  1  0  0  0  0\n  2  7  1  0  0  0  0\n  4  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 isooctane\nM  END\n>  <name>\nisooctane\n\n>  <abbreviation>\nisooctane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethylcyclohexane\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    3.9490   -2.3000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6500   -3.0500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6500   -4.5500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9490   -5.3000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2481   -4.5500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2481   -3.0500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9490   -0.8000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  2  1  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  1  1  0  0  0  0\n  1  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 methylcyclohexane\nM  END\n>  <name>\nmethylcyclohexane\n\n>  <abbreviation>\nmethylcyclohexane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethylcyclopentane\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    4.2136    0.4041    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.4271   -0.4776    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0001   -0.4776    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.9636   -1.9041    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.4636   -1.9041    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2136    1.9041    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  6  1  0  0  0  0\n  2  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  4  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 methylcyclopentane\nM  END\n>  <name>\nmethylcyclopentane\n\n>  <abbreviation>\nmethylcyclopentane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nheptane\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    4.6062   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.9052   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.2043   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5033   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.8023   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.1014   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   12.4004   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 n-heptane\nM  END\n>  <name>\nheptane\n\n>  <abbreviation>\nn-heptane\n\n>  <group>\nSalts and Solvents\n\n$$$$\nhexane\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    4.6062   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.9052   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.2043   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.5033   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.8023   -2.5071    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   11.1014   -1.7571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 n-hexane\nM  END\n>  <name>\nhexane\n\n>  <abbreviation>\nn-hexane\n\n>  <group>\nSalts and Solvents\n\n$$$$\npentane\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    2.5624   -4.3230    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1578   -4.3230    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8600   -3.5708    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4556   -3.5708    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2647   -3.5708    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  3  1  1  0  0  0  0\n  4  2  1  0  0  0  0\n  5  1  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 pentane\nM  END\n>  <name>\npentane\n\n>  <abbreviation>\npentane\n\n>  <group>\nSalts and Solvents\n\n$$$$\n2-pentanone\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n   -1.5971   -4.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.2980   -3.4500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0009   -4.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3000   -3.4500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5991   -4.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3000   -1.9500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4  6  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 2-pentanone\nM  END\n>  <name>\n2-pentanone\n\n>  <abbreviation>\n2-pentanone\n\n>  <group>\nSalts and Solvents\n\n$$$$\n3-pentanone\n  -INDIGO-11302219142D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    2.6558    5.4039    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9548    4.6539    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2538    5.4039    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2539    6.9040    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    6.5530    4.6539    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.8520    5.4039    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  3  5  1  0  0  0  0\n  5  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 3-pentanone\nM  END\n>  <name>\n3-pentanone\n\n>  <abbreviation>\n3-pentanone\n\n>  <group>\nSalts and Solvents\n\n$$$$\nacetone\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    0.0571    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2419   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3562   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0571    1.8714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 propanone\nM  END\n>  <name>\nacetone\n\n>  <abbreviation>\npropanone\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncyclohexanone\n  -INDIGO-11302219142D\n\n  7  7  0  0  0  0  0  0  0  0999 V2000\n    0.0571    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2419   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3562   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0571    1.8714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2419   -1.8786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0571   -2.6286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3562   -1.8786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\n  2  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 cyclohexanone\nM  END\n>  <name>\ncyclohexanone\n\n>  <abbreviation>\ncyclohexanone\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncyclopentanone\n  -INDIGO-11302219142D\n\n  6  6  0  0  0  0  0  0  0  0999 V2000\n    1.0323    3.5259    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0323    2.0259    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2458    1.1443    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7823   -0.2824    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.2824   -0.2824    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.1813    1.1443    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  2  6  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  6   1   2   3   4   5   6\nM  SMT   1 cyclopentanone\nM  END\n>  <name>\ncyclopentanone\n\n>  <abbreviation>\ncyclopentanone\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethyl ethyl ketone\n  -INDIGO-11302219142D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.0571    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2419   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3562   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0571    1.8714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.5409    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\n  2  5  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  5   1   2   3   4   5\nM  SMT   1 MEK\nM  END\n>  <name>\nmethyl ethyl ketone\n\n>  <abbreviation>\nMEK\n\n>  <group>\nSalts and Solvents\n\n$$$$\nmethyl isobutyl ketone\n  -INDIGO-11302219142D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    0.0571    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2419   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3562   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0571    1.8714    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.5409    0.3714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8399   -0.3786    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.5409    1.8714    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  2  0  0  0  0\n  2  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  7   1   2   3   4   5   6   7\nM  SMT   1 methyl isobutyl ketone\nM  END\n>  <name>\nmethyl isobutyl ketone\n\n>  <abbreviation>\nmethyl isobutyl ketone\n\n>  <group>\nSalts and Solvents\n\n$$$$\ncarbon disulfide\n  -INDIGO-11302219142D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n    5.7990    0.0000    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7989    0.0000    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    4.2989    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  3  2  0  0  0  0\n  2  3  2  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  3   1   2   3\nM  SMT   1 carbon disulfide\nM  END\n>  <name>\ncarbon disulfide\n\n>  <abbreviation>\ncarbon disulfide\n\n>  <group>\nSalts and Solvents\n\n$$$$\nnitromethane\n  -INDIGO-11302219142D\n\n  4  3  0  0  0  0  0  0  0  0999 V2000\n    1.5009    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8000    1.5000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.0991    0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8000    3.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  2  0  0  0  0\nM  CHG  2   2   1   3  -1\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  4   1   2   3   4\nM  SMT   1 nitromethane\nM  END\n>  <name>\nnitromethane\n\n>  <abbreviation>\nnitromethane\n\n>  <group>\nSalts and Solvents\n\n$$$$\no-xylene\n  -INDIGO-11302219142D\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n   -2.1500    4.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4490    3.7250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4490    2.2250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500    1.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.8510    2.2250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.8510    3.7250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500    5.9750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.4481    4.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  1  1  0  0  0  0\n  1  7  1  0  0  0  0\n  6  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 o-xylene\nM  END\n>  <name>\no-xylene\n\n>  <abbreviation>\no-xylene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nm-xylene\n  -INDIGO-11302219142D\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n   -2.1500    4.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4490    3.7250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4490    2.2250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500    1.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.8510    2.2250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.8510    3.7250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500    5.9750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.4480    1.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  1  1  0  0  0  0\n  1  7  1  0  0  0  0\n  5  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 m-xylene\nM  END\n>  <name>\nm-xylene\n\n>  <abbreviation>\nm-xylene\n\n>  <group>\nSalts and Solvents\n\n$$$$\np-xylene\n  -INDIGO-11302219142D\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n   -2.1500    4.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4490    3.7250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4490    2.2250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500    1.4750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.8510    2.2250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.8510    3.7250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500    5.9750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1500   -0.0250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  1  1  0  0  0  0\n  1  7  1  0  0  0  0\n  4  8  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SMT   1 p-xylene\nM  END\n>  <name>\np-xylene\n\n>  <abbreviation>\np-xylene\n\n>  <group>\nSalts and Solvents\n\n$$$$\nDIPEA\n  -INDIGO-11302219142D\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n   -1.5490    7.3145    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5490    8.8145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.8481    6.5645    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.2500    6.5645    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.1471    7.3145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.8481    5.0645    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0490    7.3145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.2500    5.0645    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.8481    9.5645    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  1  3  1  0  0  0  0\n  1  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  3  6  1  0  0  0  0\n  4  7  1  0  0  0  0\n  4  8  1  0  0  0  0\n  2  9  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  1   9\nM  SMT   1 DIPEA\nM  END\n>  <name>\nn,n-diisopropylethylamine\n\n>  <abbreviation>\nDIPEA\n\n>  <group>\nSalts and Solvents\n\n$$$$\n1,5-diazabicyclo[5.4.0]undec-7-ene\n  -INDIGO-11302219142D\n\n 11 12  0  0  0  0  0  0  0  0999 V2000\n    1.6852   -0.3846    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3514    1.0778    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.7286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3515    1.0777    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.6852   -0.3847    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.1695   -0.6090    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.7175   -2.0053    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.7822   -3.1781    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2990   -2.9545    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7500   -1.5574    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7500   -1.5574    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9 10  2  3  0  0  0\n 10  5  1  0  0  0  0\n 10 11  1  0  0  0  0\n 11  1  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  3   9  10  11\nM  SMT   1 DBU\nM  END\n>  <name>\n1,5-diazabicyclo[5.4.0]undec-7-ene\n\n>  <abbreviation>\nDBU\n\n>  <group>\nSalts and Solvents\n\n$$$$\nhexamethylphosphoramide\n  -INDIGO-11302219142D\n\n 11 10  0  0  0  0  0  0  0  0999 V2000\n    2.3174   -0.9012    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.6235   -1.9903    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.8900   -0.9145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5935   -3.2519    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5935   -4.7619    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0831   -3.2205    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    6.0654   -4.1562    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1687   -1.9999    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1521   -3.2278    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3934   -4.5570    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0626   -2.3997    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  4  5  2  0  0  0  0\n  4  6  1  0  0  0  0\n  6  7  1  0  0  0  0\n  6  8  1  0  0  0  0\n  4  9  1  0  0  0  0\n  9 10  1  0  0  0  0\n  9 11  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  3   9  10  11\nM  SMT   1 HMPA\nM  END\n>  <name>\nhexamethylphosphoramide\n\n>  <abbreviation>\nHMPA\n\n>  <group>\nSalts and Solvents\n\n$$$$\nhexamethylphosphorous triamide\n  -INDIGO-11302219142D\n\n 10  9  0  0  0  0  0  0  0  0999 V2000\n    0.0007    0.0004    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3000    0.7500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3000    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6000    0.0000    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9000    0.7500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1992    0.0004    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9000    2.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.6031   -1.5008    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    3.9032   -2.2490    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3053   -2.2531    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  5  7  1  0  0  0  0\n  4  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  8 10  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  8   1   2   3   4   5   6   7   8\nM  SAL   1  2   9  10\nM  SMT   1 HMPT\nM  END\n>  <name>\nhexamethylphosphorous triamide\n\n>  <abbreviation>\nHMPT\n\n>  <group>\nSalts and Solvents\n\n$$$$\nheavy water\n  -INDIGO-11302219142D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n    0.0007    0.0004    0.0000 D   0  0  0  0  0  0  0  0  0  0  0  0\n    1.3000    0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5993    0.0004    0.0000 D   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\nM  STY  1   1 SUP\nM  SLB  1   1   1\nM  SAL   1  3   1   2   3\nM  SMT   1 D2O\nM  END\n>  <name>\nheavy water\n\n>  <abbreviation>\nD2O\n\n>  <group>\nSalts and Solvents\n\n$$$$\n";
 
-function ownKeys$14(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$14(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$14(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$14(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$15(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$15(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$15(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$15(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initialState$1 = {
   lib: [],
   mode: MODES.FG
@@ -15594,7 +15613,7 @@ var saltsAndSolventsReducer = function saltsAndSolventsReducer() {
     payload = _ref.payload;
   switch (type) {
     case 'SALTS_AND_SOLVENTS_INIT':
-      return _objectSpread$14(_objectSpread$14({}, state), payload);
+      return _objectSpread$15(_objectSpread$15({}, state), payload);
     default:
       return state;
   }
@@ -15643,8 +15662,8 @@ function initSaltsAndSolventsTemplates() {
   }();
 }
 
-function ownKeys$13(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$13(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$13(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$13(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$14(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$14(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$14(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$14(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initial = {
   freqAtoms: [],
   currentAtom: 0,
@@ -15664,7 +15683,7 @@ function updateVisibleTools(visibleTool, activeTool) {
     if (key === 'shape' && menuHeight > 900) return res;
     if (!key.match(regExp) || menuHeight > 700) res[key] = visibleTool[key];
     return res;
-  }, _objectSpread$13({}, activeTool));
+  }, _objectSpread$14({}, activeTool));
 }
 function initResize() {
   return function (dispatch, getState) {
@@ -15688,41 +15707,41 @@ function toolbarReducer () {
     case 'ACTION':
       {
         var visibleTool = toolInMenu(action.action);
-        return visibleTool ? _objectSpread$13(_objectSpread$13({}, state), {}, {
+        return visibleTool ? _objectSpread$14(_objectSpread$14({}, state), {}, {
           opened: null,
-          visibleTools: _objectSpread$13(_objectSpread$13({}, state.visibleTools), visibleTool)
-        }) : _objectSpread$13(_objectSpread$13({}, state), {}, {
+          visibleTools: _objectSpread$14(_objectSpread$14({}, state.visibleTools), visibleTool)
+        }) : _objectSpread$14(_objectSpread$14({}, state), {}, {
           opened: null
         });
       }
     case 'ADD_ATOMS':
       {
         var newState = addFreqAtom(data, state.freqAtoms, state.currentAtom);
-        return _objectSpread$13(_objectSpread$13({}, state), newState);
+        return _objectSpread$14(_objectSpread$14({}, state), newState);
       }
     case 'CLEAR_VISIBLE':
       {
         var activeTool = toolInMenu(action.data);
         var correctTools = updateVisibleTools(state.visibleTools, activeTool);
-        return _objectSpread$13(_objectSpread$13({}, state), {}, {
+        return _objectSpread$14(_objectSpread$14({}, state), {}, {
           opened: null,
-          visibleTools: _objectSpread$13({}, correctTools)
+          visibleTools: _objectSpread$14({}, correctTools)
         });
       }
     case 'OPENED':
       {
-        return data.isSelected && state.opened ? _objectSpread$13(_objectSpread$13({}, state), {}, {
+        return data.isSelected && state.opened ? _objectSpread$14(_objectSpread$14({}, state), {}, {
           opened: null
-        }) : _objectSpread$13(_objectSpread$13({}, state), {}, {
+        }) : _objectSpread$14(_objectSpread$14({}, state), {}, {
           opened: data.menuName
         });
       }
     case 'UPDATE':
-      return _objectSpread$13(_objectSpread$13({}, state), {}, {
+      return _objectSpread$14(_objectSpread$14({}, state), {}, {
         opened: null
       });
     case 'MODAL_OPEN':
-      return _objectSpread$13(_objectSpread$13({}, state), {}, {
+      return _objectSpread$14(_objectSpread$14({}, state), {}, {
         opened: null
       });
     default:
@@ -15765,8 +15784,8 @@ function hiddenAncestor(el, base) {
   return findEl;
 }
 
-function ownKeys$12(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$12(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$12(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$13(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$13(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$13(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$13(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var initialState = {
   visible: false,
   rotateHandlePosition: {
@@ -15788,7 +15807,7 @@ var floatingToolsReducer = function floatingToolsReducer() {
     payload = _ref.payload;
   switch (type) {
     case 'UPDATE_FLOATING_TOOLS':
-      return _objectSpread$12(_objectSpread$12({}, state), payload);
+      return _objectSpread$13(_objectSpread$13({}, state), payload);
     default:
       return state;
   }
@@ -15796,8 +15815,9 @@ var floatingToolsReducer = function floatingToolsReducer() {
 
 var _excluded$t = ["type"],
   _excluded2$5 = ["buttons"];
-function ownKeys$11(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$11(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$11(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$12(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$12(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$12(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var SET_SERVER = 'SET_SERVER';
 var shared = combineReducers({
   common: commonReducer,
   actionState: actionStateReducer,
@@ -15830,11 +15850,17 @@ function getRootReducer(setEditor) {
         {
           action.type;
             var data = _objectWithoutProperties(action, _excluded$t);
-          if (data) state = _objectSpread$11(_objectSpread$11({}, state), data);
+          if (data) state = _objectSpread$12(_objectSpread$12({}, state), data);
+        }
+      case SET_SERVER:
+        {
+          state = _objectSpread$12(_objectSpread$12({}, state), {}, {
+            server: action.server || state.server
+          });
         }
     }
-    var sh = shared(state, _objectSpread$11(_objectSpread$11({}, action), pick(['editor', 'server', 'options'], state)));
-    var finalState = sh === state.shared ? state : _objectSpread$11(_objectSpread$11({}, state), sh);
+    var sh = shared(state, _objectSpread$12(_objectSpread$12({}, action), pick(['editor', 'server', 'options'], state)));
+    var finalState = sh === state.shared ? state : _objectSpread$12(_objectSpread$12({}, state), sh);
     global.currentState = finalState;
     return finalState;
   };
@@ -15857,6 +15883,12 @@ function createStore (options, server, setEditor) {
   var middleware = [thunk];
   var rootReducer = getRootReducer(setEditor);
   return createStore$1(rootReducer, initState, applyMiddleware.apply(void 0, middleware));
+}
+function setServer(server) {
+  return {
+    type: SET_SERVER,
+    server: server
+  };
 }
 
 var disableableButtons$3 = [];
@@ -15923,8 +15955,8 @@ function useSettingsContext() {
   return React__default.useContext(settingsContext);
 }
 
-function ownKeys$10(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$10(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$10(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$11(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$11(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$11(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var throttleMilliseconds = 100;
 function useThrottleResizeObserver() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -15938,11 +15970,11 @@ function useThrottleResizeObserver() {
   var onResize = useMemo(function () {
     return throttle$1(setSize, throttleMilliseconds);
   }, []);
-  var _useResizeObserver = useResizeObserver(_objectSpread$10({
+  var _useResizeObserver = useResizeObserver(_objectSpread$11({
       onResize: onResize
     }, options)),
     ref = _useResizeObserver.ref;
-  return _objectSpread$10({
+  return _objectSpread$11({
     ref: ref
   }, size);
 }
@@ -16001,13 +16033,11 @@ var useSubscriptionOnEvents = function useSubscriptionOnEvents() {
     var unsubscribeOnUnMount = function unsubscribeOnUnMount() {
       unsubscribe(getKetcherInstance());
     };
-    var fullEventName = ketcherInitEventName(ketcherId);
-    window.addEventListener(fullEventName, function () {
-      subscribeOnInit();
-    });
+    var initEventName = ketcherInitEventName(ketcherId);
+    window.addEventListener(initEventName, subscribeOnInit);
     return function () {
       unsubscribeOnUnMount();
-      window.removeEventListener(fullEventName, subscribeOnInit);
+      window.removeEventListener(initEventName, subscribeOnInit);
     };
   }, []);
 };
@@ -16076,13 +16106,13 @@ var mediaSizes$2 = {
 };
 
 var _excluded$s = ["height"];
-function ownKeys$$(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$$(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$$(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$$(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$10(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$10(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$10(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Bond$1 = function Bond(props) {
   var height = props.height,
     rest = _objectWithoutProperties(props, _excluded$s);
   if (height && height <= mediaSizes$2.bondCollapsableHeight) {
-    return jsx(ToolbarMultiToolItem, _objectSpread$$({
+    return jsx(ToolbarMultiToolItem, _objectSpread$10({
       id: "bonds",
       options: groupOptions,
       variant: "grouped",
@@ -16090,35 +16120,35 @@ var Bond$1 = function Bond(props) {
     }, rest));
   }
   return jsxs(Fragment, {
-    children: [jsx(ToolbarMultiToolItem, _objectSpread$$({
+    children: [jsx(ToolbarMultiToolItem, _objectSpread$10({
       id: "bond-common",
       options: bondCommon
-    }, rest)), jsx(ToolbarMultiToolItem, _objectSpread$$({
+    }, rest)), jsx(ToolbarMultiToolItem, _objectSpread$10({
       id: "bond-stereo",
       options: bondStereo
-    }, rest)), jsx(ToolbarMultiToolItem, _objectSpread$$({
+    }, rest)), jsx(ToolbarMultiToolItem, _objectSpread$10({
       id: "bond-query",
       options: bondQuery
-    }, rest)), jsx(ToolbarMultiToolItem, _objectSpread$$({
+    }, rest)), jsx(ToolbarMultiToolItem, _objectSpread$10({
       id: "bond-special",
       options: bondSpecial
     }, rest))]
   });
 };
 
-function ownKeys$_(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$_(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$_(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$_(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$$(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$$(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$$(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$$(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var RGroup$1 = function RGroup(props) {
-  return jsx(ToolbarGroupItem, _objectSpread$_({
+  return jsx(ToolbarGroupItem, _objectSpread$$({
     id: "rgroup",
     options: rGroupOptions
   }, props));
 };
 
-function ownKeys$Z(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$Z(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$Z(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$Z(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$_(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$_(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$_(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$_(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Shape = function Shape(props) {
-  return jsx(ToolbarGroupItem, _objectSpread$Z({
+  return jsx(ToolbarGroupItem, _objectSpread$_({
     id: "shapes",
     options: shapeOptions
   }, props));
@@ -16127,8 +16157,8 @@ var Shape = function Shape(props) {
 var classes$L = {"button-common-styles":"LeftToolbar-module_button-common-styles__WgnON","scrollbar":"LeftToolbar-module_scrollbar__OBwid","group":"LeftToolbar-module_group__0s41t","root":"LeftToolbar-module_root__yhhZm","buttons":"LeftToolbar-module_buttons__lnIjn","borderOff":"LeftToolbar-module_borderOff__om425","groupItem":"LeftToolbar-module_groupItem__OqQu0"};
 
 var _excluded$r = ["className"];
-function ownKeys$Y(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$Y(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$Y(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$Y(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$Z(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$Z(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$Z(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$Z(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var LeftToolbar = function LeftToolbar(props) {
   var _scrollRef$current;
   var className = props.className,
@@ -16154,7 +16184,7 @@ var LeftToolbar = function LeftToolbar(props) {
     var id = _ref.id,
       options = _ref.options,
       dataTestId = _ref.dataTestId;
-    return ToolbarGroupItem(_objectSpread$Y({
+    return ToolbarGroupItem(_objectSpread$Z({
       id: id,
       options: options,
       dataTestId: dataTestId
@@ -16191,16 +16221,16 @@ var LeftToolbar = function LeftToolbar(props) {
       children: visibleItems.map(function (item) {
         switch (item.id) {
           case 'bond-common':
-            return createElement(Bond$1, _objectSpread$Y(_objectSpread$Y({}, rest), {}, {
+            return createElement(Bond$1, _objectSpread$Z(_objectSpread$Z({}, rest), {}, {
               height: height,
               key: item.id
             }));
           case 'rgroup':
-            return createElement(RGroup$1, _objectSpread$Y(_objectSpread$Y({}, rest), {}, {
+            return createElement(RGroup$1, _objectSpread$Z(_objectSpread$Z({}, rest), {}, {
               key: item.id
             }));
           case 'shapes':
-            return createElement(Shape, _objectSpread$Y(_objectSpread$Y({}, rest), {}, {
+            return createElement(Shape, _objectSpread$Z(_objectSpread$Z({}, rest), {}, {
               key: item.id
             }));
           case 'bonds':
@@ -16286,6 +16316,8 @@ var LeftToolbar = function LeftToolbar(props) {
             options: shapeOptions
           }, {
             id: 'text'
+          }, {
+            id: IMAGE_KEY
           }]
         })
       })]
@@ -16328,14 +16360,14 @@ var LeftToolbarContainer = connect(mapStateToProps$k, mapDispatchToProps$k)(Left
 var classes$K = {"button-common-styles":"Atom-module_button-common-styles__j3EUJ","scrollbar":"Atom-module_scrollbar__iO-Ni","atom":"Atom-module_atom__g2RUu"};
 
 var _excluded$q = ["el", "shortcut", "selected"];
-function ownKeys$X(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$X(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$X(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$X(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$Y(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$Y(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$Y(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$Y(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function Atom$1(_ref) {
   var el = _ref.el,
     shortcut = _ref.shortcut,
     selected = _ref.selected,
     props = _objectWithoutProperties(_ref, _excluded$q);
-  return jsx("button", _objectSpread$X(_objectSpread$X({
+  return jsx("button", _objectSpread$Y(_objectSpread$Y({
     title: shortcut ? "".concat(el.title, " (").concat(shortcut, ")") : el.title,
     className: clsx(classes$K.atom, {
       selected: selected
@@ -16396,8 +16428,8 @@ var HorizontalDivider = function HorizontalDivider() {
 };
 
 var _excluded$p = ["className"];
-function ownKeys$W(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$W(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$W(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$W(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$X(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$X(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$X(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$X(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var Group = function Group(_ref) {
   var children = _ref.children,
     className = _ref.className;
@@ -16463,7 +16495,7 @@ var RightToolbar = function RightToolbar(props) {
             atoms: freqAtoms,
             active: active,
             onAction: onAction
-          }), jsx(ToolbarGroupItem, _objectSpread$W({
+          }), jsx(ToolbarGroupItem, _objectSpread$X({
             id: "period-table"
           }, rest))]
         })
@@ -16473,11 +16505,11 @@ var RightToolbar = function RightToolbar(props) {
           className: classes$J.groupItem,
           children: jsxs("div", {
             ref: sizeRef,
-            children: [jsx(ToolbarGroupItem, _objectSpread$W({
+            children: [jsx(ToolbarGroupItem, _objectSpread$X({
               id: "any-atom"
             }, rest)), jsx("div", {
               className: classes$J.button,
-              children: jsx(ToolbarGroupItem, _objectSpread$W({
+              children: jsx(ToolbarGroupItem, _objectSpread$X({
                 id: "extended-table"
               }, rest))
             })]
@@ -17335,8 +17367,8 @@ var selectAbbreviationLookupValue = function selectAbbreviationLookupValue(state
   return (_state$abbreviationLo = state.abbreviationLookup.lookupValue) !== null && _state$abbreviationLo !== void 0 ? _state$abbreviationLo : '';
 };
 
-function ownKeys$V(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread$V(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$V(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$V(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys$W(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$W(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$W(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$W(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var destinationVectorMapping = {
   ArrowUp: new Vec2(0, -1),
   ArrowDown: new Vec2(0, 1),
@@ -17361,7 +17393,7 @@ function moveSelectedItems(editor, key, isShiftPressed) {
   if (isClose) {
     var moveStep = isShiftPressed ? getFasterStep(destinationVectorInCanvas) : destinationVectorInCanvas;
     editor.render.setViewBox(function (prev) {
-      return _objectSpread$V(_objectSpread$V({}, prev), {}, {
+      return _objectSpread$W(_objectSpread$W({}, prev), {}, {
         minX: prev.minX + moveStep.x,
         minY: prev.minY + moveStep.y
       });
@@ -17423,11 +17455,17 @@ function getElementsInRectangle(restruct, p0, p1) {
   var x1 = Math.max(p0.x, p1.x);
   var y0 = Math.min(p0.y, p1.y);
   var y1 = Math.max(p0.y, p1.y);
+  var topLeftPosition = new Vec2(x0, y0);
+  var topRightPosition = new Vec2(x1, y0);
+  var bottomRightPosition = new Vec2(x1, y1);
+  var bottomLeftPosition = new Vec2(x0, y1);
   restruct.bonds.forEach(function (bond, bid) {
     if (struct.isBondFromMacromolecule(bid)) {
       return;
     }
-    var centre = Vec2.lc2(restruct.atoms.get(bond.b.begin).a.pp, 0.5, restruct.atoms.get(bond.b.end).a.pp, 0.5);
+    var centre = Vec2.lc2(
+    restruct.atoms.get(bond.b.begin).a.pp, 0.5,
+    restruct.atoms.get(bond.b.end).a.pp, 0.5);
     if (centre.x > x0 && centre.x < x1 && centre.y > y0 && centre.y < y1 && !FunctionalGroup.isBondInContractedFunctionalGroup(bond.b, sGroups, functionalGroups)) {
       bondList.push(bid);
     }
@@ -17435,7 +17473,8 @@ function getElementsInRectangle(restruct, p0, p1) {
   restruct.atoms.forEach(function (atom, aid) {
     var relatedFGId = FunctionalGroup.findFunctionalGroupByAtom(functionalGroups, aid);
     var reSGroup = restruct.sgroups.get(relatedFGId);
-    if (!((reSGroup === null || reSGroup === void 0 ? void 0 : reSGroup.item) instanceof MonomerMicromolecule) && atom.a.pp.x > x0 && atom.a.pp.x < x1 && atom.a.pp.y > y0 && atom.a.pp.y < y1 && (!FunctionalGroup.isAtomInContractedFunctionalGroup(atom.a, sGroups, functionalGroups, true) || aid === reSGroup.item.atoms[0])) {
+    if (!((reSGroup === null || reSGroup === void 0 ? void 0 : reSGroup.item) instanceof MonomerMicromolecule) && atom.a.pp.x > x0 && atom.a.pp.x < x1 && atom.a.pp.y > y0 && atom.a.pp.y < y1 && (!FunctionalGroup.isAtomInContractedFunctionalGroup(atom.a, sGroups, functionalGroups, true) ||
+    aid === reSGroup.item.atoms[0])) {
       atomList.push(aid);
     }
   });
@@ -17490,7 +17529,18 @@ function getElementsInRectangle(restruct, p0, p1) {
       rgroupAttachmentPointList.push(id);
     }
   });
-  return {
+  var reImages = Array.from(restruct.images.entries()).reduce(function (acc, _ref) {
+    var _ref2 = _slicedToArray$1(_ref, 2),
+      id = _ref2[0],
+      item = _ref2[1];
+    if (Object.values(item.image.getReferencePositions()).some(function (point) {
+      return point.isInsidePolygon([topLeftPosition, topRightPosition, bottomRightPosition, bottomLeftPosition]);
+    })) {
+      return acc.concat(id);
+    }
+    return acc;
+  }, []);
+  return _defineProperty$1({
     atoms: atomList,
     bonds: bondList,
     rxnArrows: rxnArrowsList,
@@ -17500,7 +17550,7 @@ function getElementsInRectangle(restruct, p0, p1) {
     simpleObjects: simpleObjectsList,
     texts: textsList,
     rgroupAttachmentPoints: rgroupAttachmentPointList
-  };
+  }, IMAGE_KEY, reImages);
 }
 function getElementsInPolygon(restruct, rr) {
   var bondList = [];
@@ -17516,7 +17566,9 @@ function getElementsInPolygon(restruct, rr) {
     if (struct.isAtomFromMacromolecule(bond.b.begin) || struct.isAtomFromMacromolecule(bond.b.end)) {
       return;
     }
-    var centre = Vec2.lc2(restruct.atoms.get(bond.b.begin).a.pp, 0.5, restruct.atoms.get(bond.b.end).a.pp, 0.5);
+    var centre = Vec2.lc2(
+    restruct.atoms.get(bond.b.begin).a.pp, 0.5,
+    restruct.atoms.get(bond.b.end).a.pp, 0.5);
     if (isPointInPolygon(r, centre) && !FunctionalGroup.isBondInContractedFunctionalGroup(bond.b, sGroups, functionalGroups)) {
       bondList.push(bid);
     }
@@ -17524,7 +17576,8 @@ function getElementsInPolygon(restruct, rr) {
   restruct.atoms.forEach(function (atom, aid) {
     var relatedFGId = FunctionalGroup.findFunctionalGroupByAtom(functionalGroups, aid);
     var reSGroup = restruct.sgroups.get(relatedFGId);
-    if (!((reSGroup === null || reSGroup === void 0 ? void 0 : reSGroup.item) instanceof MonomerMicromolecule) && isPointInPolygon(r, atom.a.pp) && (!FunctionalGroup.isAtomInContractedFunctionalGroup(atom.a, sGroups, functionalGroups, true) || aid === reSGroup.item.atoms[0])) {
+    if (!((reSGroup === null || reSGroup === void 0 ? void 0 : reSGroup.item) instanceof MonomerMicromolecule) && isPointInPolygon(r, atom.a.pp) && (!FunctionalGroup.isAtomInContractedFunctionalGroup(atom.a, sGroups, functionalGroups, true) ||
+    aid === reSGroup.item.atoms[0])) {
       atomList.push(aid);
     }
   });
@@ -17533,7 +17586,7 @@ function getElementsInPolygon(restruct, rr) {
   var simpleObjectsList = [];
   var textsList = [];
   restruct.rxnArrows.forEach(function (item, id) {
-    var referencePoints = item.getReferencePoints(true);
+    var referencePoints = item.getReferencePoints();
     var referencePointInPolygon = referencePoints.find(function (point) {
       return isPointInPolygon(r, point);
     });
@@ -17582,7 +17635,18 @@ function getElementsInPolygon(restruct, rr) {
       rgroupAttachmentPointList.push(id);
     }
   });
-  return {
+  var reImages = Array.from(restruct.images.entries()).reduce(function (acc, _ref4) {
+    var _ref5 = _slicedToArray$1(_ref4, 2),
+      id = _ref5[0],
+      item = _ref5[1];
+    if (Object.values(item.image.getReferencePositions()).some(function (point) {
+      return isPointInPolygon(r, point);
+    })) {
+      return acc.concat(id);
+    }
+    return acc;
+  }, []);
+  return _defineProperty$1({
     atoms: atomList,
     bonds: bondList,
     rxnArrows: rxnArrowsList,
@@ -17592,7 +17656,7 @@ function getElementsInPolygon(restruct, rr) {
     simpleObjects: simpleObjectsList,
     texts: textsList,
     rgroupAttachmentPoints: rgroupAttachmentPointList
-  };
+  }, IMAGE_KEY, reImages);
 }
 function isPointInPolygon(r, p) {
   var d = new Vec2(0, 1);
@@ -17763,13 +17827,17 @@ function deleteFunctionalGroups(sGroupsId, struct, action) {
 }
 
 function getGroupIdsFromItemArrays(struct, items) {
-  var _items$atoms, _items$bonds;
+  var _items$bonds;
   if (!struct.sgroups.size) return [];
   var groupsIds = new Set();
-  items === null || items === void 0 || (_items$atoms = items.atoms) === null || _items$atoms === void 0 || _items$atoms.forEach(function (atomId) {
-    var groupId = struct.getGroupIdFromAtomId(atomId);
-    if (groupId !== null) groupsIds.add(groupId);
-  });
+  if (items !== null && items !== void 0 && items.atoms) {
+    items.atoms.filter(function (atomId) {
+      return !Atom$2.isSuperatomLeavingGroupAtom(struct, atomId);
+    }).forEach(function (atomId) {
+      var groupId = struct.getGroupIdFromAtomId(atomId);
+      if (groupId !== null) groupsIds.add(groupId);
+    });
+  }
   items === null || items === void 0 || (_items$bonds = items.bonds) === null || _items$bonds === void 0 || _items$bonds.forEach(function (bondId) {
     var groupId = struct.getGroupIdFromBondId(bondId);
     if (groupId !== null) groupsIds.add(groupId);
@@ -17790,6 +17858,7 @@ function _checkPrivateRedeclaration$2(obj, privateCollection) { if (privateColle
 var _bondProps = new WeakMap();
 var AtomTool = function () {
   function AtomTool(editor, atomProps) {
+    var _this = this;
     _classCallCheck$2(this, AtomTool);
     _classPrivateFieldInitSpec$2(this, _bondProps, {
       writable: true,
@@ -17808,9 +17877,25 @@ var AtomTool = function () {
         var struct = editor.render.ctab;
         var action = new Action();
         var selectedSGroupsId = editorSelection && getGroupIdsFromItemArrays(struct.molecule, editorSelection);
+        var sgroups = struct.molecule.functionalGroups;
+        var atomsInFunctionalGroup = editorSelection.atoms.filter(function (atomId) {
+          return !Atom$2.isSuperatomLeavingGroupAtom(struct.molecule, atomId);
+        }).map(function (atom) {
+          return FunctionalGroup.atomsInFunctionalGroup(sgroups, atom);
+        });
+        if (atomsInFunctionalGroup.some(function (atom) {
+          return atom !== null;
+        })) {
+          editor.event.removeFG.dispatch({
+            fgIds: _toConsumableArray(selectedSGroupsId)
+          });
+          this.editor.hoverIcon.hide();
+          this.isNotActiveTool = true;
+          return;
+        }
         var deletedAtomsInSGroups = deleteFunctionalGroups(selectedSGroupsId, struct, action);
         var updatedAtoms = editorSelection === null || editorSelection === void 0 || (_editorSelection$atom = editorSelection.atoms) === null || _editorSelection$atom === void 0 ? void 0 : _editorSelection$atom.filter(function (selectAtomId) {
-          return !(deletedAtomsInSGroups !== null && deletedAtomsInSGroups !== void 0 && deletedAtomsInSGroups.includes(selectAtomId)) && struct.atoms.has(selectAtomId);
+          return !(deletedAtomsInSGroups !== null && deletedAtomsInSGroups !== void 0 && deletedAtomsInSGroups.includes(selectAtomId)) && struct.atoms.has(selectAtomId) && !Atom$2.isSuperatomLeavingGroupAtom(_this.editor.render.ctab.molecule, selectAtomId);
         });
         action.mergeWith(fromAtomsAttrs(struct, updatedAtoms, atomProps, true));
         editor.update(action);
@@ -17952,7 +18037,8 @@ var AtomTool = function () {
             }
           } else if (ci.map === 'atoms') {
             var atomId = ci.id;
-            if (dragCtx.action === undefined && FunctionalGroup.atomsInFunctionalGroup(functionalGroups, atomId) === null) {
+            var isAttachmentPointLabel = Atom$2.isSuperatomLeavingGroupAtom(editor.render.ctab.molecule, atomId);
+            if (!isAttachmentPointLabel && dragCtx.action === undefined && FunctionalGroup.atomsInFunctionalGroup(functionalGroups, atomId, true) === null) {
               action.mergeWith(fromAtomsAttrs(reStruct, atomId, atomProps, true));
             }
           }
@@ -18003,9 +18089,53 @@ function atomLongtapEvent(tool, render) {
   };
 }
 
+function filterNotInContractedSGroup(itemsToFilter, struct) {
+  var _itemsToFilter$atoms$, _itemsToFilter$atoms, _itemsToFilter$bonds$, _itemsToFilter$bonds;
+  return {
+    atoms: (_itemsToFilter$atoms$ = (_itemsToFilter$atoms = itemsToFilter.atoms) === null || _itemsToFilter$atoms === void 0 ? void 0 : _itemsToFilter$atoms.filter(function (atomId) {
+      var groupId = struct.getGroupIdFromAtomId(atomId);
+      if (isNotCollapsedSGroup(groupId, struct)) {
+        return true;
+      } else {
+        var sGroup = struct.sgroups.get(groupId);
+        return (sGroup === null || sGroup === void 0 ? void 0 : sGroup.getAttachmentAtomId()) === atomId;
+      }
+    })) !== null && _itemsToFilter$atoms$ !== void 0 ? _itemsToFilter$atoms$ : [],
+    bonds: (_itemsToFilter$bonds$ = (_itemsToFilter$bonds = itemsToFilter.bonds) === null || _itemsToFilter$bonds === void 0 ? void 0 : _itemsToFilter$bonds.filter(function (bondId) {
+      var groupId = struct.getGroupIdFromBondId(bondId);
+      return isNotCollapsedSGroup(groupId, struct);
+    })) !== null && _itemsToFilter$bonds$ !== void 0 ? _itemsToFilter$bonds$ : []
+  };
+}
+function isNotCollapsedSGroup(groupId, struct) {
+  if (groupId === null) {
+    return true;
+  }
+  var sGroup = struct.sgroups.get(groupId);
+  if (!sGroup) {
+    throw new Error("sGroup with id = \"".concat(groupId, "\" must be defined, unexpected behaviour"));
+  }
+  return sGroup.checkAttr('expanded', true);
+}
+function filterNotPartOfSuperatomWithoutLabel(itemsToFilter, struct) {
+  var _itemsToFilter$atoms$2, _itemsToFilter$atoms2, _itemsToFilter$bonds$2, _itemsToFilter$bonds2;
+  return {
+    atoms: (_itemsToFilter$atoms$2 = (_itemsToFilter$atoms2 = itemsToFilter.atoms) === null || _itemsToFilter$atoms2 === void 0 ? void 0 : _itemsToFilter$atoms2.filter(function (atomId) {
+      var _struct$getGroupFromA;
+      return !((_struct$getGroupFromA = struct.getGroupFromAtomId(atomId)) !== null && _struct$getGroupFromA !== void 0 && _struct$getGroupFromA.isSuperatomWithoutLabel);
+    })) !== null && _itemsToFilter$atoms$2 !== void 0 ? _itemsToFilter$atoms$2 : [],
+    bonds: (_itemsToFilter$bonds$2 = (_itemsToFilter$bonds2 = itemsToFilter.bonds) === null || _itemsToFilter$bonds2 === void 0 ? void 0 : _itemsToFilter$bonds2.filter(function (bondId) {
+      var _struct$getGroupFromB;
+      return !((_struct$getGroupFromB = struct.getGroupFromBondId(bondId)) !== null && _struct$getGroupFromB !== void 0 && _struct$getGroupFromB.isSuperatomWithoutLabel);
+    })) !== null && _itemsToFilter$bonds$2 !== void 0 ? _itemsToFilter$bonds$2 : []
+  };
+}
+
 function _createForOfIteratorHelper$d(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray$d(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray$d(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray$d(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$d(o, minLen); }
 function _arrayLikeToArray$d(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function ownKeys$V(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread$V(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$V(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$V(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var searchMaps = ['atoms', 'bonds', 'sgroups', 'functionalGroups', 'sgroupData'];
 var SGroupTool = function () {
   function SGroupTool(editor) {
@@ -18018,11 +18148,22 @@ var SGroupTool = function () {
     key: "checkSelection",
     value: function checkSelection() {
       var selection = this.editor.selection() || {};
+      var struct = this.editor.render.ctab;
+      var molecule = struct.molecule;
+      var filteredAtomsAndBonds = filterNotPartOfSuperatomWithoutLabel({
+        atoms: selection.atoms,
+        bonds: selection.bonds
+      }, molecule);
+      selection = _objectSpread$V(_objectSpread$V({}, selection), {}, {
+        atoms: filteredAtomsAndBonds.atoms,
+        bonds: filteredAtomsAndBonds.bonds
+      });
+      selection = this.editor.selection(selection) || {};
+      this.editor.rotateController.rerender();
+      this.editor.update(true);
       if (selection.atoms && selection.bonds) {
         var _this$editor$selectio;
         var selectedAtoms = (_this$editor$selectio = this.editor.selection()) === null || _this$editor$selectio === void 0 ? void 0 : _this$editor$selectio.atoms;
-        var struct = this.editor.render.ctab;
-        var molecule = struct.molecule;
         var sgroups = molecule.sgroups;
         var newSelected = {
           atoms: [],
@@ -18161,10 +18302,12 @@ var SGroupTool = function () {
         } finally {
           _iterator4.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length > 0) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       } else if (bondResult.length > 0) {
         var _iterator5 = _createForOfIteratorHelper$d(bondResult),
           _step5;
@@ -18295,6 +18438,9 @@ var SGroupTool = function () {
         atomsResult.forEach(function (id) {
           var _struct$sgroups$get3, _newSelected$atoms3;
           var fgId = FunctionalGroup.findFunctionalGroupByAtom(functionalGroups, id);
+          if (fgId === null) {
+            return;
+          }
           var sgroupAtoms = SGroup$1.getAtoms(molecule, (_struct$sgroups$get3 = struct.sgroups.get(fgId)) === null || _struct$sgroups$get3 === void 0 ? void 0 : _struct$sgroups$get3.item);
           (_newSelected$atoms3 = newSelected.atoms).push.apply(_newSelected$atoms3, _toConsumableArray(sgroupAtoms));
         });
@@ -18303,6 +18449,9 @@ var SGroupTool = function () {
         bondsResult.forEach(function (id) {
           var _struct$sgroups$get4, _newSelected$bonds3;
           var fgId = FunctionalGroup.findFunctionalGroupByBond(molecule, functionalGroups, id);
+          if (fgId === null) {
+            return;
+          }
           var sgroupBonds = SGroup$1.getBonds(molecule, (_struct$sgroups$get4 = struct.sgroups.get(fgId)) === null || _struct$sgroups$get4 === void 0 ? void 0 : _struct$sgroups$get4.item);
           (_newSelected$bonds3 = newSelected.bonds).push.apply(_newSelected$bonds3, _toConsumableArray(sgroupBonds));
         });
@@ -18357,6 +18506,14 @@ var SGroupTool = function () {
       var selection = null;
       if (this.lassoHelper.running(event)) {
         selection = newSelected.atoms.length > 0 ? selMerge(this.lassoHelper.end(event), newSelected, false) : this.lassoHelper.end(event);
+        var filteredAtomsAndBonds = filterNotPartOfSuperatomWithoutLabel({
+          atoms: selection.atoms,
+          bonds: selection.bonds
+        }, molecule);
+        selection = _objectSpread$V(_objectSpread$V({}, selection), {}, {
+          atoms: filteredAtomsAndBonds.atoms,
+          bonds: filteredAtomsAndBonds.bonds
+        });
         this.editor.selection(selection);
       } else {
         if (!ci) {
@@ -18701,35 +18858,6 @@ function updateSelectedBonds(_ref) {
   }
 }
 
-function filterNotInContractedSGroup(itemsToFilter, struct) {
-  var _itemsToFilter$atoms$, _itemsToFilter$atoms, _itemsToFilter$bonds$, _itemsToFilter$bonds;
-  return {
-    atoms: (_itemsToFilter$atoms$ = (_itemsToFilter$atoms = itemsToFilter.atoms) === null || _itemsToFilter$atoms === void 0 ? void 0 : _itemsToFilter$atoms.filter(function (atomId) {
-      var groupId = struct.getGroupIdFromAtomId(atomId);
-      if (isNotCollapsedSGroup(groupId, struct)) {
-        return true;
-      } else {
-        var sGroup = struct.sgroups.get(groupId);
-        return (sGroup === null || sGroup === void 0 ? void 0 : sGroup.getAttachmentAtomId()) === atomId;
-      }
-    })) !== null && _itemsToFilter$atoms$ !== void 0 ? _itemsToFilter$atoms$ : [],
-    bonds: (_itemsToFilter$bonds$ = (_itemsToFilter$bonds = itemsToFilter.bonds) === null || _itemsToFilter$bonds === void 0 ? void 0 : _itemsToFilter$bonds.filter(function (bondId) {
-      var groupId = struct.getGroupIdFromBondId(bondId);
-      return isNotCollapsedSGroup(groupId, struct);
-    })) !== null && _itemsToFilter$bonds$ !== void 0 ? _itemsToFilter$bonds$ : []
-  };
-}
-function isNotCollapsedSGroup(groupId, struct) {
-  if (groupId === null) {
-    return true;
-  }
-  var sGroup = struct.sgroups.get(groupId);
-  if (!sGroup) {
-    throw new Error("sGroup with id = \"".concat(groupId, "\" must be defined, unexpected behaviour"));
-  }
-  return sGroup.checkAttr('expanded', true);
-}
-
 function customOnChangeHandler(action, handler) {
   var data = [];
   action.operations.reverse().forEach(function (operation) {
@@ -18879,8 +19007,8 @@ function getSelectionMap(structure) {
     return result;
   }, {});
 }
-function getStructCenter(ReStruct, selection) {
-  var bb = ReStruct.getVBoxObj(selection || {});
+function getStructCenter(reStruct, selection) {
+  var bb = reStruct.getVBoxObj(selection || {});
   return Vec2.lc2(bb.p0, 0.5, bb.p1, 0.5);
 }
 
@@ -18889,7 +19017,7 @@ var handleMovingPosibilityCursor = function handleMovingPosibilityCursor(item, c
   if (!item && isCursorShown) {
     canvas.removeAttribute('cursor');
   }
-  if (item && !isCursorShown) {
+  if (item) {
     canvas.setAttribute('cursor', cursor);
   }
 };
@@ -19023,6 +19151,13 @@ var SelectTool = function () {
             info: degrees + 'º'
           });
         }
+        if (dragCtx.item.map === IMAGE_KEY && dragCtx.item.ref) {
+          if (dragCtx.action) dragCtx.action.perform(rnd.ctab);
+          var position = CoordinateTransformation.pageToModel(event, rnd);
+          dragCtx.action = fromImageResize(rnd.ctab, dragCtx.item.id, position, dragCtx.item.ref);
+          editor.update(dragCtx.action, true);
+          return true;
+        }
         if (dragCtx.item.map === 'simpleObjects' && dragCtx.item.ref) {
           if (dragCtx.action) dragCtx.action.perform(rnd.ctab);
           var props = getResizingProps(editor, dragCtx, event);
@@ -19061,8 +19196,15 @@ var SelectTool = function () {
       var maps = getMapsForClosestItem(_classPrivateFieldGet(this, _lassoHelper).fragment || event.ctrlKey);
       var item = editor.findItem(event, maps, null);
       editor.hover(item, null, event);
-      handleMovingPosibilityCursor(item,
-      this.editor.render.paper.canvas, this.editor.render.options.movingStyle.cursor);
+      if ((item === null || item === void 0 ? void 0 : item.map) === IMAGE_KEY && item.ref) {
+        var referencePositionInfo = item.ref;
+        handleMovingPosibilityCursor(item,
+        this.editor.render.paper.canvas,
+        imageReferencePositionToCursor[referencePositionInfo.name]);
+      } else {
+        handleMovingPosibilityCursor(item,
+        this.editor.render.paper.canvas, this.editor.render.options.movingStyle.cursor);
+      }
       return true;
     }
   }, {
@@ -19405,7 +19547,7 @@ function preventSaltAndSolventsMerge(struct, dragCtx, editor) {
   });
 }
 function getMapsForClosestItem(selectFragment) {
-  return ['sgroups', 'functionalGroups', 'sgroupData', 'rgroups', 'rgroupAttachmentPoints', 'rxnArrows', 'rxnPluses', 'enhancedFlags', 'simpleObjects', 'texts'].concat(_toConsumableArray(selectFragment ? ['frags'] : ['atoms', 'bonds']));
+  return ['sgroups', 'functionalGroups', 'sgroupData', 'rgroups', 'rgroupAttachmentPoints', 'rxnArrows', 'rxnPluses', 'enhancedFlags', 'simpleObjects', 'texts', IMAGE_KEY].concat(_toConsumableArray(selectFragment ? ['frags'] : ['atoms', 'bonds']));
 }
 function getResizingProps(editor, dragCtx, event) {
   var current = editor.render.page2obj(event);
@@ -19421,9 +19563,10 @@ function getNewSelectedItems(editor, selectedSgroups) {
     _step3;
   try {
     for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var _sgroup$item;
       var sgId = _step3.value;
       var sgroup = editor.render.ctab.sgroups.get(sgId);
-      if (sgroup) {
+      if (sgroup && !((_sgroup$item = sgroup.item) !== null && _sgroup$item !== void 0 && _sgroup$item.isSuperatomWithoutLabel)) {
         var _newSelected$atoms2, _newSelected$bonds2;
         var sgroupAtoms = SGroup$1.getAtoms(editor.struct(), sgroup.item);
         var sgroupBonds = SGroup$1.getBonds(editor.struct(), sgroup.item);
@@ -20477,12 +20620,21 @@ function _isChangingFunctionalGroup() {
   return _isChangingFunctionalGroup.apply(this, arguments);
 }
 
+var keydownListener = null;
 function initKeydownListener(element) {
   return function (dispatch, getState) {
     var hotKeys = initHotKeys(config);
-    element.addEventListener('keydown', function (event) {
+    keydownListener = function keydownListener(event) {
       return keyHandle(dispatch, getState, hotKeys, event);
-    });
+    };
+    element.addEventListener('keydown', keydownListener);
+  };
+}
+function removeKeydownListener(element) {
+  return function () {
+    if (keydownListener) {
+      element.removeEventListener('keydown', keydownListener);
+    }
   };
 }
 function removeNotRenderedStruct(actionTool, group, dispatch) {
@@ -20795,92 +20947,6 @@ function initClipboard(dispatch) {
     }
   };
 }
-function safelyGetMimeType(_x, _x2) {
-  return _safelyGetMimeType.apply(this, arguments);
-}
-function _safelyGetMimeType() {
-  _safelyGetMimeType = _asyncToGenerator( _regeneratorRuntime.mark(function _callee7(clipboardItem, mimeType) {
-    var result;
-    return _regeneratorRuntime.wrap(function _callee7$(_context7) {
-      while (1) switch (_context7.prev = _context7.next) {
-        case 0:
-          _context7.prev = 0;
-          _context7.next = 3;
-          return clipboardItem.getType(mimeType);
-        case 3:
-          result = _context7.sent;
-          return _context7.abrupt("return", result);
-        case 7:
-          _context7.prev = 7;
-          _context7.t0 = _context7["catch"](0);
-          return _context7.abrupt("return", '');
-        case 10:
-        case "end":
-          return _context7.stop();
-      }
-    }, _callee7, null, [[0, 7]]);
-  }));
-  return _safelyGetMimeType.apply(this, arguments);
-}
-function getStructStringFromClipboardData(_x3) {
-  return _getStructStringFromClipboardData.apply(this, arguments);
-}
-function _getStructStringFromClipboardData() {
-  _getStructStringFromClipboardData = _asyncToGenerator( _regeneratorRuntime.mark(function _callee8(data) {
-    var clipboardItem, structStr;
-    return _regeneratorRuntime.wrap(function _callee8$(_context8) {
-      while (1) switch (_context8.prev = _context8.next) {
-        case 0:
-          clipboardItem = data[0];
-          if (!(clipboardItem instanceof ClipboardItem)) {
-            _context8.next = 23;
-            break;
-          }
-          _context8.next = 4;
-          return safelyGetMimeType(clipboardItem, "web ".concat(ChemicalMimeType.KET));
-        case 4:
-          _context8.t2 = _context8.sent;
-          if (_context8.t2) {
-            _context8.next = 9;
-            break;
-          }
-          _context8.next = 8;
-          return safelyGetMimeType(clipboardItem, "web ".concat(ChemicalMimeType.Mol));
-        case 8:
-          _context8.t2 = _context8.sent;
-        case 9:
-          _context8.t1 = _context8.t2;
-          if (_context8.t1) {
-            _context8.next = 14;
-            break;
-          }
-          _context8.next = 13;
-          return safelyGetMimeType(clipboardItem, "web ".concat(ChemicalMimeType.Rxn));
-        case 13:
-          _context8.t1 = _context8.sent;
-        case 14:
-          _context8.t0 = _context8.t1;
-          if (_context8.t0) {
-            _context8.next = 19;
-            break;
-          }
-          _context8.next = 18;
-          return safelyGetMimeType(clipboardItem, 'text/plain');
-        case 18:
-          _context8.t0 = _context8.sent;
-        case 19:
-          structStr = _context8.t0;
-          return _context8.abrupt("return", structStr === '' ? '' : structStr.text());
-        case 23:
-          return _context8.abrupt("return", data[ChemicalMimeType.KET] || data[ChemicalMimeType.Mol] || data[ChemicalMimeType.Rxn] || data['text/plain']);
-        case 24:
-        case "end":
-          return _context8.stop();
-      }
-    }, _callee8);
-  }));
-  return _getStructStringFromClipboardData.apply(this, arguments);
-}
 function isAbleToCopy(editor) {
   var struct = editor.structSelected();
   var errorHandler = editor.errorHandler;
@@ -20894,49 +20960,49 @@ function isAbleToCopy(editor) {
   }
   return true;
 }
-function clipData(_x4) {
+function clipData(_x) {
   return _clipData.apply(this, arguments);
 }
 function _clipData() {
-  _clipData = _asyncToGenerator( _regeneratorRuntime.mark(function _callee9(editor) {
+  _clipData = _asyncToGenerator( _regeneratorRuntime.mark(function _callee7(editor) {
     var res, struct, errorHandler, serializer, ket, ketcherInstance, data, type;
-    return _regeneratorRuntime.wrap(function _callee9$(_context9) {
-      while (1) switch (_context9.prev = _context9.next) {
+    return _regeneratorRuntime.wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
         case 0:
           if (isAbleToCopy(editor)) {
-            _context9.next = 2;
+            _context7.next = 2;
             break;
           }
-          return _context9.abrupt("return", null);
+          return _context7.abrupt("return", null);
         case 2:
           res = {};
           struct = editor.structSelected();
           errorHandler = editor.errorHandler;
-          _context9.prev = 5;
+          _context7.prev = 5;
           serializer = new KetSerializer();
           ket = serializer.serialize(struct);
           ketcherInstance = ketcherProvider.getKetcher();
-          _context9.next = 11;
+          _context7.next = 11;
           return getStructure(SupportedFormat.molAuto, ketcherInstance.formatterFactory, struct);
         case 11:
-          data = _context9.sent;
+          data = _context7.sent;
           res[ChemicalMimeType.KET] = ket;
           type = struct.isReaction ? ChemicalMimeType.Mol : ChemicalMimeType.Rxn;
           res['text/plain'] = data;
           res[type] = data;
-          return _context9.abrupt("return", res);
+          return _context7.abrupt("return", res);
         case 19:
-          _context9.prev = 19;
-          _context9.t0 = _context9["catch"](5);
-          KetcherLogger.error('hotkeys.ts::clipData', _context9.t0);
-          errorHandler && errorHandler(_context9.t0.message);
+          _context7.prev = 19;
+          _context7.t0 = _context7["catch"](5);
+          KetcherLogger.error('hotkeys.ts::clipData', _context7.t0);
+          errorHandler && errorHandler(_context7.t0.message);
         case 23:
-          return _context9.abrupt("return", null);
+          return _context7.abrupt("return", null);
         case 24:
         case "end":
-          return _context9.stop();
+          return _context7.stop();
       }
-    }, _callee9, null, [[5, 19]]);
+    }, _callee7, null, [[5, 19]]);
   }));
   return _clipData.apply(this, arguments);
 }
@@ -21024,7 +21090,7 @@ function _unsupportedIterableToArray$9(o, minLen) { if (!o) return; if (typeof o
 function _arrayLikeToArray$9(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var SELECTION_DISTANCE_COEFFICIENT = 0.4;
 var SELECTION_WITHIN_TEXT = 0;
-var findMaps = {
+var findMaps = _defineProperty$1({
   atoms: findClosestAtom,
   bonds: findClosestBond,
   enhancedFlags: findClosestEnhancedFlag,
@@ -21038,15 +21104,15 @@ var findMaps = {
   rgroupAttachmentPoints: findClosestRgroupAttachmentPoints,
   simpleObjects: findClosestSimpleObject,
   texts: findClosestText
-};
+}, IMAGE_KEY, findClosestImage);
 function rectangleContainsPoint(startX, startY, width, height, x, y) {
   return startX <= x && x <= startX + width && startY <= y && y <= startY + height;
 }
 function findClosestText(restruct, cursorPosition) {
-  var minDist = null;
+  var minDist = Number.POSITIVE_INFINITY;
   var ret = null;
   restruct.texts.forEach(function (text, id) {
-    var referencePoints = text.getReferencePoints(restruct);
+    var referencePoints = text.getReferencePoints();
     var topX = referencePoints[0].x;
     var topY = referencePoints[0].y;
     var bottomX = referencePoints[2].x;
@@ -21094,7 +21160,7 @@ function findClosestText(restruct, cursorPosition) {
   return ret;
 }
 function findClosestSimpleObject(restruct, pos) {
-  var minDist = null;
+  var minDist = Number.POSITIVE_INFINITY;
   var refPoint = null;
   var ret = null;
   restruct.simpleObjects.forEach(function (simpleObject, id) {
@@ -21120,8 +21186,8 @@ function findClosestAtom(restruct, pos, skip, minDist) {
   minDist = minDist || maxMinDist;
   minDist = Math.min(minDist, maxMinDist);
   restruct.atoms.forEach(function (atom, aid) {
-    if (FunctionalGroup.isAtomInContractedFunctionalGroup(atom.a, sGroups, functionalGroups, true)) {
-      return null;
+    if (FunctionalGroup.isAtomInContractedFunctionalGroup(atom.a, sGroups, functionalGroups, true) || Atom$2.isHiddenLeavingGroupAtom(restruct.molecule, aid)) {
+      return;
     }
     var isSkippedAtom = aid === skipId || atom.a.isPreview;
     if (isSkippedAtom) {
@@ -21158,8 +21224,8 @@ function findClosestBond(restruct, pos, skip, minDist, options) {
     }
     var p1 = restruct.atoms.get(bond.b.begin).a.pp;
     var p2 = restruct.atoms.get(bond.b.end).a.pp;
-    if (FunctionalGroup.isBondInContractedFunctionalGroup(bond.b, sGroups, functionalGroups) || SGroup$1.isBondInContractedSGroup(bond.b, sGroups)) {
-      return null;
+    if (FunctionalGroup.isBondInContractedFunctionalGroup(bond.b, sGroups, functionalGroups) || SGroup$1.isBondInContractedSGroup(bond.b, sGroups) || Bond$2.isBondToHiddenLeavingGroup(restruct.molecule, bond.b)) {
+      return;
     }
     var mid = Vec2.lc2(p1, 0.5, p2, 0.5);
     var cdist = Vec2.dist(pos, mid);
@@ -21197,10 +21263,10 @@ function findClosestBond(restruct, pos, skip, minDist, options) {
   }
   return null;
 }
-function findClosestEnhancedFlag(restruct, pos, skip, _minDist, options) {
+function findClosestEnhancedFlag(restruct, pos, _skip, _minDist, options) {
   var minDist;
   var ret = null;
-  restruct.enhancedFlags.forEach(function (item, id) {
+  restruct.enhancedFlags.forEach(function (_item, id) {
     var fragment = restruct.molecule.frags.get(id);
     if (!fragment || !fragment.enhancedStereoFlag || !options.showStereoFlags) return;
     var p = fragment.stereoFlagPosition ? new Vec2(fragment.stereoFlagPosition.x, fragment.stereoFlagPosition.y) : Fragment$1.getDefaultStereoFlagPosition(restruct.molecule, id);
@@ -21217,7 +21283,7 @@ function findClosestEnhancedFlag(restruct, pos, skip, _minDist, options) {
   return ret;
 }
 function findClosestDataSGroupData(restruct, pos) {
-  var minDist = null;
+  var minDist = Number.POSITIVE_INFINITY;
   var ret = null;
   restruct.sgroupData.forEach(function (item, id) {
     if (item.sgroup.type !== 'DAT') throw new Error('Data group expected');
@@ -21277,7 +21343,7 @@ function findClosestRgroupAttachmentPoints(restruct, cursorPosition, _skip, minD
   var minDist = minDistToOtherItems !== null && minDistToOtherItems !== void 0 ? minDistToOtherItems : Number.POSITIVE_INFINITY;
   var closestItemId;
   restruct.visibleRGroupAttachmentPoints.forEach(function (reItem, id) {
-    var itemOutlinePoints = reItem.getOutlinePoints();
+    var itemOutlinePoints = _toConsumableArray(reItem.getOutlinePoints());
     var isCursorInsideOutline = cursorPosition.isInsidePolygon(itemOutlinePoints);
     if (isCursorInsideOutline) {
       var dist = reItem.getDistanceTo(cursorPosition);
@@ -21293,7 +21359,7 @@ function findClosestRgroupAttachmentPoints(restruct, cursorPosition, _skip, minD
   };
 }
 function findClosestRxnArrow(restruct, pos) {
-  var minDist = null;
+  var minDist = Number.POSITIVE_INFINITY;
   var refPoint = null;
   var ret = null;
   restruct.rxnArrows.forEach(function (rxnArrow, id) {
@@ -21311,7 +21377,7 @@ function findClosestRxnArrow(restruct, pos) {
   return ret;
 }
 function findClosestRxnPlus(restruct, pos) {
-  var minDist = null;
+  var minDist = Number.POSITIVE_INFINITY;
   var ret = null;
   restruct.rxnPluses.forEach(function (plus, id) {
     var p = plus.item.pp;
@@ -21330,7 +21396,7 @@ function findClosestSGroup(restruct, pos) {
   var ret = null;
   var minDist = SELECTION_DISTANCE_COEFFICIENT;
   restruct.molecule.sgroups.forEach(function (sg, sgid) {
-    if (sg.isContracted()) return null;
+    if (sg.isContracted() || sg.isSuperatomWithoutLabel) return;
     var d = sg.bracketDirection;
     var n = d.rotateSC(1, 0);
     var pg = new Vec2(Vec2.dot(pos, d), Vec2.dot(pos, n));
@@ -21423,7 +21489,9 @@ function findCloseMerge(restruct, selected) {
   });
   selected.bonds.forEach(function (bid) {
     var bond = struct.bonds.get(bid);
-    pos.bonds.set(bid, Vec2.lc2(struct.atoms.get(bond.begin).pp, 0.5, struct.atoms.get(bond.end).pp, 0.5));
+    pos.bonds.set(bid, Vec2.lc2(
+    struct.atoms.get(bond.begin).pp, 0.5,
+    struct.atoms.get(bond.end).pp, 0.5));
   });
   var result = {
     atoms: new Map(),
@@ -21436,7 +21504,8 @@ function findCloseMerge(restruct, selected) {
         mergeAtomToAtom(atomId, restruct, atomPosition, selected, result) || mergeAtomToFunctionalGroup(atomId, restruct, atomPosition, result);
       });
     } else {
-      result[map] = Array.from(pos[map].keys()).reduce(function (res, srcId) {
+      result[map] = Array.from(pos[map].keys()).reduce(
+      function (res, srcId) {
         var skip = {
           map: map,
           id: srcId
@@ -21475,6 +21544,31 @@ function mergeAtomToFunctionalGroup(atomId, restruct, atomPosition, result) {
     return true;
   }
   return false;
+}
+function findClosestImage(reStruct, cursorPosition) {
+  var renderOptions = reStruct.render.options;
+  var canvasScaledPosition = Scale.modelToCanvas(cursorPosition, renderOptions);
+  var maxDistance = renderOptions.microModeScale * SELECTION_DISTANCE_COEFFICIENT;
+  return Array.from(reStruct.images.entries()).reduce(function (acc, _ref) {
+    var _ref2 = _slicedToArray$1(_ref, 2),
+      id = _ref2[0],
+      item = _ref2[1];
+    var distanceToPoint = item.calculateDistanceToPoint(canvasScaledPosition, renderOptions);
+    if (distanceToPoint <= maxDistance) {
+      if (acc && acc.dist < distanceToPoint) {
+        return acc;
+      }
+      var dist = Math.max(distanceToPoint, maxDistance / 3);
+      var closestPosition = item.calculateClosestReferencePosition(canvasScaledPosition, renderOptions);
+      var includeRef = closestPosition.distance < maxDistance;
+      return {
+        id: id,
+        dist: dist / renderOptions.microModeScale,
+        ref: includeRef ? closestPosition.ref : null
+      };
+    }
+    return acc;
+  }, null);
 }
 var closest = {
   atom: findClosestAtom,
@@ -21558,6 +21652,10 @@ var APointTool = function () {
       var result = [];
       if (ci && functionalGroups.size && ci.map === 'atoms') {
         var atomId = FunctionalGroup.atomsInFunctionalGroup(functionalGroups, ci.id);
+        var isAtomSuperatomLeavingGroup = Atom$2.isSuperatomLeavingGroupAtom(molecule, ci.id);
+        if (isAtomSuperatomLeavingGroup) {
+          return;
+        }
         if (atomId !== null) {
           atomResult.push(atomId);
         }
@@ -21578,10 +21676,12 @@ var APointTool = function () {
         } finally {
           _iterator.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length > 0) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       }
       if (ci && ci.map === 'atoms') {
         this.editor.hover(null);
@@ -21766,10 +21866,12 @@ var BondTool = function () {
         } finally {
           _iterator.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       } else if (bondResult.length > 0) {
         var _iterator2 = _createForOfIteratorHelper$6(bondResult),
           _step2;
@@ -21786,10 +21888,12 @@ var BondTool = function () {
         } finally {
           _iterator2.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       }
       var attachmentAtomId;
       if ((ci === null || ci === void 0 ? void 0 : ci.map) === 'functionalGroups') {
@@ -21968,10 +22072,13 @@ var BondTool = function () {
           }, Vec2.diff(xy, v), Vec2.sum(xy, v));
           this.editor.update(bondAddition[0]);
         } else if (dragCtx.item.map === 'atoms') {
-          this.editor.update(fromBondAddition(render.ctab, this.bondProps, dragCtx.item.id, {
-            label: 'C'
-          })[0]);
-          delete this.dragCtx.existedBond;
+          var isAtomSuperatomLeavingGroup = Atom$2.isSuperatomLeavingGroupAtom(struct, dragCtx.item.id);
+          if (!isAtomSuperatomLeavingGroup) {
+            this.editor.update(fromBondAddition(render.ctab, this.bondProps, dragCtx.item.id, {
+              label: 'C'
+            })[0]);
+            delete this.dragCtx.existedBond;
+          }
         } else if (dragCtx.item.map === 'bonds') {
           var bondProps = Object.assign({}, this.bondProps);
           var bond = struct.bonds.get(dragCtx.item.id);
@@ -22079,10 +22186,12 @@ var ChainTool = function () {
         } finally {
           _iterator.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       } else if (bondResult.length > 0) {
         var _iterator2 = _createForOfIteratorHelper$5(bondResult),
           _step2;
@@ -22099,10 +22208,12 @@ var ChainTool = function () {
         } finally {
           _iterator2.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       }
       this.editor.hover(null);
       this.dragCtx = {
@@ -22289,6 +22400,10 @@ var ChargeTool = function () {
       var result = [];
       if (ci && functionalGroups.size && ci.map === 'atoms') {
         var atomId = FunctionalGroup.atomsInFunctionalGroup(functionalGroups, ci.id);
+        var isAtomSuperatomLeavingGroup = Atom$2.isSuperatomLeavingGroupAtom(molecule, ci.id);
+        if (isAtomSuperatomLeavingGroup) {
+          return;
+        }
         if (atomId !== null) {
           atomResult.push(atomId);
         }
@@ -22309,10 +22424,12 @@ var ChargeTool = function () {
         } finally {
           _iterator.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length > 0) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       }
       if (ci && ci.map === 'atoms' && Elements.get((_molecule$atoms$get2 = molecule.atoms.get(ci.id)) === null || _molecule$atoms$get2 === void 0 ? void 0 : _molecule$atoms$get2.label)) {
         var _molecule$atoms$get3;
@@ -22381,7 +22498,7 @@ var EraserTool = function () {
   function EraserTool(editor, mode) {
     _classCallCheck$2(this, EraserTool);
     this.editor = editor;
-    this.maps = ['atoms', 'bonds', 'rxnArrows', 'rxnPluses', 'sgroups', 'functionalGroups', 'sgroupData', 'simpleObjects', 'texts', 'rgroupAttachmentPoints'];
+    this.maps = ['atoms', 'bonds', 'rxnArrows', 'rxnPluses', 'sgroups', 'functionalGroups', 'sgroupData', 'simpleObjects', 'texts', 'rgroupAttachmentPoints', IMAGE_KEY];
     this.lassoHelper = new LassoHelper(mode || 0, editor, null);
     if (editor.selection()) {
       var action = fromFragmentDeletion(editor.render.ctab, editor.selection());
@@ -22659,6 +22776,8 @@ var EraserTool = function () {
         this.editor.update(fromTextDeletion(restruct, ci.id));
       } else if (ci.map === 'rgroupAttachmentPoints') {
         this.editor.update(fromRGroupAttachmentPointDeletion(restruct, ci.id));
+      } else if (ci.map === IMAGE_KEY) {
+        this.editor.update(fromImageDeletion(restruct, ci.id));
       } else {
         return;
       }
@@ -22888,12 +23007,6 @@ var PasteTool = function () {
         this.dragCtx.action = action;
         this.editor.update(this.dragCtx.action, true);
       } else {
-        var _struct = this.editor.struct();
-        this.struct.sgroups.forEach(function (sgroup) {
-          if (sgroup.isNotContractible(_struct)) {
-            sgroup.setAttr('expanded', true);
-          }
-        });
         var _fromPaste5 = fromPaste(this.restruct, this.struct, this.editor.render.page2obj(event)),
           _fromPaste6 = _slicedToArray$1(_fromPaste5, 2),
           _action = _fromPaste6[0],
@@ -23015,6 +23128,10 @@ var RGroupAtomTool = function () {
       var result = [];
       if (ci && functionalGroups && ci.map === 'atoms') {
         var atomId = FunctionalGroup.atomsInFunctionalGroup(functionalGroups, ci.id);
+        var isAtomSuperatomLeavingGroup = Atom$2.isSuperatomLeavingGroupAtom(molecule, ci.id);
+        if (isAtomSuperatomLeavingGroup) {
+          return;
+        }
         if (atomId !== null) {
           atomResult.push(atomId);
         }
@@ -23035,10 +23152,12 @@ var RGroupAtomTool = function () {
         } finally {
           _iterator.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length > 0) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       }
       if (!ci) {
         this.editor.hover(null);
@@ -23140,10 +23259,12 @@ var RGroupFragmentTool = function () {
         } finally {
           _iterator.f();
         }
-        this.editor.event.removeFG.dispatch({
-          fgIds: result
-        });
-        return;
+        if (result.length > 0) {
+          this.editor.event.removeFG.dispatch({
+            fgIds: result
+          });
+          return;
+        }
       } else if (bondResult.length > 0) {
         var _iterator2 = _createForOfIteratorHelper$1(bondResult),
           _step2;
@@ -24108,7 +24229,159 @@ function propsDialog(editor, id, position, pos) {
   });
 }
 
-var toolsMap = {
+var TAG = 'tool/image.ts';
+var supportedMimes = ['png', 'svg+xml'];
+var supportedMimesForRegex = supportedMimes.map(function (item) {
+  return item.replace('+', '\\+');
+}).join('|');
+var allowList = new RegExp("^image/(".concat(supportedMimesForRegex, ")$"));
+var MIN_DIMENSION_SIZE = 16;
+var ImageTool = function () {
+  function ImageTool(editor) {
+    _classCallCheck$2(this, ImageTool);
+    _defineProperty$1(this, "dragCtx", null);
+    this.editor = editor;
+    this.element = this.getElement();
+  }
+  _createClass$2(ImageTool, [{
+    key: "mousedown",
+    value: function mousedown(event) {
+      var render = this.editor.render;
+      var closestItem = this.editor.findItem(event, [IMAGE_KEY]);
+      this.editor.selection(null);
+      if (closestItem) {
+        this.editor.hover(null);
+        this.editor.selection(_defineProperty$1({}, IMAGE_KEY, [closestItem.id]));
+        this.dragCtx = {
+          center: CoordinateTransformation.pageToModel(event, render),
+          action: new Action(),
+          closestItem: closestItem
+        };
+      }
+    }
+  }, {
+    key: "click",
+    value: function click(event) {
+      var closestItem = this.editor.findItem(event, [IMAGE_KEY]);
+      this.editor.hover(null);
+      if (closestItem) {
+        return;
+      }
+      var position = CoordinateTransformation.pageToModel(event, this.editor.render);
+      this.element.onchange = this.onFileUpload.bind(this, position);
+      this.element.click();
+    }
+  }, {
+    key: "mousemove",
+    value: function mousemove(event) {
+      var render = this.editor.render;
+      if (this.dragCtx) {
+        this.dragCtx.action.perform(render.ctab);
+        var click = CoordinateTransformation.pageToModel(event, render);
+        this.dragCtx.action = this.dragCtx.closestItem.ref ? fromImageResize(render.ctab, this.dragCtx.closestItem.id, click, this.dragCtx.closestItem.ref) : fromImageMove(render.ctab, this.dragCtx.closestItem.id, click.sub(this.dragCtx.center));
+        this.editor.update(this.dragCtx.action, true);
+      } else {
+        var item = this.editor.findItem(event, [IMAGE_KEY]);
+        var _render = this.editor.render;
+        if (item !== null && item !== void 0 && item.ref) {
+          handleMovingPosibilityCursor(item,
+          _render.paper.canvas, imageReferencePositionToCursor[item.ref.name]);
+        } else {
+          handleMovingPosibilityCursor(item,
+          _render.paper.canvas, _render.options.movingStyle.cursor);
+        }
+        this.editor.hover(item, null, event);
+      }
+    }
+  }, {
+    key: "mouseup",
+    value: function mouseup() {
+      if (this.dragCtx) {
+        this.editor.update(this.dragCtx.action);
+        this.dragCtx = null;
+      }
+      return true;
+    }
+  }, {
+    key: "onFileUpload",
+    value: function onFileUpload(clickPosition) {
+      var _this = this;
+      var errorHandler = this.editor.errorHandler;
+      this.element.onchange = null;
+      if (this.element.files && this.element.files[0]) {
+        var file = this.element.files[0];
+        var image = new Image();
+        var reader = new FileReader();
+        if (!file.type || !file.type.match(allowList)) {
+          var errorMessage = "Unsupported image type";
+          KetcherLogger.error("".concat(TAG, ":onFileUpload"), errorMessage);
+          if (errorHandler) {
+            errorHandler(errorMessage);
+          }
+          this.resetElementValue();
+          return;
+        }
+        reader.addEventListener('load', function () {
+          image.src = reader.result;
+        });
+        image.onload = function () {
+          _this.resetElementValue();
+          if (image.width < MIN_DIMENSION_SIZE || image.height < MIN_DIMENSION_SIZE) {
+            var _errorMessage = 'Image should be at least 16x16 pixels';
+            KetcherLogger.error("".concat(TAG, ":onLoad"), _errorMessage);
+            if (errorHandler) {
+              errorHandler(_errorMessage);
+            }
+            return;
+          }
+          var halfSize = Scale.canvasToModel(new Vec2(image.width / 2, image.height / 2), _this.editor.render.options);
+          _this.editor.update(fromImageCreation(_this.editor.render.ctab, image.src, clickPosition, halfSize));
+        };
+        image.onerror = function (e) {
+          _this.resetElementValue();
+          var errorMessage = 'Cannot load image';
+          KetcherLogger.error("".concat(TAG, ":onerror"), errorMessage, e);
+          if (errorHandler) {
+            errorHandler(errorMessage);
+          }
+        };
+        reader.readAsDataURL(this.element.files[0]);
+      }
+    }
+  }, {
+    key: "createElement",
+    value: function createElement() {
+      var uploader = document.createElement('input');
+      uploader.style.display = 'none';
+      uploader.id = ImageTool.INPUT_ID;
+      uploader.type = 'file';
+      uploader.accept = supportedMimes.map(function (item) {
+        return "image/".concat(item);
+      }).join(',');
+      document.body.appendChild(uploader);
+      return uploader;
+    }
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      var element = document.getElementById(ImageTool.INPUT_ID);
+      if (element instanceof HTMLInputElement) {
+        return element;
+      }
+      element === null || element === void 0 || element.remove();
+      return this.createElement();
+    }
+  }, {
+    key: "resetElementValue",
+    value: function resetElementValue() {
+      this.getElement().value = '';
+    }
+  }]);
+  return ImageTool;
+}();
+_defineProperty$1(ImageTool, "INPUT_ID", 'image-upload');
+
+var toolsMap = _defineProperty$1({
   hand: HandTool,
   rgroupatom: RGroupAtomTool,
   select: SelectTool,
@@ -24131,7 +24404,7 @@ var toolsMap = {
   enhancedStereo: EnhancedStereoTool,
   simpleobject: SimpleObjectTool,
   text: TextTool
-};
+}, IMAGE_KEY, ImageTool);
 
 var Highlighter = function () {
   function Highlighter(editor) {
@@ -25002,8 +25275,8 @@ function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedec
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 var SCALE = provideEditorSettings().microModeScale;
 var HISTORY_SIZE = 32;
-var structObjects = ['atoms', 'bonds', 'frags', 'sgroups', 'sgroupData', 'rgroups', 'rxnArrows', 'rxnPluses', 'enhancedFlags', 'simpleObjects', 'texts'];
-var highlightTargets = ['atoms', 'bonds', 'rxnArrows', 'rxnPluses', 'functionalGroups', 'frags', 'merge', 'rgroups', 'rgroupAttachmentPoints', 'sgroups', 'sgroupData', 'enhancedFlags', 'simpleObjects', 'texts'];
+var structObjects = ['atoms', 'bonds', 'frags', 'sgroups', 'sgroupData', 'rgroups', 'rxnArrows', 'rxnPluses', 'enhancedFlags', 'simpleObjects', 'texts', IMAGE_KEY];
+var highlightTargets = ['atoms', 'bonds', 'rxnArrows', 'rxnPluses', 'functionalGroups', 'frags', 'merge', 'rgroups', 'rgroupAttachmentPoints', 'sgroups', 'sgroupData', 'enhancedFlags', 'simpleObjects', 'texts', IMAGE_KEY];
 function selectStereoFlagsIfNecessary(atoms, expAtoms) {
   var atomsOfFragments = {};
   atoms.forEach(function (atom, atomId) {
@@ -25433,7 +25706,7 @@ var Editor$3 = function () {
     value: function structSelected() {
       var struct = this.render.ctab.molecule;
       var selection = this.explicitSelected();
-      var dst = struct.clone(new Pile(selection.atoms), new Pile(selection.bonds), true, null, new Pile(selection.simpleObjects), new Pile(selection.texts));
+      var dst = struct.clone(new Pile(selection.atoms), new Pile(selection.bonds), true, null, new Pile(selection.simpleObjects), new Pile(selection.texts), null, new Pile(selection.images));
       struct.rxnArrows.forEach(function (item, id) {
         if (selection.rxnArrows.indexOf(id) !== -1) dst.rxnArrows.add(item.clone());
       });
@@ -25461,6 +25734,12 @@ var Editor$3 = function () {
     value: function clearMacromoleculeConvertionError() {
       this.macromoleculeConvertionError = null;
     }
+  }, {
+    key: "focusCliparea",
+    value: function focusCliparea() {
+      var cliparea = document.querySelector('.cliparea');
+      cliparea === null || cliparea === void 0 || cliparea.focus();
+    }
   }]);
   return Editor;
 }();
@@ -25472,14 +25751,32 @@ function resetSelectionOnCanvasClick(editor, eventName, clientArea, event) {
     editor.selection(null);
   }
 }
+function calculateLayerOffset(event) {
+  var target = event.target || event.srcElement;
+  var svgTarget = target === null || target === void 0 ? void 0 : target.closest('svg');
+  if (!svgTarget) {
+    return null;
+  }
+  var svgRect = svgTarget.getBoundingClientRect();
+  var offsetX = event.clientX - svgRect.left;
+  var offsetY = event.clientY - svgRect.top;
+  return {
+    offsetX: offsetX,
+    offsetY: offsetY
+  };
+}
 function updateLastCursorPosition(editor, event) {
   var events = ['mousemove', 'click', 'mousedown', 'mouseup', 'mouseover'];
   if (events.includes(event.type)) {
     var clientAreaBoundingBox = editor.render.clientArea.getBoundingClientRect();
-    editor.lastCursorPosition = {
-      x: event.clientX - clientAreaBoundingBox.x,
-      y: event.clientY - clientAreaBoundingBox.y
-    };
+    var pos = calculateLayerOffset(event);
+    if (pos != null) {
+      var _editor$options$zoom, _editor$options$exter, _editor$options$zoom2, _editor$options$exter2;
+      editor.lastCursorPosition = {
+        x: pos.offsetX / ((_editor$options$zoom = editor.options().zoom) !== null && _editor$options$zoom !== void 0 ? _editor$options$zoom : 1.0) / ((_editor$options$exter = editor.options().externalZoomScale) !== null && _editor$options$exter !== void 0 ? _editor$options$exter : 1.0) - clientAreaBoundingBox.x,
+        y: pos.offsetY / ((_editor$options$zoom2 = editor.options().zoom) !== null && _editor$options$zoom2 !== void 0 ? _editor$options$zoom2 : 1.0) / ((_editor$options$exter2 = editor.options().externalZoomScale) !== null && _editor$options$exter2 !== void 0 ? _editor$options$exter2 : 1.0) - clientAreaBoundingBox.y
+      };
+    }
   }
 }
 function isContextMenuClosed(contextMenu) {
@@ -25756,7 +26053,8 @@ var useDelete$1 = function useDelete() {
             action = fromFragmentDeletion(molecule, itemsToDelete);
             editor.update(action);
             editor.selection(null);
-          case 7:
+            editor.focusCliparea();
+          case 8:
           case "end":
             return _context.stop();
         }
@@ -25786,6 +26084,10 @@ function ButtonGroup(_ref) {
   }, [onClick]);
   return jsx(ToggleButtonGroup, {
     exclusive: true,
+    style: {
+      overflowX: 'hidden',
+      flexWrap: 'wrap'
+    },
     children: buttons.map(function (_ref2) {
       var label = _ref2.label,
         buttonValue = _ref2.value;
@@ -25796,11 +26098,154 @@ function ButtonGroup(_ref) {
           return handleChange(event, buttonValue);
         },
         className: clsx(classes$F.button, _defineProperty$1({}, classes$F.selected, buttonValue === value)),
+        style: {
+          flex: '1 0 25%',
+          margin: '2px',
+          borderRadius: '3px'
+        },
         children: label || 'none'
       }, label);
     })
   });
 }
+
+var useAddAttachmentPoint = function useAddAttachmentPoint() {
+  var _useAppContext = useAppContext(),
+    getKetcherInstance = _useAppContext.getKetcherInstance;
+  var handler = useCallback( function () {
+    var _ref2 = _asyncToGenerator( _regeneratorRuntime.mark(function _callee(_ref) {
+      var _props$atomIds;
+      var props, editor, restruct, struct, atomId, sgroup, bondAdditionResult, action, addedLeavingGroupAtomId, moleculeAtoms, sgroupAttachmentPoints, allPointsNumbers, lastMinimalPointNumber, hasFirstNumber, i, prevNumber, currentNumber;
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            props = _ref.props;
+            editor = getKetcherInstance().editor;
+            restruct = editor.render.ctab;
+            struct = editor.struct();
+            atomId = props === null || props === void 0 || (_props$atomIds = props.atomIds) === null || _props$atomIds === void 0 ? void 0 : _props$atomIds[0];
+            sgroup = struct.getGroupFromAtomId(atomId);
+            if (isNumber(atomId)) {
+              _context.next = 8;
+              break;
+            }
+            return _context.abrupt("return");
+          case 8:
+            bondAdditionResult = fromBondAddition(restruct, {
+              type: Bond$2.PATTERN.TYPE.SINGLE
+            }, atomId, {
+              label: 'H'
+            });
+            action = bondAdditionResult[0];
+            addedLeavingGroupAtomId = bondAdditionResult[2];
+            if (sgroup) {
+              _context.next = 16;
+              break;
+            }
+            moleculeAtoms = struct.findConnectedComponent(atomId);
+            action.mergeWith(fromSgroupAddition(restruct, SGroup$1.TYPES.SUP, moleculeAtoms, {
+              expanded: true
+            }, restruct.molecule.sgroups.newId(), [new SGroupAttachmentPoint(atomId, addedLeavingGroupAtomId, undefined, 1)]));
+            _context.next = 35;
+            break;
+          case 16:
+            sgroupAttachmentPoints = (sgroup === null || sgroup === void 0 ? void 0 : sgroup.getAttachmentPoints()) || [];
+            allPointsNumbers = sgroupAttachmentPoints.map(function (point) {
+              return point.attachmentPointNumber || 0;
+            }).sort();
+            lastMinimalPointNumber = allPointsNumbers[allPointsNumbers.length - 1];
+            hasFirstNumber = allPointsNumbers.includes(1);
+            if (hasFirstNumber) {
+              _context.next = 24;
+              break;
+            }
+            lastMinimalPointNumber = 0;
+            _context.next = 34;
+            break;
+          case 24:
+            i = 1;
+          case 25:
+            if (!(i < allPointsNumbers.length)) {
+              _context.next = 34;
+              break;
+            }
+            prevNumber = allPointsNumbers[i - 1];
+            currentNumber = allPointsNumbers[i];
+            if (!(currentNumber > prevNumber + 1)) {
+              _context.next = 31;
+              break;
+            }
+            lastMinimalPointNumber = prevNumber;
+            return _context.abrupt("break", 34);
+          case 31:
+            i++;
+            _context.next = 25;
+            break;
+          case 34:
+            action.mergeWith(fromSgroupAttachmentPointAddition(restruct, sgroup.id, new SGroupAttachmentPoint(atomId, addedLeavingGroupAtomId, undefined, lastMinimalPointNumber + 1)));
+          case 35:
+            editor.update(action);
+            editor.selection(null);
+            editor.focusCliparea();
+          case 38:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    return function (_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }(), [getKetcherInstance]);
+  return [handler];
+};
+
+var useRemoveAttachmentPoint = function useRemoveAttachmentPoint() {
+  var _useAppContext = useAppContext(),
+    getKetcherInstance = _useAppContext.getKetcherInstance;
+  var handler = useCallback( function () {
+    var _ref2 = _asyncToGenerator( _regeneratorRuntime.mark(function _callee(_ref) {
+      var _props$atomIds;
+      var props, editor, restruct, struct, atomId, sgroup, sgroupAttachmentPoints, atomExternalConnections, atomFreeAttachmentPoints, attachmentPointToDelete, action;
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            props = _ref.props;
+            editor = getKetcherInstance().editor;
+            restruct = editor.render.ctab;
+            struct = editor.struct();
+            atomId = props === null || props === void 0 || (_props$atomIds = props.atomIds) === null || _props$atomIds === void 0 ? void 0 : _props$atomIds[0];
+            sgroup = struct.getGroupFromAtomId(atomId);
+            sgroupAttachmentPoints = (sgroup === null || sgroup === void 0 ? void 0 : sgroup.getAttachmentPoints()) || [];
+            atomExternalConnections = Atom$2.getAttachmentAtomExternalConnections(struct, atomId);
+            atomFreeAttachmentPoints = sgroupAttachmentPoints === null || sgroupAttachmentPoints === void 0 ? void 0 : sgroupAttachmentPoints.filter(function (attachmentPoint) {
+              return attachmentPoint.atomId === atomId && !(atomExternalConnections !== null && atomExternalConnections !== void 0 && atomExternalConnections.find(function (_, bond) {
+                return bond.endSuperatomAttachmentPointNumber === attachmentPoint.attachmentPointNumber || bond.beginSuperatomAttachmentPointNumber === attachmentPoint.attachmentPointNumber;
+              }));
+            });
+            attachmentPointToDelete = atomFreeAttachmentPoints[atomFreeAttachmentPoints.length - 1];
+            if (!(!isNumber(atomId) || !attachmentPointToDelete)) {
+              _context.next = 12;
+              break;
+            }
+            return _context.abrupt("return");
+          case 12:
+            action = fromOneAtomDeletion(restruct, attachmentPointToDelete.leaveAtomId);
+            editor.update(action);
+            editor.selection(null);
+            editor.focusCliparea();
+          case 16:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    return function (_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }(), [getKetcherInstance]);
+  return [handler];
+};
 
 function ownKeys$M(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$M(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$M(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$M(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -25870,10 +26315,16 @@ var atomPropertiesForSubMenu = [{
   };
 })));
 var AtomMenuItems = function AtomMenuItems(props) {
-  var _props$propsFromTrigg4;
+  var _props$propsFromTrigg4, _props$propsFromTrigg5, _props$propsFromTrigg6;
   var _useAtomEdit = useAtomEdit(),
     _useAtomEdit2 = _slicedToArray$1(_useAtomEdit, 1),
     handleEdit = _useAtomEdit2[0];
+  var _useAddAttachmentPoin = useAddAttachmentPoint(),
+    _useAddAttachmentPoin2 = _slicedToArray$1(_useAddAttachmentPoin, 1),
+    handleAddAttachmentPoint = _useAddAttachmentPoin2[0];
+  var _useRemoveAttachmentP = useRemoveAttachmentPoint(),
+    _useRemoveAttachmentP2 = _slicedToArray$1(_useRemoveAttachmentP, 1),
+    handleRemoveAttachmentPoint = _useRemoveAttachmentP2[0];
   var _useAtomStereo = useAtomStereo(),
     _useAtomStereo2 = _slicedToArray$1(_useAtomStereo, 2),
     handleStereo = _useAtomStereo2[0],
@@ -25882,6 +26333,7 @@ var AtomMenuItems = function AtomMenuItems(props) {
   var _useAppContext = useAppContext(),
     getKetcherInstance = _useAppContext.getKetcherInstance;
   var editor = getKetcherInstance().editor;
+  var struct = editor.struct();
   var getPropertyValue = function getPropertyValue(key) {
     var _props$propsFromTrigg;
     var ctab = editor.render.ctab;
@@ -25909,10 +26361,30 @@ var AtomMenuItems = function AtomMenuItems(props) {
       });
     }
   };
+  var onlyOneAtomSelected = ((_props$propsFromTrigg4 = props.propsFromTrigger) === null || _props$propsFromTrigg4 === void 0 || (_props$propsFromTrigg4 = _props$propsFromTrigg4.atomIds) === null || _props$propsFromTrigg4 === void 0 ? void 0 : _props$propsFromTrigg4.length) === 1;
+  var selectedAtomId = (_props$propsFromTrigg5 = props.propsFromTrigger) === null || _props$propsFromTrigg5 === void 0 || (_props$propsFromTrigg5 = _props$propsFromTrigg5.atomIds) === null || _props$propsFromTrigg5 === void 0 ? void 0 : _props$propsFromTrigg5[0];
+  var sgroup = isNumber(selectedAtomId) ? struct.getGroupFromAtomId(selectedAtomId) : undefined;
+  var atomInSgroupWithLabel = sgroup && !(sgroup !== null && sgroup !== void 0 && sgroup.isSuperatomWithoutLabel);
+  var attachmentPoints = (sgroup === null || sgroup === void 0 ? void 0 : sgroup.getAttachmentPoints()) || [];
+  var maxAttachmentPointsAmount = attachmentPoints.length >= 8;
+  var isAtomSuperatomAttachmentPoint = Atom$2.isSuperatomAttachmentAtom(struct, selectedAtomId);
+  var isAtomSuperatomLeavingGroup = Atom$2.isSuperatomLeavingGroupAtom(struct, selectedAtomId);
+  var atomExternalConnections = isNumber(selectedAtomId) ? Atom$2.getAttachmentAtomExternalConnections(struct, selectedAtomId) : undefined;
+  var atomFreeAttachmentPoints = attachmentPoints === null || attachmentPoints === void 0 ? void 0 : attachmentPoints.filter(function (attachmentPoint) {
+    return attachmentPoint.atomId === selectedAtomId && !(atomExternalConnections !== null && atomExternalConnections !== void 0 && atomExternalConnections.some(function (bond) {
+      return bond.endSuperatomAttachmentPointNumber === attachmentPoint.attachmentPointNumber || bond.beginSuperatomAttachmentPointNumber === attachmentPoint.attachmentPointNumber;
+    }));
+  });
+  if (isAtomSuperatomLeavingGroup && onlyOneAtomSelected) {
+    return jsx(Item, _objectSpread$M(_objectSpread$M({}, props), {}, {
+      onClick: handleDelete,
+      children: "Delete"
+    }));
+  }
   return jsxs(Fragment, {
     children: [jsx(Item, _objectSpread$M(_objectSpread$M({}, props), {}, {
       onClick: handleEdit,
-      children: (_props$propsFromTrigg4 = props.propsFromTrigger) !== null && _props$propsFromTrigg4 !== void 0 && _props$propsFromTrigg4.extraItemsSelected ? 'Edit selected atoms...' : 'Edit...'
+      children: (_props$propsFromTrigg6 = props.propsFromTrigger) !== null && _props$propsFromTrigg6 !== void 0 && _props$propsFromTrigg6.extraItemsSelected ? 'Edit selected atoms...' : 'Edit...'
     })), jsx(Item, _objectSpread$M(_objectSpread$M({}, props), {}, {
       disabled: stereoDisabled,
       onClick: handleStereo,
@@ -25938,6 +26410,12 @@ var AtomMenuItems = function AtomMenuItems(props) {
           }
         }));
       })
+    })), onlyOneAtomSelected && !atomInSgroupWithLabel && !maxAttachmentPointsAmount && !isAtomSuperatomLeavingGroup && jsx(Item, _objectSpread$M(_objectSpread$M({}, props), {}, {
+      onClick: handleAddAttachmentPoint,
+      children: "Add attachment point"
+    })), isAtomSuperatomAttachmentPoint && atomFreeAttachmentPoints.length > 0 && jsx(Item, _objectSpread$M(_objectSpread$M({}, props), {}, {
+      onClick: handleRemoveAttachmentPoint,
+      children: "Remove attachment point"
     })), jsx(Item, _objectSpread$M(_objectSpread$M({}, props), {}, {
       onClick: handleDelete,
       children: "Delete"
@@ -26076,7 +26554,11 @@ var useBondTypeChange = function useBondTypeChange() {
   var disabled = useCallback(function (_ref2) {
     var props = _ref2.props;
     var selectedBondIds = props === null || props === void 0 ? void 0 : props.bondIds;
+    var editor = getKetcherInstance().editor;
     if (Array.isArray(selectedBondIds) && selectedBondIds.length !== 0) {
+      if (editor.struct().isBondFromMacromolecule(selectedBondIds[0])) {
+        return true;
+      }
       return false;
     }
     return true;
@@ -26093,8 +26575,9 @@ var BondMenuItems = function BondMenuItems(props) {
     _useBondEdit2 = _slicedToArray$1(_useBondEdit, 1),
     handleEdit = _useBondEdit2[0];
   var _useBondTypeChange = useBondTypeChange(),
-    _useBondTypeChange2 = _slicedToArray$1(_useBondTypeChange, 1),
-    handleTypeChange = _useBondTypeChange2[0];
+    _useBondTypeChange2 = _slicedToArray$1(_useBondTypeChange, 2),
+    handleTypeChange = _useBondTypeChange2[0],
+    disabled = _useBondTypeChange2[1];
   var _useBondSGroupAttach = useBondSGroupAttach(),
     _useBondSGroupAttach2 = _slicedToArray$1(_useBondSGroupAttach, 2),
     handleSGroupAttach = _useBondSGroupAttach2[0],
@@ -26106,9 +26589,13 @@ var BondMenuItems = function BondMenuItems(props) {
     sGroupEditHidden = _useBondSGroupEdit2[2];
   var handleDelete = useDelete$1();
   var bondNamesWithoutEmptyValue = nonQueryBondNames.slice(1);
+  var isDisabled = disabled({
+    props: props.propsFromTrigger
+  });
   return jsxs(Fragment, {
     children: [jsx(Item, _objectSpread$L(_objectSpread$L({}, props), {}, {
       onClick: handleEdit,
+      disabled: isDisabled,
       children: (_props$propsFromTrigg = props.propsFromTrigger) !== null && _props$propsFromTrigg !== void 0 && _props$propsFromTrigg.extraItemsSelected ? 'Edit selected bonds...' : 'Edit...'
     })), bondNamesWithoutEmptyValue.map(function (name, i) {
       var iconName = getIconName(name);
@@ -26118,7 +26605,8 @@ var BondMenuItems = function BondMenuItems(props) {
       }, props), {}, {
         id: name,
         onClick: handleTypeChange,
-        key: name
+        key: name,
+        disabled: isDisabled
       }), iconName && jsx(Icon, {
         name: iconName,
         className: styles$e.icon
@@ -26134,6 +26622,7 @@ var BondMenuItems = function BondMenuItems(props) {
           className: styles$e.sameGroup,
           id: name,
           onClick: handleTypeChange,
+          disabled: isDisabled,
           children: [iconName && jsx(Icon, {
             name: iconName,
             className: styles$e.icon
@@ -26421,22 +26910,68 @@ var props = {
   animation: false,
   className: styles$e.contextMenu
 };
+function BodyPortal(props) {
+  return ReactDOM.createPortal(props.children, document.body, props.refKey);
+}
 var ContextMenu = function ContextMenu() {
   var _useAppContext = useAppContext(),
     getKetcherInstance = _useAppContext.getKetcherInstance;
-  var resetMenuPosition = function resetMenuPosition() {
-    var contextMenuElement = document.querySelector('.contexify:last-of-type');
+  var adjustSubmenuPosition = function adjustSubmenuPosition(submenuElement) {
+    var rect = submenuElement.getBoundingClientRect();
+    var ketcherRootElement = document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR);
+    var ketcherRootElementRect = ketcherRootElement === null || ketcherRootElement === void 0 ? void 0 : ketcherRootElement.getBoundingClientRect();
+    var ketcherEditorWidth = (ketcherRootElementRect === null || ketcherRootElementRect === void 0 ? void 0 : ketcherRootElementRect.width) || 0;
+    var ketcherEditorHeight = (ketcherRootElementRect === null || ketcherRootElementRect === void 0 ? void 0 : ketcherRootElementRect.height) || 0;
+    var ketcherEditorLeft = (ketcherRootElementRect === null || ketcherRootElementRect === void 0 ? void 0 : ketcherRootElementRect.left) || 0;
+    var ketcherEditorTop = (ketcherRootElementRect === null || ketcherRootElementRect === void 0 ? void 0 : ketcherRootElementRect.top) || 0;
+    if (rect.right - ketcherEditorLeft > ketcherEditorWidth) {
+      submenuElement.style.left = 'auto';
+      submenuElement.style.right = '100%';
+    } else {
+      submenuElement.style.left = '100%';
+      submenuElement.style.right = 'auto';
+    }
+    if (rect.bottom - ketcherEditorTop > ketcherEditorHeight) {
+      submenuElement.style.top = 'auto';
+      submenuElement.style.bottom = '0';
+    } else {
+      submenuElement.style.top = '0';
+      submenuElement.style.bottom = 'auto';
+    }
+  };
+  var resetMenuPosition = function resetMenuPosition(menuElement) {
+    var contextMenuElement = menuElement;
     var ketcherRootElement = document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR);
     if (!contextMenuElement || !ketcherRootElement) {
       return;
     }
     var contextMenuElementBoundingBox = contextMenuElement.getBoundingClientRect();
     var ketcherRootElementBoundingBox = ketcherRootElement.getBoundingClientRect();
+    var viewportWidth = window.innerWidth;
+    var viewportHeight = window.innerHeight;
     if (!contextMenuElementBoundingBox || !ketcherRootElementBoundingBox) {
       return;
     }
-    var left = contextMenuElementBoundingBox.right > ketcherRootElementBoundingBox.right ? contextMenuElementBoundingBox.x - (contextMenuElementBoundingBox.right - ketcherRootElementBoundingBox.right) : contextMenuElementBoundingBox.x;
-    var top = contextMenuElementBoundingBox.bottom > ketcherRootElementBoundingBox.bottom ? contextMenuElementBoundingBox.y - (contextMenuElementBoundingBox.bottom - ketcherRootElementBoundingBox.bottom) : contextMenuElementBoundingBox.y;
+    var left = contextMenuElementBoundingBox.left;
+    var top = contextMenuElementBoundingBox.top;
+    if (contextMenuElementBoundingBox.right > ketcherRootElementBoundingBox.right) {
+      left = ketcherRootElementBoundingBox.right - contextMenuElementBoundingBox.width;
+    }
+    if (contextMenuElementBoundingBox.bottom > ketcherRootElementBoundingBox.bottom) {
+      top = ketcherRootElementBoundingBox.bottom - contextMenuElementBoundingBox.height;
+    }
+    if (left < 0) {
+      left = 0;
+    }
+    if (top < 0) {
+      top = 0;
+    }
+    if (contextMenuElementBoundingBox.right > viewportWidth) {
+      left = viewportWidth - contextMenuElementBoundingBox.width - 10;
+    }
+    if (contextMenuElementBoundingBox.bottom > viewportHeight) {
+      top = viewportHeight - contextMenuElementBoundingBox.height - 10;
+    }
     contextMenuElement.style.left = "".concat(left, "px");
     contextMenuElement.style.top = "".concat(top, "px");
   };
@@ -26444,43 +26979,69 @@ var ContextMenu = function ContextMenu() {
     var editor = getKetcherInstance().editor;
     if (visible) {
       editor.hoverIcon.hide();
-      resetMenuPosition();
+      var contextMenuElement = document.querySelector('.contexify:last-of-type');
+      var submenuElements = document.querySelectorAll('.contexify_submenu');
+      if (contextMenuElement) {
+        setTimeout(function () {
+          return resetMenuPosition(contextMenuElement);
+        }, 0);
+      }
+      if (submenuElements.length) {
+        submenuElements.forEach(function (submenuElement) {
+          adjustSubmenuPosition(submenuElement);
+        });
+      }
     }
     editor.contextMenu[id] = visible;
   }, [getKetcherInstance]);
   var ketcherEditorRootElement = document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR);
   return ketcherEditorRootElement ? createPortal(jsxs(Fragment, {
-    children: [jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_BONDS,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_BONDS, visible);
-      },
-      children: jsx(BondMenuItems, {})
-    })), jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_ATOMS,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_ATOMS, visible);
-      },
-      children: jsx(AtomMenuItems, {})
-    })), jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_SELECTION,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_SELECTION, visible);
-      },
-      children: jsx(SelectionMenuItems, {})
-    })), jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS, visible);
-      },
-      children: jsx(FunctionalGroupMenuItems, {})
-    })), jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
-      id: CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT,
-      onVisibilityChange: function onVisibilityChange(visible) {
-        return trackVisibility(CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT, visible);
-      },
-      children: jsx(RGroupAttachmentPointMenuItems, {})
-    }))]
+    children: [jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_BONDS,
+      children: jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_BONDS,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_BONDS, visible);
+        },
+        children: jsx(BondMenuItems, {})
+      }))
+    }), jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_ATOMS,
+      children: jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_ATOMS,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_ATOMS, visible);
+        },
+        children: jsx(AtomMenuItems, {})
+      }))
+    }), jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_SELECTION,
+      children: jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_SELECTION,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_SELECTION, visible);
+        },
+        children: jsx(SelectionMenuItems, {})
+      }))
+    }), jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+      children: jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS, visible);
+        },
+        children: jsx(FunctionalGroupMenuItems, {})
+      }))
+    }), jsx(BodyPortal, {
+      refKey: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+      children: jsx(Menu, _objectSpread$H(_objectSpread$H({}, props), {}, {
+        id: CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT,
+        onVisibilityChange: function onVisibilityChange(visible) {
+          return trackVisibility(CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT, visible);
+        },
+        children: jsx(RGroupAttachmentPointMenuItems, {})
+      }))
+    })]
   }), ketcherEditorRootElement) : null;
 };
 
@@ -26507,7 +27068,7 @@ function getMenuPropsForClosestItem(editor, closestItem) {
     case 'bonds':
       {
         var functionalGroup = FunctionalGroup.findFunctionalGroupByBond(struct, struct.functionalGroups, closestItem.id, true);
-        return functionalGroup === null ? {
+        return functionalGroup === null || functionalGroup !== null && functionalGroup !== void 0 && functionalGroup.relatedSGroup.isSuperatomWithoutLabel ? {
           id: CONTEXT_MENU_ID.FOR_BONDS,
           bondIds: [closestItem.id]
         } : {
@@ -26518,7 +27079,7 @@ function getMenuPropsForClosestItem(editor, closestItem) {
     case 'atoms':
       {
         var _functionalGroup = FunctionalGroup.findFunctionalGroupByAtom(struct.functionalGroups, closestItem.id, true);
-        return _functionalGroup === null ? {
+        return _functionalGroup === null || _functionalGroup !== null && _functionalGroup !== void 0 && _functionalGroup.relatedSGroup.isSuperatomWithoutLabel ? {
           id: CONTEXT_MENU_ID.FOR_ATOMS,
           atomIds: [closestItem.id]
         } : {
@@ -26607,9 +27168,9 @@ var ContextMenuTrigger = function ContextMenuTrigger(_ref) {
     var selectedSGroupsIds = new Set();
     selectedAtomIds === null || selectedAtomIds === void 0 || selectedAtomIds.forEach(function (atomId) {
       var functionalGroup = FunctionalGroup.findFunctionalGroupByAtom(struct.functionalGroups, atomId, true);
-      functionalGroup !== null && selectedFunctionalGroups.set(functionalGroup.relatedSGroupId, functionalGroup);
+      functionalGroup !== null && functionalGroup.relatedSGroup && !functionalGroup.relatedSGroup.isSuperatomWithoutLabel && selectedFunctionalGroups.set(functionalGroup.relatedSGroupId, functionalGroup);
       var sGroupId = struct.sgroups.find(function (_, sGroup) {
-        return sGroup.atoms.includes(atomId);
+        return !sGroup.isSuperatomWithoutLabel && sGroup.atoms.includes(atomId);
       });
       sGroupId !== null && selectedSGroupsIds.add(sGroupId);
     });
@@ -29819,17 +30380,17 @@ function AtomListValid(value, atomType, isCustomQuery) {
   }
   return value.length >= 1;
 }
-function pseudoAtomValid(value, atomType, isCustomQuery) {
-  genericsList.includes(capitalize$1(value));
-  var isGenericElement = genericsList.includes(value);
-  if (atomType !== 'pseudo' || isCustomQuery) {
-    return true;
+function pseudoAtomValid(value, atomType, isCustomQuery, disableQueryElements) {
+  var capitalizedValue = capitalize$1(value);
+  var isDisabledQueryElement = disableQueryElements === null || disableQueryElements === void 0 ? void 0 : disableQueryElements.includes(capitalizedValue);
+  if (atomType === 'pseudo' && isDisabledQueryElement) {
+    return false;
   }
-  return value && isGenericElement;
+  var isGenericElement = genericsList.includes(capitalizedValue);
+  return atomType !== 'pseudo' || isCustomQuery || value && isGenericElement;
 }
 function chargeValid(charge, isMultipleAtoms, isCustomQuery) {
-  var regex = new RegExp(atom.properties.charge.pattern);
-  var result = regex.exec(charge);
+  var result = matchCharge(charge);
   var isValidCharge = result && (result[1] === '' || result[3] === '');
   if (isCustomQuery || charge === '') {
     return true;
@@ -30003,12 +30564,13 @@ var Atom = function Atom(props) {
   };
   var customValid = useMemo(function () {
     var atomType = formState.result.atomType;
+    var disableQueryElements = SettingsManager.getOptions().disableQueryElements;
     return {
       label: function label(_label) {
         return atomValid(_label, isMultipleAtoms, atomType, isCustomQuery);
       },
       pseudo: function pseudo(value) {
-        return pseudoAtomValid(value, atomType, isCustomQuery);
+        return pseudoAtomValid(value, atomType, isCustomQuery, disableQueryElements);
       },
       atomList: function atomList(value) {
         return AtomListValid(value, atomType, isCustomQuery);
@@ -31240,7 +31802,13 @@ var SaveDialog = function (_Component) {
         }), queryPropertiesAreUsed);
         var getStructFromStringByType = function getStructFromStringByType() {
           if (type === 'ket') {
+            var _selection$atoms;
             var selection = _this.props.editor.selection();
+            if ((selection === null || selection === void 0 || (_selection$atoms = selection.atoms) === null || _selection$atoms === void 0 ? void 0 : _selection$atoms.length) > 0) {
+              selection.atoms = selection.atoms.filter(function (selectedAtomId) {
+                return !Atom$2.isSuperatomLeavingGroupAtom(struct, selectedAtomId);
+              });
+            }
             return service.getStructureFromStructAsync(struct, undefined, selection);
           }
           return service.getStructureFromStructAsync(struct);
@@ -32488,11 +33056,8 @@ function mapSelectionToProps(editor) {
   }
   return {};
 }
-var mapStateToProps$2 = function mapStateToProps(state, ownProps) {
+var mapStateToProps$2 = function mapStateToProps(state) {
   var editor = state.editor;
-  if (ownProps.values || ownProps.label) {
-    return {};
-  }
   var disabledQueryElements = editor.render.options.disableQueryElements;
   return _objectSpread$c({
     disabledQueryElements: disabledQueryElements
@@ -34076,7 +34641,7 @@ function initEditor(dispatch, getState) {
       return dlg.then(toElement);
     },
     onEnhancedStereoEdit: function onEnhancedStereoEdit(_ref3) {
-      var init = _extends$3h({}, (_objectDestructuringEmpty(_ref3), _ref3));
+      var init = _extends$3k({}, (_objectDestructuringEmpty(_ref3), _ref3));
       return sleep(0).then(function () {
         init = fromStereoLabel(init.stereoLabel);
         return openDialog(dispatch, 'enhancedStereo', {
@@ -34552,18 +35117,32 @@ var MOUSE_MOVE_THROTTLE_TIMEOUT = 300;
 var handleMouseMove = function handleMouseMove(dispatch, event) {
   dispatch(updateCursorPosition(event.clientX, event.clientY));
 };
+var pointerMoveListener = null;
+var mouseDownListener = null;
 function initMouseListener(element) {
   return function (dispatch, getState) {
     var throttledHandleMouseMove = throttle$1(handleMouseMove, MOUSE_MOVE_THROTTLE_TIMEOUT);
-    element.addEventListener('pointermove', function (event) {
+    pointerMoveListener = function pointerMoveListener(event) {
       return throttledHandleMouseMove(dispatch, event);
-    });
-    element.addEventListener('mousedown', function (event) {
+    };
+    mouseDownListener = function mouseDownListener(event) {
       var areBothLeftAndRightButtonsClicked = event.buttons === 3;
       if (areBothLeftAndRightButtonsClicked) {
         handleRightClick(getState);
       }
-    }, true);
+    };
+    element.addEventListener('pointermove', pointerMoveListener);
+    element.addEventListener('mousedown', mouseDownListener, true);
+  };
+}
+function removeMouseListeners(element) {
+  return function () {
+    if (pointerMoveListener) {
+      element.removeEventListener('pointermove', pointerMoveListener);
+    }
+    if (mouseDownListener) {
+      element.addEventListener('mousedown', mouseDownListener, true);
+    }
   };
 }
 function handleRightClick(getState) {
@@ -34580,14 +35159,22 @@ function initApp(element, appRoot, staticResourcesUrl, options, server, resolve,
     ketcherRef = ketcher;
   };
   var ketcherId = uniqueId();
+  var getServerSetter;
   var setEditor = function setEditor(editor) {
+    var setServer = getServerSetter();
     resolve({
       editor: editor,
       setKetcher: setKetcher,
-      ketcherId: ketcherId
+      ketcherId: ketcherId,
+      setServer: setServer
     });
   };
   var store = createStore(options, server, setEditor);
+  getServerSetter = function getServerSetter() {
+    return function (structService) {
+      store.dispatch(setServer(structService));
+    };
+  };
   store.dispatch(initKeydownListener(element));
   store.dispatch(initMouseListener(element));
   store.dispatch(initResize());
@@ -34615,6 +35202,10 @@ function initApp(element, appRoot, staticResourcesUrl, options, server, resolve,
       })
     })
   }));
+  return function () {
+    store.dispatch(removeKeydownListener(element));
+    store.dispatch(removeMouseListeners(element));
+  };
 }
 
 var indigo;
@@ -34664,6 +35255,28 @@ var KetcherBuilder = function () {
       return appendApiAsync;
     }()
   }, {
+    key: "reinitializeApi",
+    value: function reinitializeApi(structServiceProvider, setStructServiceToStore) {
+      var _this = this;
+      var oldStructService = this.structService;
+      this.structService = createApi(structServiceProvider, DefaultStructServiceOptions);
+      window.addEventListener(STRUCT_SERVICE_INITIALIZED_EVENT, function () {
+        var _oldStructService$des;
+        oldStructService === null || oldStructService === void 0 || (_oldStructService$des = oldStructService.destroy) === null || _oldStructService$des === void 0 || _oldStructService$des.call(oldStructService);
+        if (!_this.structService) {
+          KetcherLogger.warn('Structure service is not reinitialized');
+          return;
+        }
+        var ketcher = ketcherProvider.getKetcher();
+        ketcher.reinitializeIndigo(_this.structService);
+        IndigoProvider.setIndigo(_this.structService);
+        setStructServiceToStore(_this.structService);
+      }, {
+        once: true
+      });
+      return this.structService;
+    }
+  }, {
     key: "appendServiceMode",
     value: function appendServiceMode(mode) {
       this.serviceMode = mode;
@@ -34672,35 +35285,39 @@ var KetcherBuilder = function () {
     key: "appendUiAsync",
     value: function () {
       var _appendUiAsync = _asyncToGenerator( _regeneratorRuntime.mark(function _callee2(element, appRoot, staticResourcesUrl, errorHandler, buttons, togglerComponent) {
-        var structService, _yield$Promise, editor, setKetcher, ketcherId;
+        var structService, cleanup, _yield$Promise, editor, setKetcher, ketcherId, setServer;
         return _regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               structService = this.structService;
-              _context2.next = 3;
+              cleanup = null;
+              _context2.next = 4;
               return new Promise(function (resolve) {
-                initApp(element, appRoot, staticResourcesUrl, {
+                cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.20.0-unc20" ,
-                  buildDate: "2024-05-29T21:56:24" ,
+                  version: "2.24.0-rc.1-unc20" ,
+                  buildDate: "2024-08-19T17:45:48" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
-            case 3:
+            case 4:
               _yield$Promise = _context2.sent;
               editor = _yield$Promise.editor;
               setKetcher = _yield$Promise.setKetcher;
               ketcherId = _yield$Promise.ketcherId;
+              setServer = _yield$Promise.setServer;
               this.editor = editor;
               this.editor.errorHandler = errorHandler && typeof errorHandler === 'function' ? errorHandler :
               function () {};
               this.formatterFactory = new FormatterFactory(structService);
               return _context2.abrupt("return", {
                 setKetcher: setKetcher,
-                ketcherId: ketcherId
+                ketcherId: ketcherId,
+                cleanup: cleanup,
+                setServer: setServer
               });
-            case 11:
+            case 13:
             case "end":
               return _context2.stop();
           }
@@ -34725,6 +35342,10 @@ var KetcherBuilder = function () {
       }
       var ketcher = new Ketcher(this.editor, this.structService, this.formatterFactory);
       ketcher[this.serviceMode] = true;
+      var userInput = document.location.search;
+      if (userInput === '__proto__' || userInput === 'constructor' || userInput === 'prototype') {
+        return;
+      }
       var params = new URLSearchParams(document.location.search);
       var initialMol = params.get('moll');
       if (initialMol) {
@@ -34743,7 +35364,7 @@ function buildKetcherAsync(_x) {
 }
 function _buildKetcherAsync() {
   _buildKetcherAsync = _asyncToGenerator( _regeneratorRuntime.mark(function _callee(_ref) {
-    var element, appRoot, staticResourcesUrl, structServiceProvider, buttons, errorHandler, togglerComponent, builder, _yield$builder$append, setKetcher, ketcherId, ketcher;
+    var element, appRoot, staticResourcesUrl, structServiceProvider, buttons, errorHandler, togglerComponent, builder, _yield$builder$append, setKetcher, ketcherId, cleanup, setServer, ketcher;
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -34759,13 +35380,20 @@ function _buildKetcherAsync() {
           _yield$builder$append = _context.sent;
           setKetcher = _yield$builder$append.setKetcher;
           ketcherId = _yield$builder$append.ketcherId;
+          cleanup = _yield$builder$append.cleanup;
+          setServer = _yield$builder$append.setServer;
           ketcher = builder.build();
-          setKetcher(ketcher);
+          if (ketcher) {
+            setKetcher(ketcher);
+          }
           return _context.abrupt("return", {
             ketcher: ketcher,
-            ketcherId: ketcherId
+            ketcherId: ketcherId,
+            cleanup: cleanup,
+            builder: builder,
+            setServer: setServer
           });
-        case 13:
+        case 15:
         case "end":
           return _context.stop();
       }
@@ -34783,30 +35411,60 @@ var mediaSizes = {
   smallHeight: 600
 };
 function Editor(props) {
+  var initPromiseRef = useRef(null);
+  var appRootRef = useRef(null);
+  var cleanupRef = useRef(null);
+  var ketcherBuilderRef = useRef(null);
+  var setServerRef = useRef(function () {});
+  var structServiceProvider = props.structServiceProvider;
   var rootElRef = useRef(null);
-  var onInit = props.onInit;
   var _useResizeObserver = useThrottleResizeObserver({
       ref: rootElRef
     }),
     height = _useResizeObserver.height,
     width = _useResizeObserver.width;
   useEffect(function () {
-    var appRoot = createRoot(rootElRef.current);
-    buildKetcherAsync(_objectSpread(_objectSpread({}, props), {}, {
+    var _ketcherBuilderRef$cu;
+    (_ketcherBuilderRef$cu = ketcherBuilderRef.current) === null || _ketcherBuilderRef$cu === void 0 || _ketcherBuilderRef$cu.reinitializeApi(props.structServiceProvider, setServerRef.current);
+  }, [structServiceProvider]);
+  var initKetcher = function initKetcher() {
+    var _initPromiseRef$curre;
+    appRootRef.current = createRoot(rootElRef.current);
+    initPromiseRef.current = buildKetcherAsync(_objectSpread(_objectSpread({}, props), {}, {
       element: rootElRef.current,
-      appRoot: appRoot
-    })).then(function (_ref) {
+      appRoot: appRootRef.current
+    }));
+    (_initPromiseRef$curre = initPromiseRef.current) === null || _initPromiseRef$curre === void 0 || _initPromiseRef$curre.then(function (_ref) {
       var ketcher = _ref.ketcher,
-        ketcherId = _ref.ketcherId;
-      if (typeof onInit === 'function') {
-        onInit(ketcher);
+        ketcherId = _ref.ketcherId,
+        cleanup = _ref.cleanup,
+        builder = _ref.builder,
+        setServer = _ref.setServer;
+      cleanupRef.current = cleanup;
+      ketcherBuilderRef.current = builder;
+      setServerRef.current = setServer;
+      if (typeof props.onInit === 'function' && ketcher) {
+        props.onInit(ketcher);
         var ketcherInitEvent = new Event(ketcherInitEventName(ketcherId));
         window.dispatchEvent(ketcherInitEvent);
       }
     });
+  };
+  useEffect(function () {
+    if (initPromiseRef.current === null) {
+      initKetcher();
+    } else {
+      var _initPromiseRef$curre2;
+      (_initPromiseRef$curre2 = initPromiseRef.current) === null || _initPromiseRef$curre2 === void 0 || _initPromiseRef$curre2["finally"](function () {
+        initKetcher();
+      });
+    }
     return function () {
-      setTimeout(function () {
-        appRoot.unmount();
+      var _initPromiseRef$curre3;
+      (_initPromiseRef$curre3 = initPromiseRef.current) === null || _initPromiseRef$curre3 === void 0 || _initPromiseRef$curre3.then(function () {
+        var _cleanupRef$current, _appRootRef$current;
+        (_cleanupRef$current = cleanupRef.current) === null || _cleanupRef$current === void 0 || _cleanupRef$current.call(cleanupRef);
+        (_appRootRef$current = appRootRef.current) === null || _appRootRef$current === void 0 || _appRootRef$current.unmount();
       });
     };
   }, []);
@@ -34816,5 +35474,5 @@ function Editor(props) {
   });
 }
 
-export { Accordion$1 as Accordion, appContext as AppContext, Button, Dialog, Editor, EditorClassName, Icon, IconButton, IndigoProvider, InfoModal$1 as InfoModal, Input$2 as Input, KETCHER_INIT_EVENT_NAME, KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR, KETCHER_ROOT_NODE_CLASS_NAME, KETCHER_ROOT_NODE_CSS_SELECTOR, MODES, STRUCT_TYPE, StructRender, getIconName, ketcherInitEventName };
+export { Accordion$1 as Accordion, appContext as AppContext, Button, Dialog, Editor, EditorClassName, Icon, IconButton, IndigoProvider, InfoModal$1 as InfoModal, Input$2 as Input, KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR, KETCHER_ROOT_NODE_CLASS_NAME, KETCHER_ROOT_NODE_CSS_SELECTOR, MODES, STRUCT_SERVICE_INITIALIZED_EVENT, STRUCT_SERVICE_NO_RENDER_INITIALIZED_EVENT, STRUCT_TYPE, StructRender, getIconName, ketcherInitEventName };
 //# sourceMappingURL=index.modern.js.map

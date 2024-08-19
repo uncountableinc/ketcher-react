@@ -14,6 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 export declare function initKeydownListener(element: any): (dispatch: any, getState: any) => void;
+export declare function removeKeydownListener(element: any): () => void;
 export declare function initClipboard(dispatch: any): {
     formats: any[];
     focused(): boolean;

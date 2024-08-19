@@ -15,7 +15,7 @@
  ***************************************************************************/
 /// <reference types="react" />
 import { Root } from 'react-dom/client';
-import { ButtonsConfig } from './builders';
+import { ButtonsConfig, KetcherBuilder } from './builders';
 import { StructServiceProvider } from 'ketcher-core';
 interface Config {
     element: HTMLDivElement | null;
@@ -27,8 +27,11 @@ interface Config {
     togglerComponent?: JSX.Element;
 }
 declare function buildKetcherAsync({ element, appRoot, staticResourcesUrl, structServiceProvider, buttons, errorHandler, togglerComponent, }: Config): Promise<{
-    ketcher: import("ketcher-core").Ketcher;
+    ketcher: import("ketcher-core").Ketcher | undefined;
     ketcherId: string;
+    cleanup: (() => void) | null;
+    builder: KetcherBuilder;
+    setServer: (structService: import("ketcher-core").StructService) => void;
 }>;
 export type { Config, ButtonsConfig };
 export * from './providers';

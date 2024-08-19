@@ -339,6 +339,13 @@ declare const _default: {
     bonds: {
         hidden: (options: any) => boolean;
     };
+    images: {
+        title: string;
+        action: {
+            tool: string;
+        };
+        hidden: (options: any) => boolean;
+    };
 };
 export default _default;
 import { isFlipDisabled } from "./flips";

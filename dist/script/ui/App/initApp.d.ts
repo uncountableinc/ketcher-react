@@ -20,5 +20,6 @@ declare function initApp(element: HTMLDivElement | null, appRoot: Root, staticRe
     editor: any;
     setKetcher: (ketcher: Ketcher) => void;
     ketcherId: string;
-}) => void, togglerComponent?: JSX.Element): void;
+    setServer: (server: StructService) => void;
+}) => void, togglerComponent?: JSX.Element): () => void;
 export { initApp };

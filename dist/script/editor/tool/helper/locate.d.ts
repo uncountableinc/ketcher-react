@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare function getElementsInRectangle(restruct: any, p0: any, p1: any): {
+import { ReStruct } from 'ketcher-core';
+declare function getElementsInRectangle(restruct: ReStruct, p0: any, p1: any): {
     atoms: number[];
     bonds: number[];
     rxnArrows: number[];
@@ -23,8 +24,9 @@ declare function getElementsInRectangle(restruct: any, p0: any, p1: any): {
     simpleObjects: number[];
     texts: number[];
     rgroupAttachmentPoints: number[];
+    images: number[];
 };
-declare function getElementsInPolygon(restruct: any, rr: any): {
+declare function getElementsInPolygon(restruct: ReStruct, rr: any): {
     atoms: number[];
     bonds: number[];
     rxnArrows: number[];
@@ -34,6 +36,7 @@ declare function getElementsInPolygon(restruct: any, rr: any): {
     simpleObjects: number[];
     texts: number[];
     rgroupAttachmentPoints: number[];
+    images: number[];
 };
 declare const _default: {
     inRectangle: typeof getElementsInRectangle;

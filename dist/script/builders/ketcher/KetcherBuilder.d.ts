@@ -14,8 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 /// <reference types="react" />
-import { Ketcher, ServiceMode, StructServiceProvider } from 'ketcher-core';
+import { Ketcher, ServiceMode, StructService, StructServiceProvider } from 'ketcher-core';
 import { ButtonsConfig } from './ButtonsConfig';
+import { initApp } from '../../ui';
 import { Root } from 'react-dom/client';
 declare class KetcherBuilder {
     private structService;
@@ -24,11 +25,14 @@ declare class KetcherBuilder {
     private formatterFactory;
     constructor();
     appendApiAsync(structServiceProvider: StructServiceProvider): Promise<void>;
+    reinitializeApi(structServiceProvider: StructServiceProvider, setStructServiceToStore: (structService: StructService) => void): StructService;
     appendServiceMode(mode: ServiceMode): void;
     appendUiAsync(element: HTMLDivElement | null, appRoot: Root, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig, togglerComponent?: JSX.Element): Promise<{
         setKetcher: (ketcher: Ketcher) => void;
         ketcherId: string;
+        cleanup: ReturnType<typeof initApp> | null;
+        setServer: (structService: StructService) => void;
     }>;
-    build(): Ketcher;
+    build(): Ketcher | undefined;
 }
 export { KetcherBuilder };

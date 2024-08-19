@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-export declare const ketcherInitEventName: (ketcherId: string) => string;
-export declare const KETCHER_INIT_EVENT_NAME = "ketcher-init";
+export declare const ketcherInitEventName: (ketcherId?: string) => string;
 export declare const MODES: {
     FG: string;
 };
@@ -26,3 +25,5 @@ export declare const KETCHER_ROOT_NODE_CLASS_NAME = "Ketcher-root";
 export declare const KETCHER_ROOT_NODE_CSS_SELECTOR: string;
 export declare const EditorClassName = "Ketcher-polymer-editor-root";
 export declare const KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR: string;
+export declare const STRUCT_SERVICE_NO_RENDER_INITIALIZED_EVENT = "struct-service-no-render-initialized";
+export declare const STRUCT_SERVICE_INITIALIZED_EVENT = "struct-service-initialized";

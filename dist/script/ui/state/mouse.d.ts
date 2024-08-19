@@ -14,3 +14,4 @@
  * limitations under the License.
  ***************************************************************************/
 export declare function initMouseListener(element: any): (dispatch: any, getState: any) => void;
+export declare function removeMouseListeners(element: any): () => void;

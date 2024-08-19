@@ -31,6 +31,7 @@ declare class LassoHelper {
         simpleObjects: number[];
         texts: number[];
         rgroupAttachmentPoints: number[];
+        images: number[];
     };
     begin(event: any): void;
     running(): boolean;
@@ -44,6 +45,7 @@ declare class LassoHelper {
         simpleObjects: number[];
         texts: number[];
         rgroupAttachmentPoints: number[];
+        images: number[];
     } | null;
     update(): void;
     end(): {
@@ -56,6 +58,7 @@ declare class LassoHelper {
         simpleObjects: number[];
         texts: number[];
         rgroupAttachmentPoints: number[];
+        images: number[];
     };
     cancel(): void;
 }

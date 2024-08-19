@@ -166,6 +166,7 @@ export declare const iconNameToIcon: {
     readonly 'template-lib': ReactComponent;
     readonly 'snake-mode': ReactComponent;
     readonly text: ReactComponent;
+    readonly images: ReactComponent;
     readonly 'text-bold': ReactComponent;
     readonly 'text-italic': ReactComponent;
     readonly 'text-subscript': ReactComponent;
@@ -215,6 +216,7 @@ export declare const iconNameToIcon: {
     readonly base: ReactComponent;
     readonly phosphate: ReactComponent;
     readonly preset: ReactComponent;
+    readonly nucleotide: ReactComponent;
     readonly 'edit-filled': ReactComponent;
     readonly 'vertical-dots': ReactComponent;
     readonly expand: ReactComponent;
@@ -223,4 +225,5 @@ export declare const iconNameToIcon: {
     readonly 'flex-layout-mode': ReactComponent;
     readonly 'snake-layout-mode': ReactComponent;
     readonly 'sequence-layout-mode': ReactComponent;
+    readonly questionMark: ReactComponent;
 };

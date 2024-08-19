@@ -400,6 +400,13 @@ declare const config: {
     bonds: {
         hidden: (options: any) => boolean;
     };
+    images: {
+        title: string;
+        action: {
+            tool: string;
+        };
+        hidden: (options: any) => boolean;
+    };
     'force-update': {
         shortcut: string;
         action: (editor: any) => void;
