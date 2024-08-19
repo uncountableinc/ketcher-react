@@ -5446,7 +5446,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc20\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc21\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -16864,7 +16864,6 @@ var ZoomControls = function ZoomControls(_ref) {
       open: isExpanded,
       onClose: onClose,
       anchorEl: containerRef.current,
-      container: document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR) || document.querySelector(KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR),
       anchorOrigin: {
         vertical: 'bottom',
         horizontal: 'left'
@@ -25751,32 +25750,14 @@ function resetSelectionOnCanvasClick(editor, eventName, clientArea, event) {
     editor.selection(null);
   }
 }
-function calculateLayerOffset(event) {
-  var target = event.target || event.srcElement;
-  var svgTarget = target === null || target === void 0 ? void 0 : target.closest('svg');
-  if (!svgTarget) {
-    return null;
-  }
-  var svgRect = svgTarget.getBoundingClientRect();
-  var offsetX = event.clientX - svgRect.left;
-  var offsetY = event.clientY - svgRect.top;
-  return {
-    offsetX: offsetX,
-    offsetY: offsetY
-  };
-}
 function updateLastCursorPosition(editor, event) {
   var events = ['mousemove', 'click', 'mousedown', 'mouseup', 'mouseover'];
   if (events.includes(event.type)) {
     var clientAreaBoundingBox = editor.render.clientArea.getBoundingClientRect();
-    var pos = calculateLayerOffset(event);
-    if (pos != null) {
-      var _editor$options$zoom, _editor$options$exter, _editor$options$zoom2, _editor$options$exter2;
-      editor.lastCursorPosition = {
-        x: pos.offsetX / ((_editor$options$zoom = editor.options().zoom) !== null && _editor$options$zoom !== void 0 ? _editor$options$zoom : 1.0) / ((_editor$options$exter = editor.options().externalZoomScale) !== null && _editor$options$exter !== void 0 ? _editor$options$exter : 1.0) - clientAreaBoundingBox.x,
-        y: pos.offsetY / ((_editor$options$zoom2 = editor.options().zoom) !== null && _editor$options$zoom2 !== void 0 ? _editor$options$zoom2 : 1.0) / ((_editor$options$exter2 = editor.options().externalZoomScale) !== null && _editor$options$exter2 !== void 0 ? _editor$options$exter2 : 1.0) - clientAreaBoundingBox.y
-      };
-    }
+    editor.lastCursorPosition = {
+      x: event.clientX - clientAreaBoundingBox.x,
+      y: event.clientY - clientAreaBoundingBox.y
+    };
   }
 }
 function isContextMenuClosed(contextMenu) {
@@ -35296,8 +35277,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc20" ,
-                  buildDate: "2024-08-19T17:45:48" ,
+                  version: "2.24.0-rc.1-unc21" ,
+                  buildDate: "2024-08-19T19:38:10" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
