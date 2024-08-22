@@ -48,7 +48,7 @@ export interface PanelProps {
     onAnalyse: VoidFunction;
     onMiew: VoidFunction;
     onToggleExplicitHydrogens: VoidFunction;
-    onFullscreen: VoidFunction;
+    onFullscreen: (element: HTMLDivElement) => void;
     onAbout: VoidFunction;
     onHelp: VoidFunction;
     togglerComponent?: JSX.Element;

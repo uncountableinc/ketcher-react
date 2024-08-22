@@ -20,7 +20,7 @@ interface SystemControlsProps {
     onSettingsOpen: () => void;
     onAboutOpen: () => void;
     onHistoryClick: () => void;
-    onFullscreen: () => void;
+    onFullscreen: (element: HTMLDivElement) => void;
     onHelp: () => void;
 }
 export declare const SystemControls: ({ disabledButtons, hiddenButtons, onSettingsOpen, onFullscreen, onHelp, onAboutOpen, className, }: SystemControlsProps) => import("react/jsx-runtime").JSX.Element;

@@ -5511,7 +5511,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc26\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc27\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -5573,15 +5573,17 @@ var exitFullscreen = function exitFullscreen() {
 var getIfFullScreen$1 = function getIfFullScreen() {
   return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
 };
-var toggleFullscreen = function toggleFullscreen() {
-  var fullscreenElement = document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR) || document.documentElement;
+var toggleFullscreen = function toggleFullscreen(element) {
+  var fullscreenElement = element.closest(KETCHER_ROOT_NODE_CSS_SELECTOR) || document.documentElement;
   getIfFullScreen$1() ? exitFullscreen() : requestFullscreen(fullscreenElement);
 };
 var fullscreen = {
   fullscreen: {
     title: 'Fullscreen mode',
-    action: function action() {
-      return toggleFullscreen();
+    action: function action(element) {
+      return function () {
+        return toggleFullscreen(element);
+      };
     },
     hidden: function hidden(options) {
       return isHidden(options, 'fullscreen');
@@ -16987,8 +16989,15 @@ var SystemControls = function SystemControls(_ref) {
     onHelp = _ref.onHelp,
     onAboutOpen = _ref.onAboutOpen,
     className = _ref.className;
+  var controlPanelRef = React.useRef(null);
+  var onFullscreenCallback = React.useCallback(function () {
+    if (controlPanelRef.current) {
+      onFullscreen(controlPanelRef.current);
+    }
+  }, [controlPanelRef]);
   return jsxRuntime.jsxs(ControlsPanel$1, {
     className: className,
+    ref: controlPanelRef,
     children: [jsxRuntime.jsx(TopToolbarIconButton, {
       title: "Settings",
       onClick: onSettingsOpen,
@@ -17012,7 +17021,7 @@ var SystemControls = function SystemControls(_ref) {
       testId: "about-button"
     }), jsxRuntime.jsx(TopToolbarIconButton, {
       title: "Fullscreen mode",
-      onClick: onFullscreen,
+      onClick: onFullscreenCallback,
       iconName: getIfFullScreen() ? 'fullscreen-exit' : 'fullscreen-enter',
       disabled: disabledButtons.includes('fullscreen'),
       isHidden: hiddenButtons.includes('fullscreen'),
@@ -17348,8 +17357,8 @@ var mapDispatchToProps$h = function mapDispatchToProps(dispatch) {
         }
       });
     },
-    onFullscreen: function onFullscreen() {
-      return dispatchAction('fullscreen');
+    onFullscreen: function onFullscreen(element) {
+      return dispatch(onAction(config.fullscreen.action(element)));
     },
     onHelp: function onHelp() {
       return dispatchAction('help');
@@ -35342,8 +35351,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc26" ,
-                  buildDate: "2024-08-22T08:31:32" ,
+                  version: "2.24.0-rc.1-unc27" ,
+                  buildDate: "2024-08-22T21:22:20" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });

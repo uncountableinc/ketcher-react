@@ -16,7 +16,7 @@
 declare const _default: {
     fullscreen: {
         title: string;
-        action: () => void;
+        action: (element: HTMLElement) => () => void;
         hidden: (options: any) => boolean;
     };
 };
