@@ -5511,7 +5511,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc28\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc29\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -28408,6 +28408,9 @@ var ChevronIcon = function ChevronIcon(_ref) {
     className: clsx__default["default"](className, selectClasses.chevronIcon)
   });
 };
+var isFullScreen = function isFullScreen() {
+  return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+};
 var Select = function Select(_ref2) {
   var _currentValue$value;
   var className = _ref2.className,
@@ -28446,10 +28449,10 @@ var Select = function Select(_ref2) {
     disabled: disabled,
     MenuProps: {
       className: selectClasses.dropdownList,
-      container: function container() {
+      container: isFullScreen() ? function () {
         var _selectRef$current$cl, _selectRef$current;
         return (_selectRef$current$cl = (_selectRef$current = selectRef.current) === null || _selectRef$current === void 0 ? void 0 : _selectRef$current.closest(KETCHER_ROOT_NODE_CSS_SELECTOR)) !== null && _selectRef$current$cl !== void 0 ? _selectRef$current$cl : document.body;
-      }
+      } : undefined
     },
     IconComponent: ChevronIcon,
     "data-testid": testId,
@@ -35357,8 +35360,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc28" ,
-                  buildDate: "2024-08-25T04:01:14" ,
+                  version: "2.24.0-rc.1-unc29" ,
+                  buildDate: "2024-08-25T04:25:32" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
