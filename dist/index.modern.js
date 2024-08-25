@@ -5446,7 +5446,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc27\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc28\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -28371,14 +28371,20 @@ var Select = function Select(_ref2) {
   var handleChange = function handleChange(event) {
     onChange(event.target.value);
   };
+  var selectRef = useRef(null);
   return jsx(MuiSelect, {
+    ref: selectRef,
     className: clsx(selectClasses.selectContainer, className),
     value: (_currentValue$value = currentValue === null || currentValue === void 0 ? void 0 : currentValue.value) !== null && _currentValue$value !== void 0 ? _currentValue$value : '',
     onChange: handleChange,
     multiple: multiple,
     disabled: disabled,
     MenuProps: {
-      className: selectClasses.dropdownList
+      className: selectClasses.dropdownList,
+      container: function container() {
+        var _selectRef$current$cl, _selectRef$current;
+        return (_selectRef$current$cl = (_selectRef$current = selectRef.current) === null || _selectRef$current === void 0 ? void 0 : _selectRef$current.closest(KETCHER_ROOT_NODE_CSS_SELECTOR)) !== null && _selectRef$current$cl !== void 0 ? _selectRef$current$cl : document.body;
+      }
     },
     IconComponent: ChevronIcon,
     "data-testid": testId,
@@ -35286,8 +35292,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc27" ,
-                  buildDate: "2024-08-22T21:22:20" ,
+                  version: "2.24.0-rc.1-unc28" ,
+                  buildDate: "2024-08-25T04:01:14" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
