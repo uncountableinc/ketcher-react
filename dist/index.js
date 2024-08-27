@@ -35361,7 +35361,7 @@ var KetcherBuilder = function () {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
                   version: "2.24.0-rc.1-unc29" ,
-                  buildDate: "2024-08-25T04:25:32" ,
+                  buildDate: "2024-08-27T19:35:51" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
