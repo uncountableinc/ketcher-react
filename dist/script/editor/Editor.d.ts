@@ -93,6 +93,7 @@ declare class Editor implements KetcherEditor {
         undo: any;
         redo: number;
     };
+    clearHistoryStack(): void;
     undo(): void;
     redo(): void;
     subscribe(eventName: any, handler: any): {

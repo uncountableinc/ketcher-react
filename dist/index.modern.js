@@ -4266,7 +4266,7 @@ function fromBondType(type, stereo) {
   return '';
 }
 function fromSgroup(ssgroup) {
-  var type = ssgroup.type || 'DAT';
+  var type = ssgroup.type || 'SRU';
   var _ssgroup$attrs = ssgroup.attrs,
     context = _ssgroup$attrs.context,
     fieldName = _ssgroup$attrs.fieldName,
@@ -4279,6 +4279,9 @@ function fromSgroup(ssgroup) {
     context: context || getSdataDefault(sdataCustomSchema, 'context'),
     fieldName: fieldName || getSdataDefault(sdataCustomSchema, 'fieldName'),
     fieldValue: fieldValue || getSdataDefault(sdataCustomSchema, 'fieldValue')
+  } : type === 'SRU' ? {
+    subscript: 'n',
+    connectivity: 'ht'
   } : {};
   return Object.assign({
     type: type
@@ -5446,7 +5449,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc31\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc33\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -25600,6 +25603,12 @@ var Editor$3 = function () {
       };
     }
   }, {
+    key: "clearHistoryStack",
+    value: function clearHistoryStack() {
+      this.historyStack = [];
+      this.historyPtr = 0;
+    }
+  }, {
     key: "undo",
     value: function undo() {
       if (this.historyPtr === 0) {
@@ -27586,6 +27595,7 @@ function setupEditor(editor, props) {
       }
     }
   });
+  editor.clearHistoryStack();
   editor.render.unobserveCanvasResize();
   editor.render.observeCanvasResize();
 }
@@ -35295,8 +35305,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc31" ,
-                  buildDate: "2024-11-01T10:54:33" ,
+                  version: "2.24.0-rc.1-unc33" ,
+                  buildDate: "2024-11-01T11:08:10" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
