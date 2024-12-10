@@ -5449,7 +5449,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc33\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc34\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -16787,6 +16787,9 @@ var ZoomInput = function ZoomInput(_ref) {
 };
 
 var _templateObject$4, _templateObject2$2, _templateObject3$1, _templateObject4$1, _templateObject5$1, _templateObject6$1, _templateObject7$1;
+var isFullScreen$1 = function isFullScreen() {
+  return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+};
 var ElementAndDropdown = styled('div')(_templateObject$4 || (_templateObject$4 = _taggedTemplateLiteral(["\n  position: relative;\n"])));
 var DropDownButton = styled(Button$1)(_templateObject2$2 || (_templateObject2$2 = _taggedTemplateLiteral(["\n  display: flex;\n  color: #000000;\n  padding-right: 0;\n  padding-left: 0;\n\n  & svg {\n    margin-left: 2px;\n    width: 16px;\n    height: 16px;\n  }\n"])));
 var ZoomLabel = styled('span')(_templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral(["\n  width: 35px;\n"])));
@@ -16816,6 +16819,7 @@ var getValidZoom = function getValidZoom(zoom, currentZoom) {
   return zoom;
 };
 var ZoomControls = function ZoomControls(_ref) {
+  var _containerRef$current, _containerRef$current2;
   var currentZoom = _ref.currentZoom,
     onZoom = _ref.onZoom,
     onZoomIn = _ref.onZoomIn,
@@ -16869,6 +16873,7 @@ var ZoomControls = function ZoomControls(_ref) {
       open: isExpanded,
       onClose: onClose,
       anchorEl: containerRef.current,
+      container: isFullScreen$1() ? (_containerRef$current = (_containerRef$current2 = containerRef.current) === null || _containerRef$current2 === void 0 ? void 0 : _containerRef$current2.closest(KETCHER_ROOT_NODE_CSS_SELECTOR)) !== null && _containerRef$current !== void 0 ? _containerRef$current : document.body : undefined,
       anchorOrigin: {
         vertical: 'bottom',
         horizontal: 'left'
@@ -35305,8 +35310,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc33" ,
-                  buildDate: "2024-11-01T11:08:10" ,
+                  version: "2.24.0-rc.1-unc34" ,
+                  buildDate: "2024-12-10T20:07:04" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
