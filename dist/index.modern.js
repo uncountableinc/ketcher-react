@@ -5449,7 +5449,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc34\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc35\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -18609,6 +18609,9 @@ var SGroupTool = function () {
           var result = isQuerySGroup ? createQueryComponentSGroup(id, editor, newSg, selection, sg) : fromContextType(id, editor, newSg, selection);
           result && editor.update(result.action);
           editor.selection(null);
+          var newStruct = editor.struct().clone();
+          newStruct.setImplicitHydrogen();
+          editor.struct(newStruct);
         }
       })["catch"](function (e) {
         KetcherLogger.error('sgroup.ts::SGroupTool::sgroupDialog', e);
@@ -35310,8 +35313,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc34" ,
-                  buildDate: "2024-12-10T20:07:04" ,
+                  version: "2.24.0-rc.1-unc35" ,
+                  buildDate: "2024-12-13T16:20:27" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
