@@ -2904,33 +2904,35 @@ function prefetchRender(tmpls, baseUrl, cacheEl) {
 
 function ownKeys$1o(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$1o(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1o(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1o(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-var initOptionsState = {
-  app: {
-    server: false,
-    templates: false,
-    functionalGroups: false,
-    saltsAndSolvents: false
-  },
-  analyse: {
-    values: null,
-    roundWeight: 3,
-    roundMass: 3,
-    roundElAnalysis: 1
-  },
-  check: {
-    checkOptions: ['valence', 'radicals', 'pseudoatoms', 'stereo', 'query', 'overlapping_atoms', 'overlapping_bonds', 'rgroups', 'chiral', '3d', 'chiral_flag']
-  },
-  recognize: {
-    file: null,
-    structStr: null,
-    fragment: false,
-    version: null
-  },
-  settings: Object.assign(getDefaultOptions(), validation(storage.getItem(KETCHER_SAVED_OPTIONS_KEY))),
-  getServerSettings: function getServerSettings() {
-    return pick(SERVER_OPTIONS, this.settings);
-  }
-};
+function initOptionsState() {
+  return {
+    app: {
+      server: false,
+      templates: false,
+      functionalGroups: false,
+      saltsAndSolvents: false
+    },
+    analyse: {
+      values: null,
+      roundWeight: 3,
+      roundMass: 3,
+      roundElAnalysis: 1
+    },
+    check: {
+      checkOptions: ['valence', 'radicals', 'pseudoatoms', 'stereo', 'query', 'overlapping_atoms', 'overlapping_bonds', 'rgroups', 'chiral', '3d', 'chiral_flag']
+    },
+    recognize: {
+      file: null,
+      structStr: null,
+      fragment: false,
+      version: null
+    },
+    settings: Object.assign(getDefaultOptions(), validation(storage.getItem(KETCHER_SAVED_OPTIONS_KEY))),
+    getServerSettings: function getServerSettings() {
+      return pick(SERVER_OPTIONS, this.settings);
+    }
+  };
+}
 function appUpdate(data) {
   return function (dispatch) {
     dispatch({
@@ -5449,7 +5451,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc36\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc37\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -15878,7 +15880,7 @@ function createStore (options, server, setEditor) {
     actionState: null,
     editor: null,
     modal: null,
-    options: Object.assign(initOptionsState, {
+    options: Object.assign(initOptionsState(), {
       app: restOptions,
       buttons: buttons
     }),
@@ -35313,8 +35315,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc36" ,
-                  buildDate: "2025-01-28T16:41:53" ,
+                  version: "2.24.0-rc.1-unc37" ,
+                  buildDate: "2025-01-28T18:08:00" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });

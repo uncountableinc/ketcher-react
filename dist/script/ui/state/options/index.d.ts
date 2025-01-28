@@ -1,3 +1,28 @@
+export function initOptionsState(): {
+    app: {
+        server: boolean;
+        templates: boolean;
+        functionalGroups: boolean;
+        saltsAndSolvents: boolean;
+    };
+    analyse: {
+        values: null;
+        roundWeight: number;
+        roundMass: number;
+        roundElAnalysis: number;
+    };
+    check: {
+        checkOptions: string[];
+    };
+    recognize: {
+        file: null;
+        structStr: null;
+        fragment: boolean;
+        version: null;
+    };
+    settings: Record<string, any> & Record<string, string>;
+    getServerSettings(): Pick<Record<string, any> & Record<string, string>, string>;
+};
 export function appUpdate(data: any): (dispatch: any) => void;
 export function saveSettings(newSettings: any): {
     type: string;
@@ -38,31 +63,5 @@ export function checkOpts(data: any): {
     type: string;
     data: any;
 };
-export namespace initOptionsState {
-    namespace app {
-        const server: boolean;
-        const templates: boolean;
-        const functionalGroups: boolean;
-        const saltsAndSolvents: boolean;
-    }
-    namespace analyse {
-        const values: null;
-        const roundWeight: number;
-        const roundMass: number;
-        const roundElAnalysis: number;
-    }
-    namespace check {
-        const checkOptions: string[];
-    }
-    namespace recognize {
-        const file: null;
-        const structStr: null;
-        const fragment: boolean;
-        const version: null;
-    }
-    const settings: Record<string, any> & Record<string, string>;
-    function getServerSettings(): Pick<Record<string, any> & Record<string, string>, string>;
-    function getServerSettings(): Pick<Record<string, any> & Record<string, string>, string>;
-}
 export default optionsReducer;
 declare function optionsReducer(state: {} | undefined, action: any): {};
