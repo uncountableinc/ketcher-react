@@ -4281,7 +4281,7 @@ function fromSgroup(ssgroup) {
     context: context || getSdataDefault(sdataCustomSchema, 'context'),
     fieldName: fieldName || getSdataDefault(sdataCustomSchema, 'fieldName'),
     fieldValue: fieldValue || getSdataDefault(sdataCustomSchema, 'fieldValue')
-  } : type === 'SRU' ? {
+  } : type === 'SRU' && ssgroup.attrs.subscript == null && ssgroup.attrs.connectivity == null ? {
     subscript: 'n',
     connectivity: 'ht'
   } : {};
@@ -5451,7 +5451,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc37\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc38\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -19084,7 +19084,6 @@ var SelectTool = function () {
   }, {
     key: "mousedown",
     value: function mousedown(event) {
-      var _newSelected$atoms, _newSelected$bonds;
       this.isMouseDown = true;
       var rnd = this.editor.render;
       var ctab = rnd.ctab;
@@ -19094,15 +19093,19 @@ var SelectTool = function () {
       if (isBondingWithMacroMolecule(this.editor, event)) {
         return;
       }
-      var selected = _objectSpread$U(_objectSpread$U({}, (ci === null || ci === void 0 ? void 0 : ci.map) === 'atoms' && {
-        atoms: [ci.id]
-      }), (ci === null || ci === void 0 ? void 0 : ci.map) === 'bonds' && {
-        bonds: [ci.id]
-      });
-      var selectedSgroups = ci ? getGroupIdsFromItemArrays(molecule, selected) : [];
-      var newSelected = getNewSelectedItems(this.editor, selectedSgroups);
-      if ((_newSelected$atoms = newSelected.atoms) !== null && _newSelected$atoms !== void 0 && _newSelected$atoms.length || (_newSelected$bonds = newSelected.bonds) !== null && _newSelected$bonds !== void 0 && _newSelected$bonds.length) {
-        this.editor.selection(newSelected);
+      var selection = this.editor.selection();
+      if (ci != null && !isSelected(selection, ci)) {
+        var _newSelected$atoms, _newSelected$bonds;
+        var selected = _objectSpread$U(_objectSpread$U({}, (ci === null || ci === void 0 ? void 0 : ci.map) === 'atoms' && {
+          atoms: [ci.id]
+        }), (ci === null || ci === void 0 ? void 0 : ci.map) === 'bonds' && {
+          bonds: [ci.id]
+        });
+        var selectedSgroups = ci ? getGroupIdsFromItemArrays(molecule, selected) : [];
+        var newSelected = getNewSelectedItems(this.editor, selectedSgroups);
+        if ((_newSelected$atoms = newSelected.atoms) !== null && _newSelected$atoms !== void 0 && _newSelected$atoms.length || (_newSelected$bonds = newSelected.bonds) !== null && _newSelected$bonds !== void 0 && _newSelected$bonds.length) {
+          this.editor.selection(newSelected);
+        }
       }
       this.dragCtx = {
         item: ci,
@@ -19119,7 +19122,7 @@ var SelectTool = function () {
       }
       var sel = closestToSel(ci);
       var sgroups = ctab.sgroups.get(ci.id);
-      var selection = this.editor.selection();
+      selection = this.editor.selection();
       if (ci.map === 'frags') {
         var frag = ctab.frags.get(ci.id);
         sel = {
@@ -35315,8 +35318,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc37" ,
-                  buildDate: "2025-01-28T18:08:00" ,
+                  version: "2.24.0-rc.1-unc38" ,
+                  buildDate: "2025-02-27T17:53:10" ,
                   buildNumber: ''
                 }, structService, resolve, togglerComponent);
               });
