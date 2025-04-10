@@ -22,13 +22,13 @@ import 'whatwg-fetch';
 import './index.less';
 
 import init, { Config } from './script';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 
 import { Ketcher, StructService } from 'ketcher-core';
 import classes from './Editor.module.less';
 import clsx from 'clsx';
-import { useAppContext, useResizeObserver } from './hooks';
+import { useResizeObserver } from './hooks';
 import {
   ketcherInitEventName,
   KETCHER_ROOT_NODE_CLASS_NAME,
@@ -58,7 +58,8 @@ function MicromoleculesEditor(props: EditorProps) {
   const { height, width } = useResizeObserver<HTMLDivElement>({
     ref: rootElRef,
   });
-  const { ketcherId } = useAppContext();
+
+  const [ketcherId, setKetcherId] = useState<string | null>(null);
 
   useEffect(() => {
     ketcherBuilderRef.current?.reinitializeApi(
@@ -81,10 +82,7 @@ function MicromoleculesEditor(props: EditorProps) {
         cleanupRef.current = cleanup;
         ketcherBuilderRef.current = builder;
         setServerRef.current = setServer;
-
-        // if (rootElRef.current) {
-        //   rootElRef.current.classList.add(`ketcher-id-${ketcherId}`);
-        // }
+        setKetcherId(ketcherId);
 
         if (typeof props.onInit === 'function' && ketcher) {
           props.onInit(ketcher);
