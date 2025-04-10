@@ -23,6 +23,7 @@ export declare const STRUCT_TYPE: {
 };
 export declare const KETCHER_ROOT_NODE_CLASS_NAME = "Ketcher-root";
 export declare const KETCHER_ROOT_NODE_CSS_SELECTOR: string;
+export declare const ketcherIdCssSelector: (ketcherId: string) => string;
 export declare const EditorClassName = "Ketcher-polymer-editor-root";
 export declare const KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR: string;
 export declare const STRUCT_SERVICE_NO_RENDER_INITIALIZED_EVENT = "struct-service-no-render-initialized";

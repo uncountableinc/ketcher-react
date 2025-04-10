@@ -17,7 +17,7 @@ declare const _default: {
     fullscreen: {
         title: string;
         enabledInViewOnly: boolean;
-        action: () => void;
+        action: (ketcherId: string) => () => void;
         hidden: (options: any) => boolean;
     };
 };
