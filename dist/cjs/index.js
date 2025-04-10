@@ -1297,7 +1297,7 @@ function appUpdate(data) {
 function saveSettings(newSettings) {
   storage.setItem(ketcherCore.KETCHER_SAVED_OPTIONS_KEY, newSettings);
   reinitializeTemplateLibrary();
-  initOptionsState.getSettings();
+  initOptionsState().getSettings();
   return {
     type: 'SAVE_SETTINGS',
     data: newSettings
@@ -3803,7 +3803,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc42-alpha-6\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc42-alpha-7\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -35057,8 +35057,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc42-alpha-6" ,
-                  buildDate: "2025-04-10T20:56:48" ,
+                  version: "2.24.0-rc.1-unc42-alpha-7" ,
+                  buildDate: "2025-04-10T21:49:36" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35350,7 +35350,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty__default["default"](e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = React.lazy(function () {
-  return Promise.resolve().then(function () { return require('./index.modern-6ab08a26.js'); });
+  return Promise.resolve().then(function () { return require('./index.modern-9caee207.js'); });
 });
 var Editor = function Editor(props) {
   var _useState = React.useState(false),
