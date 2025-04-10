@@ -3,7 +3,9 @@ import { useCallback, useRef } from 'react';
 import { useAppContext } from 'src/hooks';
 import Editor from 'src/script/editor';
 import SGroupTool from 'src/script/editor/tool/sgroup';
-import { ItemEventParams } from '../contextMenu.types';
+import { BondsContextMenuProps, ItemEventParams } from '../contextMenu.types';
+
+type Params = ItemEventParams<BondsContextMenuProps>;
 
 const useBondSGroupEdit = () => {
   const { getKetcherInstance } = useAppContext();
@@ -17,7 +19,7 @@ const useBondSGroupEdit = () => {
 
   // In react-contexify, `disabled` is executed before `hidden`
   const disabled = useCallback(
-    ({ props }: ItemEventParams) => {
+    ({ props }: Params) => {
       const editor = getKetcherInstance().editor as Editor;
       const struct: ReStruct = editor.render.ctab;
       const bondIds = props!.bondIds!;
@@ -35,8 +37,15 @@ const useBondSGroupEdit = () => {
   );
 
   const hidden = useCallback(() => {
+    const editor = getKetcherInstance().editor as Editor;
+    const struct: ReStruct = editor.render.ctab;
+    const [sgGroupId] = sGroupsRef.current;
+    const sgroup = struct.sgroups.get(sgGroupId)?.item;
+    if (sgroup?.isSuperatomWithoutLabel) {
+      return true;
+    }
     return sGroupsRef.current.size === 0;
-  }, []);
+  }, [getKetcherInstance]);
 
   return [handler, disabled, hidden] as const;
 };

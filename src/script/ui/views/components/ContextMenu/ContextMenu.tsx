@@ -25,17 +25,15 @@ import BondMenuItems from './menuItems/BondMenuItems';
 import FunctionalGroupMenuItems from './menuItems/FunctionalGroupMenuItems';
 import SelectionMenuItems from './menuItems/SelectionMenuItems';
 import RGroupAttachmentPointMenuItems from './menuItems/RGroupAttachmentPointMenuItems';
-import ReactDOM, { createPortal } from 'react-dom';
+import { createPortal } from 'react-dom';
 import { KETCHER_ROOT_NODE_CSS_SELECTOR } from 'src/constants';
+import { MultitailArrowMenuItems } from './menuItems/MultitailArrowMenuItems';
+import MacromoleculeMenuItems from './menuItems/MacromoleculeMenuItems';
 
 const props: Partial<MenuProps> = {
   animation: false,
   className: styles.contextMenu,
 };
-
-function BodyPortal(props: React.PropsWithChildren<{ refKey: string }>) {
-  return ReactDOM.createPortal(props.children, document.body, props.refKey);
-}
 
 const ContextMenu: React.FC = () => {
   const { getKetcherInstance } = useAppContext();
@@ -166,68 +164,78 @@ const ContextMenu: React.FC = () => {
   return ketcherEditorRootElement
     ? createPortal(
         <>
-          <BodyPortal refKey={CONTEXT_MENU_ID.FOR_BONDS}>
-            <Menu
-              {...props}
-              id={CONTEXT_MENU_ID.FOR_BONDS}
-              onVisibilityChange={(visible) =>
-                trackVisibility(CONTEXT_MENU_ID.FOR_BONDS, visible)
-              }
-            >
-              <BondMenuItems />
-            </Menu>
-          </BodyPortal>
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_BONDS}
+            onVisibilityChange={(visible) =>
+              trackVisibility(CONTEXT_MENU_ID.FOR_BONDS, visible)
+            }
+          >
+            <BondMenuItems />
+          </Menu>
 
-          <BodyPortal refKey={CONTEXT_MENU_ID.FOR_ATOMS}>
-            <Menu
-              {...props}
-              id={CONTEXT_MENU_ID.FOR_ATOMS}
-              onVisibilityChange={(visible) =>
-                trackVisibility(CONTEXT_MENU_ID.FOR_ATOMS, visible)
-              }
-            >
-              <AtomMenuItems />
-            </Menu>
-          </BodyPortal>
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_ATOMS}
+            onVisibilityChange={(visible) =>
+              trackVisibility(CONTEXT_MENU_ID.FOR_ATOMS, visible)
+            }
+          >
+            <AtomMenuItems />
+          </Menu>
 
-          <BodyPortal refKey={CONTEXT_MENU_ID.FOR_SELECTION}>
-            <Menu
-              {...props}
-              id={CONTEXT_MENU_ID.FOR_SELECTION}
-              onVisibilityChange={(visible) =>
-                trackVisibility(CONTEXT_MENU_ID.FOR_SELECTION, visible)
-              }
-            >
-              <SelectionMenuItems />
-            </Menu>
-          </BodyPortal>
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_SELECTION}
+            onVisibilityChange={(visible) =>
+              trackVisibility(CONTEXT_MENU_ID.FOR_SELECTION, visible)
+            }
+          >
+            <SelectionMenuItems />
+          </Menu>
 
-          <BodyPortal refKey={CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS}>
-            <Menu
-              {...props}
-              id={CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS}
-              onVisibilityChange={(visible) =>
-                trackVisibility(CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS, visible)
-              }
-            >
-              <FunctionalGroupMenuItems />
-            </Menu>
-          </BodyPortal>
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS}
+            onVisibilityChange={(visible) =>
+              trackVisibility(CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS, visible)
+            }
+          >
+            <FunctionalGroupMenuItems />
+          </Menu>
 
-          <BodyPortal refKey={CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS}>
-            <Menu
-              {...props}
-              id={CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT}
-              onVisibilityChange={(visible) =>
-                trackVisibility(
-                  CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT,
-                  visible,
-                )
-              }
-            >
-              <RGroupAttachmentPointMenuItems />
-            </Menu>
-          </BodyPortal>
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT}
+            onVisibilityChange={(visible) =>
+              trackVisibility(
+                CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT,
+                visible,
+              )
+            }
+          >
+            <RGroupAttachmentPointMenuItems />
+          </Menu>
+
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_MULTITAIL_ARROW}
+            onVisibilityChange={(visible) =>
+              trackVisibility(CONTEXT_MENU_ID.FOR_MULTITAIL_ARROW, visible)
+            }
+          >
+            <MultitailArrowMenuItems />
+          </Menu>
+
+          <Menu
+            {...props}
+            id={CONTEXT_MENU_ID.FOR_MACROMOLECULE}
+            onVisibilityChange={(visible) =>
+              trackVisibility(CONTEXT_MENU_ID.FOR_MACROMOLECULE, visible)
+            }
+          >
+            <MacromoleculeMenuItems />
+          </Menu>
         </>,
         ketcherEditorRootElement,
       )

@@ -14,57 +14,118 @@
  * limitations under the License.
  ***************************************************************************/
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import clsx from 'clsx';
 
 import Input from '../Input/Input';
 import Select from '../Select';
 import styles from './measure-input.module.less';
 import { getSelectOptionsFromSchema } from '../../../utils';
+import { MeasurementUnits } from 'src/script/ui/data/schema/options-schema';
 
 const selectOptions = getSelectOptionsFromSchema({
-  enum: ['cm', 'px', 'pt', 'inch'],
+  enum: Object.values(MeasurementUnits),
 });
+
+/**
+ * @param {string} value
+ * @returns {isNewFloat: boolean, float: string}
+ * */
+const getNewFloat = (value) => {
+  const [int, float] = value.split('.');
+  const isNewFloat = float?.length > 1;
+
+  return {
+    isNewFloat,
+    ...(isNewFloat && { float: `${int}.${float[float.length - 1]}` }),
+  };
+};
+
+/**
+ * @param {string} prevValue
+ * @param {string} endorcedValue
+ * @returns {string}
+ * */
+const getNewInternalValue = (prevValue, endorcedValue) => {
+  const newValueEndsWithDot = endorcedValue?.endsWith('.');
+  const prevValueHasDot = prevValue?.includes('.');
+  const isDotDeleted = prevValueHasDot && newValueEndsWithDot;
+  const isDotAdded = !prevValueHasDot && newValueEndsWithDot;
+
+  if (isDotDeleted) {
+    return endorcedValue.replace(/\.$/, '');
+  }
+
+  if (isDotAdded) {
+    return endorcedValue + '0';
+  }
+
+  const { isNewFloat, float } = getNewFloat(endorcedValue);
+
+  if (isNewFloat) {
+    return float;
+  }
+
+  return endorcedValue;
+};
 
 const MeasureInput = ({
   schema,
+  extraSchema: _,
   value,
+  extraValue,
   onChange,
+  onExtraChange,
   name,
   className,
   ...rest
 }) => {
-  const [measure, setMeasure] = useState('px');
-  const [cust, setCust] = useState(value || schema.default);
+  const [internalValue, setInternalValue] = useState(String(value));
+
+  // NOTE: onChange handler in the Input comopnent (packages/ketcher-react/src/script/ui/component/form/Input/Input.tsx)
+  // is mapped to the internal function via constructor
+  // therefore the referencies to the MeasureInput's state are not updated
+  // so we need to sync the props and the internal value through useEffects and use callbacks with
+  // previous state to have the latest value
 
   useEffect(() => {
-    if (measure === 'px' && cust?.toFixed() - 0 !== value) {
-      setMeasure('px');
-      setCust(value);
-    } // Hack: Set init value (RESET)
-  }, []);
+    setInternalValue((prevValue) => {
+      if (prevValue !== String(value)) {
+        return String(value);
+      }
+
+      return prevValue;
+    });
+  }, [value]);
+
+  useEffect(() => {
+    if (internalValue !== String(value)) {
+      const isNewInternalValueValid = !isNaN(parseFloat(internalValue));
+
+      if (isNewInternalValueValid) {
+        onChange(parseFloat(internalValue));
+      }
+    }
+  }, [internalValue]);
 
   const handleChange = (value) => {
-    const convValue = convertValue(value, measure, 'px');
-    setCust(value);
-    onChange(convValue);
-  };
+    const stringifiedValue = String(value);
+    const startsWithZero =
+      stringifiedValue !== '0' && stringifiedValue.startsWith('0');
+    const zeroWithDot = startsWithZero && stringifiedValue.includes('.');
 
-  const handleMeasChange = (m) => {
-    setCust((prev) => {
-      convertValue(prev, measure, m);
-    });
-    setMeasure(m);
-  };
+    const endorcedValue =
+      startsWithZero && !zeroWithDot
+        ? stringifiedValue.replace(/^0/, '')
+        : stringifiedValue || '0';
+    const isNumber = !isNaN(endorcedValue);
 
-  const calcValue = () => {
-    const newValue = convertValue(value, 'px', measure);
-    setCust(newValue);
+    if (isNumber) {
+      setInternalValue((prevValue) =>
+        getNewInternalValue(prevValue, endorcedValue),
+      );
+    }
   };
-
-  useEffect(() => {
-    calcValue();
-  }, [value, measure, calcValue]);
 
   const desc = schema || schema.properties[name];
 
@@ -72,37 +133,16 @@ const MeasureInput = ({
     <div className={clsx(styles.measureInput, className)} {...rest}>
       <span>{rest.title || desc.title}</span>
       <div style={{ display: 'flex' }}>
-        <Input
-          schema={schema}
-          step={measure === 'px' || measure === 'pt' ? '1' : '0.001'}
-          value={cust}
-          onChange={handleChange}
-        />
+        <Input schema={schema} value={internalValue} onChange={handleChange} />
         <Select
-          onChange={handleMeasChange}
+          onChange={onExtraChange}
           options={selectOptions}
-          value={measure}
+          value={extraValue}
           className={styles.select}
         />
       </div>
     </div>
   );
 };
-
-const measureMap = {
-  px: 1,
-  cm: 37.795278,
-  pt: 1.333333,
-  inch: 96,
-};
-
-function convertValue(value, measureFrom, measureTo) {
-  if ((!value && value !== 0) || isNaN(value)) return null; // eslint-disable-line
-
-  return measureTo === 'px' || measureTo === 'pt'
-    ? ((value * measureMap[measureFrom]) / measureMap[measureTo]).toFixed() - 0
-    : ((value * measureMap[measureFrom]) / measureMap[measureTo]).toFixed(3) -
-        0;
-}
 
 export default MeasureInput;

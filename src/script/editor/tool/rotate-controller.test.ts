@@ -2,10 +2,14 @@
 import { Vec2 } from 'ketcher-core';
 import Editor from '../Editor';
 import RotateTool from './rotate';
-import SelectTool from './select';
+import SelectTool from './select/select';
 import RotateController, { getDifference } from './rotate-controller';
 
 describe('Rotate controller', () => {
+  beforeAll(() => {
+    global.window.PointerEvent = MouseEvent as any;
+  });
+
   /**
    * Steps to check manually:
    * Select one atom / functional group using Select Tool
@@ -53,7 +57,7 @@ describe('Rotate controller', () => {
    * 2. click Rotate Tool
    */
   it('hides when active tool is not SelectTool', () => {
-    const editor = new Editor(document, {});
+    const editor = new Editor(document, {}, {});
     const NonSelectTool = new RotateTool(editor, undefined);
     const paper = jest.fn();
     const visibleAtoms = [0, 1];
@@ -85,7 +89,7 @@ describe('Rotate controller', () => {
    * Click `zoom in` or press `Ctrl+=`
    */
   it('rerenders while zooming', () => {
-    const editor = new Editor(document, {});
+    const editor = new Editor(document, {}, {});
     editor.rotateController.rerender = jest.fn();
 
     editor.zoom(2);
@@ -199,7 +203,7 @@ describe('Rotate controller', () => {
    * 2. Undo
    */
   it(`cancels rotation without modifying history stack`, () => {
-    const editor = new Editor(document, {});
+    const editor = new Editor(document, {}, {});
     editor.render.ctab.molecule.getSelectedVisibleAtoms = () => [];
     // @ts-ignore
     editor.rotateController.rotateTool.dragCtx = {
@@ -210,7 +214,7 @@ describe('Rotate controller', () => {
 
     editor.rotateController.revert();
     const selectTool = new SelectTool(editor, 'rectangle');
-    selectTool.mouseup(new MouseEvent('mouseup'));
+    selectTool.mouseup(new PointerEvent('mouseup'));
 
     expect(updateRender).toBeCalled();
     expect(selectTool.isMouseDown).toBe(false);

@@ -28,6 +28,8 @@ import {
   b64toBlob,
   KetcherLogger,
   Atom,
+  isClipboardAPIAvailable,
+  legacyCopy,
 } from 'ketcher-core';
 
 import { Dialog } from '../../../../components';
@@ -42,6 +44,7 @@ import { updateFormState } from '../../../../../state/modal/form';
 import Select from '../../../../../component/form/Select';
 import { getSelectOptionsFromSchema } from '../../../../../utils';
 import { LoadingCircles } from 'src/script/ui/views/components/Spinner';
+import { IconButton } from 'components';
 
 const saveSchema = {
   title: 'Save',
@@ -78,7 +81,8 @@ class SaveDialog extends Component {
       tabIndex: 0,
       isLoading: true,
     };
-    this.isRxn = this.props.struct.hasRxnArrow();
+    this.isRxn =
+      this.props.struct.hasRxnArrow() || this.props.struct.hasMultitailArrow();
     this.textAreaRef = createRef();
 
     const formats = !this.props.server
@@ -89,6 +93,8 @@ class SaveDialog extends Component {
           this.isRxn ? 'rxnV3000' : 'molV3000',
           'sdf',
           'sdfV3000',
+          'rdf',
+          'rdfV3000',
           'smarts',
           'smiles',
           'smilesExt',
@@ -141,14 +147,7 @@ class SaveDialog extends Component {
   };
 
   changeType = (type) => {
-    const {
-      struct,
-      server,
-      options,
-      formState,
-      ignoreChiralFlag,
-      bondThickness,
-    } = this.props;
+    const { struct, server, options, formState, ignoreChiralFlag } = this.props;
 
     const errorHandler = this.context.errorHandler;
     if (this.isImageFormat(type)) {
@@ -161,11 +160,12 @@ class SaveDialog extends Component {
         structStr,
         isLoading: true,
       });
-      const options = {};
-      options.outputFormat = type;
-      options.bondThickness = bondThickness;
+      const serverOptions = { ...options };
+
+      serverOptions.outputFormat = type;
+
       return server
-        .generateImageAsBase64(structStr, options)
+        .generateImageAsBase64(structStr, serverOptions)
         .then((base64) => {
           this.setState({
             disableControls: false,
@@ -335,6 +335,26 @@ class SaveDialog extends Component {
     );
   };
 
+  handleCopy = (event) => {
+    const { structStr } = this.state;
+
+    try {
+      if (isClipboardAPIAvailable()) {
+        navigator.clipboard.writeText(structStr);
+      } else {
+        legacyCopy(event.clipboardData, {
+          'text/plain': structStr,
+        });
+        event.preventDefault();
+      }
+    } catch (e) {
+      KetcherLogger.error('copyAs.js::copyAs', e);
+      this.props.editor.errorHandler(
+        'This feature is not available in your browser',
+      );
+    }
+  };
+
   renderSaveFile = () => {
     const formState = Object.assign({}, this.props.formState);
     delete formState.moleculeErrors;
@@ -381,6 +401,12 @@ class SaveDialog extends Component {
             ref={this.textAreaRef}
             data-testid={`${format}-preview-area-text`}
           />
+          <IconButton
+            onClick={this.handleCopy}
+            iconName="copy"
+            title="Copy to clipboard"
+            testId="copy-to-clipboard"
+          />
         </div>
       );
     };
@@ -416,9 +442,11 @@ class SaveDialog extends Component {
 
   getButtons = () => {
     const { disableControls, imageFormat, isLoading, structStr } = this.state;
-    const { formState, bondThickness } = this.props;
+    const { options, formState } = this.props;
     const { filename, format } = formState.result;
     const isCleanStruct = this.props.struct.isBlank();
+
+    options.outputFormat = imageFormat;
 
     const savingStruct =
       this.isBinaryCdxFormat(format) && !isLoading
@@ -454,10 +482,9 @@ class SaveDialog extends Component {
       buttons.push(
         <SaveButton
           mode="saveImage"
+          options={options}
           data={structStr}
           filename={filename}
-          outputFormat={imageFormat}
-          bondThickness={bondThickness}
           key="save-image-button"
           type={`image/${format}+xml`}
           onSave={this.props.onOk}

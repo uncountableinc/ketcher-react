@@ -4,11 +4,9 @@ import { execSync } from 'child_process';
 import cleanup from 'rollup-plugin-cleanup';
 import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
-import alias from '@rollup/plugin-alias';
 import del from 'rollup-plugin-delete';
 import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import path from 'path';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import pkg from './package.json';
 import postcss from 'rollup-plugin-postcss';
@@ -54,29 +52,31 @@ const config = {
   input: pkg.source,
   output: [
     {
-      file: pkg.main,
+      dir: 'dist/cjs',
       exports: 'named',
       format: 'cjs',
       banner: license,
     },
     {
-      file: pkg.module,
+      dir: 'dist',
       exports: 'named',
       format: 'es',
       banner: license,
     },
   ],
+  resolve: {
+    alias: {
+      url: 'native-url',
+    },
+  },
   plugins: [
-    alias({
-      entries: [{ find: 'url', replacement: 'native-url' }],
-    }),
     del({
       targets: 'dist/*',
       runOnce: true,
     }),
     postcss({
       plugins: [autoprefixer({ grid: 'autoplace' })],
-      extract: path.resolve('dist/index.css'),
+      extract: 'index.css',
       minimize: isProduction,
       sourceMap: true,
       include: includePattern,

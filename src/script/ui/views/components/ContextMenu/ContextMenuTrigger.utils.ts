@@ -1,9 +1,13 @@
-import { FunctionalGroup, MonomerMicromolecule } from 'ketcher-core';
-import Editor from 'src/script/editor';
 import {
-  ClosestItem,
+  FunctionalGroup,
+  MonomerMicromolecule,
+  MULTITAIL_ARROW_KEY,
+  ReMultitailArrow,
+} from 'ketcher-core';
+import Editor, { ClosestItemWithMap } from 'src/script/editor';
+import {
   CONTEXT_MENU_ID,
-  ContextMenuShowProps,
+  ContextMenuProps,
   GetIsItemInSelectionArgs,
 } from './contextMenu.types';
 import { Selection } from '../../../../editor/Editor';
@@ -37,8 +41,8 @@ export const getIsItemInSelection = ({
 
 export function getMenuPropsForClosestItem(
   editor: Editor,
-  closestItem: ClosestItem,
-): ContextMenuShowProps | null {
+  closestItem: ClosestItemWithMap,
+): ContextMenuProps | null {
   const struct = editor.struct();
 
   switch (closestItem.map) {
@@ -50,16 +54,28 @@ export function getMenuPropsForClosestItem(
         true,
       );
 
-      return functionalGroup === null ||
-        functionalGroup?.relatedSGroup.isSuperatomWithoutLabel
-        ? {
-            id: CONTEXT_MENU_ID.FOR_BONDS,
-            bondIds: [closestItem.id],
-          }
-        : {
-            id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
-            functionalGroups: [functionalGroup],
-          };
+      const noFunctionalGroup =
+        functionalGroup === null ||
+        functionalGroup?.relatedSGroup.isSuperatomWithoutLabel;
+      const isMonomer =
+        functionalGroup?.relatedSGroup instanceof MonomerMicromolecule;
+
+      if (noFunctionalGroup) {
+        return {
+          id: CONTEXT_MENU_ID.FOR_BONDS,
+          bondIds: [closestItem.id],
+        };
+      } else if (isMonomer) {
+        return {
+          id: CONTEXT_MENU_ID.FOR_MACROMOLECULE,
+          functionalGroups: [functionalGroup],
+        };
+      } else {
+        return {
+          id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+          functionalGroups: [functionalGroup],
+        };
+      }
     }
 
     case 'atoms': {
@@ -69,22 +85,34 @@ export function getMenuPropsForClosestItem(
         true,
       );
 
-      return functionalGroup === null ||
-        functionalGroup?.relatedSGroup.isSuperatomWithoutLabel
-        ? {
-            id: CONTEXT_MENU_ID.FOR_ATOMS,
-            atomIds: [closestItem.id],
-          }
-        : {
-            id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
-            functionalGroups: [functionalGroup],
-          };
+      const noFunctionalGroup =
+        functionalGroup === null ||
+        functionalGroup?.relatedSGroup.isSuperatomWithoutLabel;
+      const isMonomer =
+        functionalGroup?.relatedSGroup instanceof MonomerMicromolecule;
+
+      if (noFunctionalGroup) {
+        return {
+          id: CONTEXT_MENU_ID.FOR_ATOMS,
+          atomIds: [closestItem.id],
+        };
+      } else if (isMonomer) {
+        return {
+          id: CONTEXT_MENU_ID.FOR_MACROMOLECULE,
+          functionalGroups: [functionalGroup],
+        };
+      } else {
+        return {
+          id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+          functionalGroups: [functionalGroup],
+        };
+      }
     }
 
     case 'sgroups':
     case 'functionalGroups': {
       const sGroup = struct.sgroups.get(closestItem.id);
-      if (sGroup instanceof MonomerMicromolecule) return null;
+
       const functionalGroup = FunctionalGroup.findFunctionalGroupBySGroup(
         struct.functionalGroups,
         sGroup,
@@ -92,7 +120,10 @@ export function getMenuPropsForClosestItem(
 
       return functionalGroup
         ? {
-            id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
+            id:
+              sGroup instanceof MonomerMicromolecule
+                ? CONTEXT_MENU_ID.FOR_MACROMOLECULE
+                : CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
             functionalGroups: [functionalGroup],
           }
         : null;
@@ -108,6 +139,18 @@ export function getMenuPropsForClosestItem(
       };
     }
 
+    case MULTITAIL_ARROW_KEY: {
+      const closestItemTyped = closestItem as unknown as ReturnType<
+        ReMultitailArrow['calculateDistanceToPoint']
+      >;
+      const tailId = closestItemTyped?.ref?.tailId;
+      return {
+        id: CONTEXT_MENU_ID.FOR_MULTITAIL_ARROW,
+        itemId: closestItem.id,
+        tailId: typeof tailId === 'number' ? tailId : null,
+      };
+    }
+
     default:
       return null;
   }
@@ -118,58 +161,54 @@ const IGNORED_MAPS_LIST = ['enhancedFlags'];
 export function getMenuPropsForSelection(
   selection: Selection | null,
   selectedFunctionalGroups: Map<number, FunctionalGroup>,
-): ContextMenuShowProps | null {
+): ContextMenuProps | null {
   if (!selection) {
     return null;
   }
 
-  const bondsInSelection = 'bonds' in selection;
-  const atomsInSelection = 'atoms' in selection;
-  const isRGroupAttachmentPointsSelected =
-    'rgroupAttachmentPoints' in selection;
+  const { bonds, atoms, rgroupAttachmentPoints } = selection;
 
   if (selectedFunctionalGroups.size > 0) {
     const functionalGroups = Array.from(selectedFunctionalGroups.values());
+    if (
+      functionalGroups.some(
+        (fg) => fg.relatedSGroup instanceof MonomerMicromolecule,
+      )
+    ) {
+      return {
+        id: CONTEXT_MENU_ID.FOR_MACROMOLECULE,
+        functionalGroups,
+      };
+    }
+
     return {
       id: CONTEXT_MENU_ID.FOR_FUNCTIONAL_GROUPS,
       functionalGroups,
     };
-  } else if (
-    bondsInSelection &&
-    !atomsInSelection &&
-    !isRGroupAttachmentPointsSelected
-  ) {
+  } else if (bonds && !atoms && !rgroupAttachmentPoints) {
     return {
       id: CONTEXT_MENU_ID.FOR_BONDS,
-      bondIds: selection.bonds,
+      bondIds: bonds,
       extraItemsSelected: !onlyHasProperty(
         selection,
         'bonds',
         IGNORED_MAPS_LIST,
       ),
     };
-  } else if (
-    atomsInSelection &&
-    !bondsInSelection &&
-    !isRGroupAttachmentPointsSelected
-  ) {
+  } else if (atoms && !bonds && !rgroupAttachmentPoints) {
     return {
       id: CONTEXT_MENU_ID.FOR_ATOMS,
-      atomIds: selection.atoms,
+      atomIds: atoms,
       extraItemsSelected: !onlyHasProperty(
         selection,
         'atoms',
         IGNORED_MAPS_LIST,
       ),
     };
-  } else if (
-    isRGroupAttachmentPointsSelected &&
-    !bondsInSelection &&
-    !atomsInSelection
-  ) {
+  } else if (rgroupAttachmentPoints && !bonds && !atoms) {
     return {
       id: CONTEXT_MENU_ID.FOR_R_GROUP_ATTACHMENT_POINT,
-      rgroupAttachmentPoints: selection.rgroupAttachmentPoints,
+      rgroupAttachmentPoints,
       extraItemsSelected: !onlyHasProperty(
         selection,
         'rgroupAttachmentPoints',
@@ -179,8 +218,9 @@ export function getMenuPropsForSelection(
   } else {
     return {
       id: CONTEXT_MENU_ID.FOR_SELECTION,
-      bondIds: selection.bonds,
-      atomIds: selection.atoms,
+      bondIds: bonds,
+      atomIds: atoms,
+      rgroupAttachmentPoints,
     };
   }
 }

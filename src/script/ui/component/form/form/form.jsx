@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-import { Component, useCallback, useState } from 'react';
-
+import clsx from 'clsx';
 import { Validator } from 'jsonschema';
-import { ErrorPopover } from './errorPopover';
+import { cloneDeep } from 'lodash';
+import { Component, useCallback, useState } from 'react';
+import { connect } from 'react-redux';
 import { FormContext } from '../../../../../contexts';
+import { useFormContext } from '../../../../../hooks';
+import { updateFormState } from '../../../state/modal/form';
+import { getSelectOptionsFromSchema } from '../../../utils';
 import Input from '../Input/Input';
 import Select from '../Select';
+import { ErrorPopover } from './errorPopover';
 import classes from './form.module.less';
-import clsx from 'clsx';
-import { connect } from 'react-redux';
-import { getSelectOptionsFromSchema } from '../../../utils';
-import { updateFormState } from '../../../state/modal/form';
-import { useFormContext } from '../../../../../hooks';
-import { cloneDeep } from 'lodash';
-import { IconButton } from 'components';
+import { Icon, IconButton } from 'components';
+import { Tooltip } from '@mui/material';
 
 class Form extends Component {
   constructor(props) {
@@ -71,18 +70,23 @@ class Form extends Component {
     onUpdate(instance, valid, errs);
   }
 
-  field(name, onChange) {
+  field(name, onChange, extraName) {
     const { result, errors } = this.props;
     const value = result[name];
+    const extraValue = extraName ? result[extraName] : null;
+
+    const handleOnChange = (name, value) => {
+      const newState = Object.assign({}, this.props.result, { [name]: value });
+      this.updateState(newState);
+      if (onChange) onChange(value);
+    };
 
     return {
       dataError: errors && errors[name],
       value,
-      onChange: (val) => {
-        const newState = Object.assign({}, this.props.result, { [name]: val });
-        this.updateState(newState);
-        if (onChange) onChange(val);
-      },
+      extraValue,
+      onChange: (val) => handleOnChange(name, val),
+      onExtraChange: (val) => handleOnChange(extraName, val),
     };
   }
 
@@ -107,17 +111,46 @@ export default connect(null, (dispatch) => ({
 
 function Label({ labelPos, title, children, ...props }) {
   const tooltip = props.tooltip ? props.tooltip : null;
-
   return (
     <label {...props}>
       {title && labelPos !== 'after' ? (
-        <span title={tooltip}>{title}</span>
+        tooltip ? (
+          <div
+            className={clsx({
+              [classes.divWithTooltipAndAboutIcon]: true,
+            })}
+          >
+            <span>{title}</span>
+            <Tooltip title={tooltip}>
+              <div>
+                <Icon name="about"></Icon>
+              </div>
+            </Tooltip>
+          </div>
+        ) : (
+          <span>{title}</span>
+        )
       ) : (
         ''
       )}
       {children}
       {title && labelPos === 'after' ? (
-        <span title={tooltip}>{title}</span>
+        tooltip ? (
+          <div
+            className={clsx({
+              [classes.divWithTooltipAndAboutIcon]: true,
+            })}
+          >
+            <Tooltip title={tooltip}>
+              <div>
+                <Icon name="about"></Icon>
+              </div>
+            </Tooltip>
+            <span>{title}</span>
+          </div>
+        ) : (
+          <span>{title}</span>
+        )
       ) : (
         ''
       )}
@@ -126,7 +159,16 @@ function Label({ labelPos, title, children, ...props }) {
 }
 
 function Field(props) {
-  const { name, onChange, component, labelPos, className, ...rest } = props;
+  const {
+    name,
+    extraName,
+    onChange,
+    component,
+    labelPos,
+    className,
+    extraLabel,
+    ...rest
+  } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const handlePopoverOpen = useCallback((event) => {
     setAnchorEl(event.currentTarget);
@@ -136,18 +178,28 @@ function Field(props) {
   }, []);
   const { schema, stateStore } = useFormContext();
   const desc = rest.schema || schema.properties[name];
-  const { dataError, ...fieldOpts } = stateStore.field(name, onChange);
+  const { dataError, onExtraChange, extraValue, ...fieldOpts } =
+    stateStore.field(name, onChange, extraName);
+
+  const getExtraSchema = () => {
+    return rest.extraSchema || schema.properties[extraName];
+  };
+
   const Component = component;
   const formField = component ? (
     <Component
       name={name}
       schema={desc}
       className={className}
+      onExtraChange={onExtraChange}
+      extraValue={extraValue}
+      {...(extraName && { extraSchema: getExtraSchema() })}
       {...fieldOpts}
       {...rest}
     />
   ) : (
     <Input
+      {...(extraLabel && { className: classes.inputWithExtraLabel })}
       name={name}
       schema={desc}
       {...fieldOpts}
@@ -182,6 +234,7 @@ function Field(props) {
           onClose={handlePopoverClose}
         />
       )}
+      {extraLabel && <Label className={classes.extraLabel}>{extraLabel}</Label>}
     </Label>
   );
 }
@@ -333,8 +386,6 @@ const SelectOneOf = (props) => {
   );
 };
 
-//
-
 function propSchema(schema, { customValid, serialize = {}, deserialize = {} }) {
   const schemaCopy = cloneDeep(schema);
 
@@ -359,10 +410,12 @@ function propSchema(schema, { customValid, serialize = {}, deserialize = {} }) {
   }
 
   const validator = new Validator();
+
   return {
     key: schema.key || '',
     serialize: (inst) => {
       const result = validator.validate(inst, schemaCopy);
+
       return {
         instance: serializeRewrite(serialize, inst, schemaCopy),
         valid: result.valid,

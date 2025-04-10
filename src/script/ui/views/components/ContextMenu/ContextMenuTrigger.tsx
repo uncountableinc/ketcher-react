@@ -14,25 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-import { FunctionalGroup } from 'ketcher-core';
-import { PropsWithChildren, useCallback } from 'react';
+import { FunctionalGroup, MULTITAIL_ARROW_KEY } from 'ketcher-core';
+import { FC, PropsWithChildren, useCallback } from 'react';
 import { useContextMenu } from 'react-contexify';
 import { useAppContext } from 'src/hooks';
 import Editor from 'src/script/editor';
+import { ContextMenuProps, ContextMenuTriggerType } from './contextMenu.types';
 import {
-  ContextMenuShowProps,
-  ContextMenuTriggerType,
-} from './contextMenu.types';
-import {
-  getMenuPropsForClosestItem,
   getIsItemInSelection,
+  getMenuPropsForClosestItem,
   getMenuPropsForSelection,
 } from './ContextMenuTrigger.utils';
 import TemplateTool from 'src/script/editor/tool/template';
 
-const ContextMenuTrigger: React.FC<PropsWithChildren> = ({ children }) => {
+const ContextMenuTrigger: FC<PropsWithChildren> = ({ children }) => {
   const { getKetcherInstance } = useAppContext();
-  const { show } = useContextMenu<ContextMenuShowProps>();
+  const { show } = useContextMenu<ContextMenuProps>();
 
   const getSelectedGroupsInfo = useCallback(() => {
     const editor = getKetcherInstance().editor as Editor;
@@ -77,6 +74,10 @@ const ContextMenuTrigger: React.FC<PropsWithChildren> = ({ children }) => {
 
       const editor = getKetcherInstance().editor as Editor;
 
+      if (editor.render.options.viewOnlyMode) {
+        return;
+      }
+
       const currentTool = editor.tool();
       if (currentTool instanceof TemplateTool) {
         currentTool.cancel();
@@ -87,7 +88,7 @@ const ContextMenuTrigger: React.FC<PropsWithChildren> = ({ children }) => {
       const { selectedFunctionalGroups, selectedSGroupsIds } =
         getSelectedGroupsInfo();
 
-      let showProps: ContextMenuShowProps = null;
+      let showProps: ContextMenuProps | null = null;
       let triggerType: ContextMenuTriggerType;
 
       if (!closestItem) {
@@ -113,7 +114,11 @@ const ContextMenuTrigger: React.FC<PropsWithChildren> = ({ children }) => {
           !selection.atoms &&
           !selection.rgroupAttachmentPoints
         ) {
-          triggerType = ContextMenuTriggerType.None;
+          if (selection[MULTITAIL_ARROW_KEY]) {
+            triggerType = ContextMenuTriggerType.ClosestItem;
+          } else {
+            triggerType = ContextMenuTriggerType.None;
+          }
         } else {
           triggerType = ContextMenuTriggerType.Selection;
         }

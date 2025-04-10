@@ -3,7 +3,7 @@ import { Item, Submenu } from 'react-contexify';
 import useAtomEdit from '../hooks/useAtomEdit';
 import useAtomStereo from '../hooks/useAtomStereo';
 import useDelete from '../hooks/useDelete';
-import { MenuItemsProps } from '../contextMenu.types';
+import { AtomContextMenuProps, MenuItemsProps } from '../contextMenu.types';
 import { updateSelectedAtoms } from 'src/script/ui/state/modal/atoms';
 import { useAppContext } from 'src/hooks';
 import Editor from 'src/script/editor';
@@ -22,6 +22,7 @@ import styles from '../ContextMenu.module.less';
 import useAddAttachmentPoint from '../hooks/useAddAttachmentPoint';
 import { isNumber } from 'lodash';
 import useRemoveAttachmentPoint from '../hooks/useRemoveAttachmentPoint';
+import HighlightMenu from 'src/script/ui/action/highlightColors/HighlightColors';
 
 const {
   ringBondCount,
@@ -95,7 +96,7 @@ const atomPropertiesForSubMenu: {
   })),
 ];
 
-const AtomMenuItems: FC<MenuItemsProps> = (props) => {
+const AtomMenuItems: FC<MenuItemsProps<AtomContextMenuProps>> = (props) => {
   const [handleEdit] = useAtomEdit();
   const [handleAddAttachmentPoint] = useAddAttachmentPoint();
   const [handleRemoveAttachmentPoint] = useRemoveAttachmentPoint();
@@ -171,11 +172,24 @@ const AtomMenuItems: FC<MenuItemsProps> = (props) => {
       ),
   );
 
+  const highlightAtomWithColor = (color: string) => {
+    const atomIds = props.propsFromTrigger?.atomIds || [];
+    editor.highlights.create({
+      atoms: atomIds,
+      rgroupAttachmentPoints: [],
+      bonds: [],
+      color: color === '' ? 'transparent' : color,
+    });
+  };
+
   if (isAtomSuperatomLeavingGroup && onlyOneAtomSelected) {
     return (
-      <Item {...props} onClick={handleDelete}>
-        Delete
-      </Item>
+      <>
+        <HighlightMenu onHighlight={highlightAtomWithColor} />
+        <Item {...props} onClick={handleDelete}>
+          Delete
+        </Item>
+      </>
     );
   }
 
@@ -221,6 +235,7 @@ const AtomMenuItems: FC<MenuItemsProps> = (props) => {
             Add attachment point
           </Item>
         )}
+      <HighlightMenu onHighlight={highlightAtomWithColor} />
       {isAtomSuperatomAttachmentPoint &&
         atomFreeAttachmentPoints.length > 0 && (
           <Item {...props} onClick={handleRemoveAttachmentPoint}>

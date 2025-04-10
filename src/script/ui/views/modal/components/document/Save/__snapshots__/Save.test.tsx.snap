@@ -137,6 +137,15 @@ Object {
                     data-testid="mol-preview-area-text"
                     readonly=""
                   />
+                  <button
+                    class="css-1kbfai8"
+                    data-testid="copy-to-clipboard"
+                    title="Copy to clipboard"
+                  >
+                    <icon-copy.svg
+                      classname="css-2ntgcm"
+                    />
+                  </button>
                 </div>
               </div>
             </div>
@@ -241,6 +250,26 @@ Object {
             tabindex="-1"
           >
             SDF V3000
+          </li>
+          <li
+            aria-selected="false"
+            class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"
+            data-testid="RDF V2000-option"
+            data-value="rdf"
+            role="option"
+            tabindex="-1"
+          >
+            RDF V2000
+          </li>
+          <li
+            aria-selected="false"
+            class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"
+            data-testid="RDF V3000-option"
+            data-value="rdfV3000"
+            role="option"
+            tabindex="-1"
+          >
+            RDF V3000
           </li>
           <li
             aria-selected="false"
@@ -511,6 +540,15 @@ Object {
                   data-testid="mol-preview-area-text"
                   readonly=""
                 />
+                <button
+                  class="css-1kbfai8"
+                  data-testid="copy-to-clipboard"
+                  title="Copy to clipboard"
+                >
+                  <icon-copy.svg
+                    classname="css-2ntgcm"
+                  />
+                </button>
               </div>
             </div>
           </div>

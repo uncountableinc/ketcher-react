@@ -27,23 +27,23 @@ import HandTool from './hand';
 import PasteTool from './paste';
 import RGroupAtomTool from './rgroupatom';
 import RGroupFragmentTool from './rgroupfragment';
-import ReactionArrowTool from './reactionarrow';
+import { CommonArrowTool } from './arrow/commonArrow';
 import ReactionMapTool from './reactionmap';
 import ReactionPlusTool from './reactionplus';
 import ReactionUnmapTool from './reactionunmap';
 import RotateTool from './rotate';
 import SGroupTool from './sgroup';
-import SelectTool from './select';
 import SimpleObjectTool from './simpleobject';
 import TemplateTool from './template';
 import TextTool from './text';
 import { ToolConstructorInterface } from './Tool';
 import { ImageTool } from './image';
+import { SelectCommonTool } from './select';
 
 export const toolsMap: Record<string, ToolConstructorInterface> = {
   hand: HandTool,
   rgroupatom: RGroupAtomTool,
-  select: SelectTool,
+  select: SelectCommonTool,
   sgroup: SGroupTool,
   eraser: EraserTool,
   atom: AtomTool,
@@ -54,7 +54,7 @@ export const toolsMap: Record<string, ToolConstructorInterface> = {
   rgroupfragment: RGroupFragmentTool,
   apoint: APointTool,
   attach: AttachTool,
-  reactionarrow: ReactionArrowTool,
+  reactionarrow: CommonArrowTool,
   reactionplus: ReactionPlusTool,
   reactionmap: ReactionMapTool,
   reactionunmap: ReactionUnmapTool,

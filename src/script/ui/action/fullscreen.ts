@@ -40,16 +40,18 @@ const getIfFullScreen = () => {
   );
 };
 
-const toggleFullscreen = (element: HTMLElement) => {
+const toggleFullscreen = () => {
   const fullscreenElement: HTMLElement =
-    element.closest(KETCHER_ROOT_NODE_CSS_SELECTOR) || document.documentElement;
+    document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR) ||
+    document.documentElement;
   getIfFullScreen() ? exitFullscreen() : requestFullscreen(fullscreenElement);
 };
 
 export default {
   fullscreen: {
     title: 'Fullscreen mode',
-    action: (element: HTMLElement) => () => toggleFullscreen(element),
+    enabledInViewOnly: true,
+    action: () => toggleFullscreen(),
     hidden: (options) => isHidden(options, 'fullscreen'),
   },
 };

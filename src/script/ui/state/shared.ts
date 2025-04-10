@@ -18,7 +18,6 @@ import {
   FormatterFactory,
   Pile,
   SGroup,
-  getStereoAtomsMap,
   identifyStructFormat,
   Struct,
   SupportedFormat,
@@ -26,6 +25,8 @@ import {
   Editor,
   KetcherLogger,
   SettingsManager,
+  MULTITAIL_ARROW_KEY,
+  IMAGE_KEY,
 } from 'ketcher-core';
 
 import { supportedSGroupTypes } from './constants';
@@ -111,6 +112,8 @@ export const getSelectionFromStruct = (struct) => {
     'texts',
     'rgroupAttachmentPoints',
     'simpleObjects',
+    IMAGE_KEY,
+    MULTITAIL_ARROW_KEY,
   ].forEach((selectionEntity) => {
     if (struct && struct[selectionEntity]) {
       const selected: number[] = [];
@@ -133,13 +136,13 @@ export function load(struct: Struct, options?) {
     const state = getState();
     const editor = state.editor as Editor;
     const server = state.server;
+    const serverSettings = state.options.getServerSettings();
     const errorHandler = editor.errorHandler;
     options = options || {};
     let { isPaste, method, ...otherOptions } = options;
     otherOptions = {
+      ...serverSettings,
       ...otherOptions,
-      'dearomatize-on-load': editor.options()['dearomatize-on-load'],
-      ignoreChiralFlag: editor.options().ignoreChiralFlag,
     };
 
     dispatch(setAnalyzingFile(true));
@@ -186,25 +189,7 @@ export function load(struct: Struct, options?) {
 
       parsedStruct.findConnectedComponents();
       parsedStruct.setImplicitHydrogen();
-
-      const stereAtomsMap = getStereoAtomsMap(
-        parsedStruct,
-        Array.from(parsedStruct.bonds.values()),
-      );
-
-      parsedStruct.atoms.forEach((atom, id) => {
-        if (parsedStruct?.atomGetNeighbors(id)?.length === 0) {
-          atom.stereoLabel = null;
-          atom.stereoParity = 0;
-        } else {
-          const stereoProp = stereAtomsMap.get(id);
-          if (stereoProp) {
-            atom.stereoLabel = stereoProp.stereoLabel;
-            atom.stereoParity = stereoProp.stereoParity;
-          }
-        }
-      });
-
+      parsedStruct.setStereoLabelsToAtoms();
       parsedStruct.markFragments();
 
       if (fragment) {

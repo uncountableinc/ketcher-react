@@ -84,6 +84,7 @@ import ReactionArrowEquilibriumFilledHalfBow from '../../../assets/icons/files/r
 import ReactionArrowEquilibriumFilledTriangle from '../../../assets/icons/files/reaction-arrow-equilibrium-filled-triangle.svg';
 import ReactionArrowEquilibriumOpenAngle from '../../../assets/icons/files/reaction-arrow-equilibrium-open-angle.svg';
 import ReactionArrowFailed from '../../../assets/icons/files/reaction-arrow-failed.svg';
+import ReactionArrowRetrosynthetic from '../../../assets/icons/files/reaction-arrow-retrosynthetic-arrow.svg';
 import ReactionArrowFilledBow from '../../../assets/icons/files/reaction-arrow-filled-bow.svg';
 import ReactionArrowFilledTriangle from '../../../assets/icons/files/reaction-arrow-filled-triangle.svg';
 import ReactionArrowOpenAngleIcon from '../../../assets/icons/files/reaction-arrow-open-angle.svg';
@@ -91,6 +92,7 @@ import ReactionArrowUnbalancedEquilibriumFilledHalfBow from '../../../assets/ico
 import ReactionArrowUnbalancedEquilibriumFilledHalfTriangle from '../../../assets/icons/files/reaction-arrow-unbalanced-equilibrium-filled-half-triangle.svg';
 import ReactionArrowUnbalancedEquilibriumLargeFilledHalfBow from '../../../assets/icons/files/reaction-arrow-unbalanced-equilibrium-large-filled-half-bow.svg';
 import ReactionArrowUnbalancedEquilibriumOpenHalfAngle from '../../../assets/icons/files/reaction-arrow-unbalanced-equilibrium-open-half-angle.svg';
+import ReactionArrowMultitail from '../../../assets/icons/files/reaction-arrow-multitail.svg';
 import ReactionAutomapIcon from '../../../assets/icons/files/reaction-automap.svg';
 import ReactionMapIcon from '../../../assets/icons/files/reaction-map.svg';
 import ReactionPlusIcon from '../../../assets/icons/files/reaction-plus.svg';
@@ -225,7 +227,8 @@ import SnakeLayoutIcon from '../../../assets/icons/files/snake-layout-mode.svg';
 import SequenceLayoutIcon from '../../../assets/icons/files/sequence-layout-mode.svg';
 import QuestionMark from '../../../assets/icons/files/questionMark.svg';
 import Nucleotide from '../../../assets/icons/files/nucleotide.svg';
-import { IMAGE_KEY } from 'ketcher-core';
+import { IMAGE_KEY, MULTITAIL_ARROW_TOOL_NAME } from 'ketcher-core';
+import CrossIcon from '../../../assets/icons/files/cross.svg';
 
 export const iconNameToIcon = {
   α,
@@ -280,6 +283,7 @@ export const iconNameToIcon = {
   'any-atom': AnyAtomIcon,
   arom: AromIcon,
   'arrow-upward': ArrowUpwardIcon,
+  bonds: BondSingleIcon,
   'bond-any': BondAnyIcon,
   'bond-aromatic': BondAromaticIcon,
   'bond-crossed': BondCrossedIcon,
@@ -335,6 +339,7 @@ export const iconNameToIcon = {
   open: OpenIcon,
   paste: PasteIcon,
   'period-table': PeriodTableIcon,
+  arrows: ReactionArrowOpenAngleIcon,
   'reaction-arrow-elliptical-arc-arrow-filled-bow':
     ReactionArrowEllipticalArcArrowFilledBow,
   'reaction-arrow-elliptical-arc-arrow-filled-triangle':
@@ -348,6 +353,7 @@ export const iconNameToIcon = {
   'reaction-arrow-filled-bow': ReactionArrowFilledBow,
   'reaction-arrow-dashed-open-angle': ReactionArrowDashedOpenAngle,
   'reaction-arrow-failed': ReactionArrowFailed,
+  'reaction-arrow-retrosynthetic': ReactionArrowRetrosynthetic,
   'reaction-arrow-both-ends-filled-triangle':
     ReactionArrowBothEndsFilledTriangle,
   'reaction-arrow-equilibrium-filled-half-bow':
@@ -363,12 +369,15 @@ export const iconNameToIcon = {
     ReactionArrowUnbalancedEquilibriumLargeFilledHalfBow,
   'reaction-arrow-unbalanced-equilibrium-filled-half-triangle':
     ReactionArrowUnbalancedEquilibriumFilledHalfTriangle,
+  [MULTITAIL_ARROW_TOOL_NAME]: ReactionArrowMultitail,
   'reaction-automap': ReactionAutomapIcon,
+  'reaction-mapping-tools': ReactionMapIcon,
   'reaction-map': ReactionMapIcon,
   'reaction-plus': ReactionPlusIcon,
   'reaction-unmap': ReactionUnmapIcon,
   recognize: RecognizeIcon,
   redo: RedoIcon,
+  rgroup: RgroupLabelIcon,
   'rgroup-attpoints': RgroupAttpointsIcon,
   'rgroup-fragment': RgroupFragmentIcon,
   'rgroup-label': RgroupLabelIcon,
@@ -402,6 +411,7 @@ export const iconNameToIcon = {
   'zoom-in': ZoomInIcon,
   'zoom-out': ZoomOutIcon,
   'zoom-reset': ZoomResetIcon,
+  shapes: ShapeEllipseIcon,
   'shape-ellipse': ShapeEllipseIcon,
   'shape-rectangle': ShapeRectangleIcon,
   'shape-polyline': ShapePolylineIcon,
@@ -417,7 +427,7 @@ export const iconNameToIcon = {
   'stereo-white': StereoWhiteIcon,
   atoms: AtomsIcon,
   'atoms-white': AtomsWhiteIcon,
-  bonds: BondsIcon,
+  'bond-common': BondsIcon,
   'bonds-white': BondsWhiteIcon,
   server: ServerIcon,
   'server-white': ServerWhiteIcon,
@@ -451,4 +461,5 @@ export const iconNameToIcon = {
   'snake-layout-mode': SnakeLayoutIcon,
   'sequence-layout-mode': SequenceLayoutIcon,
   questionMark: QuestionMark,
+  'no-highlight-cross': CrossIcon,
 } as const;

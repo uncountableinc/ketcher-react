@@ -8,17 +8,40 @@ import useBondEdit from '../hooks/useBondEdit';
 import useBondTypeChange from '../hooks/useBondTypeChange';
 import useDelete from '../hooks/useDelete';
 import { formatTitle, getBondNames } from '../utils';
-import { MenuItemsProps } from '../contextMenu.types';
+import Editor from 'src/script/editor';
+import {
+  MenuItemsProps,
+  SelectionContextMenuProps,
+} from '../contextMenu.types';
 import { getIconName, Icon } from 'components';
+import { useAppContext } from 'src/hooks';
+import HighlightMenu from 'src/script/ui/action/highlightColors/HighlightColors';
 
 const bondNames = getBondNames(tools);
 
-const SelectionMenuItems: FC<MenuItemsProps> = (props) => {
+const SelectionMenuItems: FC<MenuItemsProps<SelectionContextMenuProps>> = (
+  props,
+) => {
+  const { getKetcherInstance } = useAppContext();
+  const editor = getKetcherInstance().editor as Editor;
   const [handleBondEdit, bondEditDisabled] = useBondEdit();
   const [handleAtomEdit, atomEditDisabled] = useAtomEdit();
   const [handleTypeChange, bondTypeChangeDisabled] = useBondTypeChange();
   const [handleAtomStereo, atomStereoDisabled] = useAtomStereo();
   const handleDelete = useDelete();
+  const highlightBondWithColor = (color: string) => {
+    const bondIds = props.propsFromTrigger?.bondIds || [];
+    const atomIds = props.propsFromTrigger?.atomIds || [];
+    const rgroupAttachmentPoints =
+      props.propsFromTrigger?.rgroupAttachmentPoints || [];
+
+    editor.highlights.create({
+      atoms: atomIds,
+      bonds: bondIds,
+      rgroupAttachmentPoints,
+      color: color === '' ? 'transparent' : color,
+    });
+  };
 
   return (
     <>
@@ -50,7 +73,7 @@ const SelectionMenuItems: FC<MenuItemsProps> = (props) => {
       <Item {...props} disabled={atomStereoDisabled} onClick={handleAtomStereo}>
         Enhanced stereochemistry...
       </Item>
-
+      <HighlightMenu onHighlight={highlightBondWithColor} />
       <Item {...props} onClick={handleDelete}>
         Delete
       </Item>

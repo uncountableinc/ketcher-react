@@ -41,6 +41,8 @@ import settingsSchema, {
 import fieldGroups from './fieldGroups';
 import { isEqual } from 'lodash';
 import { Icon } from 'components';
+import { ACS_STYLE_DEFAULT_SETTINGS } from 'src/constants';
+import { onAction } from 'src/script/ui/state/shared';
 
 interface SettingsProps extends BaseProps {
   initState: any;
@@ -59,6 +61,7 @@ interface SettingsProps extends BaseProps {
 interface SettingsCallProps extends BaseCallProps {
   onOpenFile: (any) => void;
   onReset: () => void;
+  onACSStyle: (result) => void;
 }
 
 const defaultSettings = getDefaultOptions();
@@ -153,8 +156,30 @@ const SettingsDialog = (props: Props) => {
         <Field name="showValenceWarnings" />
         <Field name="atomColoring" />
         <Field name="font" component={SystemFonts} data-testid="font" />
-        <Field name="fontsz" component={MeasureInput} labelPos={false} />
-        <Field name="fontszsub" component={MeasureInput} labelPos={false} />
+        <Field
+          name="fontsz"
+          component={MeasureInput}
+          labelPos={false}
+          extraName="fontszUnit"
+        />
+        <Field
+          name="fontszsub"
+          component={MeasureInput}
+          labelPos={false}
+          extraName="fontszsubUnit"
+        />
+        <Field
+          name="reactionComponentMarginSize"
+          component={MeasureInput}
+          labelPos={false}
+          extraName="reactionComponentMarginSizeUnit"
+        />
+        <Field
+          name="imageResolution"
+          tooltip="option applicable to PNG/SVG pictures renderer"
+          component={Select}
+          options={getSelectOptionsFromSchema(settingsProps?.imageResolution)}
+        />
       </fieldset>
     ),
   };
@@ -219,15 +244,29 @@ const SettingsDialog = (props: Props) => {
       <fieldset>
         <Field name="aromaticCircle" />
         <Field
-          name="doubleBondWidth"
+          name="bondLength"
           component={MeasureInput}
           labelPos={false}
+          extraName="bondLengthUnit"
         />
-        <Field name="bondThickness" component={MeasureInput} labelPos={false} />
+        <Field name="bondSpacing" extraLabel="% of length" />
+        <Field
+          name="bondThickness"
+          component={MeasureInput}
+          labelPos={false}
+          extraName="bondThicknessUnit"
+        />
         <Field
           name="stereoBondWidth"
           component={MeasureInput}
           labelPos={false}
+          extraName="stereoBondWidthUnit"
+        />
+        <Field
+          name="hashSpacing"
+          component={MeasureInput}
+          labelPos={false}
+          extraName="hashSpacingUnit"
         />
       </fieldset>
     ),
@@ -282,6 +321,23 @@ const SettingsDialog = (props: Props) => {
     ),
   };
 
+  const onACSStyle = () => {
+    prop.onACSStyle({
+      ...formState.result,
+      ...ACS_STYLE_DEFAULT_SETTINGS,
+    });
+  };
+
+  const ACSStyleButton = (
+    <button
+      className={classes.acsStyleButton}
+      key="acsstylebutton"
+      onClick={onACSStyle}
+    >
+      Set ACS Settings
+    </button>
+  );
+
   const tabs = [
     generalTab,
     stereoTab,
@@ -295,11 +351,11 @@ const SettingsDialog = (props: Props) => {
   return (
     <Dialog
       className={classes.settings}
-      result={() => formState.result}
+      result={() => [formState.result, initState]}
       valid={() => formState.valid}
       params={prop}
       buttonsNameMap={{ OK: 'Apply' }}
-      buttons={['Cancel', 'OK']}
+      buttons={[ACSStyleButton, 'Cancel', 'OK']}
       withDivider
       needMargin={false}
       headerContent={
@@ -341,8 +397,30 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   onReset: () => dispatch(setDefaultSettings()),
   onOk: (res) => {
-    dispatch(saveSettings(res));
-    ownProps.onOk(res);
+    const [result, initState] = res;
+
+    dispatch(saveSettings(result));
+    ownProps.onOk(result);
+
+    const showNotification =
+      initState.reactionComponentMarginSize !==
+      result.reactionComponentMarginSize;
+
+    showNotification &&
+      dispatch(
+        onAction({
+          dialog: 'info-modal',
+          prop: {
+            title: '',
+            customText:
+              'To fully apply these changes, you need to apply the layout.',
+            button: 'OK',
+          },
+        }),
+      );
+  },
+  onACSStyle: (result) => {
+    dispatch(updateFormState({ result }));
   },
 });
 

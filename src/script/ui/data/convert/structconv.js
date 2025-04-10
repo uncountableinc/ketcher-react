@@ -410,6 +410,7 @@ export function fromSgroup(ssgroup) {
     sdataSchema[context][fieldName].properties.fieldValue.items
   )
     ssgroup.attrs.fieldValue = fieldValue.split('\n');
+
   const sDataInitValue =
     type === 'DAT'
       ? {
@@ -427,6 +428,7 @@ export function fromSgroup(ssgroup) {
           connectivity: 'ht',
         }
       : {};
+
   return Object.assign({ type }, ssgroup.attrs, sDataInitValue);
 }
 

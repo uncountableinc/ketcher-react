@@ -9,12 +9,12 @@ import {
   fromImageMove,
   fromImageResize,
   ImageReferencePositionInfo,
-  imageReferencePositionToCursor,
 } from 'ketcher-core';
 import { Tool } from './Tool';
 import type Editor from '../Editor';
 import { ClosestItemWithMap } from '../shared/closest.types';
 import { handleMovingPosibilityCursor } from '../utils';
+import { getItemCursor } from '../utils/getItemCursor';
 
 const TAG = 'tool/image.ts';
 const supportedMimes = ['png', 'svg+xml'];
@@ -25,6 +25,7 @@ const supportedMimesForRegex = supportedMimes
 
 const allowList = new RegExp(`^image/(${supportedMimesForRegex})$`);
 const MIN_DIMENSION_SIZE = 16;
+const MIN_SIZELESS_IMAGE_SRC_LENGTH = 320;
 
 interface DragContext {
   center: Vec2;
@@ -98,25 +99,11 @@ export class ImageTool implements Tool {
         IMAGE_KEY,
       ]) as ClosestItemWithMap<ImageReferencePositionInfo>;
       const render = this.editor.render;
-
-      if (item?.ref) {
-        handleMovingPosibilityCursor(
-          item,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore: raphael typing issues
-          render.paper.canvas,
-          imageReferencePositionToCursor[item.ref.name],
-        );
-      } else {
-        handleMovingPosibilityCursor(
-          item,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore: raphael typing issues
-          render.paper.canvas,
-          render.options.movingStyle.cursor as string,
-        );
-      }
-
+      handleMovingPosibilityCursor(
+        item,
+        render.paper.canvas,
+        getItemCursor(render, item),
+      );
       this.editor.hover(item, null, event);
     }
   }
@@ -154,10 +141,15 @@ export class ImageTool implements Tool {
 
       image.onload = () => {
         this.resetElementValue();
-        if (
-          image.width < MIN_DIMENSION_SIZE ||
-          image.height < MIN_DIMENSION_SIZE
-        ) {
+        const isValidSize =
+          image.width >= MIN_DIMENSION_SIZE &&
+          image.height >= MIN_DIMENSION_SIZE;
+        const isValidSizeless =
+          image.width === 0 &&
+          image.height === 0 &&
+          image.src.length >= MIN_SIZELESS_IMAGE_SRC_LENGTH;
+
+        if (!isValidSize && !isValidSizeless) {
           const errorMessage = 'Image should be at least 16x16 pixels';
           KetcherLogger.error(`${TAG}:onLoad`, errorMessage);
           if (errorHandler) {
@@ -166,8 +158,12 @@ export class ImageTool implements Tool {
           return;
         }
 
-        const halfSize = Scale.canvasToModel(
-          new Vec2(image.width / 2, image.height / 2),
+        const halfSize = isValidSizeless
+          ? new Vec2(MIN_DIMENSION_SIZE, MIN_DIMENSION_SIZE)
+          : new Vec2(image.width / 2, image.height / 2);
+
+        const halfSizeScaled = Scale.canvasToModel(
+          halfSize,
           this.editor.render.options,
         );
 
@@ -176,7 +172,7 @@ export class ImageTool implements Tool {
             this.editor.render.ctab,
             image.src,
             clickPosition,
-            halfSize,
+            halfSizeScaled,
           ),
         );
       };

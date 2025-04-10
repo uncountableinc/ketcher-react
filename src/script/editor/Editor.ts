@@ -16,19 +16,21 @@
 
 import {
   Action,
-  FloatingToolsParams,
   Editor as KetcherEditor,
-  Pile,
-  Render,
-  Scale,
-  Struct,
-  Vec2,
+  FloatingToolsParams,
   fromDescriptorsAlign,
   fromMultipleMove,
   fromNewCanvas,
-  provideEditorSettings,
-  ReStruct,
   IMAGE_KEY,
+  MULTITAIL_ARROW_KEY,
+  Pile,
+  provideEditorSettings,
+  Render,
+  ReStruct,
+  Scale,
+  Struct,
+  Vec2,
+  ketcherProvider,
 } from 'ketcher-core';
 import {
   DOMSubscription,
@@ -42,7 +44,7 @@ import { isEqual } from 'lodash/fp';
 import { toolsMap } from './tool';
 import { Highlighter } from './highlighter';
 import { setFunctionalGroupsTooltip } from './utils/functionalGroupsTooltip';
-import { contextMenuInfo } from '../ui/views/components/ContextMenu/contextMenu.types';
+import { ContextMenuInfo } from '../ui/views/components/ContextMenu/contextMenu.types';
 import { HoverIcon } from './HoverIcon';
 import RotateController from './tool/rotate-controller';
 import {
@@ -67,7 +69,9 @@ const structObjects: Array<keyof typeof ReStruct.maps> = [
   'enhancedFlags',
   'simpleObjects',
   'texts',
+  'rgroupAttachmentPoints',
   IMAGE_KEY,
+  MULTITAIL_ARROW_KEY,
 ];
 
 const highlightTargets = [
@@ -86,6 +90,7 @@ const highlightTargets = [
   'simpleObjects',
   'texts',
   IMAGE_KEY,
+  MULTITAIL_ARROW_KEY,
 ];
 
 function selectStereoFlagsIfNecessary(
@@ -119,6 +124,7 @@ export interface Selection {
   rxnArrows?: Array<number>;
   texts?: Array<number>;
   rgroupAttachmentPoints?: Array<number>;
+  [MULTITAIL_ARROW_KEY]?: Array<number>;
 }
 
 class Editor implements KetcherEditor {
@@ -132,7 +138,7 @@ class Editor implements KetcherEditor {
   highlights: Highlighter;
   hoverIcon: HoverIcon;
   lastCursorPosition: { x: number; y: number };
-  contextMenu: contextMenuInfo;
+  contextMenu: ContextMenuInfo;
   rotateController: RotateController;
   event: {
     message: Subscription;
@@ -158,10 +164,12 @@ class Editor implements KetcherEditor {
     updateFloatingTools: Subscription<FloatingToolsParams>;
   };
 
+  public serverSettings = {};
+
   lastEvent: any;
   macromoleculeConvertionError: string | null | undefined;
 
-  constructor(clientArea, options) {
+  constructor(clientArea, options, serverSettings) {
     this.render = new Render(
       clientArea,
       Object.assign(
@@ -182,7 +190,7 @@ class Editor implements KetcherEditor {
     this.renderAndRecoordinateStruct =
       this.renderAndRecoordinateStruct.bind(this);
     this.setOptions = this.setOptions.bind(this);
-
+    this.setServerSettings(serverSettings);
     this.lastCursorPosition = {
       x: 0,
       y: 0,
@@ -308,7 +316,10 @@ class Editor implements KetcherEditor {
   setOptions(opts: string) {
     const options = JSON.parse(opts);
     this.event.apiSettings.dispatch({ ...options });
-    return this.render.updateOptions(opts);
+    const wasViewOnlyEnabled = !!this.render.options.viewOnlyMode;
+    const result = this.render.updateOptions(opts);
+    this.updateToolAfterOptionsChange(wasViewOnlyEnabled);
+    return result;
   }
 
   options(value?: any) {
@@ -319,15 +330,34 @@ class Editor implements KetcherEditor {
     const struct = this.render.ctab.molecule;
     const zoom = this.render.options.zoom;
     this.render.clientArea.innerHTML = '';
+    const wasViewOnlyEnabled = !!this.render.options.viewOnlyMode;
 
     this.render = new Render(
       this.render.clientArea,
       Object.assign({ microModeScale: SCALE }, value),
     );
+    this.updateToolAfterOptionsChange(wasViewOnlyEnabled);
     this.struct(struct);
     this.render.setZoom(zoom);
     this.render.update();
     return this.render.options;
+  }
+
+  public setServerSettings(serverSettings) {
+    this.serverSettings = serverSettings;
+  }
+
+  private updateToolAfterOptionsChange(wasViewOnlyEnabled: boolean) {
+    const isViewOnlyEnabled = this.render.options.viewOnlyMode;
+    if (
+      (!wasViewOnlyEnabled && isViewOnlyEnabled === true) ||
+      (wasViewOnlyEnabled && isViewOnlyEnabled === false)
+    ) {
+      // We need to reset the tool to make sure it was recreated
+      this.tool('select');
+      this.event.change.dispatch('force');
+      ketcherProvider.getKetcher().changeEvent.dispatch('force');
+    }
   }
 
   zoom(value?: any, event?: WheelEvent) {
@@ -418,7 +448,6 @@ class Editor implements KetcherEditor {
       return this._selection; // eslint-disable-line
     }
 
-    const struct = this.struct();
     let ReStruct = this.render.ctab;
     let selectAll = false;
     this._selection = null; // eslint-disable-line
@@ -426,12 +455,7 @@ class Editor implements KetcherEditor {
       selectAll = true;
       // TODO: better way will be this.struct()
       ci = structObjects.reduce((res, key) => {
-        let restructItemsIds: number[] = Array.from(ReStruct[key].keys());
-        restructItemsIds = restructItemsIds.filter(
-          (restructItemId) =>
-            !struct.isTargetFromMacromolecule({ map: key, id: restructItemId }),
-        );
-        res[key] = restructItemsIds;
+        res[key] = Array.from(ReStruct[key].keys());
         return res;
       }, {});
     }
@@ -520,7 +544,8 @@ class Editor implements KetcherEditor {
           this.historyStack.shift();
         }
         this.historyPtr = this.historyStack.length;
-        this.event.change.dispatch(action); // TODO: stoppable here
+        this.event.change.dispatch(action); // TODO: stoppable here. This has to be removed, however some implicit subscription to change event exists somewhere in the app and removing it leads to unexpected behavior, investigate further
+        ketcherProvider.getKetcher().changeEvent.dispatch(action);
       }
       this.render.update(false, null);
     }
@@ -539,6 +564,7 @@ class Editor implements KetcherEditor {
   }
 
   undo() {
+    const ketcherChangeEvent = ketcherProvider.getKetcher().changeEvent;
     if (this.historyPtr === 0) {
       throw new Error('Undo stack is empty');
     }
@@ -555,15 +581,18 @@ class Editor implements KetcherEditor {
     this.historyStack[this.historyPtr] = action;
 
     if (this._tool instanceof toolsMap.paste) {
-      this.event.change.dispatch();
+      this.event.change.dispatch(); // TODO: stoppable here. This has to be removed, however some implicit subscription to change event exists somewhere in the app and removing it leads to unexpected behavior, investigate further
+      ketcherChangeEvent.dispatch();
     } else {
-      this.event.change.dispatch(action);
+      this.event.change.dispatch(action); // TODO: stoppable here. This has to be removed, however some implicit subscription to change event exists somewhere in the app and removing it leads to unexpected behavior, investigate further
+      ketcherChangeEvent.dispatch(action);
     }
 
     this.render.update();
   }
 
   redo() {
+    const ketcherChangeEvent = ketcherProvider.getKetcher().changeEvent;
     if (this.historyPtr === this.historyStack.length) {
       throw new Error('Redo stack is empty');
     }
@@ -579,9 +608,11 @@ class Editor implements KetcherEditor {
     this.historyPtr++;
 
     if (this._tool instanceof toolsMap.paste) {
-      this.event.change.dispatch();
+      this.event.change.dispatch(); // TODO: stoppable here. This has to be removed, however some implicit subscription to change event exists somewhere in the app and removing it leads to unexpected behavior, investigate further
+      ketcherChangeEvent.dispatch();
     } else {
-      this.event.change.dispatch(action);
+      this.event.change.dispatch(action); // TODO: stoppable here. This has to be removed, however some implicit subscription to change event exists somewhere in the app and removing it leads to unexpected behavior, investigate further
+      ketcherChangeEvent.dispatch(action);
     }
 
     this.render.update();
@@ -597,7 +628,7 @@ class Editor implements KetcherEditor {
         const subscribeFuncWrapper = (action) =>
           customOnChangeHandler(action, handler);
         subscriber.handler = subscribeFuncWrapper;
-        this.event[eventName].add(subscribeFuncWrapper);
+        ketcherProvider.getKetcher().changeEvent.add(subscribeFuncWrapper);
         break;
       }
 
@@ -676,6 +707,7 @@ class Editor implements KetcherEditor {
       new Pile(selection.texts),
       null,
       new Pile(selection.images),
+      new Pile(selection[MULTITAIL_ARROW_KEY]),
     );
 
     // Copy by its own as Struct.clone doesn't support
@@ -751,7 +783,7 @@ function updateLastCursorPosition(editor: Editor, event) {
   }
 }
 
-function isContextMenuClosed(contextMenu: contextMenuInfo) {
+function isContextMenuClosed(contextMenu: ContextMenuInfo) {
   return !Object.values(contextMenu).some(Boolean);
 }
 

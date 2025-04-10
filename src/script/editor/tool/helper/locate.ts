@@ -16,12 +16,13 @@
 
 import {
   FunctionalGroup,
-  MonomerMicromolecule,
   IMAGE_KEY,
   Struct,
   Vec2,
   ReStruct,
+  MULTITAIL_ARROW_KEY,
 } from 'ketcher-core';
+import assert from 'assert';
 
 function getElementsInRectangle(restruct: ReStruct, p0, p1) {
   const bondList: Array<number> = [];
@@ -40,30 +41,41 @@ function getElementsInRectangle(restruct: ReStruct, p0, p1) {
   const bottomRightPosition = new Vec2(x1, y1);
   const bottomLeftPosition = new Vec2(x0, y1);
 
-  restruct.bonds.forEach((bond, bid) => {
-    if (struct.isBondFromMacromolecule(bid)) {
-      return;
-    }
+  const polygon = [
+    topLeftPosition,
+    topRightPosition,
+    bottomRightPosition,
+    bottomLeftPosition,
+  ];
 
-    const centre = Vec2.lc2(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      restruct.atoms.get(bond.b.begin)!.a.pp,
-      0.5,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      restruct.atoms.get(bond.b.end)!.a.pp,
-      0.5,
-    );
+  restruct.bonds.forEach((bond, bid) => {
     if (
-      centre.x > x0 &&
-      centre.x < x1 &&
-      centre.y > y0 &&
-      centre.y < y1 &&
-      !FunctionalGroup.isBondInContractedFunctionalGroup(
+      FunctionalGroup.isBondInContractedFunctionalGroup(
         bond.b,
         sGroups,
         functionalGroups,
       )
     ) {
+      return;
+    }
+
+    let center: Vec2;
+    if (bond.b.isExternalBondBetweenMonomers(struct)) {
+      const firstMonomer = struct.getGroupFromAtomId(bond.b.begin);
+      const secondMonomer = struct.getGroupFromAtomId(bond.b.end);
+
+      assert(firstMonomer);
+      assert(secondMonomer);
+
+      center =
+        firstMonomer.pp && secondMonomer.pp
+          ? Vec2.centre(firstMonomer.pp, secondMonomer.pp)
+          : bond.b.center;
+    } else {
+      center = bond.b.center;
+    }
+
+    if (center.x > x0 && center.x < x1 && center.y > y0 && center.y < y1) {
       bondList.push(bid);
     }
   });
@@ -73,23 +85,35 @@ function getElementsInRectangle(restruct: ReStruct, p0, p1) {
       functionalGroups,
       aid,
     );
-    const reSGroup = restruct.sgroups.get(relatedFGId as number);
-    if (
-      !(reSGroup?.item instanceof MonomerMicromolecule) &&
-      atom.a.pp.x > x0 &&
-      atom.a.pp.x < x1 &&
-      atom.a.pp.y > y0 &&
-      atom.a.pp.y < y1 &&
-      (!FunctionalGroup.isAtomInContractedFunctionalGroup(
-        atom.a,
-        sGroups,
-        functionalGroups,
-        true,
-      ) ||
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        aid === reSGroup!.item!.atoms[0])
-    ) {
-      atomList.push(aid);
+    const sGroup = struct.sgroups.get(relatedFGId as number);
+
+    if (struct.isAtomFromMacromolecule(aid)) {
+      if (
+        sGroup &&
+        sGroup.pp &&
+        sGroup.pp.x > x0 &&
+        sGroup.pp.x < x1 &&
+        sGroup.pp.y > y0 &&
+        sGroup.pp.y < y1
+      ) {
+        atomList.push(aid);
+      }
+    } else {
+      if (
+        atom.a.pp.x > x0 &&
+        atom.a.pp.x < x1 &&
+        atom.a.pp.y > y0 &&
+        atom.a.pp.y < y1 &&
+        (!FunctionalGroup.isAtomInContractedFunctionalGroup(
+          atom.a,
+          sGroups,
+          functionalGroups,
+          true,
+        ) ||
+          aid === sGroup?.atoms[0])
+      ) {
+        atomList.push(aid);
+      }
     }
   });
 
@@ -177,22 +201,22 @@ function getElementsInRectangle(restruct: ReStruct, p0, p1) {
 
   const reImages = Array.from(restruct.images.entries()).reduce(
     (acc: Array<number>, [id, item]): Array<number> => {
-      if (
-        Object.values(item.image.getReferencePositions()).some((point) =>
-          point.isInsidePolygon([
-            topLeftPosition,
-            topRightPosition,
-            bottomRightPosition,
-            bottomLeftPosition,
-          ]),
-        )
-      ) {
-        return acc.concat(id);
-      }
-      return acc;
+      const isPointInside = Object.values(
+        item.image.getReferencePositions(),
+      ).some((point) => point.isInsidePolygon(polygon));
+      return isPointInside ? acc.concat(id) : acc;
     },
     [],
   );
+
+  const reMultitailArrows = Array.from(
+    restruct.multitailArrows.entries(),
+  ).reduce((acc: Array<number>, [id, item]): Array<number> => {
+    const isPointInside = item.multitailArrow
+      .getReferencePositionsArray()
+      .some((point) => point.isInsidePolygon(polygon));
+    return isPointInside ? acc.concat(id) : acc;
+  }, []);
 
   return {
     atoms: atomList,
@@ -205,6 +229,7 @@ function getElementsInRectangle(restruct: ReStruct, p0, p1) {
     texts: textsList,
     rgroupAttachmentPoints: rgroupAttachmentPointList,
     [IMAGE_KEY]: reImages,
+    [MULTITAIL_ARROW_KEY]: reMultitailArrows,
   };
 }
 
@@ -223,28 +248,32 @@ function getElementsInPolygon(restruct: ReStruct, rr) {
 
   restruct.bonds.forEach((bond, bid) => {
     if (
-      struct.isAtomFromMacromolecule(bond.b.begin) ||
-      struct.isAtomFromMacromolecule(bond.b.end)
-    ) {
-      return;
-    }
-
-    const centre = Vec2.lc2(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      restruct.atoms.get(bond.b.begin)!.a.pp,
-      0.5,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      restruct.atoms.get(bond.b.end)!.a.pp,
-      0.5,
-    );
-    if (
-      isPointInPolygon(r, centre) &&
-      !FunctionalGroup.isBondInContractedFunctionalGroup(
+      FunctionalGroup.isBondInContractedFunctionalGroup(
         bond.b,
         sGroups,
         functionalGroups,
       )
     ) {
+      return;
+    }
+
+    let center: Vec2;
+    if (bond.b.isExternalBondBetweenMonomers(struct)) {
+      const firstMonomer = struct.getGroupFromAtomId(bond.b.begin);
+      const secondMonomer = struct.getGroupFromAtomId(bond.b.end);
+
+      assert(firstMonomer);
+      assert(secondMonomer);
+
+      center =
+        firstMonomer?.pp && secondMonomer?.pp
+          ? Vec2.centre(firstMonomer.pp, secondMonomer.pp)
+          : bond.b.center;
+    } else {
+      center = bond.b.center;
+    }
+
+    if (isPointInPolygon(r, center)) {
       bondList.push(bid);
     }
   });
@@ -254,20 +283,25 @@ function getElementsInPolygon(restruct: ReStruct, rr) {
       functionalGroups,
       aid,
     );
-    const reSGroup = restruct.sgroups.get(relatedFGId as number);
-    if (
-      !(reSGroup?.item instanceof MonomerMicromolecule) &&
-      isPointInPolygon(r, atom.a.pp) &&
-      (!FunctionalGroup.isAtomInContractedFunctionalGroup(
-        atom.a,
-        sGroups,
-        functionalGroups,
-        true,
-      ) ||
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        aid === reSGroup!.item!.atoms[0])
-    ) {
-      atomList.push(aid);
+    const sGroup = struct.sgroups.get(relatedFGId as number);
+
+    if (struct.isAtomFromMacromolecule(aid)) {
+      if (sGroup && sGroup.pp && isPointInPolygon(r, sGroup.pp)) {
+        atomList.push(aid);
+      }
+    } else {
+      if (
+        isPointInPolygon(r, atom.a.pp) &&
+        (!FunctionalGroup.isAtomInContractedFunctionalGroup(
+          atom.a,
+          sGroups,
+          functionalGroups,
+          true,
+        ) ||
+          aid === sGroup?.atoms[0])
+      ) {
+        atomList.push(aid);
+      }
     }
   });
 
@@ -337,17 +371,22 @@ function getElementsInPolygon(restruct: ReStruct, rr) {
 
   const reImages = Array.from(restruct.images.entries()).reduce(
     (acc: Array<number>, [id, item]) => {
-      if (
-        Object.values(item.image.getReferencePositions()).some((point) =>
-          isPointInPolygon(r, point),
-        )
-      ) {
-        return acc.concat(id);
-      }
-      return acc;
+      const isPointInside = Object.values(
+        item.image.getReferencePositions(),
+      ).some((point) => isPointInPolygon(r, point));
+      return isPointInside ? acc.concat(id) : acc;
     },
     [],
   );
+
+  const reMultitailArrows = Array.from(
+    restruct.multitailArrows.entries(),
+  ).reduce((acc: Array<number>, [id, item]) => {
+    const isPointInside = item.multitailArrow
+      .getReferencePositionsArray()
+      .some((point) => isPointInPolygon(r, point));
+    return isPointInside ? acc.concat(id) : acc;
+  }, []);
 
   return {
     atoms: atomList,
@@ -360,6 +399,7 @@ function getElementsInPolygon(restruct: ReStruct, rr) {
     texts: textsList,
     rgroupAttachmentPoints: rgroupAttachmentPointList,
     [IMAGE_KEY]: reImages,
+    [MULTITAIL_ARROW_KEY]: reMultitailArrows,
   };
 }
 
