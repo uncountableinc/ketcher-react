@@ -3803,7 +3803,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc42-alpha-10\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc42-alpha-11\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -35067,8 +35067,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc42-alpha-10" ,
-                  buildDate: "2025-04-10T22:41:13" ,
+                  version: "2.24.0-rc.1-unc42-alpha-11" ,
+                  buildDate: "2025-04-10T22:54:31" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35195,6 +35195,8 @@ function MicromoleculesEditor(props) {
     }),
     height = _useResizeObserver.height,
     width = _useResizeObserver.width;
+  var _useAppContext = useAppContext(),
+    ketcherId = _useAppContext.ketcherId;
   React.useEffect(function () {
     var _ketcherBuilderRef$cu;
     (_ketcherBuilderRef$cu = ketcherBuilderRef.current) === null || _ketcherBuilderRef$cu === void 0 || _ketcherBuilderRef$cu.reinitializeApi(props.structServiceProvider, setServerRef.current);
@@ -35215,9 +35217,6 @@ function MicromoleculesEditor(props) {
       cleanupRef.current = cleanup;
       ketcherBuilderRef.current = builder;
       setServerRef.current = setServer;
-      if (rootElRef.current) {
-        rootElRef.current.classList.add("ketcher-id-".concat(ketcherId));
-      }
       if (typeof props.onInit === 'function' && ketcher) {
         props.onInit(ketcher);
         var ketcherInitEvent = new Event(ketcherInitEventName(ketcherId));
@@ -35245,7 +35244,7 @@ function MicromoleculesEditor(props) {
   }, []);
   return jsxRuntime.jsx("div", {
     ref: rootElRef,
-    className: clsx__default["default"](KETCHER_ROOT_NODE_CLASS_NAME, styles.editor, _defineProperty__default["default"]({}, styles.small, height && height <= mediaSizes.smallHeight || width && width <= mediaSizes.smallWidth))
+    className: clsx__default["default"](KETCHER_ROOT_NODE_CLASS_NAME, "ketcher-id-".concat(ketcherId), styles.editor, _defineProperty__default["default"]({}, styles.small, height && height <= mediaSizes.smallHeight || width && width <= mediaSizes.smallWidth))
   });
 }
 
@@ -35363,7 +35362,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty__default["default"](e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = React.lazy(function () {
-  return Promise.resolve().then(function () { return require('./index.modern-c527d847.js'); });
+  return Promise.resolve().then(function () { return require('./index.modern-de2ad061.js'); });
 });
 var Editor = function Editor(props) {
   var _useState = React.useState(false),
