@@ -34993,8 +34993,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc42-alpha-5-5" ,
-                  buildDate: "2025-04-10T20:26:58" ,
+                  version: "2.24.0-rc.1-unc42-alpha-6" ,
+                  buildDate: "2025-04-10T20:54:20" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35286,7 +35286,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = lazy(function () {
-  return import('./index.modern-dc87a35f.js');
+  return import('./index.modern-36154dda.js');
 });
 var Editor = function Editor(props) {
   var _useState = useState(false),
