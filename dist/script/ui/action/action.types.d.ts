@@ -42,4 +42,4 @@ interface UiAction {
 declare type Tools = {
     [key in ToolVariant]: UiAction;
 };
-export type { Tools, UiAction, UiActionAction };
+export type { Tools, UiAction, UiActionAction, ActionFn };

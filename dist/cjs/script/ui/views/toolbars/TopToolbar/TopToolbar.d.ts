@@ -49,7 +49,7 @@ export interface PanelProps {
     onAnalyse: VoidFunction;
     onMiew: VoidFunction;
     onToggleExplicitHydrogens: VoidFunction;
-    onFullscreen: VoidFunction;
+    onFullscreen: (ketcherId: string) => void;
     onAbout: VoidFunction;
     onHelp: VoidFunction;
     togglerComponent?: JSX.Element;
