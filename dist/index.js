@@ -3739,7 +3739,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc42-alpha-12\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("2.24.0-rc.1-unc42-alpha-13\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -15417,6 +15417,9 @@ var ZoomInput = function ZoomInput(_ref) {
 };
 
 var _templateObject$6, _templateObject2$4, _templateObject3$3, _templateObject4$3, _templateObject5$3, _templateObject6$2, _templateObject7$2;
+var isFullScreen$1 = function isFullScreen() {
+  return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+};
 var ElementAndDropdown$1 = styled('div')(_templateObject$6 || (_templateObject$6 = _taggedTemplateLiteral(["\n  position: relative;\n"])));
 var DropDownButton$1 = styled(Button$1)(_templateObject2$4 || (_templateObject2$4 = _taggedTemplateLiteral(["\n  display: flex;\n  color: #000000;\n  padding-right: 0;\n  padding-left: 0;\n\n  & svg {\n    margin-left: 2px;\n    width: 16px;\n    height: 16px;\n  }\n"])));
 var ZoomLabel = styled('span')(_templateObject3$3 || (_templateObject3$3 = _taggedTemplateLiteral(["\n  width: 35px;\n"])));
@@ -15446,6 +15449,7 @@ var getValidZoom = function getValidZoom(zoom, currentZoom) {
   return zoom;
 };
 var ZoomControls = function ZoomControls(_ref) {
+  var _containerRef$current, _containerRef$current2;
   var currentZoom = _ref.currentZoom,
     onZoom = _ref.onZoom,
     onZoomIn = _ref.onZoomIn,
@@ -15499,7 +15503,7 @@ var ZoomControls = function ZoomControls(_ref) {
       open: isExpanded,
       onClose: onClose,
       anchorEl: containerRef.current,
-      container: document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR) || document.querySelector(KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR),
+      container: isFullScreen$1() ? (_containerRef$current = (_containerRef$current2 = containerRef.current) === null || _containerRef$current2 === void 0 ? void 0 : _containerRef$current2.closest(KETCHER_ROOT_NODE_CSS_SELECTOR)) !== null && _containerRef$current !== void 0 ? _containerRef$current : document.body : undefined,
       anchorOrigin: {
         vertical: 'bottom',
         horizontal: 'left'
@@ -35003,8 +35007,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "2.24.0-rc.1-unc42-alpha-12" ,
-                  buildDate: "2025-04-10T23:12:28" ,
+                  version: "2.24.0-rc.1-unc42-alpha-13" ,
+                  buildDate: "2025-04-11T16:14:47" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35301,7 +35305,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = lazy(function () {
-  return import('./index.modern-1b7b679f.js');
+  return import('./index.modern-3c7f339b.js');
 });
 var Editor = function Editor(props) {
   var _useState = useState(false),
