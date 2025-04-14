@@ -3739,7 +3739,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc1\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc2\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -18297,7 +18297,8 @@ var SelectTool = function () {
       var maps = getMapsForClosestItem(_classPrivateFieldGet(this, _lassoHelper).fragment || event.altKey);
       var item = editor.findItem(event, maps, null);
       editor.hover(item, null, event);
-      handleMovingPosibilityCursor(item, this.editor.render.paper.canvas, getItemCursor(this.editor.render, item));
+      handleMovingPosibilityCursor(item,
+      this.editor.render.paper.canvas, getItemCursor(this.editor.render, item));
       return true;
     }
   }, {
@@ -22563,7 +22564,8 @@ var CommonArrowTool = function (_ArrowTool) {
       if (!this.dragContext) {
         var closestItem = this.editor.findItem(event, ['rxnArrows', MULTITAIL_ARROW_KEY]);
         this.editor.hover(closestItem, null, event);
-        handleMovingPosibilityCursor(closestItem, this.render.paper.canvas, getItemCursor(this.render, closestItem));
+        handleMovingPosibilityCursor(closestItem,
+        this.render.paper.canvas, getItemCursor(this.render, closestItem));
         return;
       }
       if (this.dragContext === 'add') {
@@ -22756,7 +22758,8 @@ var ReactionPlusTool = function () {
       } else {
         var item = editor.findItem(event, ['rxnPluses']);
         editor.hover(item, null, event);
-        handleMovingPosibilityCursor(item, editor.render.paper.canvas, editor.render.options.movingStyle.cursor);
+        handleMovingPosibilityCursor(item,
+        editor.render.paper.canvas, editor.render.options.movingStyle.cursor);
       }
     }
   }, {
@@ -23440,7 +23443,8 @@ var ImageTool = function () {
       } else {
         var item = this.editor.findItem(event, [IMAGE_KEY]);
         var _render = this.editor.render;
-        handleMovingPosibilityCursor(item, _render.paper.canvas, getItemCursor(_render, item));
+        handleMovingPosibilityCursor(item,
+        _render.paper.canvas, getItemCursor(_render, item));
         this.editor.hover(item, null, event);
       }
     }
@@ -35007,8 +35011,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "3.0.3-unc1" ,
-                  buildDate: "2025-04-14T15:17:21" ,
+                  version: "3.0.3-unc2" ,
+                  buildDate: "2025-04-14T16:30:37" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35305,7 +35309,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = lazy(function () {
-  return import('./index.modern-0942bb7b.js');
+  return import('./index.modern-eb72adde.js');
 });
 var Editor = function Editor(props) {
   var _useState = useState(false),
