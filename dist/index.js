@@ -14,10 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 import _defineProperty$1 from '@babel/runtime/helpers/defineProperty';
-import _slicedToArray$1 from '@babel/runtime/helpers/slicedToArray';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
-import * as React from 'react';
-import React__default, { createRef, Component, useRef, useEffect, useLayoutEffect, useMemo, useState, createElement, forwardRef, useCallback, Fragment as Fragment$2, PureComponent, lazy, Suspense } from 'react';
+import _slicedToArray$1 from '@babel/runtime/helpers/slicedToArray';
 import 'intersection-observer';
 import 'element-closest-polyfill';
 import 'regenerator-runtime/runtime';
@@ -28,6 +26,8 @@ import _regeneratorRuntime from '@babel/runtime/regenerator';
 import _classCallCheck$2 from '@babel/runtime/helpers/classCallCheck';
 import _createClass$2 from '@babel/runtime/helpers/createClass';
 import { KetSerializer, MolSerializer, KetcherLogger, Ketcher, defaultBondThickness, FormatterFactory, isClipboardAPIAvailable, notifyCopyCut, notifyRequestCompleted, isControlKey, StereLabelStyleType, StereoColoringType, ShowHydrogenLabels, ShowHydrogenLabelNames, SettingsManager, SdfSerializer, KETCHER_SAVED_OPTIONS_KEY, Bond as Bond$2, Elements, AtomList, getAtomType, StereoLabel, isAttachmentBond, Atom as Atom$2, findStereoAtoms, RxnArrowMode, MULTITAIL_ARROW_TOOL_NAME, SimpleObjectMode, IMAGE_KEY, SGroup as SGroup$1, Pile, identifyStructFormat, SupportedFormat, MULTITAIL_ARROW_KEY, ChemicalMimeType, RenderStruct, Struct, ZoomTool, shortcutStr, MonomerMicromolecule, UnresolvedMonomer, FunctionalGroupsProvider, SaltsAndSolventsProvider, KetcherAsyncEvents, ElementColor, ketcherProvider, generateMenuShortcuts, Vec2, Scale, fromMultipleMove, FunctionalGroup, mergeMapOfItemsToSet, fromSgroupDeletion, fromFragmentDeletion, vectorUtils, fromBondAddition, Action, fromAtomAddition, fromAtomsAttrs, checkOverlapping, fromSeveralSgroupAddition, expandSGroupWithMultipleAttachmentPoint, SgContexts, fromSgroupAction, fromItemsFuse, ReBond, setExpandSGroup, fromBondsAttrs, OperationType, ReStruct, imageReferencePositionToCursor, multitailArrowReferenceLinesToCursor, multitailReferencePositionToCursor, CoordinateTransformation, MultitailArrowRefName, fromMultitailArrowHeadTailMove, fromMultitailArrowHeadTailsResize, fromMultitailArrowMove, fromArrowResizing, fromPaste, fromImageResize, fromSimpleObjectResizing, getItemsToFuse, getHoverToFuse, fromTextDeletion, fromTextUpdating, fromTemplateOnCanvas, fromTemplateOnBondAction, fromTemplateOnAtom, BondAttr, AtomAttr, formatProperties, runAsyncAction, getStructStringFromClipboardData, getStructure, initHotKeys, keyNorm, Fragment as Fragment$1, fromRGroupAttachmentPointUpdate, fromOneBondDeletion, bondChangingAction, fromChain, fromStereoFlagUpdate, fromOneAtomDeletion, fromArrowDeletion, fromPlusDeletion, fromSimpleObjectDeletion, fromRGroupAttachmentPointDeletion, fromImageDeletion, fromMultitailArrowDeletion, notifyItemsToMergeInitializationComplete, RGroup as RGroup$2, fromRGroupFragment, fromUpdateIfThen, fromRGroupAttrs, fromArrowAddition, fromMultitailArrowCreation, fromPlusAddition, fromRotate, fromFlip, fromSimpleObjectAddition, fromTextCreation, fromImageMove, fromImageCreation, fromHighlightCreate, fromHighlightClear, getOptionsWithConvertedUnits, provideEditorSettings, fromNewCanvas, Render, fromDescriptorsAlign, fromSgroupAttachmentPointAddition, SGroupAttachmentPoint, fromSgroupAddition, atomGetAttr, fromBondFlipping, setExpandMonomerSGroup, fromMultitailArrowTailAdd, MultitailArrow, fromMultitailArrowTailRemove, AmbiguousMonomer, genericsList, getAtomCustomQuery, getFormatMimeTypeByFileName, getPropertiesByFormat, StereoFlag, getPropertiesByImgFormat, legacyCopy as legacyCopy$1, b64toBlob, Generics, TextCommand, DefaultStructServiceOptions } from 'ketcher-core';
+import * as React from 'react';
+import React__default, { createRef, Component, useRef, useEffect, useLayoutEffect, useMemo, useState, createElement, forwardRef, useCallback, Fragment as Fragment$2, PureComponent, lazy, Suspense } from 'react';
 import _objectWithoutProperties from '@babel/runtime/helpers/objectWithoutProperties';
 import _possibleConstructorReturn$2 from '@babel/runtime/helpers/possibleConstructorReturn';
 import _getPrototypeOf$2 from '@babel/runtime/helpers/getPrototypeOf';
@@ -48,7 +48,7 @@ import { connect, useDispatch, useSelector, Provider } from 'react-redux';
 import { combineReducers, createStore as createStore$1, applyMiddleware } from 'redux';
 import * as CFB from 'cfb';
 import 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 import { useInView } from 'react-intersection-observer';
 import { IconButton as IconButton$1, Collapse, ClickAwayListener, Button as Button$1, Popover, ToggleButtonGroup, ToggleButton, Tooltip, MenuList, createTheme, ThemeProvider } from '@mui/material';
@@ -271,7 +271,7 @@ var debugObj = {
   }
 };
 
-var classes$Q = {"cliparea":"cliparea-module_cliparea__GdPrN"};
+var classes$R = {"cliparea":"cliparea-module_cliparea__GdPrN"};
 
 function _createForOfIteratorHelper$g(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray$h(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray$h(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray$h(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$h(o, minLen); }
@@ -468,7 +468,7 @@ var ClipArea = function (_Component) {
     value: function render() {
       return jsx("textarea", {
         ref: this.textAreaRef,
-        className: clsx(CLIP_AREA_BASE_CLASS, classes$Q.cliparea),
+        className: clsx(CLIP_AREA_BASE_CLASS, classes$R.cliparea),
         contentEditable: true,
         suppressContentEditableWarning: true
       });
@@ -3739,7 +3739,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc5\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc6\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -4190,7 +4190,7 @@ function hasSelection(editor) {
   }).length > 0;
 }
 
-var classes$P = {"button-common-styles":"ActionButton-module_button-common-styles__y-hng","scrollbar":"ActionButton-module_scrollbar__lD3MH","button":"ActionButton-module_button__nfoWQ","selected":"ActionButton-module_selected__kPCxA"};
+var classes$Q = {"button-common-styles":"ActionButton-module_button-common-styles__y-hng","scrollbar":"ActionButton-module_scrollbar__lD3MH","button":"ActionButton-module_button__nfoWQ","selected":"ActionButton-module_selected__kPCxA"};
 
 var _path$3g, _rect$4, _rect2$3;
 function _extends$3m() { _extends$3m = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$3m.apply(this, arguments); }
@@ -8051,7 +8051,7 @@ var style$1 = {
   text: text
 };
 
-var _templateObject$d, _templateObject2$9, _templateObject3$7;
+var _templateObject$c, _templateObject2$8, _templateObject3$6;
 var StyledButton$1 = styled('button', {
   shouldForwardProp: function shouldForwardProp(prop) {
     return prop !== 'isActive';
@@ -8084,9 +8084,9 @@ var StyledButton$1 = styled('button', {
     }
   };
 });
-var IconStyles = css(_templateObject$d || (_templateObject$d = _taggedTemplateLiteral(["\n  width: 100%;\n  height: 100%;\n"])));
-var StyledIcon$1 = styled(Icon)(_templateObject2$9 || (_templateObject2$9 = _taggedTemplateLiteral(["\n  ", ";\n"])), IconStyles);
-var StyledCustomIcon = styled('img')(_templateObject3$7 || (_templateObject3$7 = _taggedTemplateLiteral(["\n  ", ";\n"])), IconStyles);
+var IconStyles = css(_templateObject$c || (_templateObject$c = _taggedTemplateLiteral(["\n  width: 100%;\n  height: 100%;\n"])));
+var StyledIcon = styled(Icon)(_templateObject2$8 || (_templateObject2$8 = _taggedTemplateLiteral(["\n  ", ";\n"])), IconStyles);
+var StyledCustomIcon = styled('img')(_templateObject3$6 || (_templateObject3$6 = _taggedTemplateLiteral(["\n  ", ";\n"])), IconStyles);
 
 var IconButtonBase = function IconButtonBase(_ref) {
   var onClick = _ref.onClick,
@@ -8123,7 +8123,7 @@ var IconButton = function IconButton(_ref) {
   var iconName = _ref.iconName,
     props = _objectWithoutProperties(_ref, _excluded$z);
   return jsx(IconButtonBase, _objectSpread$1m(_objectSpread$1m({}, props), {}, {
-    children: jsx(StyledIcon$1, {
+    children: jsx(StyledIcon, {
       name: iconName
     })
   }));
@@ -8176,8 +8176,8 @@ var Button = function Button(_ref) {
   }));
 };
 
-var _templateObject$c;
-var Container$2 = styled.div(_templateObject$c || (_templateObject$c = _taggedTemplateLiteral(["\n  ", "\n"])), function (props) {
+var _templateObject$b;
+var Container$2 = styled.div(_templateObject$b || (_templateObject$b = _taggedTemplateLiteral(["\n  ", "\n"])), function (props) {
   if (props.fullsize) {
     return "\n          > svg {\n            height: 100%;\n            width: 100%;\n          }\n        ";
   } else {
@@ -8288,15 +8288,15 @@ var error$1 = {
   close: 'Close'
 };
 
-var styles$i = {"infoModalOverlay":"InfoModal-module_infoModalOverlay__Ve2pm","infoModalWindow":"InfoModal-module_infoModalWindow__Qd-UI","infoModalBody":"InfoModal-module_infoModalBody__BYoCY","modalHidden":"InfoModal-module_modalHidden__6HnzH","ok":"InfoModal-module_ok__BETvY"};
+var styles$h = {"infoModalOverlay":"InfoModal-module_infoModalOverlay__Ve2pm","infoModalWindow":"InfoModal-module_infoModalWindow__Qd-UI","infoModalBody":"InfoModal-module_infoModalBody__BYoCY","modalHidden":"InfoModal-module_modalHidden__6HnzH","ok":"InfoModal-module_ok__BETvY"};
 
 var InfoModal$1 = function InfoModal(_ref) {
   var message = _ref.message,
     close = _ref.close;
   return jsx("div", {
-    className: styles$i.infoModalOverlay,
+    className: styles$h.infoModalOverlay,
     children: jsxs("div", {
-      className: styles$i.infoModalWindow,
+      className: styles$h.infoModalWindow,
       role: "dialog",
       "aria-modal": "true",
       "aria-labelledby": "dialog-label",
@@ -8306,13 +8306,13 @@ var InfoModal$1 = function InfoModal(_ref) {
         id: "dialog-label",
         children: error$1.message
       }), jsx("div", {
-        className: styles$i.infoModalBody,
+        className: styles$h.infoModalBody,
         id: "dialog-content",
         "data-testid": "info-modal-body",
         children: message
       }), jsx("footer", {
         children: jsx("button", {
-          className: styles$i.ok,
+          className: styles$h.ok,
           onClick: close,
           children: error$1.close
         })
@@ -8321,7 +8321,7 @@ var InfoModal$1 = function InfoModal(_ref) {
   });
 };
 
-var styles$h = {"button-common-styles":"Dialog-module_button-common-styles__Xehyp","scrollbar":"Dialog-module_scrollbar__L8hUr","dialog":"Dialog-module_dialog__hiRBI","hide":"Dialog-module_hide__bbkvB","header":"Dialog-module_header__8QGek","btnContainer":"Dialog-module_btnContainer__ulrFM","buttonTop":"Dialog-module_buttonTop__91ha8","closeButton":"Dialog-module_closeButton__XyaAE","footer":"Dialog-module_footer__PliV0","ok":"Dialog-module_ok__BUQ6q","cancel":"Dialog-module_cancel__8d83c","withDivider":"Dialog-module_withDivider__YBKiQ","body":"Dialog-module_body__EWh4H","withMargin":"Dialog-module_withMargin__-zVS4"};
+var styles$g = {"button-common-styles":"Dialog-module_button-common-styles__Xehyp","scrollbar":"Dialog-module_scrollbar__L8hUr","dialog":"Dialog-module_dialog__hiRBI","hide":"Dialog-module_hide__bbkvB","header":"Dialog-module_header__8QGek","btnContainer":"Dialog-module_btnContainer__ulrFM","buttonTop":"Dialog-module_buttonTop__91ha8","closeButton":"Dialog-module_closeButton__XyaAE","footer":"Dialog-module_footer__PliV0","ok":"Dialog-module_ok__BUQ6q","cancel":"Dialog-module_cancel__8d83c","withDivider":"Dialog-module_withDivider__YBKiQ","body":"Dialog-module_body__EWh4H","withMargin":"Dialog-module_withMargin__-zVS4"};
 
 var _excluded$w = ["children", "title", "params", "result", "valid", "buttons", "headerContent", "footerContent", "className", "buttonsNameMap", "needMargin", "withDivider", "focusable"];
 function ownKeys$1i(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -8388,35 +8388,35 @@ var Dialog = function Dialog(props) {
     },
     onKeyDown: keyDown,
     tabIndex: -1,
-    className: clsx(styles$h.dialog, className, params.className)
+    className: clsx(styles$g.dialog, className, params.className)
   }, rest), {}, {
     children: [jsxs("header", {
-      className: clsx(styles$h.header, withDivider && styles$h.withDivider),
+      className: clsx(styles$g.header, withDivider && styles$g.withDivider),
       children: [headerContent || jsx("span", {
         children: title
       }), jsx("div", {
-        className: styles$h.btnContainer,
+        className: styles$g.btnContainer,
         children: jsx("button", {
-          className: styles$h.buttonTop,
+          className: styles$g.buttonTop,
           onClick: function onClick() {
             return exit('Cancel');
           },
           "data-testid": 'close-icon',
           children: jsx(Icon, {
             name: 'close',
-            className: styles$h.closeButton
+            className: styles$g.closeButton
           })
         })
       })]
     }), jsx("div", {
-      className: clsx(styles$h.body, needMargin && styles$h.withMargin),
+      className: clsx(styles$g.body, needMargin && styles$g.withMargin),
       children: children
     }), (footerContent || buttons.length > 0) && jsxs("footer", {
-      className: styles$h.footer,
+      className: styles$g.footer,
       children: [footerContent, buttons.length > 0 && buttons.map(function (button) {
         return typeof button !== 'string' ? button : jsx("input", {
           type: "button",
-          className: clsx(isButtonOk(button) ? styles$h.ok : styles$h.cancel, button === 'Save' && styles$h.save),
+          className: clsx(isButtonOk(button) ? styles$g.ok : styles$g.cancel, button === 'Save' && styles$g.save),
           value: buttonsNameMap && buttonsNameMap[button] ? buttonsNameMap[button] : button,
           disabled: isButtonOk(button) && !valid(),
           onClick: function onClick() {
@@ -8429,16 +8429,16 @@ var Dialog = function Dialog(props) {
   }));
 };
 
-var _templateObject$b, _templateObject2$8, _templateObject3$6, _templateObject4$5, _templateObject5$4, _templateObject6$3;
-var Container = styled.div(_templateObject$b || (_templateObject$b = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  align-items: start;\n  gap: 16px;\n  padding: 8px;\n  background: #ffffff;\n  border: 1px solid #cad3dd;\n  border-radius: 4px;\n  box-shadow: 0px 1px 1px rgba(197, 203, 207, 0.7);\n"])));
-var Header$1 = styled.div(_templateObject2$8 || (_templateObject2$8 = _taggedTemplateLiteral(["\n  font-weight: 600;\n"])));
-var Content = styled.div(_templateObject3$6 || (_templateObject3$6 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n"])));
-var ContentLine = styled.div(_templateObject4$5 || (_templateObject4$5 = _taggedTemplateLiteral(["\n  height: 24px;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  white-space: nowrap;\n"])));
-var RatioBar = styled.div(_templateObject5$4 || (_templateObject5$4 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 100%;\n  width: 36px;\n  border-right: 0.5px solid #b4b9d6;\n  background: ", ";\n"])), function (_ref) {
+var _templateObject$a, _templateObject2$7, _templateObject3$5, _templateObject4$4, _templateObject5$3, _templateObject6$2;
+var Container = styled.div(_templateObject$a || (_templateObject$a = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  align-items: start;\n  gap: 16px;\n  padding: 8px;\n  background: #ffffff;\n  border: 1px solid #cad3dd;\n  border-radius: 4px;\n  box-shadow: 0px 1px 1px rgba(197, 203, 207, 0.7);\n"])));
+var Header$1 = styled.div(_templateObject2$7 || (_templateObject2$7 = _taggedTemplateLiteral(["\n  font-weight: 600;\n"])));
+var Content = styled.div(_templateObject3$5 || (_templateObject3$5 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n"])));
+var ContentLine = styled.div(_templateObject4$4 || (_templateObject4$4 = _taggedTemplateLiteral(["\n  height: 24px;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  white-space: nowrap;\n"])));
+var RatioBar = styled.div(_templateObject5$3 || (_templateObject5$3 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 100%;\n  width: 36px;\n  border-right: 0.5px solid #b4b9d6;\n  background: ", ";\n"])), function (_ref) {
   var ratio = _ref.ratio;
   return "linear-gradient(\n    90deg,\n    #ffffff 0%,\n    #ffffff ".concat(100 - ratio, "%,\n    #e7f7ea ").concat(100 - ratio + 0.5, "%,\n    #e7f7ea 100%\n  )");
 });
-var MonomerName = styled.div(_templateObject6$3 || (_templateObject6$3 = _taggedTemplateLiteral(["\n  flex: 1;\n"])));
+var MonomerName = styled.div(_templateObject6$2 || (_templateObject6$2 = _taggedTemplateLiteral(["\n  flex: 1;\n"])));
 
 var AmbiguousMonomerPreview = function AmbiguousMonomerPreview(_ref) {
   var className = _ref.className,
@@ -13023,7 +13023,7 @@ var ActionButton = function ActionButton(props) {
     disabled: disabled,
     onClick: handleClick,
     title: shortcut ? "".concat(action === null || action === void 0 ? void 0 : action.title, " (").concat(shortcut, ")") : action === null || action === void 0 ? void 0 : action.title,
-    className: clsx(classes$P.button, _defineProperty$1({}, classes$P.selected, selected), className),
+    className: clsx(classes$Q.button, _defineProperty$1({}, classes$Q.selected, selected), className),
     children: [jsx(Icon, {
       name: name
     }), jsx("kbd", {
@@ -13179,7 +13179,7 @@ var DefaultMultiTool = function DefaultMultiTool(props) {
   });
 };
 
-var classes$O = {"group":"GroupedMultiTool-module_group__BJQAU"};
+var classes$P = {"group":"GroupedMultiTool-module_group__BJQAU"};
 
 var GroupedMultiTool = function GroupedMultiTool(props) {
   var groups = props.groups,
@@ -13194,7 +13194,7 @@ var GroupedMultiTool = function GroupedMultiTool(props) {
   return jsx(Fragment, {
     children: groups.map(function (descriptor) {
       return jsx("div", {
-        className: classes$O.group,
+        className: classes$P.group,
         children: options.slice(descriptor.start, descriptor.end).map(function (toolbarItem) {
           var currentStatus = status[toolbarItem.id];
           var iconName = getIconName(toolbarItem.id);
@@ -13225,7 +13225,7 @@ function chooseMultiTool() {
   }
 }
 
-var classes$N = {"button-common-styles":"ToolbarMultiToolItem-module_button-common-styles__Fuxbo","scrollbar":"ToolbarMultiToolItem-module_scrollbar__XTmfz","icon":"ToolbarMultiToolItem-module_icon__-HQal","root":"ToolbarMultiToolItem-module_root__uTaId","iconSelected":"ToolbarMultiToolItem-module_iconSelected__hlO0J","portal":"ToolbarMultiToolItem-module_portal__2XJgz","portal-vertical":"ToolbarMultiToolItem-module_portal-vertical__A0DVe"};
+var classes$O = {"button-common-styles":"ToolbarMultiToolItem-module_button-common-styles__Fuxbo","scrollbar":"ToolbarMultiToolItem-module_scrollbar__XTmfz","icon":"ToolbarMultiToolItem-module_icon__-HQal","root":"ToolbarMultiToolItem-module_root__uTaId","iconSelected":"ToolbarMultiToolItem-module_iconSelected__hlO0J","portal":"ToolbarMultiToolItem-module_portal__2XJgz","portal-vertical":"ToolbarMultiToolItem-module_portal-vertical__A0DVe"};
 
 function usePortalOpening(_ref) {
   var _ref2 = _slicedToArray$1(_ref, 3),
@@ -13347,7 +13347,7 @@ var ToolbarMultiToolItem = function ToolbarMultiToolItem(props) {
   var isDisabled = (currentStatus === null || currentStatus === void 0 ? void 0 : currentStatus.disabled) === true;
   return displayMultiToolItem && iconName ? jsxs("div", {
     ref: ref,
-    className: classes$N.root,
+    className: classes$O.root,
     "data-testid": "".concat(dataTestId || iconName, "-in-toolbar"),
     children: [jsx(ActionButton, _objectSpread$1g(_objectSpread$1g({}, actionButtonProps), {}, {
       className: className,
@@ -13357,12 +13357,12 @@ var ToolbarMultiToolItem = function ToolbarMultiToolItem(props) {
       selected: selected,
       dataTestId: dataTestId || iconName
     })), !isOpen && !isDisabled && jsx(Icon, {
-      className: "".concat(classes$N.icon, " ").concat((currentStatus === null || currentStatus === void 0 ? void 0 : currentStatus.selected) && classes$N.iconSelected),
+      className: "".concat(classes$O.icon, " ").concat((currentStatus === null || currentStatus === void 0 ? void 0 : currentStatus.selected) && classes$O.iconSelected),
       name: "dropdown",
       onClick: onOpenOptions
     }), isOpen ? jsx(Portal, {
       isOpen: isOpen,
-      className: clsx(classes$N.portal, vertical && classes$N['portal-vertical'], portalClassName),
+      className: clsx(classes$O.portal, vertical && classes$O['portal-vertical'], portalClassName),
       style: portalStyle,
       children: jsx(Component, {
         options: options,
@@ -13453,7 +13453,7 @@ var TemplatesList = function TemplatesList(props) {
   });
 };
 
-var classes$M = {"button-common-styles":"BottomToolbar-module_button-common-styles__PbtE9","scrollbar":"BottomToolbar-module_scrollbar__i1f8P","group":"BottomToolbar-module_group__b-pGt","root":"BottomToolbar-module_root__kjkSm"};
+var classes$N = {"button-common-styles":"BottomToolbar-module_button-common-styles__PbtE9","scrollbar":"BottomToolbar-module_scrollbar__i1f8P","group":"BottomToolbar-module_group__b-pGt","root":"BottomToolbar-module_root__kjkSm"};
 
 var _excluded$v = ["className"];
 function ownKeys$1f(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -13462,7 +13462,7 @@ var Group$1 = function Group(_ref) {
   var children = _ref.children,
     className = _ref.className;
   return jsx("div", {
-    className: clsx(classes$M.group, className),
+    className: clsx(classes$N.group, className),
     children: children
   });
 };
@@ -13471,7 +13471,7 @@ var BottomToolbar = function BottomToolbar(props) {
     rest = _objectWithoutProperties(props, _excluded$v);
   return jsx("div", {
     "data-testid": "bottom-toolbar",
-    className: clsx(classes$M.root, className),
+    className: clsx(classes$N.root, className),
     children: jsxs(Group$1, {
       children: [jsx(TemplatesList, _objectSpread$1f({}, rest)), jsx(ToolbarGroupItem, _objectSpread$1f({
         id: "template-lib"
@@ -14502,7 +14502,7 @@ function createStore (options, server, setEditor) {
     server: server || Promise.reject(new Error('Standalone mode!')),
     templates: initTmplsState
   };
-  var middleware = [thunkMiddleware];
+  var middleware = [thunk];
   var rootReducer = getRootReducer(setEditor);
   return createStore$1(rootReducer, initState, applyMiddleware.apply(void 0, middleware));
 }
@@ -14571,7 +14571,7 @@ var selectOptions$2 = makeItems(['select-rectangle', 'select-lasso', 'select-fra
 var arrowsOptions = makeItems(['reaction-arrow-open-angle', 'reaction-arrow-filled-triangle', 'reaction-arrow-filled-bow', 'reaction-arrow-dashed-open-angle', 'reaction-arrow-failed', 'reaction-arrow-retrosynthetic', 'reaction-arrow-both-ends-filled-triangle', 'reaction-arrow-equilibrium-filled-half-bow', 'reaction-arrow-equilibrium-filled-triangle', 'reaction-arrow-equilibrium-open-angle', 'reaction-arrow-unbalanced-equilibrium-filled-half-bow', 'reaction-arrow-unbalanced-equilibrium-open-half-angle', 'reaction-arrow-unbalanced-equilibrium-large-filled-half-bow', 'reaction-arrow-unbalanced-equilibrium-filled-half-triangle', 'reaction-arrow-elliptical-arc-arrow-filled-bow', 'reaction-arrow-elliptical-arc-arrow-filled-triangle', 'reaction-arrow-elliptical-arc-arrow-open-angle', 'reaction-arrow-elliptical-arc-arrow-open-half-angle', MULTITAIL_ARROW_TOOL_NAME]);
 var mappingOptions = makeItems(['reaction-map', 'reaction-unmap', 'reaction-automap']);
 
-var classes$L = {"scroll":"ArrowScroll-module_scroll__h9kCx","button":"ArrowScroll-module_button__ygMgL","down":"ArrowScroll-module_down__yDzZX","up":"ArrowScroll-module_up__Q1ubd"};
+var classes$M = {"scroll":"ArrowScroll-module_scroll__h9kCx","button":"ArrowScroll-module_button__ygMgL","down":"ArrowScroll-module_down__yDzZX","up":"ArrowScroll-module_up__Q1ubd"};
 
 function useSettingsContext() {
   return React__default.useContext(settingsContext);
@@ -14690,7 +14690,7 @@ var ArrowScroll = function ArrowScroll(_ref) {
     };
   }, [endInView]);
   return jsxs("div", {
-    className: classes$L.scroll,
+    className: classes$M.scroll,
     children: [endInView ? jsx(Fragment, {}) : jsx("button", {
       onClick: function onClick() {
         return scrollDown();
@@ -14701,7 +14701,7 @@ var ArrowScroll = function ArrowScroll(_ref) {
       onMouseDown: function onMouseDown() {
         return setScrollDown(true);
       },
-      className: clsx(classes$L.button, classes$L.down),
+      className: clsx(classes$M.button, classes$M.down),
       children: "\u25BC"
     }), startInView ? jsx(Fragment, {}) : jsx("button", {
       onClick: function onClick() {
@@ -14713,7 +14713,7 @@ var ArrowScroll = function ArrowScroll(_ref) {
       onMouseDown: function onMouseDown() {
         return setScrollUp(true);
       },
-      className: clsx(classes$L.button, classes$L.up),
+      className: clsx(classes$M.button, classes$M.up),
       children: "\u25B2"
     })]
   });
@@ -14776,7 +14776,7 @@ var Shape = function Shape(props) {
   }, props));
 };
 
-var classes$K = {"button-common-styles":"LeftToolbar-module_button-common-styles__WgnON","scrollbar":"LeftToolbar-module_scrollbar__OBwid","group":"LeftToolbar-module_group__0s41t","root":"LeftToolbar-module_root__yhhZm","buttons":"LeftToolbar-module_buttons__lnIjn","borderOff":"LeftToolbar-module_borderOff__om425","groupItem":"LeftToolbar-module_groupItem__OqQu0"};
+var classes$L = {"button-common-styles":"LeftToolbar-module_button-common-styles__WgnON","scrollbar":"LeftToolbar-module_scrollbar__OBwid","group":"LeftToolbar-module_group__0s41t","root":"LeftToolbar-module_root__yhhZm","buttons":"LeftToolbar-module_buttons__lnIjn","borderOff":"LeftToolbar-module_borderOff__om425","groupItem":"LeftToolbar-module_groupItem__OqQu0"};
 
 var _excluded$r = ["className"];
 function ownKeys$11(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -14839,7 +14839,7 @@ var LeftToolbar = function LeftToolbar(props) {
       });
     }
     return visibleItems.length ? jsx("div", {
-      className: clsx(classes$K.group, className),
+      className: clsx(classes$L.group, className),
       children: visibleItems.map(function (item) {
         switch (item.id) {
           case 'bond-common':
@@ -14872,17 +14872,17 @@ var LeftToolbar = function LeftToolbar(props) {
   };
   return jsxs("div", {
     "data-testid": "left-toolbar",
-    className: clsx(classes$K.root, className),
+    className: clsx(classes$L.root, className),
     ref: ref,
     children: [jsxs("div", {
-      className: classes$K.buttons,
+      className: classes$L.buttons,
       ref: scrollRef,
       "data-testid": "left-toolbar-buttons",
       children: [jsx("div", {
-        className: classes$K.listener,
+        className: classes$L.listener,
         ref: startRef,
         children: jsx(Group, {
-          className: classes$K.groupItem,
+          className: classes$L.groupItem,
           items: [{
             id: 'hand'
           }, {
@@ -14893,7 +14893,7 @@ var LeftToolbar = function LeftToolbar(props) {
           }]
         })
       }), jsx(Group, {
-        className: classes$K.groupItem,
+        className: classes$L.groupItem,
         items: [{
           id: 'bonds',
           options: [].concat(_toConsumableArray(bondCommon), _toConsumableArray(bondQuery), _toConsumableArray(bondSpecial), _toConsumableArray(bondStereo))
@@ -14907,10 +14907,10 @@ var LeftToolbar = function LeftToolbar(props) {
           id: 'charge-minus'
         }]
       }), jsx("div", {
-        className: classes$K.listener,
+        className: classes$L.listener,
         ref: sizeRef,
         children: jsx(Group, {
-          className: classes$K.groupItem,
+          className: classes$L.groupItem,
           items: [{
             id: 'sgroup'
           }, {
@@ -14919,7 +14919,7 @@ var LeftToolbar = function LeftToolbar(props) {
           }]
         })
       }), jsx(Group, {
-        className: classes$K.groupItem,
+        className: classes$L.groupItem,
         items: [{
           id: 'reaction-plus'
         }, {
@@ -14932,7 +14932,7 @@ var LeftToolbar = function LeftToolbar(props) {
       }), jsx("div", {
         ref: endRef,
         children: jsx(Group, {
-          className: classes$K.groupItem,
+          className: classes$L.groupItem,
           items: [{
             id: 'shapes',
             options: shapeOptions
@@ -14979,7 +14979,7 @@ var mapDispatchToProps$k = function mapDispatchToProps(dispatch) {
 };
 var LeftToolbarContainer = connect(mapStateToProps$k, mapDispatchToProps$k)(LeftToolbar);
 
-var classes$J = {"button-common-styles":"Atom-module_button-common-styles__j3EUJ","scrollbar":"Atom-module_scrollbar__iO-Ni","atom":"Atom-module_atom__g2RUu"};
+var classes$K = {"button-common-styles":"Atom-module_button-common-styles__j3EUJ","scrollbar":"Atom-module_scrollbar__iO-Ni","atom":"Atom-module_atom__g2RUu"};
 
 var _excluded$q = ["el", "shortcut", "selected"];
 function ownKeys$10(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -14991,7 +14991,7 @@ function Atom$1(_ref) {
     props = _objectWithoutProperties(_ref, _excluded$q);
   return jsx("button", _objectSpread$10(_objectSpread$10({
     title: shortcut ? "".concat(el.title, " (").concat(shortcut, ")") : el.title,
-    className: clsx(classes$J.atom, {
+    className: clsx(classes$K.atom, {
       selected: selected
     }),
     value: el.number,
@@ -15041,11 +15041,11 @@ var AtomsList = forwardRef(function (props, ref) {
   });
 });
 
-var classes$I = {"button-common-styles":"RightToolbar-module_button-common-styles__fNlqY","scrollbar":"RightToolbar-module_scrollbar__2Q0UU","group":"RightToolbar-module_group__3mhUx","root":"RightToolbar-module_root__1D5hp","atomsList":"RightToolbar-module_atomsList__ar08-","groupItem":"RightToolbar-module_groupItem__KHL-v","buttons":"RightToolbar-module_buttons__YxRHI","button":"RightToolbar-module_button__KwZD8"};
+var classes$J = {"button-common-styles":"RightToolbar-module_button-common-styles__fNlqY","scrollbar":"RightToolbar-module_scrollbar__2Q0UU","group":"RightToolbar-module_group__3mhUx","root":"RightToolbar-module_root__1D5hp","atomsList":"RightToolbar-module_atomsList__ar08-","groupItem":"RightToolbar-module_groupItem__KHL-v","buttons":"RightToolbar-module_buttons__YxRHI","button":"RightToolbar-module_button__KwZD8"};
 
-var _templateObject$a, _templateObject2$7;
-var VerticalDivider = styled('hr')(_templateObject$a || (_templateObject$a = _taggedTemplateLiteral(["\n  margin: 0px 6px;\n  flex-shrink: 0;\n  height: 45%;\n  align-self: center;\n  border-width: 0px thin 0px 0px;\n  border-style: solid;\n  border-color: ", ";\n"])), style$1.color.darkGrey);
-var HorizontalDividerElement = styled('hr')(_templateObject2$7 || (_templateObject2$7 = _taggedTemplateLiteral(["\n  margin: 6px 0px;\n  -webkit-flex-shrink: 0;\n  -ms-flex-negative: 0;\n  flex-shrink: 0;\n  width: 70%;\n  -webkit-align-self: center;\n  -ms-flex-item-align: center;\n  align-self: center;\n  border: 1px solid;\n  border-color: ", ";\n"])), style$1.color.grey);
+var _templateObject$9, _templateObject2$6;
+var VerticalDivider = styled('hr')(_templateObject$9 || (_templateObject$9 = _taggedTemplateLiteral(["\n  margin: 0px 6px;\n  flex-shrink: 0;\n  height: 45%;\n  align-self: center;\n  border-width: 0px thin 0px 0px;\n  border-style: solid;\n  border-color: ", ";\n"])), style$1.color.darkGrey);
+var HorizontalDividerElement = styled('hr')(_templateObject2$6 || (_templateObject2$6 = _taggedTemplateLiteral(["\n  margin: 6px 0px;\n  -webkit-flex-shrink: 0;\n  -ms-flex-negative: 0;\n  flex-shrink: 0;\n  width: 70%;\n  -webkit-align-self: center;\n  -ms-flex-item-align: center;\n  align-self: center;\n  border: 1px solid;\n  border-color: ", ";\n"])), style$1.color.grey);
 var Divider$1 = function Divider() {
   return jsx(VerticalDivider, {});
 };
@@ -15060,7 +15060,7 @@ var Group = function Group(_ref) {
   var children = _ref.children,
     className = _ref.className;
   return jsx("div", {
-    className: clsx(classes$I.group, className),
+    className: clsx(classes$J.group, className),
     children: children
   });
 };
@@ -15097,15 +15097,15 @@ var RightToolbar = function RightToolbar(props) {
   };
   return jsxs("div", {
     "data-testid": "right-toolbar",
-    className: clsx(classes$I.root, className),
+    className: clsx(classes$J.root, className),
     ref: ref,
     children: [jsxs("div", {
       ref: scrollRef,
-      className: classes$I.buttons,
+      className: classes$J.buttons,
       children: [jsx("div", {
         ref: startRef,
         children: jsxs(Group, {
-          className: clsx(classes$I.atomsList, classes$I.buttons, classes$I.groupItem),
+          className: clsx(classes$J.atomsList, classes$J.buttons, classes$J.groupItem),
           children: [jsx(AtomsList, {
             atoms: basicAtoms.slice(0, 1),
             active: active,
@@ -15133,13 +15133,13 @@ var RightToolbar = function RightToolbar(props) {
       }), jsx("div", {
         ref: endRef,
         children: jsx(Group, {
-          className: classes$I.groupItem,
+          className: classes$J.groupItem,
           children: jsxs("div", {
             ref: sizeRef,
             children: [jsx(ToolbarGroupItem, _objectSpread$$({
               id: "any-atom"
             }, rest)), jsx("div", {
-              className: classes$I.button,
+              className: classes$J.button,
               children: jsx(ToolbarGroupItem, _objectSpread$$({
                 id: "extended-table"
               }, rest))
@@ -15185,10 +15185,10 @@ var mapDispatchToProps$j = function mapDispatchToProps(dispatch) {
 };
 var RightToolbarContainer = connect(mapStateToProps$j, mapDispatchToProps$j)(RightToolbar);
 
-var _templateObject$9, _templateObject2$6, _templateObject3$5;
-var TopToolbarIconStyles = css(_templateObject$9 || (_templateObject$9 = _taggedTemplateLiteral(["\n  border-radius: 4px;\n  padding: 2px;\n  width: 28px;\n  height: 28px;\n\n  @media only screen {\n    @container (min-width: 1024px) {\n      height: 32px;\n      width: 32px;\n      padding: 4px;\n    }\n  }\n  @media only screen {\n    @container (min-width: 1920px) {\n      height: 40px;\n      width: 40px;\n      padding: 5px;\n    }\n  }\n"])));
-var TopToolbarIconButton = styled(IconButton)(_templateObject2$6 || (_templateObject2$6 = _taggedTemplateLiteral(["\n  ", "\n"])), TopToolbarIconStyles);
-var TopToolbarCustomIconButton = styled(IconButtonCustomIcon)(_templateObject3$5 || (_templateObject3$5 = _taggedTemplateLiteral(["\n  ", "\n"])), TopToolbarIconStyles);
+var _templateObject$8, _templateObject2$5, _templateObject3$4;
+var TopToolbarIconStyles = css(_templateObject$8 || (_templateObject$8 = _taggedTemplateLiteral(["\n  border-radius: 4px;\n  padding: 2px;\n  width: 28px;\n  height: 28px;\n\n  @media only screen {\n    @container (min-width: 1024px) {\n      height: 32px;\n      width: 32px;\n      padding: 4px;\n    }\n  }\n  @media only screen {\n    @container (min-width: 1920px) {\n      height: 40px;\n      width: 40px;\n      padding: 5px;\n    }\n  }\n"])));
+var TopToolbarIconButton = styled(IconButton)(_templateObject2$5 || (_templateObject2$5 = _taggedTemplateLiteral(["\n  ", "\n"])), TopToolbarIconStyles);
+var TopToolbarCustomIconButton = styled(IconButtonCustomIcon)(_templateObject3$4 || (_templateObject3$4 = _taggedTemplateLiteral(["\n  ", "\n"])), TopToolbarIconStyles);
 
 var FileControls = function FileControls(_ref) {
   var onFileOpen = _ref.onFileOpen,
@@ -15214,11 +15214,11 @@ var FileControls = function FileControls(_ref) {
   });
 };
 
-var _templateObject$8, _templateObject2$5, _templateObject3$4, _templateObject4$4;
-var ElementAndDropdown$2 = styled('div')(_templateObject$8 || (_templateObject$8 = _taggedTemplateLiteral(["\n  position: relative;\n"])));
-var DropDownContent$2 = styled('div')(_templateObject2$5 || (_templateObject2$5 = _taggedTemplateLiteral(["\n  display: flex;\n  position: absolute;\n  left: 5px;\n  border-radius: 2px;\n  flex-direction: column;\n  z-index: 20;\n  white-space: nowrap;\n  word-break: keep-all;\n  padding: 2px;\n  background: white; // TODO use variable\n  border: 1px solid #cad3dd; // TODO use variable\n  border-radius: 5px;\n  box-shadow: 0 6px 12px rgb(0 0 0 / 18%);\n"])));
-var DropDownButton$2 = styled(IconButton$1)(_templateObject3$4 || (_templateObject3$4 = _taggedTemplateLiteral(["\n  position: absolute;\n  padding: 0;\n  right: 0;\n  bottom: 0;\n\n  &.disabled {\n    cursor: not-allowed;\n    opacity: 0.5;\n    background-color: initial;\n    color: #333;\n    pointer-events: auto;\n  }\n"])));
-var DropDownArrow = styled(Icon)(_templateObject4$4 || (_templateObject4$4 = _taggedTemplateLiteral(["\n  display: block;\n  width: 7px;\n  height: 7px;\n  margin: 1px;\n\n  &:hover {\n    fill: #005662;\n    transform: none;\n    box-shadow: none;\n    transition: none;\n    background: none;\n  }\n\n  &svg {\n    width: 100%;\n    height: 100%;\n  }\n\n  &svg path {\n    fill: inherit;\n  }\n"])));
+var _templateObject$7, _templateObject2$4, _templateObject3$3, _templateObject4$3;
+var ElementAndDropdown$1 = styled('div')(_templateObject$7 || (_templateObject$7 = _taggedTemplateLiteral(["\n  position: relative;\n"])));
+var DropDownContent$1 = styled('div')(_templateObject2$4 || (_templateObject2$4 = _taggedTemplateLiteral(["\n  display: flex;\n  position: absolute;\n  left: 5px;\n  border-radius: 2px;\n  flex-direction: column;\n  z-index: 20;\n  white-space: nowrap;\n  word-break: keep-all;\n  padding: 2px;\n  background: white; // TODO use variable\n  border: 1px solid #cad3dd; // TODO use variable\n  border-radius: 5px;\n  box-shadow: 0 6px 12px rgb(0 0 0 / 18%);\n"])));
+var DropDownButton$1 = styled(IconButton$1)(_templateObject3$3 || (_templateObject3$3 = _taggedTemplateLiteral(["\n  position: absolute;\n  padding: 0;\n  right: 0;\n  bottom: 0;\n\n  &.disabled {\n    cursor: not-allowed;\n    opacity: 0.5;\n    background-color: initial;\n    color: #333;\n    pointer-events: auto;\n  }\n"])));
+var DropDownArrow = styled(Icon)(_templateObject4$3 || (_templateObject4$3 = _taggedTemplateLiteral(["\n  display: block;\n  width: 7px;\n  height: 7px;\n  margin: 1px;\n\n  &:hover {\n    fill: #005662;\n    transform: none;\n    box-shadow: none;\n    transition: none;\n    background: none;\n  }\n\n  &svg {\n    width: 100%;\n    height: 100%;\n  }\n\n  &svg path {\n    fill: inherit;\n  }\n"])));
 var MenuItemWithDropdown = function MenuItemWithDropdown(_ref) {
   var topElement = _ref.topElement,
     dropDownElements = _ref.dropDownElements,
@@ -15234,10 +15234,10 @@ var MenuItemWithDropdown = function MenuItemWithDropdown(_ref) {
     onToolOpen();
     setIsExpanded(true);
   };
-  return jsxs(ElementAndDropdown$2, {
+  return jsxs(ElementAndDropdown$1, {
     children: [topElement && topElement, dropDownElements.filter(function (element) {
       return !element.props.isHidden;
-    }).length !== 0 && jsx(DropDownButton$2, {
+    }).length !== 0 && jsx(DropDownButton$1, {
       onClick: expand,
       "data-testid": "copy-button-dropdown-triangle",
       className: "expanded ".concat(topElement !== null && topElement !== void 0 && topElement.props.disabled ? 'disabled' : ''),
@@ -15251,7 +15251,7 @@ var MenuItemWithDropdown = function MenuItemWithDropdown(_ref) {
       unmountOnExit: true,
       children: jsx(ClickAwayListener, {
         onClickAway: collapse,
-        children: jsx(DropDownContent$2, {
+        children: jsx(DropDownContent$1, {
           children: dropDownElements
         })
       })
@@ -15367,8 +15367,8 @@ var UndoRedo = function UndoRedo(_ref) {
   });
 };
 
-var _templateObject$7;
-var StyledInput = styled('input')(_templateObject$7 || (_templateObject$7 = _taggedTemplateLiteral(["\n  border: 1px solid #cad3dd;\n  border-radius: 4px;\n  padding: 3px 8px;\n  color: #585858;\n  font-size: 14px;\n  line-height: 16px;\n  caret-color: #43b5c0;\n  margin-bottom: 8px;\n\n  &:hover {\n    border-color: #43b5c0;\n  }\n\n  &:active,\n  &:focus {\n    border-color: #167782;\n    outline: none;\n  }\n\n  &::after,\n  &::before {\n    display: none;\n  }\n"])));
+var _templateObject$6;
+var StyledInput = styled('input')(_templateObject$6 || (_templateObject$6 = _taggedTemplateLiteral(["\n  border: 1px solid #cad3dd;\n  border-radius: 4px;\n  padding: 3px 8px;\n  color: #585858;\n  font-size: 14px;\n  line-height: 16px;\n  caret-color: #43b5c0;\n  margin-bottom: 8px;\n\n  &:hover {\n    border-color: #43b5c0;\n  }\n\n  &:active,\n  &:focus {\n    border-color: #167782;\n    outline: none;\n  }\n\n  &::after,\n  &::before {\n    display: none;\n  }\n"])));
 var onFocusHandler = function onFocusHandler(event) {
   var el = event.target;
   el.select();
@@ -15416,17 +15416,17 @@ var ZoomInput = function ZoomInput(_ref) {
   });
 };
 
-var _templateObject$6, _templateObject2$4, _templateObject3$3, _templateObject4$3, _templateObject5$3, _templateObject6$2, _templateObject7$2;
+var _templateObject$5, _templateObject2$3, _templateObject3$2, _templateObject4$2, _templateObject5$2, _templateObject6$1, _templateObject7$1;
 var isFullScreen$1 = function isFullScreen() {
   return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
 };
-var ElementAndDropdown$1 = styled('div')(_templateObject$6 || (_templateObject$6 = _taggedTemplateLiteral(["\n  position: relative;\n"])));
-var DropDownButton$1 = styled(Button$1)(_templateObject2$4 || (_templateObject2$4 = _taggedTemplateLiteral(["\n  display: flex;\n  color: #000000;\n  padding-right: 0;\n  padding-left: 0;\n\n  & svg {\n    margin-left: 2px;\n    width: 16px;\n    height: 16px;\n  }\n"])));
-var ZoomLabel = styled('span')(_templateObject3$3 || (_templateObject3$3 = _taggedTemplateLiteral(["\n  width: 35px;\n"])));
-var Dropdown$1 = styled(Popover)(_templateObject4$3 || (_templateObject4$3 = _taggedTemplateLiteral(["\n  & .MuiPopover-paper {\n    padding: 8px;\n    width: 175px;\n    border: none;\n    border-radius: 0px 0px 4px 4px;\n    box-shadow: 0px 30px 48px -17px rgba(160, 165, 174, 0.3);\n    box-sizing: border-box;\n  }\n"])));
-var DropDownContent$1 = styled('div')(_templateObject5$3 || (_templateObject5$3 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  white-space: nowrap;\n  word-break: keep-all;\n  background: white;\n"])));
-var ZoomControlButton = styled(Button$1)(_templateObject6$2 || (_templateObject6$2 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: space-between;\n  font-weight: 400;\n  font-size: 12px;\n  line-height: 14px;\n  padding: 7px 8px;\n  text-transform: none;\n  color: #333333;\n"])));
-var ShortcutLabel = styled('span')(_templateObject7$2 || (_templateObject7$2 = _taggedTemplateLiteral(["\n  color: #cad3dd;\n"])));
+var ElementAndDropdown = styled('div')(_templateObject$5 || (_templateObject$5 = _taggedTemplateLiteral(["\n  position: relative;\n"])));
+var DropDownButton = styled(Button$1)(_templateObject2$3 || (_templateObject2$3 = _taggedTemplateLiteral(["\n  display: flex;\n  color: #000000;\n  padding-right: 0;\n  padding-left: 0;\n\n  & svg {\n    margin-left: 2px;\n    width: 16px;\n    height: 16px;\n  }\n"])));
+var ZoomLabel = styled('span')(_templateObject3$2 || (_templateObject3$2 = _taggedTemplateLiteral(["\n  width: 35px;\n"])));
+var Dropdown = styled(Popover)(_templateObject4$2 || (_templateObject4$2 = _taggedTemplateLiteral(["\n  & .MuiPopover-paper {\n    padding: 8px;\n    width: 175px;\n    border: none;\n    border-radius: 0px 0px 4px 4px;\n    box-shadow: 0px 30px 48px -17px rgba(160, 165, 174, 0.3);\n    box-sizing: border-box;\n  }\n"])));
+var DropDownContent = styled('div')(_templateObject5$2 || (_templateObject5$2 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  white-space: nowrap;\n  word-break: keep-all;\n  background: white;\n"])));
+var ZoomControlButton = styled(Button$1)(_templateObject6$1 || (_templateObject6$1 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: space-between;\n  font-weight: 400;\n  font-size: 12px;\n  line-height: 14px;\n  padding: 7px 8px;\n  text-transform: none;\n  color: #333333;\n"])));
+var ShortcutLabel = styled('span')(_templateObject7$1 || (_templateObject7$1 = _taggedTemplateLiteral(["\n  color: #cad3dd;\n"])));
 var getIntegerFromString = function getIntegerFromString(zoomInput) {
   var zoomNumber = parseInt(zoomInput || '');
   if (isNaN(zoomNumber)) {
@@ -15489,9 +15489,9 @@ var ZoomControls = function ZoomControls(_ref) {
   var resetZoom = function resetZoom() {
     onZoom(100);
   };
-  return jsxs(ElementAndDropdown$1, {
+  return jsxs(ElementAndDropdown, {
     ref: containerRef,
-    children: [jsxs(DropDownButton$1, {
+    children: [jsxs(DropDownButton, {
       onClick: onExpand,
       children: [jsxs(ZoomLabel, {
         "data-testid": "zoom-input",
@@ -15499,7 +15499,7 @@ var ZoomControls = function ZoomControls(_ref) {
       }), jsx(Icon, {
         name: "chevron"
       })]
-    }), jsx(Dropdown$1, {
+    }), jsx(Dropdown, {
       open: isExpanded,
       onClose: onClose,
       anchorEl: containerRef.current,
@@ -15508,7 +15508,7 @@ var ZoomControls = function ZoomControls(_ref) {
         vertical: 'bottom',
         horizontal: 'left'
       },
-      children: jsxs(DropDownContent$1, {
+      children: jsxs(DropDownContent, {
         children: [jsx(ZoomInput, {
           onZoomSubmit: onZoomSubmit,
           inputRef: inputRef,
@@ -15549,11 +15549,11 @@ var ZoomControls = function ZoomControls(_ref) {
   });
 };
 
-var _templateObject$5;
+var _templateObject$4;
 var getIfFullScreen = function getIfFullScreen() {
   return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
 };
-var ControlsPanel$1 = styled('div')(_templateObject$5 || (_templateObject$5 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  flex-grow: 0;\n  justify-content: flex-end;\n"])));
+var ControlsPanel$1 = styled('div')(_templateObject$4 || (_templateObject$4 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  flex-grow: 0;\n  justify-content: flex-end;\n"])));
 var SystemControls = function SystemControls(_ref) {
   var disabledButtons = _ref.disabledButtons,
     hiddenButtons = _ref.hiddenButtons,
@@ -15728,11 +15728,11 @@ var CustomButtons = function CustomButtons(_ref2) {
   });
 };
 
-var _templateObject$4, _templateObject2$3;
+var _templateObject$3, _templateObject2$2;
 var collapseLimit = 650;
 var CUSTOM_BUTTON_ADDITIONAL_WIDTH = 40;
-var ControlsPanel = styled('div')(_templateObject$4 || (_templateObject$4 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0px;\n  height: 36px;\n  padding: 0px 22px;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(103, 104, 132, 0.15);\n\n  .group {\n    display: flex;\n    flex-direction: row;\n    gap: 0px;\n  }\n\n  & * {\n    box-sizing: border-box;\n  }\n\n  @media only screen {\n    @container (min-width: 1024px) {\n      height: 40px;\n      gap: 0px;\n      padding-bottom: 0;\n      .group {\n        gap: 4px;\n      }\n    }\n  }\n\n  @media only screen {\n    @container (min-width: 1920px) {\n      height: 64px;\n      gap: 12px;\n    }\n  }\n"])));
-var BtnsWpapper = styled.div(_templateObject2$3 || (_templateObject2$3 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  height: 100%;\n"])));
+var ControlsPanel = styled('div')(_templateObject$3 || (_templateObject$3 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0px;\n  height: 36px;\n  padding: 0px 22px;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(103, 104, 132, 0.15);\n\n  .group {\n    display: flex;\n    flex-direction: row;\n    gap: 0px;\n  }\n\n  & * {\n    box-sizing: border-box;\n  }\n\n  @media only screen {\n    @container (min-width: 1024px) {\n      height: 40px;\n      gap: 0px;\n      padding-bottom: 0;\n      .group {\n        gap: 4px;\n      }\n    }\n  }\n\n  @media only screen {\n    @container (min-width: 1920px) {\n      height: 64px;\n      gap: 12px;\n    }\n  }\n"])));
+var BtnsWpapper = styled.div(_templateObject2$2 || (_templateObject2$2 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  height: 100%;\n"])));
 var TopToolbar = function TopToolbar(_ref) {
   var className = _ref.className,
     disabledButtons = _ref.disabledButtons,
@@ -16017,7 +16017,7 @@ var getFloatingToolsRotateHandlePosition = function getFloatingToolsRotateHandle
   return floatingTools.rotateHandlePosition;
 };
 
-var classes$H = {"button-common-styles":"FloatingTools-module_button-common-styles__5y-1V","scrollbar":"FloatingTools-module_scrollbar__yoYi0","group":"FloatingTools-module_group__pQ-sJ","wrapper":"FloatingTools-module_wrapper__OFeE9","item":"FloatingTools-module_item__UcfDN"};
+var classes$I = {"button-common-styles":"FloatingTools-module_button-common-styles__5y-1V","scrollbar":"FloatingTools-module_scrollbar__yoYi0","group":"FloatingTools-module_group__pQ-sJ","wrapper":"FloatingTools-module_wrapper__OFeE9","item":"FloatingTools-module_item__UcfDN"};
 
 var FLOATING_TOOLS = ['transform-flip-h', 'transform-flip-v', 'erase'];
 var FloatingTools = function FloatingTools(_ref) {
@@ -16028,7 +16028,7 @@ var FloatingTools = function FloatingTools(_ref) {
     onAction = _ref.onAction;
   if (!visible) return null;
   return jsx("div", {
-    className: classes$H.wrapper,
+    className: classes$I.wrapper,
     style: {
       left: rotateHandlePosition.x,
       top: rotateHandlePosition.y
@@ -16037,7 +16037,7 @@ var FloatingTools = function FloatingTools(_ref) {
     children: FLOATING_TOOLS.map(function (name) {
       var iconName = getIconName(name === 'erase' ? 'delete' : name);
       return iconName && jsx(ActionButton, {
-        className: classes$H.item,
+        className: classes$I.item,
         name: iconName,
         action: configWithNonViewOnlyActionsDisabled[name],
         status: status[name],
@@ -20084,7 +20084,7 @@ var mapDispatchToProps$f = function mapDispatchToProps(dispatch) {
 };
 var AppHiddenContainer = connect(null, mapDispatchToProps$f)(AppHidden);
 
-var classes$G = {"button-common-styles":"Modal-module_button-common-styles__ko9E5","scrollbar":"Modal-module_scrollbar__yPIJc","modalOverlay":"Modal-module_modalOverlay__AzVeg","animate":"Modal-module_animate__pnPNj","hide":"Modal-module_hide__0CTey","smallScreen":"Modal-module_smallScreen__nzt2L"};
+var classes$H = {"button-common-styles":"Modal-module_button-common-styles__ko9E5","scrollbar":"Modal-module_scrollbar__yPIJc","modalOverlay":"Modal-module_modalOverlay__AzVeg","animate":"Modal-module_animate__pnPNj","hide":"Modal-module_hide__0CTey","smallScreen":"Modal-module_smallScreen__nzt2L"};
 
 var selectClasses = {"button-common-styles":"Select-module_button-common-styles__cgaVz","scrollbar":"Select-module_scrollbar__cA89D","dropdownList":"Select-module_dropdownList__rdcrH","listDivider":"Select-module_listDivider__4vJyh","selectContainer":"Select-module_selectContainer__yXT-t"};
 
@@ -20093,11 +20093,11 @@ var mediaSizes$1 = {
   smallHeight: 600
 };
 
-var styles$g = {"container":"LoadingCircles-module_container__MPCs0","bounce":"LoadingCircles-module_bounce__gCepS"};
+var styles$f = {"container":"LoadingCircles-module_container__MPCs0","bounce":"LoadingCircles-module_bounce__gCepS"};
 
 var LoadingCircles = function LoadingCircles() {
   return jsxs("div", {
-    className: "".concat(styles$g.container, " loading-spinner"),
+    className: "".concat(styles$f.container, " loading-spinner"),
     children: [jsx("span", {}), jsx("span", {}), jsx("span", {})]
   });
 };
@@ -25080,9 +25080,9 @@ function setHover(ci, visible, render) {
   return true;
 }
 
-var classes$F = {"button-common-styles":"StructEditor-module_button-common-styles__3P7PO","scrollbar":"StructEditor-module_scrollbar__SUs-o","spinnerOverlay":"StructEditor-module_spinnerOverlay__5H1IM","canvas":"StructEditor-module_canvas__LLnzh","measureLog":"StructEditor-module_measureLog__B2wuy","visible":"StructEditor-module_visible__3eFNB","intermediateCanvas":"StructEditor-module_intermediateCanvas__fR3ws","enableCursor":"StructEditor-module_enableCursor__Qla0A"};
+var classes$G = {"button-common-styles":"StructEditor-module_button-common-styles__3P7PO","scrollbar":"StructEditor-module_scrollbar__SUs-o","spinnerOverlay":"StructEditor-module_spinnerOverlay__5H1IM","canvas":"StructEditor-module_canvas__LLnzh","measureLog":"StructEditor-module_measureLog__B2wuy","visible":"StructEditor-module_visible__3eFNB","intermediateCanvas":"StructEditor-module_intermediateCanvas__fR3ws","enableCursor":"StructEditor-module_enableCursor__Qla0A"};
 
-var styles$f = {"button-common-styles":"ContextMenu-module_button-common-styles__pshYr","scrollbar":"ContextMenu-module_scrollbar__fCla5","contextMenu":"ContextMenu-module_contextMenu__oqyL-","icon":"ContextMenu-module_icon__KhXEk","sameGroup":"ContextMenu-module_sameGroup__0DPIX","devider":"ContextMenu-module_devider__-K9Bc","subMenu":"ContextMenu-module_subMenu__87kBE"};
+var styles$e = {"button-common-styles":"ContextMenu-module_button-common-styles__pshYr","scrollbar":"ContextMenu-module_scrollbar__fCla5","contextMenu":"ContextMenu-module_contextMenu__oqyL-","icon":"ContextMenu-module_icon__KhXEk","sameGroup":"ContextMenu-module_sameGroup__0DPIX","devider":"ContextMenu-module_devider__-K9Bc","subMenu":"ContextMenu-module_subMenu__87kBE"};
 
 var CONTEXT_MENU_ID;
 (function (CONTEXT_MENU_ID) {
@@ -25250,7 +25250,7 @@ var useDelete$1 = function useDelete() {
   return handler;
 };
 
-var classes$E = {"button-common-styles":"ToggleButtonGroup-module_button-common-styles__wU4We","scrollbar":"ToggleButtonGroup-module_scrollbar__lvyIF","button":"ToggleButtonGroup-module_button__5nfNK","selected":"ToggleButtonGroup-module_selected__SAbod"};
+var classes$F = {"button-common-styles":"ToggleButtonGroup-module_button-common-styles__wU4We","scrollbar":"ToggleButtonGroup-module_scrollbar__lvyIF","button":"ToggleButtonGroup-module_button__5nfNK","selected":"ToggleButtonGroup-module_selected__SAbod"};
 
 function ButtonGroup(_ref) {
   var buttons = _ref.buttons,
@@ -25280,7 +25280,7 @@ function ButtonGroup(_ref) {
         onClick: function onClick(event) {
           return handleChange(event, buttonValue);
         },
-        className: clsx(classes$E.button, _defineProperty$1({}, classes$E.selected, buttonValue === value)),
+        className: clsx(classes$F.button, _defineProperty$1({}, classes$F.selected, buttonValue === value)),
         style: {
           display: 'flex',
           flex: '1 0 25%',
@@ -25431,7 +25431,7 @@ var useRemoveAttachmentPoint = function useRemoveAttachmentPoint() {
   return [handler];
 };
 
-var _templateObject$3, _templateObject2$2, _templateObject3$2, _templateObject4$2, _templateObject5$2;
+var _templateObject$2, _templateObject2$1, _templateObject3$1, _templateObject4$1, _templateObject5$1;
 var standardColors = [{
   name: 'Red',
   value: '#F64D3C'
@@ -25457,13 +25457,13 @@ var standardColors = [{
   name: 'Magenta',
   value: '#FF00FF'
 }];
-styled(Submenu)(_templateObject$3 || (_templateObject$3 = _taggedTemplateLiteral(["\n  width: 150px;!important;\n"])));
-var ColorContainer = styled.div(_templateObject2$2 || (_templateObject2$2 = _taggedTemplateLiteral(["\n  display: grid;\n  grid-template-columns: repeat(4, 30px);\n  padding: 5px;\n  gap: 10px;\n"])));
-var ColorSquare = styled.span(_templateObject3$2 || (_templateObject3$2 = _taggedTemplateLiteral(["\n  width: 30px;\n  height: 30px;\n  background-color: ", ";\n  border-radius: 4px;\n  cursor: pointer;\n  &:hover {\n    outline: 4px solid #00bbd3;\n  }\n\n  &.active {\n    outline: 4px solid #00bbd3;\n  }\n"])), function (props) {
+styled(Submenu)(_templateObject$2 || (_templateObject$2 = _taggedTemplateLiteral(["\n  width: 150px;!important;\n"])));
+var ColorContainer = styled.div(_templateObject2$1 || (_templateObject2$1 = _taggedTemplateLiteral(["\n  display: grid;\n  grid-template-columns: repeat(4, 30px);\n  padding: 5px;\n  gap: 10px;\n"])));
+var ColorSquare = styled.span(_templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral(["\n  width: 30px;\n  height: 30px;\n  background-color: ", ";\n  border-radius: 4px;\n  cursor: pointer;\n  &:hover {\n    outline: 4px solid #00bbd3;\n  }\n\n  &.active {\n    outline: 4px solid #00bbd3;\n  }\n"])), function (props) {
   return props.color;
 });
-var ColorItem = styled(Item)(_templateObject4$2 || (_templateObject4$2 = _taggedTemplateLiteral(["\n  .contexify_itemContent {\n    padding: 0 !important;\n  }\n"])));
-var Divider = styled.div(_templateObject5$2 || (_templateObject5$2 = _taggedTemplateLiteral(["\n  height: 1px;\n  background-color: #ccc;\n"])));
+var ColorItem = styled(Item)(_templateObject4$1 || (_templateObject4$1 = _taggedTemplateLiteral(["\n  .contexify_itemContent {\n    padding: 0 !important;\n  }\n"])));
+var Divider = styled.div(_templateObject5$1 || (_templateObject5$1 = _taggedTemplateLiteral(["\n  height: 1px;\n  background-color: #ccc;\n"])));
 
 var HighlightMenu = function HighlightMenu(_ref) {
   var onHighlight = _ref.onHighlight;
@@ -25669,7 +25669,7 @@ var AtomMenuItems = function AtomMenuItems(props) {
         return createElement(Submenu, _objectSpread$P(_objectSpread$P({}, props), {}, {
           label: title,
           key: key,
-          className: styles$f.sameGroup
+          className: styles$e.sameGroup
         }), jsx(ButtonGroup, {
           buttons: buttons,
           defaultValue: getPropertyValue(key),
@@ -25942,7 +25942,7 @@ var BondMenuItems = function BondMenuItems(props) {
       children: (_props$propsFromTrigg3 = props.propsFromTrigger) !== null && _props$propsFromTrigg3 !== void 0 && _props$propsFromTrigg3.extraItemsSelected ? 'Edit selected bonds...' : 'Edit...'
     })), bondNamesWithoutEmptyValue.map(function (name, i) {
       var iconName = getIconName(name);
-      var classNames = styles$f.sameGroup + (i === bondNamesWithoutEmptyValue.length - 1 ? styles$f.devider : '');
+      var classNames = styles$e.sameGroup + (i === bondNamesWithoutEmptyValue.length - 1 ? styles$e.devider : '');
       return createElement(Item, _objectSpread$O(_objectSpread$O({
         className: classNames
       }, props), {}, {
@@ -25952,23 +25952,23 @@ var BondMenuItems = function BondMenuItems(props) {
         disabled: isDisabled
       }), iconName && jsx(Icon, {
         name: iconName,
-        className: styles$f.icon
+        className: styles$e.icon
       }), jsx("span", {
         children: formatTitle(tools[name].title)
       }));
     }), jsx(Submenu, _objectSpread$O(_objectSpread$O({}, props), {}, {
       label: "Query bonds",
-      className: styles$f.subMenu,
+      className: styles$e.subMenu,
       children: queryBondNames.map(function (name) {
         var iconName = getIconName(name);
         return jsxs(Item, {
-          className: styles$f.sameGroup,
+          className: styles$e.sameGroup,
           id: name,
           onClick: handleTypeChange,
           disabled: isDisabled,
           children: [iconName && jsx(Icon, {
             name: iconName,
-            className: styles$f.icon
+            className: styles$e.icon
           }), jsx("span", {
             children: formatTitle(tools[name].title)
           })]
@@ -26128,7 +26128,7 @@ var SelectionMenuItems = function SelectionMenuItems(props) {
     })), jsx(Submenu, _objectSpread$M(_objectSpread$M({}, props), {}, {
       label: "Bond type",
       disabled: bondTypeChangeDisabled,
-      className: styles$f.subMenu,
+      className: styles$e.subMenu,
       children: bondNames.map(function (name) {
         var iconName = getIconName(name);
         return jsxs(Item, {
@@ -26136,7 +26136,7 @@ var SelectionMenuItems = function SelectionMenuItems(props) {
           onClick: handleTypeChange,
           children: [iconName && jsx(Icon, {
             name: iconName,
-            className: styles$f.icon
+            className: styles$e.icon
           }), jsx("span", {
             children: formatTitle(tools[name].title)
           })]
@@ -26398,7 +26398,7 @@ function ownKeys$I(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymb
 function _objectSpread$I(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$I(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$I(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var props = {
   animation: false,
-  className: styles$f.contextMenu
+  className: styles$e.contextMenu
 };
 var ContextMenu = function ContextMenu() {
   var _useAppContext = useAppContext(),
@@ -26780,7 +26780,7 @@ var ContextMenuTrigger = function ContextMenuTrigger(_ref) {
   });
 };
 
-var classes$D = {"infoPanel":"InfoPanel-module_infoPanel__irvZL","infoTooltip":"InfoPanel-module_infoTooltip__D7Mnj"};
+var classes$E = {"infoPanel":"InfoPanel-module_infoPanel__irvZL","infoTooltip":"InfoPanel-module_infoTooltip__D7Mnj"};
 
 var X_COORD_INDEX = 0;
 var Y_COORD_INDEX = 1;
@@ -26880,7 +26880,7 @@ var SGroupDataRender = function SGroupDataRender(props) {
       left: panelCoordinate.x + 'px',
       top: panelCoordinate.y + 'px'
     },
-    className: clsx(classes$D.infoPanel, className),
+    className: clsx(classes$E.infoPanel, className),
     children: sGroupData
   }) : null;
 };
@@ -26991,7 +26991,7 @@ var InfoPanel = function InfoPanel(props) {
       left: x + 'px',
       top: y + 'px'
     },
-    className: clsx(classes$D.infoPanel, className),
+    className: clsx(classes$E.infoPanel, className),
     children: jsx(StructRender, {
       struct: molecule,
       options: _objectSpread$H(_objectSpread$H({}, render.options), {}, {
@@ -27099,7 +27099,7 @@ var InfoTooltip = function InfoTooltip(props) {
       left: shiftedPosition.x + 'px',
       top: shiftedPosition.y + 'px'
     },
-    className: clsx(classes$D.infoTooltip, className),
+    className: clsx(classes$E.infoTooltip, className),
     dangerouslySetInnerHTML: {
       __html: tooltip
     }
@@ -27252,9 +27252,9 @@ var StructEditor = function (_Component) {
             KetcherLogger.error('StructEditor.jsx::StructEditor::componentDidMount', e);
             el.innerHTML = msg.info;
           }
-          el.classList.add(classes$F.visible);
+          el.classList.add(classes$G.visible);
         } else {
-          el.classList.remove(classes$F.visible);
+          el.classList.remove(classes$G.visible);
         }
       });
       this.editor.event.cursor.add(function (csr) {
@@ -27262,7 +27262,7 @@ var StructEditor = function (_Component) {
         switch (csr.status) {
           case 'enable':
             {
-              _this4.editorRef.current.classList.add(classes$F.enableCursor);
+              _this4.editorRef.current.classList.add(classes$G.enableCursor);
               var _this4$editorRef$curr = _this4.editorRef.current.getBoundingClientRect(),
                 left = _this4$editorRef$curr.left,
                 top = _this4$editorRef$curr.top,
@@ -27280,7 +27280,7 @@ var StructEditor = function (_Component) {
             }
           case 'move':
             {
-              _this4.editorRef.current.classList.add(classes$F.enableCursor);
+              _this4.editorRef.current.classList.add(classes$G.enableCursor);
               _this4.setState({
                 enableCursor: true,
                 clientX: clientX,
@@ -27290,7 +27290,7 @@ var StructEditor = function (_Component) {
             }
           case 'disable':
             {
-              _this4.editorRef.current.classList.remove(classes$F.enableCursor);
+              _this4.editorRef.current.classList.remove(classes$G.enableCursor);
               _this4.setState({
                 enableCursor: false
               });
@@ -27298,7 +27298,7 @@ var StructEditor = function (_Component) {
             }
           case 'leave':
             {
-              _this4.editorRef.current.classList.remove(classes$F.enableCursor);
+              _this4.editorRef.current.classList.remove(classes$G.enableCursor);
               _this4.setState({
                 enableCursor: false
               });
@@ -27306,7 +27306,7 @@ var StructEditor = function (_Component) {
             }
           case 'mouseover':
             {
-              _this4.editorRef.current.classList.add(classes$F.enableCursor);
+              _this4.editorRef.current.classList.add(classes$G.enableCursor);
               _this4.setState({
                 enableCursor: true
               });
@@ -27368,19 +27368,19 @@ var StructEditor = function (_Component) {
         _this$state$clientY = _this$state.clientY,
         clientY = _this$state$clientY === void 0 ? 0 : _this$state$clientY;
       return jsxs(Tag, _objectSpread$G(_objectSpread$G({
-        className: clsx(classes$F.canvas, className)
+        className: clsx(classes$G.canvas, className)
       }, props), {}, {
         "data-testid": "ketcher-canvas",
         children: [jsx(ContextMenuTrigger, {
           children: jsx("div", {
             ref: this.editorRef,
-            className: clsx(classes$F.intermediateCanvas)
+            className: clsx(classes$G.intermediateCanvas)
           })
         }), jsx("div", {
-          className: classes$F.measureLog,
+          className: classes$G.measureLog,
           ref: this.logRef
         }), indigoVerification && jsx("div", {
-          className: "".concat(classes$F.spinnerOverlay, " loading-spinner"),
+          className: "".concat(classes$G.spinnerOverlay, " loading-spinner"),
           children: jsx(LoadingCircles, {})
         }), jsx(InfoPanel$1, {
           clientX: clientX,
@@ -27445,35 +27445,35 @@ function SvgLogo(props) {
   })))));
 }
 
-var classes$C = {"button-common-styles":"About-module_button-common-styles__XmSbT","scrollbar":"About-module_scrollbar__4-AeI","dialog_body":"About-module_dialog_body__ebQu-","about":"About-module_about__ZVesh","body":"About-module_body__8VOc3","versionName":"About-module_versionName__1gqJr","firstline":"About-module_firstline__h5XMW","links":"About-module_links__sMpyx","infoLinks":"About-module_infoLinks__4-Tot","indigoVersion":"About-module_indigoVersion__WKFlu","headerContent":"About-module_headerContent__YclOx","title":"About-module_title__k-6Zg","indigoFirstLine":"About-module_indigoFirstLine__-86rb","okButton":"About-module_okButton__FMcEk"};
+var classes$D = {"button-common-styles":"About-module_button-common-styles__XmSbT","scrollbar":"About-module_scrollbar__4-AeI","dialog_body":"About-module_dialog_body__ebQu-","about":"About-module_about__ZVesh","body":"About-module_body__8VOc3","versionName":"About-module_versionName__1gqJr","firstline":"About-module_firstline__h5XMW","links":"About-module_links__sMpyx","infoLinks":"About-module_infoLinks__4-Tot","indigoVersion":"About-module_indigoVersion__WKFlu","headerContent":"About-module_headerContent__YclOx","title":"About-module_title__k-6Zg","indigoFirstLine":"About-module_indigoFirstLine__-86rb","okButton":"About-module_okButton__FMcEk"};
 
 function AboutDialog(props) {
   var indigoInfo = props.indigoVersion && props.indigoVersion.split('.r');
   return jsxs(Dialog, {
-    className: "".concat(classes$C.about, " ").concat(classes$C.dialog_body),
+    className: "".concat(classes$D.about, " ").concat(classes$D.dialog_body),
     params: props,
     buttons: [jsx("button", {
       onClick: props.onOk,
-      className: classes$C.okButton,
+      className: classes$D.okButton,
       children: "Ok"
     }, "ok")],
     children: [jsx("div", {
-      className: classes$C.headerContent,
+      className: classes$D.headerContent,
       children: jsxs("a", {
         href: props.overviewLink,
         target: "_blank",
         rel: "noopener noreferrer",
         children: [jsx(SvgLogo, {}), jsx("span", {
-          className: classes$C.title,
+          className: classes$D.title,
           children: "Ketcher"
         })]
       })
     }), jsx("div", {
-      className: classes$C.body,
+      className: classes$D.body,
       children: jsx("div", {
-        className: classes$C.verionsInfo,
+        className: classes$D.verionsInfo,
         children: jsxs("dl", {
-          className: classes$C.ketcherVersionInfo,
+          className: classes$D.ketcherVersionInfo,
           children: [jsx("dt", {
             "data-testid": "build-version",
             children: jsxs("a", {
@@ -27488,7 +27488,7 @@ function AboutDialog(props) {
               children: props.date
             })]
           }), jsxs("div", {
-            className: classes$C.infoLinks,
+            className: classes$D.infoLinks,
             children: [jsx("dt", {
               children: jsx("a", {
                 href: props.feedbackLink,
@@ -27505,7 +27505,7 @@ function AboutDialog(props) {
               })
             })]
           }), jsx("br", {}), jsxs("div", {
-            className: classes$C.indigoVersion,
+            className: classes$D.indigoVersion,
             children: [jsxs("a", {
               href: "http://lifescience.opensource.epam.com/indigo/",
               target: "_blank",
@@ -27553,7 +27553,7 @@ var mapDispatchToProps$e = function mapDispatchToProps(dispatch) {
 };
 var About = connect(mapStateToProps$g, mapDispatchToProps$e)(AboutDialog);
 
-var classes$B = {"fieldSetLabel":"Input-module_fieldSetLabel__pPlSl","input":"Input-module_input__tcHBd","checkbox":"Input-module_checkbox__dth7G","radioButton":"Input-module_radioButton__WNnzl","slider":"Input-module_slider__ws6m0","select":"Input-module_select__z9CHU","genericInput":"Input-module_genericInput__yT-J9"};
+var classes$C = {"fieldSetLabel":"Input-module_fieldSetLabel__pPlSl","input":"Input-module_input__tcHBd","checkbox":"Input-module_checkbox__dth7G","radioButton":"Input-module_radioButton__WNnzl","slider":"Input-module_slider__ws6m0","select":"Input-module_select__z9CHU","genericInput":"Input-module_genericInput__yT-J9"};
 
 var _excluded$n = ["schema", "value", "onChange", "innerRef", "type", "isFocused"],
   _excluded2$4 = ["schema", "value", "onChange", "innerRef"],
@@ -27592,12 +27592,12 @@ function GenericInput(_ref) {
       type: type,
       value: value !== null && value !== void 0 ? value : '',
       onChange: onChange,
-      className: clsx(classes$B.input, classes$B.genericInput),
+      className: clsx(classes$C.input, classes$C.genericInput),
       ref: inputRef
     }, props)), type === 'checkbox' && jsx("span", {
-      className: classes$B.checkbox
+      className: classes$C.checkbox
     }), type === 'radio' && jsx("span", {
-      className: classes$B.radioButton
+      className: classes$C.radioButton
     })]
   });
 }
@@ -27635,16 +27635,16 @@ function CheckBox(_ref3) {
     innerRef = _ref3.innerRef,
     rest = _objectWithoutProperties(_ref3, _excluded3$1);
   return jsxs("div", {
-    className: classes$B.fieldSetItem,
+    className: classes$C.fieldSetItem,
     children: [jsx("input", _objectSpread$F({
       type: "checkbox",
       checked: Boolean(value),
       onClick: onChange,
       onChange: onChange,
-      className: classes$B.input,
+      className: classes$C.input,
       ref: innerRef
     }, rest)), jsx("span", {
-      className: classes$B.checkbox
+      className: classes$C.checkbox
     })]
   });
 }
@@ -27665,7 +27665,7 @@ function Select$1(_ref4) {
     value: value,
     name: name,
     multiple: multiple,
-    className: clsx(classes$B.select, className),
+    className: clsx(classes$C.select, className),
     children: enumSchema(schema, function (title, val) {
       return jsx("option", {
         value: val,
@@ -27696,19 +27696,19 @@ function FieldSet(_ref5) {
     onClick: onSelect,
     children: enumSchema(schema, function (title, val) {
       return jsx("li", {
-        className: classes$B.fieldSetItem,
+        className: classes$C.fieldSetItem,
         children: jsxs("label", {
-          className: classes$B.fieldSetLabel,
+          className: classes$C.fieldSetLabel,
           children: [jsx("input", _objectSpread$F({
             ref: innerRef,
             type: type,
             defaultChecked: type === 'radio' ? selected(val, checked) : selected(val, value),
             value: _typeof$3(val) !== 'object' && val,
-            className: classes$B.input
+            className: classes$C.input
           }, rest)), type === 'checkbox' && jsx("span", {
-            className: classes$B.checkbox
+            className: classes$C.checkbox
           }), type === 'radio' && jsx("span", {
-            className: classes$B.radioButton
+            className: classes$C.radioButton
           }), title]
         })
       }, title);
@@ -27739,7 +27739,7 @@ function Slider(_ref6) {
     innerRef = _ref6.innerRef,
     rest = _objectWithoutProperties(_ref6, _excluded5$1);
   return jsxs("div", {
-    className: classes$B.slider,
+    className: classes$C.slider,
     children: [jsx("input", _objectSpread$F({
       ref: innerRef,
       type: "checkbox",
@@ -27942,8 +27942,8 @@ var Select = function Select(_ref2) {
   });
 };
 
-var _templateObject$2;
-var ErrorMessage = styled(Popover)(_templateObject$2 || (_templateObject$2 = _taggedTemplateLiteral(["\n  & .MuiPopover-paper {\n    padding: 0 8px;\n    box-shadow: 4px 0px, 2px rgba(0, 0, 0, 0.25);\n    font-size: 12px;\n    max-width: 160px;\n  }\n"])));
+var _templateObject$1;
+var ErrorMessage = styled(Popover)(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteral(["\n  & .MuiPopover-paper {\n    padding: 0 8px;\n    box-shadow: 4px 0px, 2px rgba(0, 0, 0, 0.25);\n    font-size: 12px;\n    max-width: 160px;\n  }\n"])));
 var ErrorPopover = function ErrorPopover(_ref) {
   var error = _ref.error,
     anchorEl = _ref.anchorEl,
@@ -27973,7 +27973,7 @@ var ErrorPopover = function ErrorPopover(_ref) {
   });
 };
 
-var classes$A = {"button-common-styles":"form-module_button-common-styles__BvKSn","scrollbar":"form-module_scrollbar__MgLtc","inputWithExtraLabel":"form-module_inputWithExtraLabel__Y--OH","extraLabel":"form-module_extraLabel__2IE13","dataError":"form-module_dataError__IXK1h","inputWrapper":"form-module_inputWrapper__sIDHH","inputWithEditButtonWrapper":"form-module_inputWithEditButtonWrapper__hM70e","editButton":"form-module_editButton__zLQI5","divWithTooltipAndAboutIcon":"form-module_divWithTooltipAndAboutIcon__rnNIB"};
+var classes$B = {"button-common-styles":"form-module_button-common-styles__BvKSn","scrollbar":"form-module_scrollbar__MgLtc","inputWithExtraLabel":"form-module_inputWithExtraLabel__Y--OH","extraLabel":"form-module_extraLabel__2IE13","dataError":"form-module_dataError__IXK1h","inputWrapper":"form-module_inputWrapper__sIDHH","inputWithEditButtonWrapper":"form-module_inputWithEditButtonWrapper__hM70e","editButton":"form-module_editButton__zLQI5","divWithTooltipAndAboutIcon":"form-module_divWithTooltipAndAboutIcon__rnNIB"};
 
 var _excluded$m = ["schema", "result"],
   _excluded2$3 = ["labelPos", "title", "children"],
@@ -28101,7 +28101,7 @@ function Label(_ref) {
   var tooltip = props.tooltip ? props.tooltip : null;
   return jsxs("label", _objectSpread$E(_objectSpread$E({}, props), {}, {
     children: [title && labelPos !== 'after' ? tooltip ? jsxs("div", {
-      className: clsx(_defineProperty$1({}, classes$A.divWithTooltipAndAboutIcon, true)),
+      className: clsx(_defineProperty$1({}, classes$B.divWithTooltipAndAboutIcon, true)),
       children: [jsx("span", {
         children: title
       }), jsx(Tooltip, {
@@ -28115,7 +28115,7 @@ function Label(_ref) {
     }) : jsx("span", {
       children: title
     }) : '', children, title && labelPos === 'after' ? tooltip ? jsxs("div", {
-      className: clsx(_defineProperty$1({}, classes$A.divWithTooltipAndAboutIcon, true)),
+      className: clsx(_defineProperty$1({}, classes$B.divWithTooltipAndAboutIcon, true)),
       children: [jsx(Tooltip, {
         title: tooltip,
         children: jsx("div", {
@@ -28172,7 +28172,7 @@ function Field(props) {
   }, extraName && {
     extraSchema: getExtraSchema()
   }), fieldOpts), rest)) : jsx(Input$1, _objectSpread$E(_objectSpread$E(_objectSpread$E(_objectSpread$E({}, extraLabel && {
-    className: classes$A.inputWithExtraLabel
+    className: classes$B.inputWithExtraLabel
   }), {}, {
     name: name,
     schema: desc
@@ -28181,14 +28181,14 @@ function Field(props) {
   }));
   if (labelPos === false) return formField;
   return jsxs(Label, {
-    className: clsx(_defineProperty$1({}, classes$A.dataError, dataError), className),
+    className: clsx(_defineProperty$1({}, classes$B.dataError, dataError), className),
     error: dataError,
     title: rest.title || desc.title,
     labelPos: labelPos,
     tooltip: rest === null || rest === void 0 ? void 0 : rest.tooltip,
     "data-testid": props['data-testid'],
     children: [jsx("span", {
-      className: classes$A.inputWrapper,
+      className: classes$B.inputWrapper,
       onMouseEnter: handlePopoverOpen,
       onMouseLeave: handlePopoverClose,
       "data-testid": props['data-testid'] + '-input-span',
@@ -28199,7 +28199,7 @@ function Field(props) {
       error: dataError,
       onClose: handlePopoverClose
     }), extraLabel && jsx(Label, {
-      className: classes$A.extraLabel,
+      className: classes$B.extraLabel,
       children: extraLabel
     })]
   });
@@ -28235,7 +28235,7 @@ function FieldWithModal(props) {
     labelPos: labelPos,
     tooltip: rest === null || rest === void 0 ? void 0 : rest.tooltip,
     children: [jsxs("span", {
-      className: clsx(_defineProperty$1(_defineProperty$1(_defineProperty$1({}, classes$A.dataError, dataError), classes$A.inputWithEditButtonWrapper, true), classes$A.inputWrapper, true)),
+      className: clsx(_defineProperty$1(_defineProperty$1(_defineProperty$1({}, classes$B.dataError, dataError), classes$B.inputWithEditButtonWrapper, true), classes$B.inputWrapper, true)),
       onMouseEnter: handlePopoverOpen,
       onMouseLeave: handlePopoverClose,
       children: [jsx(Input$1, _objectSpread$E(_objectSpread$E({
@@ -28246,7 +28246,7 @@ function FieldWithModal(props) {
           onEdit(fieldOpts.onChange);
         },
         iconName: "edit",
-        className: classes$A.editButton
+        className: classes$B.editButton
       })]
     }), dataError && anchorEl && jsx(ErrorPopover, {
       anchorEl: anchorEl,
@@ -28302,7 +28302,7 @@ function CustomQueryField(props) {
     }), jsx("span", {
       onMouseEnter: handlePopoverOpen,
       onMouseLeave: handlePopoverClose,
-      className: clsx(_defineProperty$1(_defineProperty$1({}, classes$A.dataError, dataError), classes$A.inputWrapper, true)),
+      className: clsx(_defineProperty$1(_defineProperty$1({}, classes$B.dataError, dataError), classes$B.inputWrapper, true)),
       children: jsx(Input$1, _objectSpread$E(_objectSpread$E({
         type: "textarea",
         "data-testid": "atomCustomQuery",
@@ -28410,7 +28410,7 @@ function getErrorsObj(errors) {
   return errs;
 }
 
-var classes$z = {"colorPickerInput":"ColorPicker-module_colorPickerInput__voi2r","selectedInput":"ColorPicker-module_selectedInput__Ykcjd","colorPickerWrap":"ColorPicker-module_colorPickerWrap__IAQVo","withPalette":"ColorPicker-module_withPalette__gTwNu","colorPicker":"ColorPicker-module_colorPicker__Uz3PM","colorPickerBtn":"ColorPicker-module_colorPickerBtn__nr6ph","colorPickerPreview":"ColorPicker-module_colorPickerPreview__-Rf-i","colorPickerOverlay":"ColorPicker-module_colorPickerOverlay__WzC-w","colorContainer":"ColorPicker-module_colorContainer__ib5up","hex":"ColorPicker-module_hex__mE9my","presetColors":"ColorPicker-module_presetColors__J-ysq","chooseColor":"ColorPicker-module_chooseColor__fdzt8","clicked":"ColorPicker-module_clicked__8BNoN","expandIcon":"ColorPicker-module_expandIcon__oH4ka","turnedIcon":"ColorPicker-module_turnedIcon__-zaq-","colorPickerWrapper":"ColorPicker-module_colorPickerWrapper__GJm87"};
+var classes$A = {"colorPickerInput":"ColorPicker-module_colorPickerInput__voi2r","selectedInput":"ColorPicker-module_selectedInput__Ykcjd","colorPickerWrap":"ColorPicker-module_colorPickerWrap__IAQVo","withPalette":"ColorPicker-module_withPalette__gTwNu","colorPicker":"ColorPicker-module_colorPicker__Uz3PM","colorPickerBtn":"ColorPicker-module_colorPickerBtn__nr6ph","colorPickerPreview":"ColorPicker-module_colorPickerPreview__-Rf-i","colorPickerOverlay":"ColorPicker-module_colorPickerOverlay__WzC-w","colorContainer":"ColorPicker-module_colorContainer__ib5up","hex":"ColorPicker-module_hex__mE9my","presetColors":"ColorPicker-module_presetColors__J-ysq","chooseColor":"ColorPicker-module_chooseColor__fdzt8","clicked":"ColorPicker-module_clicked__8BNoN","expandIcon":"ColorPicker-module_expandIcon__oH4ka","turnedIcon":"ColorPicker-module_turnedIcon__-zaq-","colorPickerWrapper":"ColorPicker-module_colorPickerWrapper__GJm87"};
 
 var presetColors = ['#FF4545', '#FFAD31', '#68D442', '#3ACACC', '#4434FF', '#9C9C9C', '#000000'];
 var ColorPicker = function ColorPicker(props) {
@@ -28458,32 +28458,32 @@ var ColorPicker = function ColorPicker(props) {
     }
   };
   return jsxs("div", {
-    className: classes$z.colorPickerWrapper,
+    className: classes$A.colorPickerWrapper,
     "data-testid": isOpen ? 'color-picker-field-open' : 'color-picker-field',
     onClick: function onClick(e) {
       return e.preventDefault();
     },
     children: [jsxs("div", {
-      className: clsx(_defineProperty$1(_defineProperty$1({}, classes$z.colorPickerInput, true), classes$z.selectedInput, isOpen)),
+      className: clsx(_defineProperty$1(_defineProperty$1({}, classes$A.colorPickerInput, true), classes$A.selectedInput, isOpen)),
       onClick: handleClick,
       children: [jsx("div", {
-        className: classes$z.colorPickerPreview,
+        className: classes$A.colorPickerPreview,
         "data-testid": "color-picker-preview",
         style: {
           backgroundColor: value
         }
       }), jsx(Icon, {
-        className: clsx(_defineProperty$1(_defineProperty$1({}, classes$z.expandIcon, true), classes$z.turnedIcon, !isOpen)),
+        className: clsx(_defineProperty$1(_defineProperty$1({}, classes$A.expandIcon, true), classes$A.turnedIcon, !isOpen)),
         name: "chevron"
       })]
     }), isOpen && jsxs("div", {
-      className: clsx(classes$z.colorPickerWrap, isPaletteOpen && classes$z.withPalette),
+      className: clsx(classes$A.colorPickerWrap, isPaletteOpen && classes$A.withPalette),
       onBlur: handleBlur,
       "data-testid": "color-picker-preset",
       children: [jsxs("div", {
-        className: classes$z.presetColors,
+        className: classes$A.presetColors,
         children: [jsx("button", {
-          className: clsx(classes$z.chooseColor, isPaletteOpen && classes$z.clicked),
+          className: clsx(classes$A.chooseColor, isPaletteOpen && classes$A.clicked),
           onClick: handlePaletteOpen,
           autoFocus: true,
           "data-testid": "color-picker-btn"
@@ -28495,19 +28495,19 @@ var ColorPicker = function ColorPicker(props) {
             style: {
               backgroundColor: color
             },
-            className: classes$z.presetColor
+            className: classes$A.presetColor
           }, color);
         })]
       }), isPaletteOpen && jsxs("div", {
-        className: classes$z.colorPicker,
+        className: classes$A.colorPicker,
         "data-testid": "color-palette",
         children: [jsx(HexColorPicker, {
           color: value,
           onChange: handleChange
         }), jsxs("div", {
-          className: classes$z.colorContainer,
+          className: classes$A.colorContainer,
           children: [jsx("span", {
-            className: classes$z.hex,
+            className: classes$A.hex,
             children: "HEX"
           }), jsx(HexColorInput, {
             "data-testid": "color-picker-input",
@@ -28520,7 +28520,7 @@ var ColorPicker = function ColorPicker(props) {
   });
 };
 
-var styles$e = {"measureInput":"measure-input-module_measureInput__uZQ-j","select":"measure-input-module_select__1ZFmv"};
+var styles$d = {"measureInput":"measure-input-module_measureInput__uZQ-j","select":"measure-input-module_select__1ZFmv"};
 
 var _excluded$l = ["schema", "extraSchema", "value", "extraValue", "onChange", "onExtraChange", "name", "className"];
 function ownKeys$D(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -28603,7 +28603,7 @@ var MeasureInput = function MeasureInput(_ref) {
   };
   var desc = schema || schema.properties[name];
   return jsxs("div", _objectSpread$D(_objectSpread$D({
-    className: clsx(styles$e.measureInput, className)
+    className: clsx(styles$d.measureInput, className)
   }, rest), {}, {
     children: [jsx("span", {
       children: rest.title || desc.title
@@ -28619,13 +28619,13 @@ var MeasureInput = function MeasureInput(_ref) {
         onChange: onExtraChange,
         options: selectOptions$1,
         value: extraValue,
-        className: styles$e.select
+        className: styles$d.select
       })]
     })]
   }));
 };
 
-var classes$y = {"button-common-styles":"buttons-module_button-common-styles__qWDOz","scrollbar":"buttons-module_scrollbar__SpaVV","openButton":"buttons-module_openButton__wErm9"};
+var classes$z = {"button-common-styles":"buttons-module_button-common-styles__qWDOz","scrollbar":"buttons-module_scrollbar__SpaVV","openButton":"buttons-module_openButton__wErm9"};
 
 var _excluded$k = ["children", "type", "server", "className"];
 function ownKeys$C(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -28678,7 +28678,7 @@ var OpenButton = function (_Component) {
         onClick: function onClick() {
           return _this2.btn.click();
         },
-        className: clsx(classes$y.openButton, className)
+        className: clsx(classes$z.openButton, className)
       }, props), {}, {
         children: [jsx("input", {
           onChange: function onChange(ev) {
@@ -28783,7 +28783,7 @@ var SaveButton$1 = function SaveButton(props) {
   });
 };
 
-var classes$x = {"button-common-styles":"Accordion-module_button-common-styles__enTfZ","scrollbar":"Accordion-module_scrollbar__lJTa6","accordionWrapper":"Accordion-module_accordionWrapper__RKk00","expandIcon":"Accordion-module_expandIcon__ncUKv","turnedIcon":"Accordion-module_turnedIcon__v1sCA","accordionSummaryWrapper":"Accordion-module_accordionSummaryWrapper__roIRd","accordionSummary":"Accordion-module_accordionSummary__1Gq0d","accordionDetailsWrapper":"Accordion-module_accordionDetailsWrapper__fnSnc","hiddenAccordion":"Accordion-module_hiddenAccordion__WZFcJ","accordionDetails":"Accordion-module_accordionDetails__g2RM0","groupIcon":"Accordion-module_groupIcon__1g1lx","groupLabel":"Accordion-module_groupLabel__23y4U","changeMarker":"Accordion-module_changeMarker__UPtGx"};
+var classes$y = {"button-common-styles":"Accordion-module_button-common-styles__enTfZ","scrollbar":"Accordion-module_scrollbar__lJTa6","accordionWrapper":"Accordion-module_accordionWrapper__RKk00","expandIcon":"Accordion-module_expandIcon__ncUKv","turnedIcon":"Accordion-module_turnedIcon__v1sCA","accordionSummaryWrapper":"Accordion-module_accordionSummaryWrapper__roIRd","accordionSummary":"Accordion-module_accordionSummary__1Gq0d","accordionDetailsWrapper":"Accordion-module_accordionDetailsWrapper__fnSnc","hiddenAccordion":"Accordion-module_hiddenAccordion__WZFcJ","accordionDetails":"Accordion-module_accordionDetails__g2RM0","groupIcon":"Accordion-module_groupIcon__1g1lx","groupLabel":"Accordion-module_groupLabel__23y4U","changeMarker":"Accordion-module_changeMarker__UPtGx"};
 
 var Accordion = function Accordion(_ref) {
   var tabs = _ref.tabs,
@@ -28802,7 +28802,7 @@ var Accordion = function Accordion(_ref) {
     };
   };
   return jsx("div", {
-    className: clsx(classes$x.accordionWrapper, className),
+    className: clsx(classes$y.accordionWrapper, className),
     children: tabs.map(function (_ref2) {
       var label = _ref2.label,
         content = _ref2.content,
@@ -28811,29 +28811,29 @@ var Accordion = function Accordion(_ref) {
       return jsxs("div", {
         children: [jsx("div", {
           onClick: handleAccordionChange(label),
-          className: classes$x.accordionSummaryWrapper,
+          className: classes$y.accordionSummaryWrapper,
           "data-testid": "".concat(label, "-accordion"),
           children: jsxs("div", {
-            className: classes$x.accordionSummary,
+            className: classes$y.accordionSummary,
             children: [jsx(Icon, {
-              className: clsx(_defineProperty$1(_defineProperty$1({}, classes$x.expandIcon, true), classes$x.turnedIcon, !shouldGroupBeRended)),
+              className: clsx(_defineProperty$1(_defineProperty$1({}, classes$y.expandIcon, true), classes$y.turnedIcon, !shouldGroupBeRended)),
               name: "chevron"
             }), jsxs("div", {
-              className: classes$x.groupLabel,
+              className: classes$y.groupLabel,
               children: [jsx(Icon, {
                 name: "elements-group",
-                className: classes$x.groupIcon
+                className: classes$y.groupIcon
               }), jsx("span", {
                 children: label
               })]
             }), changedGroups.has(label) && jsx("span", {
-              className: classes$x.changeMarker
+              className: classes$y.changeMarker
             })]
           })
         }), jsx("div", {
-          className: clsx(_defineProperty$1(_defineProperty$1({}, classes$x.accordionDetailsWrapper, true), classes$x.hiddenAccordion, !shouldGroupBeRended)),
+          className: clsx(_defineProperty$1(_defineProperty$1({}, classes$y.accordionDetailsWrapper, true), classes$y.hiddenAccordion, !shouldGroupBeRended)),
           children: jsx("div", {
-            className: classes$x.accordionDetails,
+            className: classes$y.accordionDetails,
             children: content
           })
         })]
@@ -28891,7 +28891,7 @@ function SystemFonts(props) {
   });
 }
 
-var classes$w = {"button-common-styles":"Settings-module_button-common-styles__tlD-u","scrollbar":"Settings-module_scrollbar__il1S2","headerContent":"Settings-module_headerContent__wBYFf","title":"Settings-module_title__a6mod","button":"Settings-module_button__VZ2w7","accordion":"Settings-module_accordion__1uSYy","settings":"Settings-module_settings__Z5btc","acsStyleButton":"Settings-module_acsStyleButton__TUqy0"};
+var classes$x = {"button-common-styles":"Settings-module_button-common-styles__tlD-u","scrollbar":"Settings-module_scrollbar__il1S2","headerContent":"Settings-module_headerContent__wBYFf","title":"Settings-module_title__a6mod","button":"Settings-module_button__VZ2w7","accordion":"Settings-module_accordion__1uSYy","settings":"Settings-module_settings__Z5btc","acsStyleButton":"Settings-module_acsStyleButton__TUqy0"};
 
 var fieldGroups = {
   resetToSelect: 'General',
@@ -28949,15 +28949,15 @@ var HeaderContent$1 = function HeaderContent(_ref) {
     if (formState.result.init) return isEqual$1(defaultSettings, initState);else return isEqual$1(defaultSettings, formState.result);
   };
   return jsxs("div", {
-    className: classes$w.headerContent,
+    className: classes$x.headerContent,
     children: [jsx("span", {
-      className: classes$w.title,
+      className: classes$x.title,
       children: " Settings"
     }), jsx(OpenButton, {
       title: "Open from File",
       server: server,
       onLoad: onOpenFile,
-      className: classes$w.button,
+      className: classes$x.button,
       children: jsx(Icon, {
         name: "open-1"
       })
@@ -28965,14 +28965,14 @@ var HeaderContent$1 = function HeaderContent(_ref) {
       title: "Save to File",
       data: JSON.stringify(formState.result),
       filename: "ketcher-settings",
-      className: classes$w.button,
+      className: classes$x.button,
       children: jsx(Icon, {
         name: "save-1"
       })
     }, "ketcher-settings"), jsx("button", {
       title: "Reset",
       onClick: onReset,
-      className: classes$w.button,
+      className: classes$x.button,
       disabled: getIsResetDisabled(),
       children: jsx(Icon, {
         name: "reset"
@@ -29159,7 +29159,7 @@ var SettingsDialog = function SettingsDialog(props) {
     label: '3D Viewer',
     content:
     jsxs("fieldset", {
-      className: classes$w.viewer,
+      className: classes$x.viewer,
       children: [jsx(Field, {
         name: "miewMode",
         component: Select,
@@ -29194,13 +29194,13 @@ var SettingsDialog = function SettingsDialog(props) {
     prop.onACSStyle(_objectSpread$B(_objectSpread$B({}, formState.result), ACS_STYLE_DEFAULT_SETTINGS));
   };
   var ACSStyleButton = jsx("button", {
-    className: classes$w.acsStyleButton,
+    className: classes$x.acsStyleButton,
     onClick: onACSStyle,
     children: "Set ACS Settings"
   }, "acsstylebutton");
   var tabs = [generalTab, stereoTab, atomsTab, bondsTab, serverTab, threeDViewerTab, debuggingTab];
   return jsx(Dialog, {
-    className: classes$w.settings,
+    className: classes$x.settings,
     result: function result() {
       return [formState.result, initState];
     },
@@ -29227,7 +29227,7 @@ var SettingsDialog = function SettingsDialog(props) {
     }, formState), {}, {
       children: jsx(Accordion, {
         tabs: tabs,
-        className: classes$w.accordion,
+        className: classes$x.accordion,
         changedGroups: changedGroups
       })
     }))
@@ -29478,7 +29478,7 @@ var mapDispatchToProps$c = function mapDispatchToProps(dispatch, ownProps) {
 };
 var Check = connect(mapStateToProps$e, mapDispatchToProps$c)(CheckDialog);
 
-var styles$d = {"button-common-styles":"FormulaInput-module_button-common-styles__xQ8ZA","scrollbar":"FormulaInput-module_scrollbar__8TUkb","chem_input":"FormulaInput-module_chem_input__oprB3"};
+var styles$c = {"button-common-styles":"FormulaInput-module_button-common-styles__xQ8ZA","scrollbar":"FormulaInput-module_scrollbar__8TUkb","chem_input":"FormulaInput-module_chem_input__oprB3"};
 
 var formulaRegexp = /\b(\d*)([A-Z][a-z]{0,3}#?)(\d*)\s*\b/g;
 var errorRegexp = /error:.*/g;
@@ -29492,7 +29492,7 @@ function formulaInputMarkdown(contentData) {
     }
   };
   return jsx("div", {
-    className: styles$d.chem_input,
+    className: styles$c.chem_input,
     onKeyPress: function onKeyPress(e) {
       return e.preventDefault();
     },
@@ -29542,7 +29542,7 @@ function FrozenInput(_ref) {
   });
 }
 
-var classes$v = {"button-common-styles":"Analyse-module_button-common-styles__8No07","scrollbar":"Analyse-module_scrollbar__UAaIN","analyse":"Analyse-module_analyse__MR-Tu","inputWrapper":"Analyse-module_inputWrapper__uR995","contentWrapper":"Analyse-module_contentWrapper__B4WCi","selectWrapper":"Analyse-module_selectWrapper__xEkKL","select":"Analyse-module_select__c6hFt"};
+var classes$w = {"button-common-styles":"Analyse-module_button-common-styles__8No07","scrollbar":"Analyse-module_scrollbar__UAaIN","analyse":"Analyse-module_analyse__MR-Tu","inputWrapper":"Analyse-module_inputWrapper__uR995","contentWrapper":"Analyse-module_contentWrapper__B4WCi","selectWrapper":"Analyse-module_selectWrapper__xEkKL","select":"Analyse-module_select__c6hFt"};
 
 var _excluded$h = ["values", "round", "loading", "onAnalyse", "onChangeRound"];
 function _callSuper$5(t, o, e) { return o = _getPrototypeOf$2(o), _possibleConstructorReturn$2(t, _isNativeReflectConstruct$5() ? Reflect.construct(o, e || [], _getPrototypeOf$2(t).constructor) : o.apply(t, e)); }
@@ -29579,7 +29579,7 @@ var AnalyseDialog = function (_Component) {
         props = _objectWithoutProperties(_this$props, _excluded$h);
       return jsx(Dialog, {
         title: "Calculated Values",
-        className: classes$v.analyse,
+        className: classes$w.analyse,
         withDivider: true,
         needMargin: true,
         valid: function valid() {
@@ -29612,10 +29612,10 @@ var AnalyseDialog = function (_Component) {
             withSelector: false
           }].map(function (item) {
             return jsxs("li", {
-              className: classes$v.contentWrapper,
+              className: classes$w.contentWrapper,
               "data-testid": item.name + '-wrapper',
               children: [jsxs("div", {
-                className: classes$v.inputWrapper,
+                className: classes$w.inputWrapper,
                 children: [jsxs("label", {
                   children: [item.name, ":"]
                 }), item.key === 'gross' ? jsx(FormulaInput, {
@@ -29628,7 +29628,7 @@ var AnalyseDialog = function (_Component) {
                   value: values && !loading ? roundOff(values[item.key], round[item.round]) : 0
                 })]
               }), item.withSelector ? jsxs("div", {
-                className: classes$v.selectWrapper,
+                className: classes$w.selectWrapper,
                 children: [jsx("span", {
                   children: "Decimal places"
                 }), jsx(Select, {
@@ -29637,7 +29637,7 @@ var AnalyseDialog = function (_Component) {
                   onChange: function onChange(val) {
                     return onChangeRound(item.round, val);
                   },
-                  className: classes$v.select,
+                  className: classes$w.select,
                   "data-testid": item.name + '-select'
                 })]
               }) : null]
@@ -29673,7 +29673,7 @@ var mapDispatchToProps$b = function mapDispatchToProps(dispatch) {
 };
 var Analyse = connect(mapStateToProps$d, mapDispatchToProps$b)(AnalyseDialog);
 
-var classes$u = {"button-common-styles":"Recognize-module_button-common-styles__B04E6","scrollbar":"Recognize-module_scrollbar__rohcP","recognize":"Recognize-module_recognize__66jG2","footerContent":"Recognize-module_footerContent__0MAC7","imagoVersion":"Recognize-module_imagoVersion__nBIj6","openButton":"Recognize-module_openButton__H-j5I","imagesContainer":"Recognize-module_imagesContainer__rXWWk","topBody":"Recognize-module_topBody__ZCCjN","output":"Recognize-module_output__WgRnP","picture":"Recognize-module_picture__x2Y7S","filename":"Recognize-module_filename__-1HIU","messageContainer":"Recognize-module_messageContainer__tMvyb","primaryButton":"Recognize-module_primaryButton__rzm03","secondaryButton":"Recognize-module_secondaryButton__H1Q28","struct":"Recognize-module_struct__W55TL"};
+var classes$v = {"button-common-styles":"Recognize-module_button-common-styles__B04E6","scrollbar":"Recognize-module_scrollbar__rohcP","recognize":"Recognize-module_recognize__66jG2","footerContent":"Recognize-module_footerContent__0MAC7","imagoVersion":"Recognize-module_imagoVersion__nBIj6","openButton":"Recognize-module_openButton__H-j5I","imagesContainer":"Recognize-module_imagesContainer__rXWWk","topBody":"Recognize-module_topBody__ZCCjN","output":"Recognize-module_output__WgRnP","picture":"Recognize-module_picture__x2Y7S","filename":"Recognize-module_filename__-1HIU","messageContainer":"Recognize-module_messageContainer__tMvyb","primaryButton":"Recognize-module_primaryButton__rzm03","secondaryButton":"Recognize-module_secondaryButton__H1Q28","struct":"Recognize-module_struct__W55TL"};
 
 var DialogActionButton = function DialogActionButton(_ref) {
   var clickHandler = _ref.clickHandler,
@@ -29706,11 +29706,11 @@ function FooterContent$3(_ref) {
     copyHandler = _ref.copyHandler,
     isAddToCanvasDisabled = _ref.isAddToCanvasDisabled;
   return jsxs("div", {
-    className: classes$u.footerContent,
+    className: classes$v.footerContent,
     children: [jsxs(OpenButton, {
       onLoad: onImage,
       type: "image/*",
-      className: classes$u.openButton,
+      className: classes$v.openButton,
       children: [jsx(Icon, {
         name: "open"
       }), jsx("span", {
@@ -29720,12 +29720,12 @@ function FooterContent$3(_ref) {
       children: [jsx(DialogActionButton, {
         disabled: !structStr,
         clickHandler: openHandler,
-        styles: classes$u.secondaryButton,
+        styles: classes$v.secondaryButton,
         label: "Open as new Project"
       }, "openButton"), jsx(DialogActionButton, {
         disabled: !structStr || isAddToCanvasDisabled,
         clickHandler: copyHandler,
-        styles: classes$u.primaryButton,
+        styles: classes$v.primaryButton,
         label: "Add to Canvas",
         title: "Structure will be loaded as fragment and added to Clipboard"
       }, "copyButton")]
@@ -29777,7 +29777,7 @@ function RecognizeDialog(prop) {
   };
   return jsxs(Dialog, {
     title: "Import Structure from Image",
-    className: classes$u.recognize,
+    className: classes$v.recognize,
     params: _objectSpread$z(_objectSpread$z({}, props), {}, {
       onOk: onOk
     }),
@@ -29795,9 +29795,9 @@ function RecognizeDialog(prop) {
     }),
     buttons: [],
     children: [jsxs("div", {
-      className: classes$u.topBody,
+      className: classes$v.topBody,
       children: [jsxs("label", {
-        className: classes$u.imagoVersion,
+        className: classes$v.imagoVersion,
         children: ["Imago version", jsx(Input$1, {
           schema: {
             "enum": imagoVersions,
@@ -29814,9 +29814,9 @@ function RecognizeDialog(prop) {
         children: "Recognized structure preview"
       })]
     }), jsxs("div", {
-      className: classes$u.imagesContainer,
+      className: classes$v.imagesContainer,
       children: [jsxs("div", {
-        className: classes$u.picture,
+        className: classes$v.picture,
         children: [file && isImage(file) && canPreviewImage && jsx("img", {
           alt: "",
           id: "pic",
@@ -29825,27 +29825,27 @@ function RecognizeDialog(prop) {
             setCanPreviewImage(false);
           }
         }), jsxs("span", {
-          className: classes$u.filename,
+          className: classes$v.filename,
           children: [" ", file ? file.name : null, " "]
         }), file && isImage(file) && !canPreviewImage && jsx("div", {
-          className: classes$u.messageContainer,
+          className: classes$v.messageContainer,
           children: jsxs("p", {
             children: ["Preview of '", file.type, "' MIME type is not supported by current browser"]
           })
         }), (!file || !isImage(file) && clearFile()) && jsx("div", {
-          className: classes$u.messageContainer,
+          className: classes$v.messageContainer,
           children: jsx("p", {
             children: "Please choose image"
           })
         })]
       }), jsx("div", {
-        className: classes$u.output,
+        className: classes$v.output,
         children: structStr && (
         structStr instanceof Promise || typeof structStr !== 'string' ? jsx("div", {
-          className: classes$u.messageContainer,
+          className: classes$v.messageContainer,
           children: jsx(LoadingCircles, {})
         }) : jsx(StructRender, {
-          className: classes$u.struct,
+          className: classes$v.struct,
           struct: structStr
         }))
       })]
@@ -29891,7 +29891,7 @@ var mapDispatchToProps$a = function mapDispatchToProps(dispatch) {
 };
 var Recognize = connect(mapStateToProps$c, mapDispatchToProps$a)(RecognizeDialog);
 
-var classes$t = {"button-common-styles":"Miew-module_button-common-styles__8FE-p","scrollbar":"Miew-module_scrollbar__ZMWH-","warning":"Miew-module_warning__IDl5F","applyButton":"Miew-module_applyButton__ZDE-i","miewDialog":"Miew-module_miewDialog__gHvYc","miewContainer":"Miew-module_miewContainer__2SNw3","loadingContainer":"Miew-module_loadingContainer__cVF-M","miewDarkTheme":"Miew-module_miewDarkTheme__kMFzc"};
+var classes$u = {"button-common-styles":"Miew-module_button-common-styles__8FE-p","scrollbar":"Miew-module_scrollbar__ZMWH-","warning":"Miew-module_warning__IDl5F","applyButton":"Miew-module_applyButton__ZDE-i","miewDialog":"Miew-module_miewDialog__gHvYc","miewContainer":"Miew-module_miewContainer__2SNw3","loadingContainer":"Miew-module_loadingContainer__cVF-M","miewDarkTheme":"Miew-module_miewDarkTheme__kMFzc"};
 
 var _excluded$f = ["miewOpts", "server", "struct", "onExportCML", "miewTheme"];
 var Viewer = lazy(function () {
@@ -29952,7 +29952,7 @@ function createMiewOptions(userOpts) {
 var CHANGING_WARNING = 'Stereocenters can be changed after the strong 3D rotation';
 var FooterContent$2 = function FooterContent() {
   return jsx("div", {
-    className: classes$t.warning,
+    className: classes$u.warning,
     children: CHANGING_WARNING
   });
 };
@@ -30003,19 +30003,19 @@ var MiewDialog = function MiewDialog(_ref) {
     params: prop,
     buttons: ['Cancel', jsx("button", {
       onClick: exportCML,
-      className: classes$t.applyButton,
+      className: classes$u.applyButton,
       disabled: isDisabled,
       "data-testid": "miew-modal-button",
       children: "Apply"
     }, "apply")],
     footerContent: jsx(FooterContent$2, {}),
-    className: classes$t.miewDialog,
+    className: classes$u.miewDialog,
     children: jsx("div", {
       children: jsx("div", {
-        className: "".concat(classes$t.miewContainer, " ").concat(miewTheme === 'dark' ? classes$t.miewDarkTheme : ''),
+        className: "".concat(classes$u.miewContainer, " ").concat(miewTheme === 'dark' ? classes$u.miewDarkTheme : ''),
         children: jsx(Suspense, {
           fallback: jsx("div", {
-            className: classes$t.loadingContainer,
+            className: classes$u.loadingContainer,
             children: jsx(LoadingCircles, {})
           }),
           children: jsx(Viewer, {
@@ -30049,7 +30049,7 @@ var mapDispatchToProps$9 = function mapDispatchToProps(dispatch) {
 };
 var Miew = connect(mapStateToProps$b, mapDispatchToProps$9)(MiewDialog);
 
-var classes$s = {"button-common-styles":"Atom-module_button-common-styles__ipWaI","scrollbar":"Atom-module_scrollbar__z5cVx","atomProps":"Atom-module_atomProps__pqBjY","accordionWrapper":"Atom-module_accordionWrapper__MSuU7","expandIcon":"Atom-module_expandIcon__mPszC","turnedIcon":"Atom-module_turnedIcon__0Kzwy","accordionSummaryWrapper":"Atom-module_accordionSummaryWrapper__MGqsq","accordionSummary":"Atom-module_accordionSummary__HMKzl","customQueryWrapper":"Atom-module_customQueryWrapper__hYuxI","accordionDetailsWrapper":"Atom-module_accordionDetailsWrapper__p6EI7","hiddenAccordion":"Atom-module_hiddenAccordion__pDNdM","accordionDetails":"Atom-module_accordionDetails__-B3jK","checkbox":"Atom-module_checkbox__Vup40","reactionFlags":"Atom-module_reactionFlags__gdNb1","querySpecific":"Atom-module_querySpecific__7XxMr"};
+var classes$t = {"button-common-styles":"Atom-module_button-common-styles__ipWaI","scrollbar":"Atom-module_scrollbar__z5cVx","atomProps":"Atom-module_atomProps__pqBjY","accordionWrapper":"Atom-module_accordionWrapper__MSuU7","expandIcon":"Atom-module_expandIcon__mPszC","turnedIcon":"Atom-module_turnedIcon__0Kzwy","accordionSummaryWrapper":"Atom-module_accordionSummaryWrapper__MGqsq","accordionSummary":"Atom-module_accordionSummary__HMKzl","customQueryWrapper":"Atom-module_customQueryWrapper__hYuxI","accordionDetailsWrapper":"Atom-module_accordionDetailsWrapper__p6EI7","hiddenAccordion":"Atom-module_hiddenAccordion__pDNdM","accordionDetails":"Atom-module_accordionDetails__-B3jK","checkbox":"Atom-module_checkbox__Vup40","reactionFlags":"Atom-module_reactionFlags__gdNb1","querySpecific":"Atom-module_querySpecific__7XxMr"};
 
 function atomValid(label, isMultipleAtoms, atomType, isCustomQuery) {
   var isChemicalElement = !!Elements.get(capitalize$1(label));
@@ -30161,7 +30161,7 @@ var AtomElement = function AtomElement(_ref) {
       }), jsx(Field, {
         name: "notList",
         labelPos: "before",
-        className: classes$s.checkbox
+        className: classes$t.checkbox
       })]
     }),
     pseudo: jsx(FieldWithModal, {
@@ -30199,7 +30199,7 @@ var querySpecificFields = [{
 }, {
   name: 'unsaturatedAtom',
   labelPos: 'before',
-  className: classes$s.checkbox
+  className: classes$t.checkbox
 }, {
   name: 'aromaticity',
   component: 'dropdown'
@@ -30302,7 +30302,7 @@ var Atom = function Atom(props) {
   }, {
     groupName: 'Query specific',
     component: jsx("div", {
-      className: classes$s.querySpecific,
+      className: classes$t.querySpecific,
       children: querySpecificFields.map(function (field) {
         if (field.component === 'dropdown') {
           return jsx(Field, {
@@ -30319,7 +30319,7 @@ var Atom = function Atom(props) {
   }, {
     groupName: 'Reaction flags',
     component: jsxs("div", {
-      className: classes$s.reactionFlags,
+      className: classes$t.reactionFlags,
       children: [jsx(Field, {
         name: "invRet",
         component: Select,
@@ -30327,13 +30327,13 @@ var Atom = function Atom(props) {
       }), jsx(Field, {
         name: "exactChangeFlag",
         labelPos: "before",
-        className: classes$s.checkbox
+        className: classes$t.checkbox
       })]
     })
   }];
   return jsx(Dialog, {
     title: "Atom Properties",
-    className: classes$s.atomProps,
+    className: classes$t.atomProps,
     result: function result() {
       return formState.result;
     },
@@ -30352,7 +30352,7 @@ var Atom = function Atom(props) {
       init: isRestoredModal ? null : rest
     }, formState), {}, {
       children: jsxs("div", {
-        className: classes$s.accordionWrapper,
+        className: classes$t.accordionWrapper,
         children: [itemGroups.map(function (_ref) {
           var groupName = _ref.groupName,
             component = _ref.component;
@@ -30361,31 +30361,31 @@ var Atom = function Atom(props) {
             "data-testid": "".concat(groupName, "-section"),
             children: [jsx("div", {
               onClick: handleAccordionChange(groupName),
-              className: classes$s.accordionSummaryWrapper,
+              className: classes$t.accordionSummaryWrapper,
               "aria-disabled": isCustomQuery,
               children: jsxs("div", {
-                className: classes$s.accordionSummary,
+                className: classes$t.accordionSummary,
                 children: [jsx("span", {
                   children: groupName
                 }), jsx(Icon, {
-                  className: clsx(_defineProperty$1(_defineProperty$1({}, classes$s.expandIcon, true), classes$s.turnedIcon, !shouldGroupBeRended)),
+                  className: clsx(_defineProperty$1(_defineProperty$1({}, classes$t.expandIcon, true), classes$t.turnedIcon, !shouldGroupBeRended)),
                   name: "chevron"
                 })]
               })
             }), jsx("div", {
-              className: clsx(_defineProperty$1(_defineProperty$1({}, classes$s.accordionDetailsWrapper, true), classes$s.hiddenAccordion, !shouldGroupBeRended)),
+              className: clsx(_defineProperty$1(_defineProperty$1({}, classes$t.accordionDetailsWrapper, true), classes$t.hiddenAccordion, !shouldGroupBeRended)),
               children: jsx("div", {
-                className: classes$s.accordionDetails,
+                className: classes$t.accordionDetails,
                 children: component
               })
             })]
           }, groupName);
         }), !SettingsManager.disableCustomQuery && jsx("div", {
-          className: classes$s.customQueryWrapper,
+          className: classes$t.customQueryWrapper,
           children: jsx(CustomQueryField, {
             name: "customQuery",
             labelPos: "after",
-            className: classes$s.checkbox,
+            className: classes$t.checkbox,
             disabled: !isCustomQuery,
             checkboxValue: isCustomQuery,
             onCheckboxChange: handleCustomQueryCheckBoxChange,
@@ -30404,7 +30404,7 @@ var mapStateToProps$a = function mapStateToProps(state) {
 };
 var AtomContainer = connect(mapStateToProps$a)(Atom);
 
-var classes$r = {"attachPoints":"Attach-module_attachPoints__5QEAv"};
+var classes$s = {"attachPoints":"Attach-module_attachPoints__5QEAv"};
 
 var _excluded$d = ["formState"];
 function ownKeys$w(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -30414,7 +30414,7 @@ var AttachPoints = function AttachPoints(props) {
     rest = _objectWithoutProperties(props, _excluded$d);
   return jsx(Dialog, {
     title: "Attachment Points",
-    className: classes$r.attachPoints,
+    className: classes$s.attachPoints,
     result: function result() {
       return formState.result;
     },
@@ -30447,7 +30447,7 @@ var mapStateToProps$9 = function mapStateToProps(state) {
 };
 var AttachPointsContainer = connect(mapStateToProps$9)(AttachPoints);
 
-var classes$q = {"automap":"Automap-module_automap__531ko"};
+var classes$r = {"automap":"Automap-module_automap__531ko"};
 
 var _excluded$c = ["formState"];
 function ownKeys$v(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -30470,7 +30470,7 @@ var Automap = function Automap(props) {
     rest = _objectWithoutProperties(props, _excluded$c);
   return jsx(Dialog, {
     title: "Reaction Auto-Mapping",
-    className: classes$q.automap,
+    className: classes$r.automap,
     result: function result() {
       return formState.result;
     },
@@ -30512,7 +30512,7 @@ var mapDispatchToProps$8 = function mapDispatchToProps(dispatch, ownProps) {
 };
 var AutomapContainer = connect(mapStateToProps$8, mapDispatchToProps$8)(Automap);
 
-var classes$p = {"bond":"Bond-module_bond__EDfLY","customQueryWrapper":"Bond-module_customQueryWrapper__mKGLY"};
+var classes$q = {"bond":"Bond-module_bond__EDfLY","customQueryWrapper":"Bond-module_customQueryWrapper__mKGLY"};
 
 var _excluded$b = ["formState"];
 function ownKeys$u(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -30561,7 +30561,7 @@ var Bond = function Bond(props) {
   };
   return jsx(Dialog, {
     title: "Bond Properties",
-    className: classes$p.bond,
+    className: classes$q.bond,
     result: function result() {
       return formState.result;
     },
@@ -30601,11 +30601,11 @@ var Bond = function Bond(props) {
         formName: "bond-properties",
         "data-testid": "reacting-center"
       }), !SettingsManager.disableCustomQuery && jsx("div", {
-        className: classes$p.customQueryWrapper,
+        className: classes$q.customQueryWrapper,
         children: jsx(CustomQueryField, {
           name: "customQuery",
           labelPos: "after",
-          className: classes$p.checkbox,
+          className: classes$q.checkbox,
           disabled: !isCustomQuery,
           checkboxValue: isCustomQuery,
           onCheckboxChange: handleCustomQueryCheckBoxChange,
@@ -30658,7 +30658,7 @@ var mapStateToProps$7 = function mapStateToProps(state) {
 };
 var BondContainer = connect(mapStateToProps$7)(Bond);
 
-var classes$o = {"field":"IfThenSelect-module_field__9YaPA"};
+var classes$p = {"field":"IfThenSelect-module_field__9YaPA"};
 
 function ownKeys$t(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$t(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$t(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$t(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -30681,14 +30681,14 @@ var IfThenSelect = function IfThenSelect(props) {
   });
   return jsx(Field, _objectSpread$t(_objectSpread$t({
     schema: desc,
-    className: classes$o.field
+    className: classes$p.field
   }, props), {}, {
     component: Select,
     options: getSelectOptionsFromSchema(desc)
   }));
 };
 
-var classes$n = {"button-common-styles":"RgroupLogic-module_button-common-styles__P-ABP","scrollbar":"RgroupLogic-module_scrollbar__gDniy","rgroupLogic":"RgroupLogic-module_rgroupLogic__q4RTy","resth":"RgroupLogic-module_resth__RL2qE"};
+var classes$o = {"button-common-styles":"RgroupLogic-module_button-common-styles__P-ABP","scrollbar":"RgroupLogic-module_scrollbar__gDniy","rgroupLogic":"RgroupLogic-module_rgroupLogic__q4RTy","resth":"RgroupLogic-module_resth__RL2qE"};
 
 var _excluded$a = ["formState", "label", "rgroupLabels"];
 function ownKeys$s(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -30700,7 +30700,7 @@ var RgroupLogic = function RgroupLogic(props) {
     rest = _objectWithoutProperties(props, _excluded$a);
   return jsx(Dialog, {
     title: "R-Group Logic Condition",
-    className: classes$n.rgroupLogic,
+    className: classes$o.rgroupLogic,
     result: function result() {
       return formState.result;
     },
@@ -30727,7 +30727,7 @@ var RgroupLogic = function RgroupLogic(props) {
       }), jsx(Field, {
         name: "resth",
         labelPos: "after",
-        className: classes$n.resth
+        className: classes$o.resth
       }), jsx(IfThenSelect, {
         name: "ifthen",
         label: label,
@@ -30750,17 +30750,17 @@ var mapStateToProps$6 = function mapStateToProps(state) {
 };
 var RgroupLogicContainer = connect(mapStateToProps$6)(RgroupLogic);
 
-var classes$m = {"button-common-styles":"Open-module_button-common-styles__NBSQP","scrollbar":"Open-module_scrollbar__sRvYM","open":"Open-module_open__m8V9g","textareaEditor":"Open-module_textareaEditor__ZbEVj","footerContent":"Open-module_footerContent__Q0hTw","buttonsContainer":"Open-module_buttonsContainer__L1HqU","openButton":"Open-module_openButton__cj3oU","cancelButton":"Open-module_cancelButton__0TQzA","copyButton":"Open-module_copyButton__KlXKd","loadingContainer":"Open-module_loadingContainer__Y354t"};
+var classes$n = {"button-common-styles":"Open-module_button-common-styles__NBSQP","scrollbar":"Open-module_scrollbar__sRvYM","open":"Open-module_open__m8V9g","textareaEditor":"Open-module_textareaEditor__ZbEVj","footerContent":"Open-module_footerContent__Q0hTw","buttonsContainer":"Open-module_buttonsContainer__L1HqU","openButton":"Open-module_openButton__cj3oU","cancelButton":"Open-module_cancelButton__0TQzA","copyButton":"Open-module_copyButton__KlXKd","loadingContainer":"Open-module_loadingContainer__Y354t"};
 
-var styles$c = {"analyzingFileWrapper":"AnalyzingFile-module_analyzingFileWrapper__j0Ltf","fileBox":"AnalyzingFile-module_fileBox__ywFIh"};
+var styles$b = {"analyzingFileWrapper":"AnalyzingFile-module_analyzingFileWrapper__j0Ltf","fileBox":"AnalyzingFile-module_fileBox__ywFIh"};
 
 var ICON_NAME = 'file-thumbnail';
 var AnalyzingFile = function AnalyzingFile(_ref) {
   var fileName = _ref.fileName;
   return jsxs("div", {
-    className: styles$c.analyzingFileWrapper,
+    className: styles$b.analyzingFileWrapper,
     children: [fileName && jsxs("div", {
-      className: styles$c.fileBox,
+      className: styles$b.fileBox,
       children: [jsx(Icon, {
         name: ICON_NAME
       }), jsx("p", {
@@ -30770,9 +30770,9 @@ var AnalyzingFile = function AnalyzingFile(_ref) {
   });
 };
 
-var styles$b = {"optionsContainer":"OpenOptions-module_optionsContainer__-WqT8","dropContainer":"OpenOptions-module_dropContainer__PL6Tg","buttonLabelWrapper":"OpenOptions-module_buttonLabelWrapper__h2YsI","buttonLabel":"OpenOptions-module_buttonLabel__LiY--","textLabelWrapper":"OpenOptions-module_textLabelWrapper__Vx8NF","textLabel":"OpenOptions-module_textLabel__TlOfz","dropIconWrapper":"OpenOptions-module_dropIconWrapper__ibBQx"};
+var styles$a = {"optionsContainer":"OpenOptions-module_optionsContainer__-WqT8","dropContainer":"OpenOptions-module_dropContainer__PL6Tg","buttonLabelWrapper":"OpenOptions-module_buttonLabelWrapper__h2YsI","buttonLabel":"OpenOptions-module_buttonLabel__LiY--","textLabelWrapper":"OpenOptions-module_textLabelWrapper__Vx8NF","textLabel":"OpenOptions-module_textLabel__TlOfz","dropIconWrapper":"OpenOptions-module_dropIconWrapper__ibBQx"};
 
-var styles$a = {"isHovered":"FileDrop-module_isHovered__c-CDn","isDisabled":"FileDrop-module_isDisabled__Ejuyq"};
+var styles$9 = {"isHovered":"FileDrop-module_isHovered__c-CDn","isDisabled":"FileDrop-module_isDisabled__Ejuyq"};
 
 var _excluded$9 = ["buttonLabel", "textLabel", "iconName", "disabled", "disabledText"];
 function ownKeys$r(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -30793,7 +30793,7 @@ var FileDrop = function FileDrop(_ref) {
     isDragActive = _useDropzone.isDragActive,
     open = _useDropzone.open;
   var getClassesString = useMemo(function () {
-    var classes = [styles$b.dropContainer, isDragActive ? styles$a.isHovered : null, disabled ? styles$a.isDisabled : null];
+    var classes = [styles$a.dropContainer, isDragActive ? styles$9.isHovered : null, disabled ? styles$9.isDisabled : null];
     return classes.join(' ');
   }, [isDragActive]);
   return jsxs("div", _objectSpread$r(_objectSpread$r({
@@ -30802,24 +30802,24 @@ var FileDrop = function FileDrop(_ref) {
     className: getClassesString
   })), {}, {
     children: [jsx("input", _objectSpread$r({}, getInputProps())), jsx("div", {
-      className: styles$b.dropIconWrapper,
+      className: styles$a.dropIconWrapper,
       children: jsx(Icon, {
         name: iconName
       })
     }), disabled ? jsx("p", {
-      className: styles$b.textLabel,
+      className: styles$a.textLabel,
       children: disabledText
     }) : jsxs(Fragment, {
       children: [jsx("div", {
-        className: styles$b.textLabelWrapper,
+        className: styles$a.textLabelWrapper,
         children: jsx("p", {
-          className: styles$b.textLabel,
+          className: styles$a.textLabel,
           children: textLabel
         })
       }), jsx("div", {
-        className: styles$b.buttonLabelWrapper,
+        className: styles$a.buttonLabelWrapper,
         children: jsx("p", {
-          className: styles$b.buttonLabel,
+          className: styles$a.buttonLabel,
           children: buttonLabel
         })
       })]
@@ -30839,21 +30839,21 @@ var OpenOptions = function OpenOptions(_ref) {
     isRecognizeDisabled = _ref.isRecognizeDisabled,
     errorHandler = _ref.errorHandler;
   return jsxs("div", {
-    className: styles$b.optionsContainer,
+    className: styles$a.optionsContainer,
     children: [jsxs("div", {
       onClick: selectClipboard,
-      className: styles$b.dropContainer,
+      className: styles$a.dropContainer,
       children: [jsx("div", {
-        className: styles$b.dropIconWrapper,
+        className: styles$a.dropIconWrapper,
         children: jsx(Icon, {
           name: ICON_NAMES.PASTE
         })
       }), jsx("div", {
-        className: styles$b.textLabelWrapper
+        className: styles$a.textLabelWrapper
       }), jsx("div", {
-        className: styles$b.buttonLabelWrapper,
+        className: styles$a.buttonLabelWrapper,
         children: jsx("p", {
-          className: styles$b.buttonLabel,
+          className: styles$a.buttonLabel,
           children: "Paste from clipboard"
         })
       })]
@@ -30887,7 +30887,7 @@ var TextEditor = function TextEditor(_ref) {
     autoFocus = _ref$autoFocus === void 0 ? false : _ref$autoFocus;
   return jsx(Fragment, {
     children: jsx("textarea", {
-      className: classes$m.textareaEditor,
+      className: classes$n.textareaEditor,
       value: structStr,
       onChange: function onChange(event) {
         return inputHandler(event.target.value);
@@ -30901,7 +30901,7 @@ var serverSelector = function serverSelector(state) {
   return state.options.app.server ? state.server : null;
 };
 
-var styles$9 = {"wrapper":"CDXStructuresViewer-module_wrapper__7nZbQ","structuresWrapper":"CDXStructuresViewer-module_structuresWrapper__kZN0N","menuListWrapper":"CDXStructuresViewer-module_menuListWrapper__za1za","header":"CDXStructuresViewer-module_header__107Fj","fileName":"CDXStructuresViewer-module_fileName__BkvUb","menuItem":"CDXStructuresViewer-module_menuItem__21Wb1","centerWrapper":"CDXStructuresViewer-module_centerWrapper__T26wg","imageWrapper":"CDXStructuresViewer-module_imageWrapper__m54Wi","image":"CDXStructuresViewer-module_image__7Q-Ah"};
+var styles$8 = {"wrapper":"CDXStructuresViewer-module_wrapper__7nZbQ","structuresWrapper":"CDXStructuresViewer-module_structuresWrapper__kZN0N","menuListWrapper":"CDXStructuresViewer-module_menuListWrapper__za1za","header":"CDXStructuresViewer-module_header__107Fj","fileName":"CDXStructuresViewer-module_fileName__BkvUb","menuItem":"CDXStructuresViewer-module_menuItem__21Wb1","centerWrapper":"CDXStructuresViewer-module_centerWrapper__T26wg","imageWrapper":"CDXStructuresViewer-module_imageWrapper__m54Wi","image":"CDXStructuresViewer-module_image__7Q-Ah"};
 
 var editorOptionsSelector = function editorOptionsSelector(state) {
   var _state$editor;
@@ -30966,7 +30966,7 @@ var CDXStructuresViewer = function CDXStructuresViewer(_ref) {
   var renderStructure = function renderStructure(structure) {
     if (loading) {
       return jsx("div", {
-        className: styles$9.centerWrapper,
+        className: styles$8.centerWrapper,
         children: jsx(LoadingCircles, {})
       });
     }
@@ -30978,7 +30978,7 @@ var CDXStructuresViewer = function CDXStructuresViewer(_ref) {
     }
     if (structure !== null && structure !== void 0 && structure.struct) {
       return jsx(StructRender, {
-        className: styles$9.image,
+        className: styles$8.image,
         struct: structure.struct,
         options: _objectSpread$q(_objectSpread$q({}, editorOptions), {}, {
           autoScale: true,
@@ -30991,18 +30991,18 @@ var CDXStructuresViewer = function CDXStructuresViewer(_ref) {
   var renderStructures = function renderStructures() {
     if (!(structList !== null && structList !== void 0 && structList.length)) {
       return jsx("div", {
-        className: styles$9.centerWrapper,
+        className: styles$8.centerWrapper,
         children: jsx("div", {
           children: "No embedded structures found in the file"
         })
       });
     }
     return jsxs("div", {
-      className: styles$9.structuresWrapper,
+      className: styles$8.structuresWrapper,
       children: [jsxs("div", {
-        className: styles$9.menuListWrapper,
+        className: styles$8.menuListWrapper,
         children: [jsx("div", {
-          className: styles$9.header,
+          className: styles$8.header,
           children: "Select structure"
         }), jsx(MenuList, {
           children: structList.map(function (value, index) {
@@ -31019,16 +31019,16 @@ var CDXStructuresViewer = function CDXStructuresViewer(_ref) {
           })
         })]
       }), jsx("div", {
-        className: styles$9.imageWrapper,
+        className: styles$8.imageWrapper,
         children: renderStructure(itemsMap[selectedIndex])
       })]
     });
   };
   return jsxs("div", {
-    className: styles$9.wrapper,
+    className: styles$8.wrapper,
     children: [jsxs("div", {
       children: ["File: ", jsx("span", {
-        className: styles$9.fileName,
+        className: styles$8.fileName,
         children: fileName
       })]
     }), renderStructures()]
@@ -31072,22 +31072,22 @@ var FooterContent$1 = function FooterContent(_ref) {
     onCancel = _ref.onCancel,
     isAddToCanvasDisabled = _ref.isAddToCanvasDisabled;
   return jsxs("div", {
-    className: classes$m.footerContent,
+    className: classes$n.footerContent,
     children: [jsx("button", {
       onClick: onCancel,
-      className: classes$m.cancelButton,
+      className: classes$n.cancelButton,
       children: "Cancel"
     }), jsxs("div", {
-      className: classes$m.buttonsContainer,
+      className: classes$n.buttonsContainer,
       children: [jsx(DialogActionButton, {
         disabled: !structStr,
         clickHandler: openHandler,
-        styles: classes$m.openButton,
+        styles: classes$n.openButton,
         label: "Open as New Project"
       }, "openButton"), jsx(DialogActionButton, {
         disabled: !structStr || isAddToCanvasDisabled,
         clickHandler: copyHandler,
-        styles: classes$m.copyButton,
+        styles: classes$n.copyButton,
         label: "Add to Canvas",
         title: "Structure will be loaded as fragment and added to Clipboard"
       }, "copyButton")]
@@ -31181,7 +31181,7 @@ var Open = function Open(props) {
   }
   return jsxs(Dialog, {
     title: "Open structure",
-    className: classes$m.open,
+    className: classes$n.open,
     params: rest,
     result: function result() {
       return null;
@@ -31213,7 +31213,7 @@ var Open = function Open(props) {
       autoFocus: true,
       structList: structList
     }), isLoading && jsx("div", {
-      className: classes$m.loadingContainer,
+      className: classes$n.loadingContainer,
       children: jsx(LoadingCircles, {})
     })]
   });
@@ -31321,7 +31321,7 @@ function couldBeSaved(struct, format) {
   return null;
 }
 
-var classes$l = {"tabs":"Tabs-module_tabs__PuztJ","active":"Tabs-module_active__eeyNd"};
+var classes$m = {"tabs":"Tabs-module_tabs__PuztJ","active":"Tabs-module_active__eeyNd"};
 
 function ownKeys$n(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$n(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$n(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$n(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -31372,10 +31372,10 @@ var Tabs = function (_Component) {
           className: className,
           tabIndex: tabIndex,
           children: jsx("li", {
-            className: classes$l.tabs,
+            className: classes$m.tabs,
             children: tabs.map(function (tabPanel, index) {
               return jsx("a", {
-                className: clsx(_defineProperty$1({}, classes$l.active, _this2.state.tabIndex === index)),
+                className: clsx(_defineProperty$1({}, classes$m.active, _this2.state.tabIndex === index)),
                 onClick: function onClick(ev) {
                   return _this2.changeTab(ev, index);
                 },
@@ -31394,7 +31394,7 @@ var Tabs = function (_Component) {
   return Tabs;
 }(Component);
 
-var classes$k = {"button-common-styles":"Save-module_button-common-styles__mpLS8","scrollbar":"Save-module_scrollbar__XMf7I","dialog":"Save-module_dialog__of-0M","formContainer":"Save-module_formContainer__v1pIq","tabs":"Save-module_tabs__TOB-R","warnings":"Save-module_warnings__1PxJT","warningsContainer":"Save-module_warningsContainer__-3yVy","warningsArr":"Save-module_warningsArr__bKUFY","previewBackground":"Save-module_previewBackground__AbaUf","previewArea":"Save-module_previewArea__-0SLb","loadingCirclesContainer":"Save-module_loadingCirclesContainer__COUKN","imageContainer":"Save-module_imageContainer__gFELk","previewMessage":"Save-module_previewMessage__CZfZB","ok":"Save-module_ok__SgeCM","cancel":"Save-module_cancel__SMkEV","saveTmpl":"Save-module_saveTmpl__O-d0T"};
+var classes$l = {"button-common-styles":"Save-module_button-common-styles__mpLS8","scrollbar":"Save-module_scrollbar__XMf7I","dialog":"Save-module_dialog__of-0M","formContainer":"Save-module_formContainer__v1pIq","tabs":"Save-module_tabs__TOB-R","warnings":"Save-module_warnings__1PxJT","warningsContainer":"Save-module_warningsContainer__-3yVy","warningsArr":"Save-module_warningsArr__bKUFY","previewBackground":"Save-module_previewBackground__AbaUf","previewArea":"Save-module_previewArea__-0SLb","loadingCirclesContainer":"Save-module_loadingCirclesContainer__COUKN","imageContainer":"Save-module_imageContainer__gFELk","previewMessage":"Save-module_previewMessage__CZfZB","ok":"Save-module_ok__SgeCM","cancel":"Save-module_cancel__SMkEV","saveTmpl":"Save-module_saveTmpl__O-d0T"};
 
 function ownKeys$m(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$m(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$m(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$m(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -31572,7 +31572,7 @@ var SaveDialog = function (_Component) {
         tabIndex: 1
       }];
       return jsxs("div", {
-        className: classes$k.formContainer,
+        className: classes$l.formContainer,
         children: [jsxs(Form$1, _objectSpread$m(_objectSpread$m({
           schema: _this.saveSchema,
           init: {
@@ -31591,7 +31591,7 @@ var SaveDialog = function (_Component) {
             "data-testid": "file-format-list"
           })]
         })), jsx(Tabs, {
-          className: classes$k.tabs,
+          className: classes$l.tabs,
           captions: tabs,
           tabIndex: _this.state.tabIndex,
           changeTab: _this.changeTab,
@@ -31626,13 +31626,13 @@ var SaveDialog = function (_Component) {
       var isCleanStruct = _this.props.struct.isBlank();
       var LoadingState = function LoadingState() {
         return jsx("div", {
-          className: classes$k.loadingCirclesContainer,
+          className: classes$l.loadingCirclesContainer,
           children: jsx(LoadingCircles, {})
         });
       };
       var ImageContent = function ImageContent() {
         return jsx("div", {
-          className: classes$k.imageContainer,
+          className: classes$l.imageContainer,
           children: !isCleanStruct && jsx("img", {
             src: "data:image/".concat(format, "+xml;base64,").concat(imageSrc),
             alt: "".concat(format, " preview")
@@ -31641,10 +31641,10 @@ var SaveDialog = function (_Component) {
       };
       var BinaryContent = function BinaryContent() {
         return jsx("div", {
-          className: classes$k.previewBackground,
+          className: classes$l.previewBackground,
           children: jsx("textarea", {
             value: "Can not display binary content",
-            className: classes$k.previewArea,
+            className: classes$l.previewArea,
             readOnly: true,
             ref: _this.textAreaRef,
             "data-testid": "preview-area-binary"
@@ -31654,10 +31654,10 @@ var SaveDialog = function (_Component) {
       var PreviewContent = function PreviewContent(_ref3) {
         var format = _ref3.format;
         return jsxs("div", {
-          className: classes$k.previewBackground,
+          className: classes$l.previewBackground,
           children: [jsx("textarea", {
             value: structStr,
-            className: classes$k.previewArea,
+            className: classes$l.previewArea,
             readOnly: true,
             ref: _this.textAreaRef,
             "data-testid": "".concat(format, "-preview-area-text")
@@ -31686,12 +31686,12 @@ var SaveDialog = function (_Component) {
       var format = formState.result.format;
       var warnings = _this.getWarnings(format);
       return warnings.length ? jsx("div", {
-        className: classes$k.warnings,
+        className: classes$l.warnings,
         children: warnings.map(function (warning) {
           return jsx("div", {
-            className: classes$k.warningsContainer,
+            className: classes$l.warningsContainer,
             children: jsx("span", {
-              className: classes$k.warningsArr,
+              className: classes$l.warningsArr,
               "data-testid": "WarningTextArea",
               children: warning
             })
@@ -31716,7 +31716,7 @@ var SaveDialog = function (_Component) {
       var savingStruct = _this.isBinaryCdxFormat(format) && !isLoading ? b64toBlob(structStr) : structStr;
       var isMoleculeContain = _this.props.struct.atoms.size && _this.props.struct.bonds.size;
       var buttons = [jsx("button", {
-        className: classes$k.saveTmpl,
+        className: classes$l.saveTmpl,
         disabled: disableControls || isCleanStruct || !isMoleculeContain,
         onClick: function onClick() {
           return _this.props.onTmplSave(_this.props.struct);
@@ -31725,7 +31725,7 @@ var SaveDialog = function (_Component) {
       }, "save-tmpl")];
       buttons.push( jsx("button", {
         mode: "onCancel",
-        className: classes$k.cancel,
+        className: classes$l.cancel,
         onClick: function onClick() {
           return _this.props.onOk({});
         },
@@ -31741,7 +31741,7 @@ var SaveDialog = function (_Component) {
           type: "image/".concat(format, "+xml"),
           onSave: _this.props.onOk,
           disabled: disableControls || !formState.valid || isCleanStruct || !_this.props.server,
-          className: classes$k.ok,
+          className: classes$l.ok,
           children: "Save"
         }, "save-image-button"));
       } else {
@@ -31753,7 +31753,7 @@ var SaveDialog = function (_Component) {
           server: _this.props.server,
           onSave: _this.props.onOk,
           disabled: disableControls || !formState.valid || isCleanStruct,
-          className: classes$k.ok,
+          className: classes$l.ok,
           children: "Save"
         }, "save-file-button"));
       }
@@ -31796,7 +31796,7 @@ var SaveDialog = function (_Component) {
     key: "render",
     value: function render() {
       return jsx(Dialog, {
-        className: classes$k.dialog,
+        className: classes$l.dialog,
         title: "Save Structure",
         params: this.props,
         buttons: this.getButtons(),
@@ -31843,7 +31843,7 @@ var mapDispatchToProps$6 = function mapDispatchToProps(dispatch) {
 };
 var Save = connect(mapStateToProps$4, mapDispatchToProps$6)(SaveDialog);
 
-var classes$j = {"enhancedStereo":"enhancedStereo-module_enhancedStereo__8FLSY","stereoLabelItem":"enhancedStereo-module_stereoLabelItem__lEf-0","labelGroupSelect":"enhancedStereo-module_labelGroupSelect__K7TYC"};
+var classes$k = {"enhancedStereo":"enhancedStereo-module_enhancedStereo__8FLSY","stereoLabelItem":"enhancedStereo-module_stereoLabelItem__lEf-0","labelGroupSelect":"enhancedStereo-module_labelGroupSelect__K7TYC"};
 
 var _excluded$7 = ["struct", "formState", "init"];
 function ownKeys$l(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -31875,7 +31875,7 @@ var EnhancedStereo = function EnhancedStereo(props) {
   };
   return jsx(Dialog, {
     title: "Enhanced Stereochemistry",
-    className: classes$j.enhancedStereo,
+    className: classes$k.enhancedStereo,
     params: rest,
     result: function result() {
       return _result;
@@ -31912,7 +31912,7 @@ var EnhancedStereo = function EnhancedStereo(props) {
             name: "andNumber",
             schema: range$2(1, maxAnd + 1),
             type: "text",
-            className: classes$j.labelGroupSelect
+            className: classes$k.labelGroupSelect
           }), "Group"]
         }), maxOr !== 0 && jsxs("label", {
           children: [jsx(Field, {
@@ -31925,7 +31925,7 @@ var EnhancedStereo = function EnhancedStereo(props) {
             name: "orNumber",
             schema: range$2(1, maxOr + 1),
             type: "text",
-            className: classes$j.labelGroupSelect
+            className: classes$k.labelGroupSelect
           }), "Group"]
         }), jsxs("label", {
           children: [jsx(Field, {
@@ -31980,7 +31980,7 @@ var EnhancedStereo$1 = connect(function (state) {
   };
 })(EnhancedStereo);
 
-var styles$8 = {"button-common-styles":"labelEdit-module_button-common-styles__S5XMA","scrollbar":"labelEdit-module_scrollbar__GFcQm","labelEdit":"labelEdit-module_labelEdit__9LnIH","labelEditInputField":"labelEdit-module_labelEditInputField__tb-J4"};
+var styles$7 = {"button-common-styles":"labelEdit-module_button-common-styles__S5XMA","scrollbar":"labelEdit-module_scrollbar__GFcQm","labelEdit":"labelEdit-module_labelEdit__9LnIH","labelEditInputField":"labelEdit-module_labelEditInputField__tb-J4"};
 
 var _excluded$6 = ["formState"];
 function ownKeys$k(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -32038,7 +32038,7 @@ function LabelEdit(props) {
     result: function result() {
       return deserialize(_result.label);
     },
-    className: styles$8.labelEdit,
+    className: styles$7.labelEdit,
     buttons: ['Cancel', 'OK'],
     buttonsNameMap: {
       OK: 'Apply'
@@ -32059,7 +32059,7 @@ function LabelEdit(props) {
         maxLength: "20",
         size: "10",
         autoFocus: true,
-        className: styles$8.labelEditInputField
+        className: styles$7.labelEditInputField
       })
     }))
   });
@@ -32070,7 +32070,7 @@ var LabelEdit$1 = connect(function (store) {
   };
 })(LabelEdit);
 
-var classes$i = {"button-common-styles":"AtomInfo-module_button-common-styles__x3ucv","scrollbar":"AtomInfo-module_scrollbar__8GiyC","ket_atom_info":"AtomInfo-module_ket_atom_info__GOuZ6","none":"AtomInfo-module_none__PRuzx"};
+var classes$j = {"button-common-styles":"AtomInfo-module_button-common-styles__x3ucv","scrollbar":"AtomInfo-module_scrollbar__8GiyC","ket_atom_info":"AtomInfo-module_ket_atom_info__GOuZ6","none":"AtomInfo-module_none__PRuzx"};
 
 function AtomInfo(_ref) {
   var el = _ref.el,
@@ -32085,7 +32085,7 @@ function AtomInfo(_ref) {
     fontSize: '18px'
   };
   return jsxs("div", {
-    className: clsx(classes$i.ket_atom_info, !isInfo && classes$i.none),
+    className: clsx(classes$j.ket_atom_info, !isInfo && classes$j.none),
     children: [jsx("div", {
       style: numberStyle,
       children: el.number
@@ -32182,7 +32182,7 @@ function OutinerRow(_ref) {
   });
 }
 
-var styles$7 = {"button-common-styles":"ElementsTable-module_button-common-styles__-6eHN","scrollbar":"ElementsTable-module_scrollbar__0R-HA","table":"ElementsTable-module_table__iNPVY","main_row":"ElementsTable-module_main_row__csN5a","outiner_row":"ElementsTable-module_outiner_row__fzfGL","noble":"ElementsTable-module_noble__65B92","alkali":"ElementsTable-module_alkali__sM9z9","alkaline-earth":"ElementsTable-module_alkaline-earth__t2h2s","metalloid":"ElementsTable-module_metalloid__Ui4Y8","other-nonmetal":"ElementsTable-module_other-nonmetal__mbkMN","post-transition":"ElementsTable-module_post-transition__k4C-G","transition":"ElementsTable-module_transition__GCnID","lanthanide":"ElementsTable-module_lanthanide__wVoLa","actinide":"ElementsTable-module_actinide__bVCBg","halogen":"ElementsTable-module_halogen__W6EjM","unknown-props":"ElementsTable-module_unknown-props__d9rq4","unknown-state":"ElementsTable-module_unknown-state__lRBCp","button":"ElementsTable-module_button__xCaL4","selected":"ElementsTable-module_selected__B9LGf"};
+var styles$6 = {"button-common-styles":"ElementsTable-module_button-common-styles__-6eHN","scrollbar":"ElementsTable-module_scrollbar__0R-HA","table":"ElementsTable-module_table__iNPVY","main_row":"ElementsTable-module_main_row__csN5a","outiner_row":"ElementsTable-module_outiner_row__fzfGL","noble":"ElementsTable-module_noble__65B92","alkali":"ElementsTable-module_alkali__sM9z9","alkaline-earth":"ElementsTable-module_alkaline-earth__t2h2s","metalloid":"ElementsTable-module_metalloid__Ui4Y8","other-nonmetal":"ElementsTable-module_other-nonmetal__mbkMN","post-transition":"ElementsTable-module_post-transition__k4C-G","transition":"ElementsTable-module_transition__GCnID","lanthanide":"ElementsTable-module_lanthanide__wVoLa","actinide":"ElementsTable-module_actinide__bVCBg","halogen":"ElementsTable-module_halogen__W6EjM","unknown-props":"ElementsTable-module_unknown-props__d9rq4","unknown-state":"ElementsTable-module_unknown-state__lRBCp","button":"ElementsTable-module_button__xCaL4","selected":"ElementsTable-module_selected__B9LGf"};
 
 function ownKeys$h(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$h(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$h(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$h(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -32240,7 +32240,7 @@ var ElementsTable = function (_Component) {
       var type = metalPrefix.includes(item.type) ? "".concat(item.type, " ").concat(atomClassNames.metal) : item.type || atomClassNames.unknownProps;
       var classes = [].concat(_toConsumableArray(type.split(' ')), [item.state || atomClassNames.unknownState, item.origin, atomClassNames.button, selected(item.label) && atomClassNames.selected]);
       return classes.map(function (className) {
-        return styles$7[className];
+        return styles$6[className];
       });
     });
     return _this;
@@ -32265,12 +32265,12 @@ var ElementsTable = function (_Component) {
         onDoubleClick: onDoubleClick
       };
       return jsxs("table", {
-        className: styles$7.table,
+        className: styles$6.table,
         summary: "Periodic table of the chemical elements",
         children: [jsx(Header, {}), main.map(function (row, index) {
           return jsx(MainRow, _objectSpread$h({
             atomClassNames: _this2.getAtomClassNames,
-            className: styles$7.main_row,
+            className: styles$6.main_row,
             row: row,
             caption: index + 1,
             refer: function refer(element) {
@@ -32279,12 +32279,12 @@ var ElementsTable = function (_Component) {
           }, callbacks), index);
         }), jsx(OutinerRow, _objectSpread$h({
           atomClassNames: this.getAtomClassNames,
-          className: styles$7.outiner_row,
+          className: styles$6.outiner_row,
           row: lanthanides,
           caption: "*"
         }, callbacks)), jsx(OutinerRow, _objectSpread$h({
           atomClassNames: this.getAtomClassNames,
-          className: styles$7.outiner_row,
+          className: styles$6.outiner_row,
           row: actinides,
           caption: "**"
         }, callbacks))]
@@ -32294,37 +32294,37 @@ var ElementsTable = function (_Component) {
   return ElementsTable;
 }(Component);
 
-var styles$6 = {"horizintalNodeLines":"BoxWithLines-module_horizintalNodeLines__QO-Su","upperLines":"BoxWithLines-module_upperLines__8pL-R","lowerLine":"BoxWithLines-module_lowerLine__tBZJd","verticalNodeLines":"BoxWithLines-module_verticalNodeLines__wBgwS"};
+var styles$5 = {"horizintalNodeLines":"BoxWithLines-module_horizintalNodeLines__QO-Su","upperLines":"BoxWithLines-module_upperLines__8pL-R","lowerLine":"BoxWithLines-module_lowerLine__tBZJd","verticalNodeLines":"BoxWithLines-module_verticalNodeLines__wBgwS"};
 
 var HorizontalBoxWithLines = function HorizontalBoxWithLines() {
   return jsxs("div", {
-    className: styles$6.horizintalNodeLines,
+    className: styles$5.horizintalNodeLines,
     children: [jsx("div", {
-      className: styles$6.upperLines
+      className: styles$5.upperLines
     }), jsx("div", {
-      className: styles$6.lowerLine
+      className: styles$5.lowerLine
     })]
   });
 };
 var VerticalBoxWithLines = function VerticalBoxWithLines() {
   return jsxs("div", {
-    className: styles$6.verticalNodeLines,
+    className: styles$5.verticalNodeLines,
     children: [jsx("div", {
-      className: styles$6.upperLines
+      className: styles$5.upperLines
     }), jsx("div", {
-      className: styles$6.lowerLine
+      className: styles$5.lowerLine
     })]
   });
 };
 
-var classes$h = {"button-common-styles":"GenSet-module_button-common-styles__0Ro-U","scrollbar":"GenSet-module_scrollbar__Ev8Uz","genGroupLegendBox":"GenSet-module_genGroupLegendBox__CSTQr","legendBox":"GenSet-module_legendBox__0zIAk","SpecialNodes":"GenSet-module_SpecialNodes__oFKp3","AtomGenerics":"GenSet-module_AtomGenerics__MoQCf","GroupGenerics":"GenSet-module_GroupGenerics__pFPtX","Cyclic":"GenSet-module_Cyclic__VJRtt","Acyclic":"GenSet-module_Acyclic__R97MM","CyclicCarbo":"GenSet-module_CyclicCarbo__Aanb0","AcyclicCarbo":"GenSet-module_AcyclicCarbo__nowGn","CyclicHetero":"GenSet-module_CyclicHetero__bbOnT","AcyclicHetero":"GenSet-module_AcyclicHetero__hnr4G"};
+var classes$i = {"button-common-styles":"GenSet-module_button-common-styles__0Ro-U","scrollbar":"GenSet-module_scrollbar__Ev8Uz","genGroupLegendBox":"GenSet-module_genGroupLegendBox__CSTQr","legendBox":"GenSet-module_legendBox__0zIAk","SpecialNodes":"GenSet-module_SpecialNodes__oFKp3","AtomGenerics":"GenSet-module_AtomGenerics__MoQCf","GroupGenerics":"GenSet-module_GroupGenerics__pFPtX","Cyclic":"GenSet-module_Cyclic__VJRtt","Acyclic":"GenSet-module_Acyclic__R97MM","CyclicCarbo":"GenSet-module_CyclicCarbo__Aanb0","AcyclicCarbo":"GenSet-module_AcyclicCarbo__nowGn","CyclicHetero":"GenSet-module_CyclicHetero__bbOnT","AcyclicHetero":"GenSet-module_AcyclicHetero__hnr4G"};
 
 var isGenericGroup = function isGenericGroup(group) {
   var cyclicGroups = ['Acyclic', 'Cyclic', 'Acyclic Carbo', 'Cyclic Carbo', 'Acyclic Hetero', 'Cyclic Hetero'];
   return cyclicGroups.includes(group);
 };
 
-var classes$g = {"button-common-styles":"ButtonGenSet-module_button-common-styles__3bEj7","scrollbar":"ButtonGenSet-module_scrollbar__CKIcM","button":"ButtonGenSet-module_button__hBoCQ","selected":"ButtonGenSet-module_selected__XAfYj"};
+var classes$h = {"button-common-styles":"ButtonGenSet-module_button-common-styles__3bEj7","scrollbar":"ButtonGenSet-module_scrollbar__CKIcM","button":"ButtonGenSet-module_button__hBoCQ","selected":"ButtonGenSet-module_selected__XAfYj"};
 
 var ButtonGenSet = function ButtonGenSet(_ref) {
   var button = _ref.button,
@@ -32341,7 +32341,7 @@ var ButtonGenSet = function ButtonGenSet(_ref) {
     },
     title: titleText,
     disabled: disabled,
-    className: clsx(_defineProperty$1({}, classes$g.selected, selected(button.label)), classes$g.button),
+    className: clsx(_defineProperty$1({}, classes$h.selected, selected(button.label)), classes$h.button),
     children: button.label
   });
 };
@@ -32363,7 +32363,7 @@ function GenSet(_ref) {
       return jsxs("fieldset", {
         className: className,
         children: [jsx("div", {
-          className: classes$h[getGroupClassName(group)],
+          className: classes$i[getGroupClassName(group)],
           children: buttons.map(function (button, index) {
             return jsx(ButtonGenSet, {
               button: button,
@@ -32373,14 +32373,14 @@ function GenSet(_ref) {
             }, index);
           })
         }), !isGenericGroup(group) && caption && jsx("div", {
-          className: classes$h.legendBox,
+          className: classes$i.legendBox,
           children: jsx("legend", {
             children: caption
           })
         }), isGenericGroup(group) && caption && jsx("div", {
-          className: classes$h.genGroupLegendBox,
+          className: classes$i.genGroupLegendBox,
           children: jsx("legend", {
-            className: classes$h.genGroupLegend,
+            className: classes$i.genGroupLegend,
             children: caption
           })
         })]
@@ -32389,7 +32389,7 @@ function GenSet(_ref) {
   });
 }
 
-var styles$5 = {"fieldFlexWrapper":"GenGroup-module_fieldFlexWrapper__mBHRt","buttonContainer":"GenGroup-module_buttonContainer__7qTti","genButtonContainer":"GenGroup-module_genButtonContainer__6Bwe1","subGroup":"GenGroup-module_subGroup__afiEU","legendMain":"GenGroup-module_legendMain__h-Wl3","legend":"GenGroup-module_legend__JWafm","fieldset":"GenGroup-module_fieldset__JehYt"};
+var styles$4 = {"fieldFlexWrapper":"GenGroup-module_fieldFlexWrapper__mBHRt","buttonContainer":"GenGroup-module_buttonContainer__7qTti","genButtonContainer":"GenGroup-module_genButtonContainer__6Bwe1","subGroup":"GenGroup-module_subGroup__afiEU","legendMain":"GenGroup-module_legendMain__h-Wl3","legend":"GenGroup-module_legend__JWafm","fieldset":"GenGroup-module_fieldset__JehYt"};
 
 var getLegendClassname = function getLegendClassname(title) {
   var mainTitles = ['Atom Generics', 'Special Nodes', 'Group Generics', 'Acyclic', 'Cyclic'];
@@ -32402,19 +32402,19 @@ var GenGroup = function GenGroup(_ref) {
     selected = _ref.selected,
     disabledQueryElements = _ref.disabledQueryElements;
   return jsx("div", {
-    className: styles$5.fieldFlexWrapper,
+    className: styles$4.fieldFlexWrapper,
     children: jsxs("fieldset", {
-      className: styles$5.fieldset,
+      className: styles$4.fieldset,
       children: [jsx("legend", {
-        className: styles$5[getLegendClassname(group.title)],
+        className: styles$4[getLegendClassname(group.title)],
         children: group.title
       }), jsx("div", {
-        className: isGenericGroup(group.title) ? styles$5.genButtonContainer : styles$5.buttonContainer,
+        className: isGenericGroup(group.title) ? styles$4.genButtonContainer : styles$4.buttonContainer,
         children: group.itemSets && jsx(GenSet, {
           labels: group.itemSets,
           selected: selected,
           onAtomSelect: onAtomSelect,
-          className: styles$5.subGroup,
+          className: styles$4.subGroup,
           group: group.title,
           disabledQueryElements: disabledQueryElements
         })
@@ -32423,7 +32423,7 @@ var GenGroup = function GenGroup(_ref) {
   });
 };
 
-var classes$f = {"button-common-styles":"GenericGroups-module_button-common-styles__nYUJe","scrollbar":"GenericGroups-module_scrollbar__5iavS","genericGroups":"GenericGroups-module_genericGroups__z4EaG","topGroupsContainer":"GenericGroups-module_topGroupsContainer__bMeoG","groupGenerics":"GenericGroups-module_groupGenerics__6UpH6","subgroupContainer":"GenericGroups-module_subgroupContainer__xULxX"};
+var classes$g = {"button-common-styles":"GenericGroups-module_button-common-styles__nYUJe","scrollbar":"GenericGroups-module_scrollbar__5iavS","genericGroups":"GenericGroups-module_genericGroups__z4EaG","topGroupsContainer":"GenericGroups-module_topGroupsContainer__bMeoG","groupGenerics":"GenericGroups-module_groupGenerics__6UpH6","subgroupContainer":"GenericGroups-module_subgroupContainer__xULxX"};
 
 function ownKeys$g(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$g(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$g(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$g(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -32453,22 +32453,22 @@ function GenericGroups(_ref) {
     onAtomSelect = _ref.onAtomSelect,
     disabledQueryElements = _ref.disabledQueryElements;
   return jsxs("div", {
-    className: classes$f.genericGroups,
+    className: classes$g.genericGroups,
     children: [jsxs("div", {
-      className: classes$f.topGroupsContainer,
+      className: classes$g.topGroupsContainer,
       children: [renderGenGroupComponent(groupNames.atomsGen, selected, onAtomSelect, disabledQueryElements), renderGenGroupComponent(groupNames.specialNodes, selected, onAtomSelect, disabledQueryElements)]
     }), renderGenGroupComponent(groupNames.groupGen, selected, onAtomSelect, disabledQueryElements), jsx(HorizontalBoxWithLines, {}), jsxs("div", {
-      className: classes$f.groupGenerics,
+      className: classes$g.groupGenerics,
       children: [jsxs("div", {
         children: [renderGenGroupComponent(groupNames.groupAcyclic, selected, onAtomSelect, disabledQueryElements), jsxs("div", {
-          className: classes$f.subgroupContainer,
+          className: classes$g.subgroupContainer,
           children: [jsx(VerticalBoxWithLines, {}), jsxs("div", {
             children: [renderGenGroupComponent(groupNames.acyclicCarbo, selected, onAtomSelect, disabledQueryElements), renderGenGroupComponent(groupNames.acyclicHetero, selected, onAtomSelect, disabledQueryElements)]
           })]
         })]
       }), jsxs("div", {
         children: [renderGenGroupComponent(groupNames.groupCyclic, selected, onAtomSelect, disabledQueryElements), jsxs("div", {
-          className: classes$f.subgroupContainer,
+          className: classes$g.subgroupContainer,
           children: [jsx(VerticalBoxWithLines, {}), jsxs("div", {
             children: [renderGenGroupComponent(groupNames.cyclicCarbo, selected, onAtomSelect, disabledQueryElements), renderGenGroupComponent(groupNames.cyclicHetero, selected, onAtomSelect, disabledQueryElements)]
           })]
@@ -32491,7 +32491,7 @@ var groupNames;
   groupNames["cyclicCarbo"] = "cyclic-carbo";
 })(groupNames || (groupNames = {}));
 
-var classes$e = {"fieldset":"TypeChoice-module_fieldset__yJqT7"};
+var classes$f = {"fieldset":"TypeChoice-module_fieldset__yJqT7"};
 
 var _excluded$5 = ["value", "onChange"];
 function ownKeys$f(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -32511,7 +32511,7 @@ function TypeChoice(_ref) {
     _onChange = _ref.onChange,
     props = _objectWithoutProperties(_ref, _excluded$5);
   return jsx("fieldset", {
-    className: classes$e.fieldset,
+    className: classes$f.fieldset,
     children: typeSchema.map(function (type) {
       return jsxs("label", {
         children: [jsx(GenericInput, _objectSpread$f({
@@ -32527,7 +32527,7 @@ function TypeChoice(_ref) {
   });
 }
 
-var classes$d = {"button-common-styles":"PeriodTable-module_button-common-styles__8JrOW","scrollbar":"PeriodTable-module_scrollbar__iG-vx","elementsTable":"PeriodTable-module_elementsTable__Vcz12","dialogHeader":"PeriodTable-module_dialogHeader__-Wgw4","tabs":"PeriodTable-module_tabs__q-2GL","tabsContent":"PeriodTable-module_tabsContent__5rij5","contentGeneral":"PeriodTable-module_contentGeneral__-XKPp","periodTable":"PeriodTable-module_periodTable__l-Uqx","addAtom":"PeriodTable-module_addAtom__ehSSN"};
+var classes$e = {"button-common-styles":"PeriodTable-module_button-common-styles__8JrOW","scrollbar":"PeriodTable-module_scrollbar__iG-vx","elementsTable":"PeriodTable-module_elementsTable__Vcz12","dialogHeader":"PeriodTable-module_dialogHeader__-Wgw4","tabs":"PeriodTable-module_tabs__q-2GL","tabsContent":"PeriodTable-module_tabsContent__5rij5","contentGeneral":"PeriodTable-module_contentGeneral__-XKPp","periodTable":"PeriodTable-module_periodTable__l-Uqx","addAtom":"PeriodTable-module_addAtom__ehSSN"};
 
 function ownKeys$e(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$e(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$e(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$e(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -32555,7 +32555,7 @@ var Table$1 = function (_Component) {
     });
     _defineProperty$1(_assertThisInitialized$2(_this), "headerContent", function () {
       return jsxs("div", {
-        className: classes$d.dialogHeader,
+        className: classes$e.dialogHeader,
         children: [jsx(Icon, {
           name: "period-table"
         }), jsx("span", {
@@ -32641,7 +32641,7 @@ var Table$1 = function (_Component) {
       var HeaderContent = this.headerContent;
       return jsx(Dialog, {
         headerContent: jsx(HeaderContent, {}),
-        className: classes$d.elementsTable,
+        className: classes$e.elementsTable,
         params: this.props,
         result: this.result,
         buttons: ['Cancel', 'OK'],
@@ -32654,7 +32654,7 @@ var Table$1 = function (_Component) {
           onChange: this.changeType
         }) : null,
         children: jsxs("div", {
-          className: classes$d.periodTable,
+          className: classes$e.periodTable,
           children: [jsx(AtomInfo, {
             el: this.state.current,
             isInfo: this.state.isInfo
@@ -32708,7 +32708,7 @@ var mapDispatchToProps$5 = function mapDispatchToProps(dispatch, ownProps) {
 };
 var PeriodTable = connect(mapStateToProps$3, mapDispatchToProps$5)(Table$1);
 
-var classes$c = {"extendedTable":"ExtendedTable-module_extendedTable__2-hjV"};
+var classes$d = {"extendedTable":"ExtendedTable-module_extendedTable__2-hjV"};
 
 function ownKeys$d(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$d(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$d(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$d(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -32740,7 +32740,7 @@ var Table = function Table(props) {
   return jsx(Dialog, {
     title: "Extended Table",
     withDivider: true,
-    className: classes$c.extendedTable,
+    className: classes$d.extendedTable,
     params: props,
     result: result,
     buttons: ['Cancel', 'OK'],
@@ -32787,7 +32787,7 @@ var mapDispatchToProps$4 = function mapDispatchToProps(dispatch, ownProps) {
 };
 var ExtendedTable = connect(mapStateToProps$2, mapDispatchToProps$4)(Table);
 
-var classes$b = {"window":"RemoveFG-module_window__6PHH4","question":"RemoveFG-module_question__J8Qzx","header":"RemoveFG-module_header__1hBAs","footer":"RemoveFG-module_footer__8wImu","buttonOk":"RemoveFG-module_buttonOk__zR5x4","buttonCancel":"RemoveFG-module_buttonCancel__xCaJt"};
+var classes$c = {"window":"RemoveFG-module_window__6PHH4","question":"RemoveFG-module_question__J8Qzx","header":"RemoveFG-module_header__1hBAs","footer":"RemoveFG-module_footer__8wImu","buttonOk":"RemoveFG-module_buttonOk__zR5x4","buttonCancel":"RemoveFG-module_buttonCancel__xCaJt"};
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -32822,26 +32822,26 @@ var RemoveFG = function RemoveFG(props) {
       return event.preventDefault();
     },
     tabIndex: -1,
-    className: classes$b.window,
+    className: classes$c.window,
     children: [jsx("header", {
-      className: classes$b.header,
+      className: classes$c.header,
       children: "Edit Abbreviation"
     }), jsx("div", {
-      className: classes$b.question,
+      className: classes$c.question,
       children: "A change was detected for the abbreviation. Do you want to remove the abbreviation information from the structure and continue work with separate atoms and bonds?"
     }), jsxs("footer", {
-      className: classes$b.footer,
+      className: classes$c.footer,
       children: [jsx("input", {
         type: "button",
         value: 'Cancel',
-        className: classes$b.buttonCancel,
+        className: classes$c.buttonCancel,
         onClick: function onClick() {
           return exit('onOk', false);
         }
       }), jsx("input", {
         type: "button",
         value: 'Remove Abbreviation',
-        className: classes$b.buttonOk,
+        className: classes$c.buttonOk,
         onClick: function onClick() {
           return exit('onOk', remove());
         }
@@ -32881,7 +32881,7 @@ function ButtonList(_ref) {
   });
 }
 
-var classes$a = {"button-common-styles":"rgroup-module_button-common-styles__O66iR","scrollbar":"rgroup-module_scrollbar__GmU8o","rgroup":"rgroup-module_rgroup__Pm-uA","selected":"rgroup-module_selected__hP5cM"};
+var classes$b = {"button-common-styles":"rgroup-module_button-common-styles__O66iR","scrollbar":"rgroup-module_scrollbar__GmU8o","rgroup":"rgroup-module_rgroup__Pm-uA","selected":"rgroup-module_selected__hP5cM"};
 
 var _excluded$4 = ["disabledIds", "values", "formState", "type"];
 function ownKeys$c(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -32894,7 +32894,7 @@ function RGroup(_ref) {
     props = _objectWithoutProperties(_ref, _excluded$4);
   return jsx(Dialog, {
     title: "R-Group",
-    className: classes$a.rgroup,
+    className: classes$b.rgroup,
     params: props,
     result: function result() {
       return formState.result;
@@ -32916,7 +32916,7 @@ function RGroup(_ref) {
         labelPos: false,
         component: ButtonList,
         disabledIds: disabledIds,
-        classes: classes$a
+        classes: classes$b
       })
     }))
   });
@@ -32969,7 +32969,7 @@ function SDataFieldset(_ref) {
   });
 }
 
-var classes$9 = {"button-common-styles":"sgroup-module_button-common-styles__MAeEP","scrollbar":"sgroup-module_scrollbar__T3fpf","sgroup":"sgroup-module_sgroup__Kh2Xj"};
+var classes$a = {"button-common-styles":"sgroup-module_button-common-styles__MAeEP","scrollbar":"sgroup-module_scrollbar__T3fpf","sgroup":"sgroup-module_sgroup__Kh2Xj"};
 
 function ownKeys$b(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$b(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$b(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$b(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -33010,7 +33010,7 @@ function SGroupFieldset(_ref) {
   var result = formState.result;
   var type = result.type;
   return jsx("fieldset", {
-    className: type === 'DAT' ? classes$9.data : 'base',
+    className: type === 'DAT' ? classes$a.data : 'base',
     children: content(type)
   });
 }
@@ -33033,7 +33033,7 @@ function Sgroup(_ref) {
   }, [_result.context, _result.fieldName, _result.fieldValue, type]);
   return jsx(Dialog, {
     title: "S-Group Properties",
-    className: classes$9.sgroup,
+    className: classes$a.sgroup,
     result: function result() {
       return _result;
     },
@@ -33070,24 +33070,24 @@ var SGroup = connect(function (store) {
   };
 })(Sgroup);
 
-var classes$8 = {"button-common-styles":"template-lib-module_button-common-styles__9adxB","scrollbar":"template-lib-module_scrollbar__ZFwCC","warning":"template-lib-module_warning__UqgEG","dialogHeader":"template-lib-module_dialogHeader__-AmwE","button":"template-lib-module_button__LKf1c","dialog_body":"template-lib-module_dialog_body__QtL0J","inputContainer":"template-lib-module_inputContainer__dxoHA","searchIcon":"template-lib-module_searchIcon__o7cAy","accordionSummary":"template-lib-module_accordionSummary__2hIop","groupIcon":"template-lib-module_groupIcon__LBIRH","expandIcon":"template-lib-module_expandIcon__Fb1EU","tabsContent":"template-lib-module_tabsContent__1QMnN","resultsContainer":"template-lib-module_resultsContainer__KnPBZ","saveButton":"template-lib-module_saveButton__8PE6t","tabs":"template-lib-module_tabs__YkpEG"};
+var classes$9 = {"button-common-styles":"template-lib-module_button-common-styles__9adxB","scrollbar":"template-lib-module_scrollbar__ZFwCC","warning":"template-lib-module_warning__UqgEG","dialogHeader":"template-lib-module_dialogHeader__-AmwE","button":"template-lib-module_button__LKf1c","dialog_body":"template-lib-module_dialog_body__QtL0J","inputContainer":"template-lib-module_inputContainer__dxoHA","searchIcon":"template-lib-module_searchIcon__o7cAy","accordionSummary":"template-lib-module_accordionSummary__2hIop","groupIcon":"template-lib-module_groupIcon__LBIRH","expandIcon":"template-lib-module_expandIcon__Fb1EU","tabsContent":"template-lib-module_tabsContent__1QMnN","resultsContainer":"template-lib-module_resultsContainer__KnPBZ","saveButton":"template-lib-module_saveButton__8PE6t","tabs":"template-lib-module_tabs__YkpEG"};
 
 var _excluded$2 = ["onInit"],
   _excluded2$1 = ["name", "onNameEdit", "onAttachEdit"];
-var _templateObject$1, _templateObject2$1, _templateObject3$1, _templateObject4$1, _templateObject5$1, _templateObject6$1, _templateObject7$1, _templateObject8$1, _templateObject9$1, _templateObject10, _templateObject11, _templateObject12;
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12;
 function ownKeys$9(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$9(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$9(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _callSuper(t, o, e) { return o = _getPrototypeOf$2(o), _possibleConstructorReturn$2(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf$2(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
-var TemplateEditDialog = styled(Dialog)(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteral(["\n  background-color: #fff;\n\n  & header {\n    text-transform: none;\n    border-bottom: 1px solid #e1e5ea;\n    margin: 0;\n    padding: 12px;\n  }\n\n  & form {\n    display: flex;\n\n    & label::after {\n      top: 92px;\n      margin-right: 12px;\n    }\n  }\n"])));
-var Editor$2 = styled('div')(_templateObject2$1 || (_templateObject2$1 = _taggedTemplateLiteral(["\n  border: 1px solid #b4b9d6;\n  background-color: #ffff;\n  border-radius: 5px;\n  position: relative;\n  height: 300px;\n  width: 330px;\n  overflow: hidden;\n\n  & .structEditor {\n    height: 100%;\n    width: 100%;\n    border: none;\n  }\n"])));
-var Warning = styled('div')(_templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral(["\n  padding: 0 5px;\n"])));
-var Message = styled('div')(_templateObject4$1 || (_templateObject4$1 = _taggedTemplateLiteral(["\n  background-color: #e1e5ea;\n  color: #333333;\n  padding: 10px 12px;\n  border-top: 1px solid #cad3dd;\n  border-bottom: 1px solid #cad3dd;\n"])));
-var LeftColumn = styled('div')(_templateObject5$1 || (_templateObject5$1 = _taggedTemplateLiteral(["\n  padding: 12px;\n  border-radius: 0 0 0 8px;\n  background-color: #eff2f5;\n"])));
-var RightColumn = styled('div')(_templateObject6$1 || (_templateObject6$1 = _taggedTemplateLiteral(["\n  width: 40%;\n  min-width: 200px;\n  box-sizing: border-box;\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n"])));
-var NameInput = styled(Field)(_templateObject7$1 || (_templateObject7$1 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  margin-bottom: 12px;\n\n  & input[type='text'] {\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    border: 1px solid #cad3dd;\n    border-radius: 4px;\n    line-height: 16px;\n    font-size: 14px;\n    margin-top: 4px;\n\n    &:hover {\n      border-color: #43b5c0;\n    }\n\n    &:hover,\n    :focus {\n      box-shadow: none;\n    }\n  }\n\n  & span {\n    display: block;\n    width: 100%;\n  }\n"])));
-var AttachmentOutput = styled('span')(_templateObject8$1 || (_templateObject8$1 = _taggedTemplateLiteral(["\n  display: block;\n  width: 100%;\n  height: 24px;\n  box-sizing: border-box;\n  padding: 4px 8px;\n  border: 1px solid #cad3dd;\n  border-radius: 4px;\n  line-height: 14px;\n  font-size: 14px;\n  background-color: #eff2f5;\n  margin-top: 4px;\n"])));
-var Buttons = styled('div')(_templateObject9$1 || (_templateObject9$1 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: row;\n  margin-top: auto;\n  justify-content: flex-end;\n  gap: 8px;\n"])));
+var TemplateEditDialog = styled(Dialog)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  background-color: #fff;\n\n  & header {\n    text-transform: none;\n    border-bottom: 1px solid #e1e5ea;\n    margin: 0;\n    padding: 12px;\n  }\n\n  & form {\n    display: flex;\n\n    & label::after {\n      top: 92px;\n      margin-right: 12px;\n    }\n  }\n"])));
+var Editor$2 = styled('div')(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  border: 1px solid #b4b9d6;\n  background-color: #ffff;\n  border-radius: 5px;\n  position: relative;\n  height: 300px;\n  width: 330px;\n  overflow: hidden;\n\n  & .structEditor {\n    height: 100%;\n    width: 100%;\n    border: none;\n  }\n"])));
+var Warning = styled('div')(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n  padding: 0 5px;\n"])));
+var Message = styled('div')(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n  background-color: #e1e5ea;\n  color: #333333;\n  padding: 10px 12px;\n  border-top: 1px solid #cad3dd;\n  border-bottom: 1px solid #cad3dd;\n"])));
+var LeftColumn = styled('div')(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n  padding: 12px;\n  border-radius: 0 0 0 8px;\n  background-color: #eff2f5;\n"])));
+var RightColumn = styled('div')(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  width: 40%;\n  min-width: 200px;\n  box-sizing: border-box;\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n"])));
+var NameInput = styled(Field)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  margin-bottom: 12px;\n\n  & input[type='text'] {\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    border: 1px solid #cad3dd;\n    border-radius: 4px;\n    line-height: 16px;\n    font-size: 14px;\n    margin-top: 4px;\n\n    &:hover {\n      border-color: #43b5c0;\n    }\n\n    &:hover,\n    :focus {\n      box-shadow: none;\n    }\n  }\n\n  & span {\n    display: block;\n    width: 100%;\n  }\n"])));
+var AttachmentOutput = styled('span')(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n  display: block;\n  width: 100%;\n  height: 24px;\n  box-sizing: border-box;\n  padding: 4px 8px;\n  border: 1px solid #cad3dd;\n  border-radius: 4px;\n  line-height: 14px;\n  font-size: 14px;\n  background-color: #eff2f5;\n  margin-top: 4px;\n"])));
+var Buttons = styled('div')(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: row;\n  margin-top: auto;\n  justify-content: flex-end;\n  gap: 8px;\n"])));
 var buttonCommonStyles = css(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["\n  width: fit-content;\n  padding: 5px 8px;\n  text-transform: none;\n  font-size: 12px;\n  line-height: 14px;\n  box-shadow: none;\n"])));
 var SaveButton = styled(Button$1)(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["\n  ", "\n  background-color: #167782;\n\n  &:hover {\n    background-color: #43b5c0;\n    box-shadow: none;\n  }\n\n  &:disabled {\n    background-color: #e1e5ea;\n    color: #333333;\n  }\n"])), buttonCommonStyles);
 var CancelButton = styled(Button$1)(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["\n  ", "\n  border-color: #585858;\n  color: #585858;\n\n  &:hover {\n    border-color: #333333;\n    color: #333333;\n    box-shadow: none;\n  }\n"])), buttonCommonStyles);
@@ -33222,14 +33222,14 @@ var Attach = function (_Component) {
               children: [jsx(CancelButton, {
                 variant: "outlined",
                 onClick: this.props.onCancel,
-                className: classes$8.button,
+                className: classes$9.button,
                 children: "Cancel"
               }), jsx(SaveButton, {
                 variant: "contained",
                 onClick: function onClick() {
                   return _this2.props.onOk(_this2.onResult());
                 },
-                className: classes$8.button,
+                className: classes$9.button,
                 disabled: !this.checkIsValidName(name),
                 children: this.mode === this.MODES.SAVE ? 'Save' : 'Edit'
               })]
@@ -33307,7 +33307,7 @@ function getScale(struct) {
   return 40;
 }
 
-var classes$7 = {"button-common-styles":"TemplateTable-module_button-common-styles__ZYUa5","scrollbar":"TemplateTable-module_scrollbar__aSGhu","tableContent":"TemplateTable-module_tableContent__dnVKg","structTitle":"TemplateTable-module_structTitle__2XUWI","twoRowsTitleTable":"TemplateTable-module_twoRowsTitleTable__ZYwHq","oneRowTitleTable":"TemplateTable-module_oneRowTitleTable__N8Ibd","struct":"TemplateTable-module_struct__lOLBI","selectedTitle":"TemplateTable-module_selectedTitle__J-cte","td":"TemplateTable-module_td__6LIhx","selected":"TemplateTable-module_selected__qZEF9","button":"TemplateTable-module_button__dpOF0","deleteButton":"TemplateTable-module_deleteButton__KfBpW","editButton":"TemplateTable-module_editButton__A0BoE","structure":"TemplateTable-module_structure__rI84W"};
+var classes$8 = {"button-common-styles":"TemplateTable-module_button-common-styles__ZYUa5","scrollbar":"TemplateTable-module_scrollbar__aSGhu","tableContent":"TemplateTable-module_tableContent__dnVKg","structTitle":"TemplateTable-module_structTitle__2XUWI","twoRowsTitleTable":"TemplateTable-module_twoRowsTitleTable__ZYwHq","oneRowTitleTable":"TemplateTable-module_oneRowTitleTable__N8Ibd","struct":"TemplateTable-module_struct__lOLBI","selectedTitle":"TemplateTable-module_selectedTitle__J-cte","td":"TemplateTable-module_td__6LIhx","selected":"TemplateTable-module_selected__qZEF9","button":"TemplateTable-module_button__dpOF0","deleteButton":"TemplateTable-module_deleteButton__KfBpW","editButton":"TemplateTable-module_editButton__A0BoE","structure":"TemplateTable-module_structure__rI84W"};
 
 function ownKeys$8(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$8(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$8(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -33339,18 +33339,18 @@ var TemplateTable = function TemplateTable(props) {
     titleRows = _props$titleRows === void 0 ? 2 : _props$titleRows,
     renderOptions = props.renderOptions;
   return jsx("div", {
-    className: "".concat(classes$7.tableContent, " ").concat(titleRows === 1 ? classes$7.oneRowTitleTable : classes$7.twoRowsTitleTable),
+    className: "".concat(classes$8.tableContent, " ").concat(titleRows === 1 ? classes$8.oneRowTitleTable : classes$8.twoRowsTitleTable),
     "data-testid": "templates-modal",
     children: templates.map(function (tmpl, i) {
       return jsxs("div", {
-        className: tmpl.struct !== (selected === null || selected === void 0 ? void 0 : selected.struct) ? classes$7.td : "".concat(classes$7.td, " ").concat(classes$7.selected),
+        className: tmpl.struct !== (selected === null || selected === void 0 ? void 0 : selected.struct) ? classes$8.td : "".concat(classes$8.td, " ").concat(classes$8.selected),
         title: greekify(getTemplateTitle(tmpl, i)),
         onClick: function onClick() {
           return onSelect(tmpl);
         },
         children: [jsx(StructRender, {
           struct: tmpl.struct,
-          className: classes$7.struct,
+          className: classes$8.struct,
           fullsize: true,
           options: _objectSpread$8(_objectSpread$8({}, renderOptions), {}, {
             autoScaleMargin: 10,
@@ -33358,10 +33358,10 @@ var TemplateTable = function TemplateTable(props) {
             downScale: true
           })
         }), jsx("div", {
-          className: "".concat(classes$7.structTitle, " ").concat((selected === null || selected === void 0 ? void 0 : selected.struct) === tmpl.struct ? classes$7.selectedTitle : ''),
+          className: "".concat(classes$8.structTitle, " ").concat((selected === null || selected === void 0 ? void 0 : selected.struct) === tmpl.struct ? classes$8.selectedTitle : ''),
           children: greekify(tmplName(tmpl, i))
         }), tmpl.props.group === 'User Templates' && jsx("button", {
-          className: "".concat(classes$7.button, " ").concat(classes$7.deleteButton),
+          className: "".concat(classes$8.button, " ").concat(classes$8.deleteButton),
           onClick: function onClick() {
             return onDelete(tmpl);
           },
@@ -33369,7 +33369,7 @@ var TemplateTable = function TemplateTable(props) {
             name: "delete"
           })
         }), !isFunctionalGroupTemplate(tmpl) && !isSaltOrSolventTemplate(tmpl) && jsx("button", {
-          className: "".concat(classes$7.button, " ").concat(classes$7.editButton),
+          className: "".concat(classes$8.button, " ").concat(classes$8.editButton),
           onClick: function onClick(e) {
             e.stopPropagation();
             onAttach(tmpl);
@@ -33387,12 +33387,12 @@ var saltsAndSolventsSelector = function saltsAndSolventsSelector(state) {
   return state.saltsAndSolvents.lib;
 };
 
-var classes$6 = {"emptySearch":"emptySearchResult-module_emptySearch__aUSew"};
+var classes$7 = {"emptySearch":"emptySearchResult-module_emptySearch__aUSew"};
 
 var EmptySearchResult = function EmptySearchResult(_ref) {
   var textInfo = _ref.textInfo;
   return jsxs("div", {
-    className: classes$6.emptySearch,
+    className: classes$7.emptySearch,
     children: [jsx("p", {
       children: textInfo
     }), jsx(Icon, {
@@ -33451,7 +33451,7 @@ function TabPanel(props) {
     index = props.index,
     other = _objectWithoutProperties(props, _excluded$1);
   return jsx("div", _objectSpread$7(_objectSpread$7({
-    className: classes$8.tabPanel,
+    className: classes$9.tabPanel,
     component: "div",
     role: "tabpanel",
     id: "scrollable-auto-tabpanel-".concat(index),
@@ -33480,7 +33480,7 @@ var filterLibSelector = createSelector(function (props) {
 var FUNCTIONAL_GROUPS = 'Functional Groups';
 var HeaderContent = function HeaderContent() {
   return jsxs("div", {
-    className: classes$8.dialogHeader,
+    className: classes$9.dialogHeader,
     children: [jsx(Icon, {
       name: "template-dialog"
     }), jsx("span", {
@@ -33506,7 +33506,7 @@ var FooterContent = function FooterContent(_ref) {
     },
     children: [jsx(SaveButton$1, {
       data: data,
-      className: classes$8.saveButton,
+      className: classes$9.saveButton,
       filename: tab === TemplateTabs.TemplateLibrary ? 'ketcher-tmpls.sdf' : 'ketcher-fg-tmpls.sdf',
       children: "Save to SDF"
     }, "save-to-SDF"), clickToAddToCanvas]
@@ -33573,15 +33573,15 @@ var TemplateDialog = function TemplateDialog(props) {
       tab: tab,
       data: data
     }),
-    className: "".concat(classes$8.dialog_body),
+    className: "".concat(classes$9.dialog_body),
     params: omit(['group'], rest),
     buttons: [],
     needMargin: false,
     children: [jsxs("div", {
-      className: classes$8.inputContainer,
+      className: classes$9.inputContainer,
       children: [jsx(Input$1, {
         ref: searchInputRef,
-        className: classes$8.input,
+        className: classes$9.input,
         type: "search",
         value: filter,
         onChange: function onChange(value) {
@@ -33591,14 +33591,14 @@ var TemplateDialog = function TemplateDialog(props) {
         isFocused: true
       }), jsx(Icon, {
         name: "search",
-        className: classes$8.searchIcon
+        className: classes$9.searchIcon
       })]
     }), jsxs(Tabs$1, {
       value: tab,
       onChange: function onChange(_, value) {
         return handleTabChange(value);
       },
-      className: classes$8.tabs,
+      className: classes$9.tabs,
       children: [jsx(Tab, _objectSpread$7({
         label: "Template Library"
       }, a11yProps(TemplateTabs.TemplateLibrary))), jsx(Tab, _objectSpread$7({
@@ -33607,7 +33607,7 @@ var TemplateDialog = function TemplateDialog(props) {
         label: "Salts and Solvents"
       }, a11yProps(TemplateTabs.SaltsAndSolvents)))]
     }), jsxs("div", {
-      className: classes$8.tabsContent,
+      className: classes$9.tabsContent,
       children: [jsx(TabPanel, {
         value: tab,
         index: TemplateTabs.TemplateLibrary,
@@ -33619,14 +33619,14 @@ var TemplateDialog = function TemplateDialog(props) {
               onChange: handleAccordionChange(groupName),
               expanded: shouldGroupBeRended,
               children: [jsxs(AccordionSummary, {
-                className: classes$8.accordionSummary,
+                className: classes$9.accordionSummary,
                 expandIcon: jsx(Icon, {
-                  className: classes$8.expandIcon,
+                  className: classes$9.expandIcon,
                   name: "chevron"
                 }),
                 children: [jsx(Icon, {
                   name: "elements-group",
-                  className: classes$8.groupIcon
+                  className: classes$9.groupIcon
                 }), "".concat(greekify(groupName), " (").concat(filteredTemplateLib[groupName].length, ")")]
               }), jsx(AccordionDetails, {
                 children: jsx(TemplateTable, {
@@ -33642,7 +33642,7 @@ var TemplateDialog = function TemplateDialog(props) {
               })]
             }, groupName);
           }) : jsx("div", {
-            className: classes$8.resultsContainer,
+            className: classes$9.resultsContainer,
             children: jsx(EmptySearchResult, {
               textInfo: "No items found"
             })
@@ -33652,7 +33652,7 @@ var TemplateDialog = function TemplateDialog(props) {
         value: tab,
         index: TemplateTabs.FunctionalGroupLibrary,
         children: filteredFG !== null && filteredFG !== void 0 && filteredFG.length ? jsx("div", {
-          className: classes$8.resultsContainer,
+          className: classes$9.resultsContainer,
           children: jsx(TemplateTable, {
             titleRows: 1,
             templates: filteredFG,
@@ -33663,7 +33663,7 @@ var TemplateDialog = function TemplateDialog(props) {
             renderOptions: props.renderOptions
           })
         }) : jsx("div", {
-          className: classes$8.resultsContainer,
+          className: classes$9.resultsContainer,
           children: jsx(EmptySearchResult, {
             textInfo: "No items found"
           })
@@ -33672,7 +33672,7 @@ var TemplateDialog = function TemplateDialog(props) {
         value: tab,
         index: TemplateTabs.SaltsAndSolvents,
         children: filteredSaltsAndSolvents !== null && filteredSaltsAndSolvents !== void 0 && filteredSaltsAndSolvents.length ? jsx("div", {
-          className: classes$8.resultsContainer,
+          className: classes$9.resultsContainer,
           children: jsx(TemplateTable, {
             titleRows: 1,
             templates: filteredSaltsAndSolvents,
@@ -33683,7 +33683,7 @@ var TemplateDialog = function TemplateDialog(props) {
             renderOptions: props.renderOptions
           })
         }) : jsx("div", {
-          className: classes$8.resultsContainer,
+          className: classes$9.resultsContainer,
           children: jsx(EmptySearchResult, {
             textInfo: "No items found"
           })
@@ -33756,7 +33756,7 @@ var useClickOutside = function useClickOutside(targetRef, callback) {
   }, []);
 };
 
-var classes$5 = {"button-common-styles":"FontControl-module_button-common-styles__CMSGk","scrollbar":"FontControl-module_scrollbar__Vq3kt","fontSizeMenu":"FontControl-module_fontSizeMenu__4RvmP","fontSizeOption":"FontControl-module_fontSizeOption__eGz-q","fontBtn":"FontControl-module_fontBtn__zGgG3"};
+var classes$6 = {"button-common-styles":"FontControl-module_button-common-styles__CMSGk","scrollbar":"FontControl-module_scrollbar__Vq3kt","fontSizeMenu":"FontControl-module_fontSizeMenu__4RvmP","fontSizeOption":"FontControl-module_fontSizeOption__eGz-q","fontBtn":"FontControl-module_fontBtn__zGgG3"};
 
 var FontControl = function FontControl(_ref) {
   var editorState = _ref.editorState,
@@ -33793,7 +33793,7 @@ var FontControl = function FontControl(_ref) {
   var fontSizeOptions = useMemo(function () {
     return fontSizes.map(function (fontSize) {
       return jsx("div", {
-        className: classes$5.fontSizeOption,
+        className: classes$6.fontSizeOption,
         onMouseDown: function onMouseDown(e) {
           return setFontSize(e, "".concat(fontSize, "px"));
         },
@@ -33804,29 +33804,29 @@ var FontControl = function FontControl(_ref) {
   return jsxs("div", {
     ref: wrapperRef,
     children: [jsx("button", {
-      className: classes$5.fontBtn,
+      className: classes$6.fontBtn,
       onMouseDown: function onMouseDown(e) {
         e.preventDefault();
         setIsShowingFontSizeMenu(!isShowingFontSizeMenu);
       },
       children: parseFloat(currentFontSize)
     }), isShowingFontSizeMenu ? jsx("div", {
-      className: classes$5.fontSizeMenu,
+      className: classes$6.fontSizeMenu,
       children: fontSizeOptions
     }) : null]
   });
 };
 
-var classes$4 = {"window":"SpecialSymbolsList-module_window__4tD1N","button":"SpecialSymbolsList-module_button__uCp6O"};
+var classes$5 = {"window":"SpecialSymbolsList-module_window__4tD1N","button":"SpecialSymbolsList-module_button__uCp6O"};
 
 var SpecialSymbolsList = function SpecialSymbolsList(_ref) {
   var select = _ref.select;
   var symbols = ['α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', '℃', '℉', 'Å', '°', 'ħ', '±', '‰', '√', '←', '→', '←/', '/→', '↔', '∏', '∑', '∞', '∂', '∆', '∫', '≈', '=/', '≤', '≥'];
   return jsx("div", {
-    className: classes$4.window,
+    className: classes$5.window,
     children: symbols.map(function (symbol, id) {
       return jsx("button", {
-        className: classes$4.button,
+        className: classes$5.button,
         value: symbol,
         onMouseDown: function onMouseDown(event) {
           select(event, symbol);
@@ -33839,7 +33839,7 @@ var SpecialSymbolsList = function SpecialSymbolsList(_ref) {
   });
 };
 
-var classes$3 = {"button-common-styles":"SpecialSymbolsButton-module_button-common-styles__OZY5u","scrollbar":"SpecialSymbolsButton-module_scrollbar__BGjVm","textButton":"SpecialSymbolsButton-module_textButton__1gh-c","activeTextButton":"SpecialSymbolsButton-module_activeTextButton__jbgHY"};
+var classes$4 = {"button-common-styles":"SpecialSymbolsButton-module_button-common-styles__OZY5u","scrollbar":"SpecialSymbolsButton-module_scrollbar__BGjVm","textButton":"SpecialSymbolsButton-module_textButton__1gh-c","activeTextButton":"SpecialSymbolsButton-module_activeTextButton__jbgHY"};
 
 var SpecialSymbolsButton = function SpecialSymbolsButton(_ref) {
   var editorState = _ref.editorState,
@@ -33876,7 +33876,7 @@ var SpecialSymbolsButton = function SpecialSymbolsButton(_ref) {
         e.preventDefault();
         setShowSpecialSymbols(!showSpecialSymbols);
       },
-      className: showSpecialSymbols ? classes$3.activeTextButton : classes$3.textButton,
+      className: showSpecialSymbols ? classes$4.activeTextButton : classes$4.textButton,
       children: jsx(Icon, {
         name: "text-special-symbols"
       })
@@ -33886,7 +33886,7 @@ var SpecialSymbolsButton = function SpecialSymbolsButton(_ref) {
   });
 };
 
-var styles$4 = {"button-common-styles":"TextButton-module_button-common-styles__7F1Uf","scrollbar":"TextButton-module_scrollbar__u11Yl","textButton":"TextButton-module_textButton__Ocny2","isActive":"TextButton-module_isActive__DQ-xh"};
+var styles$3 = {"button-common-styles":"TextButton-module_button-common-styles__7F1Uf","scrollbar":"TextButton-module_scrollbar__u11Yl","textButton":"TextButton-module_textButton__Ocny2","isActive":"TextButton-module_isActive__DQ-xh"};
 
 var TextButton = function TextButton(props) {
   var toggleStyle = function toggleStyle(event, command) {
@@ -33894,7 +33894,7 @@ var TextButton = function TextButton(props) {
     props.toggleStyle(command);
   };
   return jsx("button", {
-    className: clsx(styles$4.textButton, _defineProperty$1({}, styles$4.isActive, props.active)),
+    className: clsx(styles$3.textButton, _defineProperty$1({}, styles$3.isActive, props.active)),
     title: props.button.command.toLowerCase(),
     onMouseDown: function onMouseDown(event) {
       toggleStyle(event, props.button.command);
@@ -33905,10 +33905,10 @@ var TextButton = function TextButton(props) {
   });
 };
 
-var classes$2 = {"button-common-styles":"Text-module_button-common-styles__dhz9O","scrollbar":"Text-module_scrollbar__0OhTV","textEditor":"Text-module_textEditor__EFR54","controlPanel":"Text-module_controlPanel__agLDc"};
+var classes$3 = {"button-common-styles":"Text-module_button-common-styles__dhz9O","scrollbar":"Text-module_scrollbar__0OhTV","textEditor":"Text-module_textEditor__EFR54","controlPanel":"Text-module_controlPanel__agLDc"};
 
 var _createStyles = createStyles(['font-size']),
-  styles$3 = _createStyles.styles,
+  styles$2 = _createStyles.styles,
   customStyleFn = _createStyles.customStyleFn;
 var buttons = [{
   command: TextCommand.Bold,
@@ -33995,7 +33995,7 @@ var Text = function Text(props) {
     setFocusInEditor();
   }, [setFocusInEditor]);
   return jsxs(Dialog, {
-    className: classes$2.textEditor,
+    className: classes$3.textEditor,
     title: "Text Editor",
     params: props,
     result: result,
@@ -34008,7 +34008,7 @@ var Text = function Text(props) {
     buttons: ['Cancel', 'OK'],
     withDivider: true,
     children: [jsxs("div", {
-      className: classes$2.controlPanel,
+      className: classes$3.controlPanel,
       onClick: setFocusInEditor,
       children: [buttons.map(function (button) {
         return jsx(TextButton, {
@@ -34025,7 +34025,7 @@ var Text = function Text(props) {
       }), jsx(FontControl, {
         editorState: editorState,
         setEditorState: setEditorState,
-        styles: styles$3
+        styles: styles$2
       })]
     }), jsx("span", {
       children: "Text:"
@@ -34049,26 +34049,26 @@ var Confirm = function Confirm(_ref) {
   var onOk = _ref.onOk,
     onCancel = _ref.onCancel;
   return jsxs("div", {
-    className: classes$b.window,
+    className: classes$c.window,
     children: [jsx("header", {
-      className: classes$b.header,
+      className: classes$c.header,
       children: "Warning!"
     }), jsx("div", {
-      className: classes$b.question,
+      className: classes$c.question,
       children: "Unsupported S-group type found. Would you like to import structure without it?"
     }), jsxs("footer", {
-      className: classes$b.footer,
+      className: classes$c.footer,
       children: [jsx("input", {
         type: "button",
         value: 'Cancel',
-        className: classes$b.buttonCancel,
+        className: classes$c.buttonCancel,
         onClick: function onClick() {
           return onCancel();
         }
       }), jsx("input", {
         type: "button",
         value: 'OK',
-        className: classes$b.buttonOk,
+        className: classes$c.buttonOk,
         onClick: function onClick() {
           return onOk();
         }
@@ -34087,19 +34087,19 @@ var error = {
   close: 'Close'
 };
 
-var styles$2 = {"pasteErrorModalBody":"PasteErrorModalBody-module_pasteErrorModalBody__ExG0r","shortcutsBlock":"PasteErrorModalBody-module_shortcutsBlock__e-wyA","shortcuts":"PasteErrorModalBody-module_shortcuts__x0xBs","shortcut":"PasteErrorModalBody-module_shortcut__sED-E"};
+var styles$1 = {"pasteErrorModalBody":"PasteErrorModalBody-module_pasteErrorModalBody__ExG0r","shortcutsBlock":"PasteErrorModalBody-module_shortcutsBlock__e-wyA","shortcuts":"PasteErrorModalBody-module_shortcuts__x0xBs","shortcut":"PasteErrorModalBody-module_shortcut__sED-E"};
 
 var PasteErrorModalBody = function PasteErrorModalBody() {
   return jsxs("div", {
-    className: styles$2.pasteErrorModalBody,
+    className: styles$1.pasteErrorModalBody,
     children: [jsx("div", {
       children: pasteErrorText
     }), jsx("div", {
-      className: styles$2.shortcutsBlock,
+      className: styles$1.shortcutsBlock,
       children: jsxs("div", {
-        className: styles$2.shortcuts,
+        className: styles$1.shortcuts,
         children: [jsx("div", {
-          className: styles$2.shortcut,
+          className: styles$1.shortcut,
           "data-testid": "infoModal-shortcut-for-paste",
           children: shortcut.hotKey
         }), jsx("div", {
@@ -34110,7 +34110,7 @@ var PasteErrorModalBody = function PasteErrorModalBody() {
   });
 };
 
-var styles$1 = {"infoModal":"InfoModal-module_infoModal__0Vza1","ok":"InfoModal-module_ok__BZ1ar"};
+var styles = {"infoModal":"InfoModal-module_infoModal__0Vza1","ok":"InfoModal-module_ok__BZ1ar"};
 
 function ErrorInfoModal(props) {
   var _config$paste$title, _props$title;
@@ -34121,11 +34121,11 @@ function ErrorInfoModal(props) {
     children: (_props$title = props.title) !== null && _props$title !== void 0 ? _props$title : error.message
   });
   return jsx(Dialog, {
-    className: styles$1.infoModal,
+    className: styles.infoModal,
     params: props,
     buttons: [jsx("button", {
       onClick: props.onOk,
-      className: styles$1.ok,
+      className: styles.ok,
       children: props.button || 'Close'
     }, "ok")],
     headerContent: headerContent,
@@ -34194,11 +34194,11 @@ function Modal(props) {
   var Component = modals[modal.name];
   if (!Component) throw new Error("There is no modal window named ".concat(modal.name));
   return jsx("div", {
-    className: clsx(classes$G.modalOverlay, selectClasses.selectContainer),
+    className: clsx(classes$H.modalOverlay, selectClasses.selectContainer),
     ref: containerRef,
     "data-testid": "".concat(modal.name, "-dialog"),
     children: jsx(Component, _objectSpread$6({
-      className: clsx(_defineProperty$1({}, classes$G.smallScreen, height && height <= mediaSizes$1.smallHeight || width && width <= mediaSizes$1.smallWidth))
+      className: clsx(_defineProperty$1({}, classes$H.smallScreen, height && height <= mediaSizes$1.smallHeight || width && width <= mediaSizes$1.smallWidth))
     }, rest))
   });
 }
@@ -34492,9 +34492,9 @@ var Editor$1 = connect(function (state) {
   };
 }, mapDispatchToProps$1)(StructEditor);
 
-var classes$1 = {"app":"App-module_app__8cgyF","canvas":"App-module_canvas__taJxn","top":"App-module_top__SBeSV","left":"App-module_left__2iz-i","right":"App-module_right__U7A5Q","bottom":"App-module_bottom__tQA2B"};
+var classes$2 = {"app":"App-module_app__8cgyF","canvas":"App-module_canvas__taJxn","top":"App-module_top__SBeSV","left":"App-module_left__2iz-i","right":"App-module_right__U7A5Q","bottom":"App-module_bottom__tQA2B"};
 
-var classes = {"lookupContainer":"AbbreviationLookup-module_lookupContainer__-JRMj","inputContainer":"AbbreviationLookup-module_inputContainer__6tJpn","input":"AbbreviationLookup-module_input__vCxY9","searchIcon":"AbbreviationLookup-module_searchIcon__DiK0c","optionItemContent":"AbbreviationLookup-module_optionItemContent__L1JlW","optionItem":"AbbreviationLookup-module_optionItem__dAhO-","noOptions":"AbbreviationLookup-module_noOptions__yKxml","listBox":"AbbreviationLookup-module_listBox__Y50AT"};
+var classes$1 = {"lookupContainer":"AbbreviationLookup-module_lookupContainer__-JRMj","inputContainer":"AbbreviationLookup-module_inputContainer__6tJpn","input":"AbbreviationLookup-module_input__vCxY9","searchIcon":"AbbreviationLookup-module_searchIcon__DiK0c","optionItemContent":"AbbreviationLookup-module_optionItemContent__L1JlW","optionItem":"AbbreviationLookup-module_optionItem__dAhO-","noOptions":"AbbreviationLookup-module_noOptions__yKxml","listBox":"AbbreviationLookup-module_listBox__Y50AT"};
 
 var selectCursorPosition = function selectCursorPosition(state) {
   return state.common.cursorPosition;
@@ -34674,7 +34674,7 @@ var AbbreviationLookup = function AbbreviationLookup(_ref) {
   };
   return jsx(Portal, {
     isOpen: true,
-    className: classes.lookupContainer,
+    className: classes$1.lookupContainer,
     style: portalStyle,
     children: jsx(MuiAutocomplete, {
       ref: autocompleteRef,
@@ -34689,18 +34689,18 @@ var AbbreviationLookup = function AbbreviationLookup(_ref) {
       autoHighlight: true,
       noOptionsText: loweredLookupValue ? NO_MATCHING_RESULTS_LABEL : START_TYPING_NOTIFICATION_LABEL,
       classes: {
-        option: classes.optionItem,
-        listbox: classes.listBox,
-        input: classes.input,
-        noOptions: classes.noOptions
+        option: classes$1.optionItem,
+        listbox: classes$1.listBox,
+        input: classes$1.input,
+        noOptions: classes$1.noOptions
       },
       renderInput: function renderInput(params) {
         return jsxs("div", {
-          className: classes.inputContainer,
+          className: classes$1.inputContainer,
           ref: params.InputProps.ref,
           children: [jsx(Icon, {
             name: "search",
-            className: classes.searchIcon
+            className: classes$1.searchIcon
           }), jsx("input", _objectSpread$2(_objectSpread$2({
             type: "text"
           }, params.inputProps), {}, {
@@ -34719,7 +34719,7 @@ var AbbreviationLookup = function AbbreviationLookup(_ref) {
         return jsx("li", _objectSpread$2(_objectSpread$2({}, props), {}, {
           title: option.label,
           children: jsx("div", {
-            className: classes.optionItemContent,
+            className: classes$1.optionItemContent,
             children: highlightOptionLabel(option, loweredLookupValue)
           })
         }));
@@ -34806,18 +34806,18 @@ var App = function App(props) {
   return jsx(ThemeProvider, {
     theme: muiTheme,
     children: jsxs("div", {
-      className: classes$1.app,
+      className: classes$2.app,
       children: [jsx(AppHiddenContainer, {}), jsx(Editor, {
-        className: classes$1.canvas
+        className: classes$2.canvas
       }), jsx(TopToolbarContainer, {
-        className: classes$1.top,
+        className: classes$2.top,
         togglerComponent: props.togglerComponent
       }), jsx(LeftToolbarContainer, {
-        className: classes$1.left
+        className: classes$2.left
       }), jsx(BottomToolbarContainer, {
-        className: classes$1.bottom
+        className: classes$2.bottom
       }), jsx(RightToolbarContainer, {
-        className: classes$1.right
+        className: classes$2.right
       }), jsx(AppClipArea, {}), jsx(ModalContainer, {}), jsx(AbbreviationLookupContainer, {})]
     })
   });
@@ -35011,8 +35011,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "3.0.3-unc5" ,
-                  buildDate: "2025-04-14T18:31:21" ,
+                  version: "3.0.3-unc6" ,
+                  buildDate: "2025-04-22T18:26:25" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35118,7 +35118,7 @@ function _buildKetcherAsync() {
   return _buildKetcherAsync.apply(this, arguments);
 }
 
-var styles = {"button-common-styles":"Editor-module_button-common-styles__h4pal","scrollbar":"Editor-module_scrollbar__yVsY8","small":"Editor-module_small__8cgEX","editor":"Editor-module_editor__o0Gjz","-hidden":"Editor-module_-hidden__aKodt","switchingLoader":"Editor-module_switchingLoader__OlmM6","blink":"Editor-module_blink__J7UCV"};
+var classes = {"button-common-styles":"Editor-module_button-common-styles__h4pal","scrollbar":"Editor-module_scrollbar__yVsY8","small":"Editor-module_small__8cgEX","editor":"Editor-module_editor__o0Gjz","-hidden":"Editor-module_-hidden__aKodt","switchingLoader":"Editor-module_switchingLoader__OlmM6","blink":"Editor-module_blink__J7UCV"};
 
 function ownKeys$1(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread$1(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys$1(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -35191,157 +35191,16 @@ function MicromoleculesEditor(props) {
   }, []);
   return jsx("div", {
     ref: rootElRef,
-    className: clsx(KETCHER_ROOT_NODE_CLASS_NAME, "ketcher-id-".concat(ketcherId), styles.editor, _defineProperty$1({}, styles.small, height && height <= mediaSizes.smallHeight || width && width <= mediaSizes.smallWidth))
+    className: clsx(KETCHER_ROOT_NODE_CLASS_NAME, "ketcher-id-".concat(ketcherId), classes.editor, _defineProperty$1({}, classes.small, height && height <= mediaSizes.smallHeight || width && width <= mediaSizes.smallWidth))
   });
 }
 
-var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9;
-var ElementAndDropdown = styled('div')(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  position: relative;\n  width: 28px;\n  padding: 2px;\n  flexgrow: 1;\n  display: flex;\n  justifycontent: flex-end;\n\n  @media only screen {\n    @container (min-width: 900px) {\n      width: 162px;\n      padding: 6px 3px;\n    }\n  }\n"])));
-var DropDownButton = styled(Button$1)(function () {
-  return {
-    display: 'flex',
-    justifyContent: 'space-between',
-    color: '#000000',
-    padding: '0px',
-    width: '100%',
-    minWidth: '0px',
-    '& svg:first-of-type': {
-      margin: '2px',
-      width: '20px',
-      height: '20px'
-    }
-  };
-});
-var StyledIcon = styled(Icon)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  width: 16px;\n  height: 16px;\n  transform: ", ";\n  opacity: ", ";\n"])), function (_ref) {
-  var expanded = _ref.expanded;
-  return expanded ? 'rotate(180deg)' : 'none';
-}, function (_ref2) {
-  var hidden = _ref2.hidden;
-  return hidden ? '0' : '100';
-});
-var StyledIconForMacromoleculesToggler = styled(StyledIcon)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n  display: none;\n  @media only screen {\n    @container (min-width: 900px) {\n      display: flex;\n    }\n  }\n"])));
-var CornerIcon = styled(Icon)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n  display: block;\n  width: 7px;\n  height: 7px;\n  position: absolute;\n  right: 0;\n  bottom: 0;\n  fill: @main-color;\n  @media only screen {\n    @container (min-width: 900px) {\n      display: none;\n    }\n  }\n"])));
-var ModeLabel = styled('span')(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n  display: none;\n  text-transform: none;\n  font-size: 12px;\n  text-align: left;\n  flex-grow: 1;\n  @media only screen {\n    @container (min-width: 900px) {\n      display: inline;\n    }\n  }\n"])));
-var ModeControlButton = styled('div')(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  height: 28px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0 3px;\n\n  :hover {\n    background-color: #f3f8f9;\n  }\n"])));
-var ModeButtonLable = styled('span')(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["\n  font-size: 12px;\n  flex-grow: 1;\n  text-align: start;\n  text-transform: none;\n"])));
-var Dropdown = styled(Popover)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n  & .MuiPopover-paper {\n    padding: 3px 0px;\n    width: 162px;\n    border: none;\n    border-radius: 0px 0px 4px 4px;\n    box-shadow: 0px 30px 48px -17px rgba(160, 165, 174, 0.3);\n    box-sizing: border-box;\n  }\n"])));
-var DropDownContent = styled('div')(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  white-space: nowrap;\n  word-break: keep-all;\n  background: white;\n  cursor: pointer;\n"])));
-var ModeControl = function ModeControl(_ref3) {
-  var toggle = _ref3.toggle,
-    isPolymerEditor = _ref3.isPolymerEditor;
-  var _useState = useState(false),
-    _useState2 = _slicedToArray$1(_useState, 2),
-    isExpanded = _useState2[0],
-    setIsExpanded = _useState2[1];
-  var btnRef = useRef(null);
-  var onClose = function onClose() {
-    setIsExpanded(false);
-  };
-  var onExpand = function onExpand() {
-    setIsExpanded(true);
-  };
-  var modeLabel = isPolymerEditor ? 'Macromolecules' : 'Molecules';
-  var modeIcon = isPolymerEditor ? 'macromolecules-mode' : 'molecules-mode';
-  var title = isPolymerEditor ? 'Switch to Ketcher mode' : 'Switch to Macromolecule mode';
-  return jsxs(ElementAndDropdown, {
-    title: title,
-    children: [jsxs(DropDownButton, {
-      "data-testid": "polymer-toggler",
-      onClick: onExpand,
-      ref: btnRef,
-      children: [jsx(Icon, {
-        name: modeIcon
-      }), jsxs(Fragment, {
-        children: [jsx(ModeLabel, {
-          children: modeLabel
-        }), jsx(StyledIconForMacromoleculesToggler, {
-          name: "chevron",
-          expanded: isExpanded
-        })]
-      }), jsx(Fragment, {
-        children: jsx(CornerIcon, {
-          name: "dropdown"
-        })
-      })]
-    }), jsx(Dropdown, {
-      title: "",
-      open: isExpanded,
-      onClose: onClose,
-      anchorEl: btnRef.current,
-      container: document.querySelector(KETCHER_ROOT_NODE_CSS_SELECTOR) || document.querySelector(KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR),
-      anchorOrigin: {
-        vertical: 'bottom',
-        horizontal: 'left'
-      },
-      children: jsxs(DropDownContent, {
-        children: [jsxs(ModeControlButton, {
-          "data-testid": "molecules_mode",
-          onClick: function onClick() {
-            toggle(false);
-            onClose();
-          },
-          children: [jsx(Icon, {
-            name: "molecules-mode"
-          }), jsx(ModeButtonLable, {
-            children: "Molecules"
-          }), !isPolymerEditor && jsx(StyledIcon, {
-            name: "check-mark"
-          })]
-        }), jsxs(ModeControlButton, {
-          "data-testid": "macromolecules_mode",
-          onClick: function onClick() {
-            toggle(true);
-            onClose();
-          },
-          children: [jsx(Icon, {
-            name: "macromolecules-mode"
-          }), jsx(ModeButtonLable, {
-            children: "Macromolecules"
-          }), isPolymerEditor && jsx(StyledIcon, {
-            name: "check-mark"
-          })]
-        })]
-      })
-    })]
-  });
-};
-
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty$1(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-var MacromoleculesEditor = lazy(function () {
-  return import('./index.modern-bf5ec9eb.js');
-});
 var Editor = function Editor(props) {
-  var _useState = useState(false),
-    _useState2 = _slicedToArray$1(_useState, 2),
-    showPolymerEditor = _useState2[0],
-    setShowPolymerEditor = _useState2[1];
-  var togglePolymerEditor = function togglePolymerEditor(toggleValue) {
-    setShowPolymerEditor(toggleValue);
-    window.isPolymerEditorTurnedOn = toggleValue;
-  };
-  var togglerComponent = !props.disableMacromoleculesEditor ? jsx(ModeControl, {
-    toggle: togglePolymerEditor,
-    isPolymerEditor: showPolymerEditor
-  }) : undefined;
-  useEffect(function () {
-    return function () {
-      window.isPolymerEditorTurnedOn = false;
-    };
-  }, []);
-  return jsx(Fragment, {
-    children: showPolymerEditor ? jsx(Suspense, {
-      fallback: jsx("div", {
-        className: styles.switchingLoader,
-        children: jsx(LoadingCircles, {})
-      }),
-      children: jsx(MacromoleculesEditor, {
-        togglerComponent: togglerComponent
-      })
-    }) : jsx(MicromoleculesEditor, _objectSpread(_objectSpread({}, props), {}, {
-      togglerComponent: togglerComponent
-    }))
-  });
+  return jsx(MicromoleculesEditor, _objectSpread(_objectSpread({}, props), {}, {
+    togglerComponent: undefined
+  }));
 };
 
 export { ACS_STYLE_DEFAULT_SETTINGS, Accordion$1 as Accordion, AmbiguousMonomerPreview, appContext as AppContext, Button, Container, Content, ContentLine, Dialog, Editor, EditorClassName, Header$1 as Header, Icon, IconButton, IconButtonCustomIcon, IndigoProvider, InfoModal$1 as InfoModal, Input$2 as Input, KETCHER_MACROMOLECULES_ROOT_NODE_SELECTOR, KETCHER_ROOT_NODE_CLASS_NAME, KETCHER_ROOT_NODE_CSS_SELECTOR, MODES, MonomerName, PresetPosition, PreviewType, RatioBar, STRUCT_SERVICE_INITIALIZED_EVENT, STRUCT_SERVICE_NO_RENDER_INITIALIZED_EVENT, STRUCT_TYPE, StructRender, calculateAmbiguousMonomerPreviewLeft, calculateAmbiguousMonomerPreviewTop, calculateBondPreviewPosition, calculateMonomerPreviewTop, calculateNucleoElementPreviewTop, getIconName, ketcherIdCssSelector, ketcherInitEventName, preview };
