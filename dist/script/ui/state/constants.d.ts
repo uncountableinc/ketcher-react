@@ -19,5 +19,6 @@ export declare const supportedSGroupTypes: {
     readonly SUP: "SUP";
     readonly DAT: "DAT";
     readonly GEN: "GEN";
+    readonly COP: "COP";
     readonly queryComponent: "queryComponent";
 };
