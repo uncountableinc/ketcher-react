@@ -3824,7 +3824,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc14\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc15\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -27312,8 +27312,8 @@ var StructEditor = function (_Component) {
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(props) {
-      setupEditor(this.editor, props, this.props);
+    value: function componentDidUpdate(prevProps) {
+      setupEditor(this.editor, this.props, prevProps);
     }
   }, {
     key: "componentDidMount",
@@ -35096,8 +35096,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "3.0.3-unc14" ,
-                  buildDate: "2025-08-28T14:20:19" ,
+                  version: "3.0.3-unc15" ,
+                  buildDate: "2025-08-28T15:50:58" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35394,7 +35394,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty__default["default"](e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = React.lazy(function () {
-  return Promise.resolve().then(function () { return require('./index.modern-aa2bf2e3.js'); });
+  return Promise.resolve().then(function () { return require('./index.modern-f9a1c97a.js'); });
 });
 var Editor = function Editor(props) {
   var _useState = React.useState(false),

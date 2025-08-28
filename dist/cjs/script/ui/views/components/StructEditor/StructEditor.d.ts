@@ -23,7 +23,7 @@ declare class StructEditor extends Component<any, any, any> {
      */
     handleScroll(event: WheelEvent): void;
     shouldComponentUpdate(nextProps: any, nextState: any): boolean;
-    componentDidUpdate(props: any): void;
+    componentDidUpdate(prevProps: any): void;
     componentDidMount(): void;
     editor: Editor | undefined;
     componentWillUnmount(): void;
