@@ -20,5 +20,8 @@ export declare const supportedSGroupTypes: {
     readonly DAT: "DAT";
     readonly GEN: "GEN";
     readonly COP: "COP";
+    readonly MON: "MON";
+    readonly MIX: "MIX";
+    readonly COM: "COM";
     readonly queryComponent: "queryComponent";
 };

@@ -1937,6 +1937,9 @@ var supportedSGroupTypes = {
   DAT: 'DAT',
   GEN: 'GEN',
   COP: 'COP',
+  MON: 'MON',
+  MIX: 'MIX',
+  COM: 'COM',
   queryComponent: 'queryComponent'
 };
 
@@ -2234,6 +2237,54 @@ var sgroup = {
       }
     },
     required: ['connectivity']
+  }, {
+    key: 'MON',
+    title: 'Monomer',
+    type: 'object',
+    properties: {
+      type: {
+        "enum": ['MON']
+      }
+    }
+  }, {
+    key: 'MIX',
+    title: 'Mixture',
+    type: 'object',
+    properties: {
+      type: {
+        "enum": ['MIX']
+      },
+      subscript: {
+        title: 'Label',
+        type: 'string',
+        "default": 'mix',
+        pattern: '^(?!\\s*$)[^"]+$',
+        invalidMessage: 'MIX label should not be empty and contain double quotes'
+      }
+    }
+  }, {
+    key: 'COM',
+    title: 'Component',
+    type: 'object',
+    properties: {
+      type: {
+        "enum": ['COM']
+      },
+      subscript: {
+        title: 'Label',
+        type: 'string',
+        "default": 'c',
+        pattern: '^(?!\\s*$)[^"]+$',
+        invalidMessage: 'COM label should not be empty and contain double quotes'
+      },
+      compno: {
+        title: 'Component number',
+        type: 'integer',
+        "default": 0,
+        minimum: 0,
+        maximum: 200
+      }
+    }
   }, {
     key: 'SUP',
     title: 'Superatom',
@@ -3824,7 +3875,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc15\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc16\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -27311,9 +27362,9 @@ var StructEditor = function (_Component) {
       return this.props.indigoVerification !== nextProps.indigoVerification || nextState.enableCursor !== this.state.enableCursor;
     }
   }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      setupEditor(this.editor, this.props, prevProps);
+    key: "UNSAFE_componentWillReceiveProps",
+    value: function UNSAFE_componentWillReceiveProps(props) {
+      setupEditor(this.editor, props, this.props);
     }
   }, {
     key: "componentDidMount",
@@ -28133,6 +28184,19 @@ var Form = function (_Component) {
       var extraValue = extraName ? result[extraName] : null;
       var handleOnChange = function handleOnChange(name, value) {
         var newState = Object.assign({}, _this2.props.result, _defineProperty__default["default"]({}, name, value));
+        if (name === 'type') {
+          switch (value) {
+            case 'SRU':
+              newState.subscript = 'n';
+              break;
+            case 'MIX':
+              newState.subscript = 'mix';
+              break;
+            case 'COM':
+              newState.subscript = 'c';
+              break;
+          }
+        }
         _this2.updateState(newState);
         if (onChange) onChange(value);
       };
@@ -35096,8 +35160,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "3.0.3-unc15" ,
-                  buildDate: "2025-08-28T15:50:58" ,
+                  version: "3.0.3-unc16" ,
+                  buildDate: "2025-09-08T22:57:58" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35394,7 +35458,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty__default["default"](e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = React.lazy(function () {
-  return Promise.resolve().then(function () { return require('./index.modern-f9a1c97a.js'); });
+  return Promise.resolve().then(function () { return require('./index.modern-9b7f232a.js'); });
 });
 var Editor = function Editor(props) {
   var _useState = React.useState(false),
