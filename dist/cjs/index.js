@@ -51,7 +51,7 @@ var reactRedux = require('react-redux');
 var redux = require('redux');
 var CFB = require('cfb');
 require('redux-logger');
-var thunk = require('redux-thunk');
+var thunkMiddleware = require('redux-thunk');
 var useResizeObserver = require('use-resize-observer/polyfilled');
 var reactIntersectionObserver = require('react-intersection-observer');
 var material = require('@mui/material');
@@ -125,7 +125,7 @@ var KN__namespace = /*#__PURE__*/_interopNamespace(KN);
 var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0$2);
 var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
 var CFB__namespace = /*#__PURE__*/_interopNamespace(CFB);
-var thunk__default = /*#__PURE__*/_interopDefaultLegacy(thunk);
+var thunkMiddleware__default = /*#__PURE__*/_interopDefaultLegacy(thunkMiddleware);
 var useResizeObserver__default = /*#__PURE__*/_interopDefaultLegacy(useResizeObserver);
 var _classPrivateFieldGet__default = /*#__PURE__*/_interopDefaultLegacy(_classPrivateFieldGet);
 var _classPrivateFieldSet__default = /*#__PURE__*/_interopDefaultLegacy(_classPrivateFieldSet);
@@ -3875,7 +3875,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc18\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc19\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -14638,7 +14638,7 @@ function createStore (options, server, setEditor) {
     server: server || Promise.reject(new Error('Standalone mode!')),
     templates: initTmplsState
   };
-  var middleware = [thunk__default["default"]];
+  var middleware = [thunkMiddleware__default["default"]];
   var rootReducer = getRootReducer(setEditor);
   return redux.createStore(rootReducer, initState, redux.applyMiddleware.apply(void 0, middleware));
 }
@@ -35153,8 +35153,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "3.0.3-unc18" ,
-                  buildDate: "2025-11-17T16:28:10" ,
+                  version: "3.0.3-unc19" ,
+                  buildDate: "2025-11-17T16:47:23" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35451,7 +35451,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty__default["default"](e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = React.lazy(function () {
-  return Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespace(require('ketcher-macromolecules')); });
+  return Promise.resolve().then(function () { return require('./index.modern-572d6a46.js'); });
 });
 var Editor = function Editor(props) {
   var _useState = React.useState(false),
