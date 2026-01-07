@@ -3874,7 +3874,7 @@ var zoom = {
 
 var openHelpLink = function openHelpLink() {
   var _window$open;
-  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc22\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
+  return (_window$open = window.open("https://github.com/epam/ketcher/blob/".concat("3.0.3-unc23\n", "/documentation/help.md#ketcher-overview"))) === null || _window$open === void 0 ? void 0 : _window$open.focus();
 };
 var help = {
   help: {
@@ -26813,6 +26813,7 @@ var ContextMenuTrigger = function ContextMenuTrigger(_ref) {
     getKetcherInstance = _useAppContext.getKetcherInstance;
   var _useContextMenu = reactContexify.useContextMenu(),
     show = _useContextMenu.show;
+  var divRef = React.useRef(null);
   var getSelectedGroupsInfo = React.useCallback(function () {
     var _editor$selection;
     var editor = getKetcherInstance().editor;
@@ -26901,11 +26902,25 @@ var ContextMenuTrigger = function ContextMenuTrigger(_ref) {
       props: showProps
     });
   }, [getKetcherInstance, getSelectedGroupsInfo, show]);
+  React.useEffect(function () {
+    var divElement = divRef.current;
+    if (divElement) {
+      divElement.addEventListener('contextmenu', handleDisplay, {
+        capture: true
+      });
+      return function () {
+        divElement.removeEventListener('contextmenu', handleDisplay, {
+          capture: true
+        });
+      };
+    }
+    return undefined;
+  }, [handleDisplay]);
   return jsxRuntime.jsx("div", {
+    ref: divRef,
     style: {
       height: '100%'
     },
-    onContextMenu: handleDisplay,
     children: children
   });
 };
@@ -35153,8 +35168,8 @@ var KetcherBuilder = function () {
                 cleanup = initApp(element, appRoot, staticResourcesUrl, {
                   buttons: buttons || {},
                   errorHandler: errorHandler || null,
-                  version: "3.0.3-unc22" ,
-                  buildDate: "2026-01-07T19:02:39" ,
+                  version: "3.0.3-unc23" ,
+                  buildDate: "2026-01-07T19:43:21" ,
                   buildNumber: '',
                   customButtons: customButtons || []
                 }, structService, resolve, togglerComponent);
@@ -35451,7 +35466,7 @@ var ModeControl = function ModeControl(_ref3) {
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty__default["default"](e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 var MacromoleculesEditor = React.lazy(function () {
-  return Promise.resolve().then(function () { return require('./index.modern-689b896c.js'); });
+  return Promise.resolve().then(function () { return require('./index.modern-70ce3655.js'); });
 });
 var Editor = function Editor(props) {
   var _useState = React.useState(false),
