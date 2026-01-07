@@ -14,6 +14,5 @@
  * limitations under the License.
  ***************************************************************************/
 import React from 'react';
-import 'react-contexify/ReactContexify.css';
 declare const ContextMenu: React.FC;
 export default ContextMenu;
