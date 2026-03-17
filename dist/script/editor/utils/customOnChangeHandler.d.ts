@@ -13,4 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+declare type Position = {
+    x: number;
+    y: number;
+};
+declare type ArrowPosition = [Position, Position];
+export declare type ChangeEventData = {
+    operation: any;
+    id?: number;
+    label?: string;
+    position?: Position | ArrowPosition;
+    attribute?: any;
+    from?: any;
+    to?: any;
+    atomId?: any;
+    fragId?: any;
+    sGroupId?: any;
+    type?: any;
+    mode?: any;
+};
 export declare function customOnChangeHandler(action: any, handler: any): any;
+export {};

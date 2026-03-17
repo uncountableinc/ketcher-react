@@ -17,5 +17,6 @@ export declare type TextEditorProps = {
     structStr: string;
     inputHandler: (str: string) => void;
     autoFocus?: boolean;
+    testId?: string;
 };
-export declare const TextEditor: ({ structStr, inputHandler, autoFocus, }: TextEditorProps) => import("react/jsx-runtime").JSX.Element;
+export declare const TextEditor: ({ structStr, inputHandler, autoFocus, testId, }: TextEditorProps) => import("react/jsx-runtime").JSX.Element;

@@ -21,6 +21,7 @@ declare type FileDropProps = {
     iconName: IconName;
     disabled?: boolean;
     disabledText?: string;
+    testId?: string;
 } & DropzoneOptions;
-declare const FileDrop: ({ buttonLabel, textLabel, iconName, disabled, disabledText, ...rest }: FileDropProps) => import("react/jsx-runtime").JSX.Element;
+declare const FileDrop: ({ buttonLabel, textLabel, iconName, disabled, disabledText, testId, ...rest }: FileDropProps) => import("react/jsx-runtime").JSX.Element;
 export { FileDrop };

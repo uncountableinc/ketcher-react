@@ -14,27 +14,28 @@
  * limitations under the License.
  ***************************************************************************/
 export const basicAtoms: string[];
-export namespace atomCuts {
-    const H: string;
-    const C: string;
-    const N: string;
-    const O: string;
-    const S: string;
-    const P: string;
-    const F: string;
-    const Cl: string;
-    const Br: string;
-    const I: string;
-    const A: string;
-    const Q: string;
-    const R: string;
-    const K: string;
-    const M: string;
-    const Si: string;
-    const Na: string;
-    const X: string;
-    const D: string;
-    const B: string;
-}
+export const atomCuts: {
+    H: string;
+    C: string;
+    N: string;
+    O: string;
+    S: string;
+    P: string;
+    F: string;
+    Cl: string;
+    Br: string;
+    I: string;
+    A: string;
+    Q: string;
+    R: string;
+    K: string;
+    M: string;
+    Si: string;
+    Na: string;
+    X: string;
+    D: string;
+    B: string;
+    '*': string;
+};
 declare const _default: {};
 export default _default;

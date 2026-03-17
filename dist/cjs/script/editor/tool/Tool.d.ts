@@ -9,13 +9,19 @@ interface ToolEventHandler {
     mouseLeaveClientArea?(event: Event): void;
     mouseover?(event: Event): void;
 }
+export declare type HoverTarget = {
+    id: number;
+    map: string;
+} | {
+    map: 'merge';
+    items: Record<string, number[]>;
+};
 export interface Tool extends ToolEventHandler {
     cancel?(): void;
     isSelectionRunning?(): boolean;
     isNotActiveTool?: boolean;
+    ci?: HoverTarget;
 }
-export declare type ToolConstructorInterface = {
-    new (editor: Editor, ...args: any[]): Tool;
-};
+export declare type ToolConstructorInterface = new (editor: Editor, ...args: any[]) => Tool;
 export declare type ToolEventHandlerName = keyof ToolEventHandler;
 export {};

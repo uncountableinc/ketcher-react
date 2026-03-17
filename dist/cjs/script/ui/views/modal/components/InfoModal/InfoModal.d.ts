@@ -14,5 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 declare function ErrorInfoModal(props: any): import("react/jsx-runtime").JSX.Element;
-declare const InfoModal: import("react-redux").ConnectedComponent<typeof ErrorInfoModal, import("react-redux").Omit<any, "errorMessage" | "onOk">>;
+declare const InfoModal: import("react-redux").ConnectedComponent<typeof ErrorInfoModal, {
+    [x: string]: any;
+    [x: number]: any;
+    [x: symbol]: any;
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+} | {
+    [x: string]: any;
+    [x: number]: any;
+    [x: symbol]: any;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export default InfoModal;

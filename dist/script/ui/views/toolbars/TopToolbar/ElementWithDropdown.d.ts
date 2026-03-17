@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 interface ElementWithDropdownProps {
     topElement?: JSX.Element;
     dropDownElements: JSX.Element[];
     onToolOpen: () => void;
 }
-export declare const ElementWithDropdown: import("react-redux").ConnectedComponent<({ topElement, dropDownElements, onToolOpen, }: ElementWithDropdownProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<ElementWithDropdownProps, "onToolOpen">>;
+export declare const ElementWithDropdown: import("react-redux").ConnectedComponent<({ topElement, dropDownElements, onToolOpen, }: ElementWithDropdownProps) => import("react/jsx-runtime").JSX.Element, {
+    topElement?: JSX.Element | undefined;
+    dropDownElements: JSX.Element[];
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export {};

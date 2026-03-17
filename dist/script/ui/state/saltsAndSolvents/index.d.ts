@@ -19,7 +19,7 @@ interface SaltsAndSolventsState {
     lib: [];
     mode: string;
 }
-declare const saltsAndSolventsReducer: (state: SaltsAndSolventsState | undefined, { type, payload }: AnyAction) => any;
+declare const saltsAndSolventsReducer: (state: SaltsAndSolventsState | undefined, action: AnyAction) => any;
 export declare const initSaltsAndSolvents: (lib: SdfItem[]) => {
     type: string;
     payload: {

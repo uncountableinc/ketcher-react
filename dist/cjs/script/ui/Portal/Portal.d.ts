@@ -19,6 +19,7 @@ interface PortalProps {
     className?: string;
     style?: CSSProperties;
     children: ReactNode;
+    testId?: string;
 }
 declare type Props = PortalProps;
 declare class Portal extends Component<Props> {

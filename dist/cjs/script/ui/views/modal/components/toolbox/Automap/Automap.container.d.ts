@@ -14,5 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 import { BaseCallProps, BaseProps } from '../../../modal.types';
-declare const AutomapContainer: import("react-redux").ConnectedComponent<(props: BaseProps & BaseCallProps) => import("react/jsx-runtime").JSX.Element, any>;
+declare const AutomapContainer: import("react-redux").ConnectedComponent<(props: BaseProps & BaseCallProps) => import("react/jsx-runtime").JSX.Element, {
+    [x: string]: any;
+}>;
 export default AutomapContainer;

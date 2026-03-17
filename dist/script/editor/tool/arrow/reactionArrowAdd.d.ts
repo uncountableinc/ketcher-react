@@ -2,10 +2,10 @@ import { RxnArrowMode } from 'ketcher-core';
 import { Editor } from '../../Editor';
 import { ArrowAddTool } from './arrow.types';
 export declare class ReactionArrowAddTool implements ArrowAddTool {
-    private editor;
-    private mode;
-    static MIN_LENGTH: number;
-    static DEFAULT_LENGTH: number;
+    private readonly editor;
+    private readonly mode;
+    static readonly MIN_LENGTH = 0.5;
+    static readonly DEFAULT_LENGTH = 1;
     private dragCtx;
     constructor(editor: Editor, mode: RxnArrowMode);
     private get render();

@@ -8,5 +8,5 @@ export declare class ReactionArrowMoveTool extends ArrowTool implements ArrowMov
         closestItem: ReactionArrowClosestItem;
     };
     mousemove(event: PointerEvent, dragContext: CommonArrowDragContext<ReactionArrowClosestItem>): import("ketcher-core").Action;
-    mouseup(_event: PointerEvent, dragContext: CommonArrowDragContext<ReactionArrowClosestItem>): any;
+    mouseup(_event: PointerEvent, dragContext: CommonArrowDragContext<ReactionArrowClosestItem>): import("ketcher-core").Action | null;
 }

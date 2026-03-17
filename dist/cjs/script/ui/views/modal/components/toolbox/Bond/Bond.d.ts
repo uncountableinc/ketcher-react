@@ -22,7 +22,9 @@ interface BondSettings {
 }
 interface BondProps extends BaseProps, BondSettings {
 }
-declare type Props = BondProps & BaseCallProps;
+declare type Props = BondProps & BaseCallProps & {
+    isMonomerCreationWizardActive?: boolean;
+};
 declare const Bond: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export type { BondProps };
 export default Bond;

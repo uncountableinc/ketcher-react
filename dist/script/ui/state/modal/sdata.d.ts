@@ -3,6 +3,7 @@ export function sdataReducer(state: any, action: any): {
     valid: any;
     errors: any;
 };
+export function nucleotideComponentReducer(state: any, action: any): any;
 export function initSdata(schema: any): {
     errors: {};
     valid: boolean;

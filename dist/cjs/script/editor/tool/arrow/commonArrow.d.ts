@@ -7,9 +7,9 @@ export declare class CommonArrowTool extends ArrowTool implements Tool {
     static isDragContextMultitail(dragContext: CommonArrowDragContext<MultitailArrowClosestItem | ReactionArrowClosestItem>): dragContext is CommonArrowDragContext<MultitailArrowClosestItem>;
     static isDragContextReaction(dragContext: CommonArrowDragContext<MultitailArrowClosestItem | ReactionArrowClosestItem>): dragContext is CommonArrowDragContext<ReactionArrowClosestItem>;
     private dragContext;
-    private addTool;
-    private multitailMoveTool;
-    private reactionMoveTool;
+    private readonly addTool;
+    private readonly multitailMoveTool;
+    private readonly reactionMoveTool;
     constructor(editor: Editor, mode: RxnArrowMode | typeof MULTITAIL_ARROW_TOOL_NAME);
     mousedown(event: PointerEvent): void;
     mousemove(event: PointerEvent): void;

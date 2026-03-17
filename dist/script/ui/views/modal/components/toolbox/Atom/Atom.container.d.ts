@@ -17,8 +17,28 @@
 declare const AtomContainer: import("react-redux").ConnectedComponent<import("react").FC<import("./Atom").AtomProps & {
     isMultipleAtoms?: boolean | undefined;
     isRestoredModal: boolean;
-}>, import("react-redux").Omit<import("./Atom").AtomProps & {
+    isMonomerCreationWizardActive?: boolean | undefined;
+}>, {
+    className: string;
+    alias: string;
+    charge: string;
+    exactChangeFlag: boolean;
+    explicitValence: number;
+    hCount: number;
+    invRet: number;
+    isotope: number;
+    label: string;
+    radical: number;
+    ringBondCount: number;
+    stereoParity: number;
+    substitutionCount: number;
+    unsaturatedAtom: boolean;
+    customQuery: string;
+    onCancel: () => void;
+    onOk: (result: any) => void;
     isMultipleAtoms?: boolean | undefined;
     isRestoredModal: boolean;
-}, "formState">>;
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export default AtomContainer;

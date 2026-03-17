@@ -14,5 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 import { AppHiddenCallProps } from './AppHidden';
-declare const AppHiddenContainer: import("react-redux").ConnectedComponent<(props: AppHiddenCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<AppHiddenCallProps, "onInitTmpls">>;
+declare const AppHiddenContainer: import("react-redux").ConnectedComponent<(props: AppHiddenCallProps) => import("react/jsx-runtime").JSX.Element, {
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export { AppHiddenContainer };

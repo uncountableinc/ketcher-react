@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import { Ketcher } from 'ketcher-core';
 import React from 'react';
 export interface IAppContext {
-    getKetcherInstance: () => Ketcher;
     ketcherId: string;
+    prevKetcherId: string;
 }
 declare const appContext: React.Context<IAppContext>;
 export default appContext;

@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+import { ReactNode } from 'react';
 export interface Option {
     value: string;
     label: string;
+    children?: ReactNode;
 }
 interface Props {
     options: Array<Option>;
@@ -26,7 +28,9 @@ interface Props {
     disabled?: boolean;
     formName?: string;
     name?: string;
+    placeholder?: string;
     'data-testid'?: string;
+    error?: boolean;
 }
-declare const Select: ({ className, value, onChange, multiple, disabled, options, formName, name, "data-testid": testId, }: Props) => import("react/jsx-runtime").JSX.Element;
+declare const Select: ({ className, value, onChange, multiple, disabled, options, formName, name, placeholder, "data-testid": testId, error, }: Props) => import("react/jsx-runtime").JSX.Element;
 export default Select;

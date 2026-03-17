@@ -24,7 +24,7 @@ export interface DialogParams extends DialogParamsCallProps {
 }
 interface DialogProps {
     title?: string;
-    params: DialogParams;
+    params?: DialogParams;
     buttons?: Array<string | ReactElement>;
     className?: string;
     needMargin?: boolean;
@@ -35,6 +35,7 @@ interface DialogProps {
         [key in string]: string;
     };
     focusable?: boolean;
+    primaryButtons?: string[];
 }
 interface DialogCallProps {
     result?: () => unknown;

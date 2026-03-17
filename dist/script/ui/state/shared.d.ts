@@ -21,7 +21,6 @@ export declare function removeStructAction(): {
     type: string;
     action?: Record<string, unknown>;
 };
-export declare const getSelectionFromStruct: (struct: any) => {};
 export declare function load(struct: Struct, options?: any): (dispatch: any, getState: any) => Promise<void>;
 export declare function openInfoModal(command: 'Paste' | 'Copy' | 'Cut'): {
     type: 'MODAL_OPEN';

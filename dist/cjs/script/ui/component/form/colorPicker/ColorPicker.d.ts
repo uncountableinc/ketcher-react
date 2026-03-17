@@ -16,8 +16,6 @@
 interface ColorPickerProps {
     value: string;
     name: string;
-    schema: any;
-    type?: string;
 }
 interface ColorPickerCallProps {
     onChange: (value: string) => void;

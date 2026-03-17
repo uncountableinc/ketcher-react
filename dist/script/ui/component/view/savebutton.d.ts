@@ -27,6 +27,7 @@ declare type Props = {
     className?: string;
     title?: string;
     disabled?: boolean;
+    testId?: string;
 };
 declare type SaveButtonProps = PropsWithChildren<Props>;
 declare const SaveButton: (props: SaveButtonProps) => import("react/jsx-runtime").JSX.Element;

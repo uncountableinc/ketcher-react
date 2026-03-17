@@ -27,12 +27,20 @@ declare const _default: {
             opts: string;
         };
     };
-    'select-fragment': {
+    'select-structure': {
         title: string;
         shortcut: string[];
         action: {
             tool: string;
             opts: string;
+        };
+        hidden: (options: any) => boolean;
+    };
+    'select-fragment': {
+        title: string;
+        shortcut: string[];
+        action: {
+            tool: string;
         };
         hidden: (options: any) => boolean;
     };
@@ -58,11 +66,11 @@ declare const _default: {
         action: {
             tool: string;
         };
-        disabled: (editor: any) => boolean;
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'charge-plus': {
-        shortcut: string;
+        shortcut: string[];
         title: string;
         action: {
             tool: string;
@@ -71,7 +79,7 @@ declare const _default: {
         hidden: (options: any) => boolean;
     };
     'charge-minus': {
-        shortcut: string;
+        shortcut: string[];
         title: string;
         action: {
             tool: string;
@@ -112,9 +120,11 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     arrows: {
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-open-angle': {
@@ -123,6 +133,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-filled-triangle': {
@@ -131,6 +142,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-filled-bow': {
@@ -139,6 +151,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-dashed-open-angle': {
@@ -147,6 +160,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-failed': {
@@ -155,6 +169,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-retrosynthetic': {
@@ -163,6 +178,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-both-ends-filled-triangle': {
@@ -171,6 +187,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-equilibrium-filled-half-bow': {
@@ -179,6 +196,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-equilibrium-filled-triangle': {
@@ -187,6 +205,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-equilibrium-open-angle': {
@@ -195,6 +214,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-unbalanced-equilibrium-filled-half-bow': {
@@ -203,6 +223,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-unbalanced-equilibrium-open-half-angle': {
@@ -211,6 +232,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-unbalanced-equilibrium-large-filled-half-bow': {
@@ -219,6 +241,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-unbalanced-equilibrium-filled-half-triangle': {
@@ -227,6 +250,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-elliptical-arc-arrow-filled-bow': {
@@ -235,6 +259,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-elliptical-arc-arrow-filled-triangle': {
@@ -243,6 +268,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-elliptical-arc-arrow-open-angle': {
@@ -251,6 +277,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-arrow-elliptical-arc-arrow-open-half-angle': {
@@ -259,6 +286,7 @@ declare const _default: {
             tool: string;
             opts: RxnArrowMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     "reaction-arrow-multitail": {
@@ -267,6 +295,7 @@ declare const _default: {
             tool: string;
             opts: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-plus': {
@@ -274,9 +303,11 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-mapping-tools': {
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-map': {
@@ -284,6 +315,7 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'reaction-unmap': {
@@ -291,9 +323,11 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     rgroup: {
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'rgroup-label': {
@@ -302,6 +336,7 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'rgroup-fragment': {
@@ -310,6 +345,7 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'rgroup-attpoints': {
@@ -318,9 +354,20 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
+        hidden: (options: any) => boolean;
+    };
+    "create-monomer": {
+        shortcut: string;
+        title: string;
+        action: {
+            tool: string;
+        };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     shapes: {
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'shape-ellipse': {
@@ -329,6 +376,7 @@ declare const _default: {
             tool: string;
             opts: SimpleObjectMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'shape-rectangle': {
@@ -337,6 +385,7 @@ declare const _default: {
             tool: string;
             opts: SimpleObjectMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     'shape-line': {
@@ -345,6 +394,7 @@ declare const _default: {
             tool: string;
             opts: SimpleObjectMode;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     text: {
@@ -353,6 +403,7 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
     bonds: {
@@ -363,6 +414,7 @@ declare const _default: {
         action: {
             tool: string;
         };
+        disabled: (editor: any) => any;
         hidden: (options: any) => boolean;
     };
 };

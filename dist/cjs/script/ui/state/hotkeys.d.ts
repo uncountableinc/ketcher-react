@@ -15,7 +15,7 @@
  ***************************************************************************/
 export declare function initKeydownListener(element: any): (dispatch: any, getState: any) => void;
 export declare function removeKeydownListener(element: any): () => void;
-export declare function initClipboard(dispatch: any): {
+export declare function initClipboard(dispatch: any, getState: any): {
     formats: any[];
     focused(): boolean;
     onLegacyCut(): {} | null;

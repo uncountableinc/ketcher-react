@@ -1,7 +1,9 @@
-declare const _default: import("react-redux").ConnectedComponent<typeof Sgroup, import("react-redux").Omit<{
+declare const _default: import("react-redux").ConnectedComponent<typeof Sgroup, {
     [x: string]: any;
-    formState: any;
-}, "formState" | "dispatch">>;
+    [x: number]: any;
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export default _default;
 declare function Sgroup({ formState, ...props }: {
     [x: string]: any;

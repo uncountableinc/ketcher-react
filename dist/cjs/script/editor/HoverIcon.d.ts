@@ -2,7 +2,7 @@ import { type ElementLabel, type AtomColor } from 'ketcher-core';
 import Editor from './Editor';
 export declare class HoverIcon {
     element: any;
-    _fill: AtomColor | '';
+    _fill: AtomColor;
     _label: ElementLabel | '';
     isShown: boolean;
     /**
@@ -12,8 +12,8 @@ export declare class HoverIcon {
     shouldBeShownWhenMouseBack: boolean;
     editor: Editor;
     constructor(editor: Editor);
-    set fill(fillColor: AtomColor | '');
-    get fill(): AtomColor | '';
+    set fill(fillColor: AtomColor);
+    get fill(): AtomColor;
     set label(label: ElementLabel | '');
     get label(): ElementLabel | '';
     isOverLoader(event: MouseEvent): boolean;
@@ -24,7 +24,7 @@ export declare class HoverIcon {
     hide(restShouldBeShownWhenMouseBack?: boolean): void;
     initialize(): {
         element: any;
-        fill: AtomColor | '';
+        fill: AtomColor;
         label: ElementLabel | '';
     };
     create(): void;

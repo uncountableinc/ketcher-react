@@ -13,4 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+import { MonomerCreationState } from 'ketcher-core';
+import { Selection } from '../../../../editor/Editor';
 export declare const editorOptionsSelector: (state: any) => any;
+export declare const editorMonomerCreationStateSelector: (state: any) => MonomerCreationState;
+export declare const selectionSelector: (state: any) => Selection;

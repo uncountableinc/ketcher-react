@@ -25,6 +25,7 @@ interface TemplateLibProps {
     initialTab: number;
     saltsAndSolvents: Template[];
     renderOptions?: any;
+    isMonomerCreationWizardActive?: boolean;
 }
 interface TemplateLibCallProps {
     onAttach: (tmpl: Template) => void;
@@ -38,5 +39,27 @@ interface TemplateLibCallProps {
     functionalGroups: Template[];
 }
 declare type Props = TemplateLibProps & TemplateLibCallProps;
-declare const _default: import("react-redux").ConnectedComponent<FC<Props>, import("react-redux").Omit<TemplateLibProps & TemplateLibCallProps, "onFilter" | "onTabChange" | "onSelect" | "onChangeGroup" | "onAttach" | "onCancel" | "onDelete" | "initialTab" | "renderOptions" | "functionalGroups" | "saltsAndSolvents"> & TemplateLibProps & TemplateLibCallProps>;
+declare const _default: import("react-redux").ConnectedComponent<FC<Props>, {
+    filter: string;
+    tab: number;
+    group: string;
+    lib: Template[];
+    selected: Template | null;
+    mode: string;
+    onOk: (res: any) => void;
+    initialTab: number;
+    saltsAndSolvents: Template[];
+    renderOptions?: any;
+    isMonomerCreationWizardActive?: boolean | undefined;
+    onAttach: (tmpl: Template) => void;
+    onCancel: () => void;
+    onChangeGroup: (group: string) => void;
+    onDelete: (tmpl: Template) => void;
+    onFilter: (filter: string) => void;
+    onSelect: (res: any) => void;
+    onTabChange: (tab: number) => void;
+    functionalGroups: Template[];
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export default _default;

@@ -7,7 +7,7 @@
  * @param fieldName? { string }
  * @returns { string }
  */
-export function getSdataDefault(schema: {} | undefined, context: any, fieldName: any): string;
+export function getSdataDefault(schema?: {}, context?: undefined, fieldName?: undefined): string;
 export namespace sdataCustomSchema {
     const key: string;
     const title: string;

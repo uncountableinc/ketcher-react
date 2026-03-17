@@ -19,5 +19,9 @@ interface InfoPanelProps {
     render: Render;
     className?: string;
 }
-declare const _default: import("react-redux").ConnectedComponent<FC<InfoPanelProps>, import("react-redux").Omit<InfoPanelProps, "render">>;
+declare const _default: import("react-redux").ConnectedComponent<FC<InfoPanelProps>, {
+    className?: string | undefined;
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export default _default;

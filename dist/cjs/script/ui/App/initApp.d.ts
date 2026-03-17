@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
-import { Ketcher, StructService } from 'ketcher-core';
+import { StructService } from 'ketcher-core';
 import { Root } from 'react-dom/client';
-declare function initApp(element: HTMLDivElement | null, appRoot: Root, staticResourcesUrl: string, options: any, server: StructService, resolve: (args: {
+declare function initApp(prevKetcherId: string, ketcherId: string, element: HTMLDivElement | null, appRoot: Root, staticResourcesUrl: string, options: any, server: StructService, resolve: (args: {
     editor: any;
-    setKetcher: (ketcher: Ketcher) => void;
-    ketcherId: string;
     setServer: (server: StructService) => void;
 }) => void, togglerComponent?: JSX.Element): () => void;
 export { initApp };

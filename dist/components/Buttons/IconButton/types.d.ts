@@ -29,6 +29,7 @@ export interface IIconButtonBaseProps {
 declare type IIconButtonBasePropsWithoutChildren = Omit<IIconButtonBaseProps, 'children'>;
 export interface IIconButtonProps extends IIconButtonBasePropsWithoutChildren {
     iconName: IconName;
+    testid?: string;
 }
 export interface IIconButtonCustomIconProps extends IIconButtonBasePropsWithoutChildren {
     link: string;

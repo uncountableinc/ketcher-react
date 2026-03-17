@@ -19,6 +19,7 @@ declare type Props = {
     label: string;
     styles: string;
     title?: string;
+    testId?: string;
 };
-export declare const DialogActionButton: ({ clickHandler, label, title, styles, disabled, }: Props) => import("react/jsx-runtime").JSX.Element;
+export declare const DialogActionButton: ({ clickHandler, label, title, styles, disabled, testId, }: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

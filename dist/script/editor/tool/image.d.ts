@@ -4,7 +4,7 @@ import type Editor from '../Editor';
 export declare class ImageTool implements Tool {
     private readonly editor;
     static readonly INPUT_ID = "image-upload";
-    private element;
+    private readonly element;
     private dragCtx;
     constructor(editor: Editor);
     mousedown(event: MouseEvent): void;

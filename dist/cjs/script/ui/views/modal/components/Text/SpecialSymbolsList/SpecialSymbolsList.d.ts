@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare const SpecialSymbolsList: ({ select }: {
-    select: any;
-}) => import("react/jsx-runtime").JSX.Element;
+/// <reference types="react" />
+interface SpecialSymbolsListProps {
+    id: string;
+    onSelect: (event: React.MouseEvent<HTMLButtonElement>, value: string) => void;
+}
+declare const SpecialSymbolsList: ({ onSelect, ...props }: Omit<React.HTMLAttributes<HTMLMenuElement>, 'onSelect'> & SpecialSymbolsListProps) => import("react/jsx-runtime").JSX.Element;
 export { SpecialSymbolsList };

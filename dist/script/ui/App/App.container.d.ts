@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { AppCallProps } from './App';
-declare const AppContainer: import("react-redux").ConnectedComponent<(props: AppCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<AppCallProps, "checkServer" | "togglerComponent"> & {
+declare const AppContainer: import("react-redux").ConnectedComponent<(props: AppCallProps) => import("react/jsx-runtime").JSX.Element, {
     togglerComponent?: JSX.Element | undefined;
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
 }>;
 export { AppContainer };
 export default AppContainer;

@@ -23,6 +23,7 @@ import { Config } from './script';
 import { Ketcher } from 'ketcher-core';
 export interface EditorProps extends Omit<Config, 'element' | 'appRoot'> {
     onInit?: (ketcher: Ketcher) => void;
+    onSetKetcherId?: (ketcherId: string) => void;
 }
-declare function MicromoleculesEditor(props: EditorProps): import("react/jsx-runtime").JSX.Element;
+declare function MicromoleculesEditor(props: Readonly<EditorProps>): import("react/jsx-runtime").JSX.Element;
 export { MicromoleculesEditor };

@@ -16,7 +16,6 @@
 export declare type CDXStructuresViewerProps = {
     structList?: string[];
     inputHandler: (str: string) => void;
-    structStr: string;
     fileName: string;
 };
 export declare const CDXStructuresViewer: ({ structList, inputHandler, fileName, }: CDXStructuresViewerProps) => import("react/jsx-runtime").JSX.Element;

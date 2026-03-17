@@ -24,5 +24,6 @@ export default function initEditor(dispatch: any, getState: any): {
     onUpdateFloatingTools: (...args: any[]) => void;
     onZoomIn: import("lodash").DebouncedFunc<() => any>;
     onZoomOut: import("lodash").DebouncedFunc<() => any>;
+    onZoomChanged: import("lodash").DebouncedFunc<() => any>;
     onShowMacromoleculesErrorMessage: (payload: any) => any;
 };

@@ -13,5 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare const AttachPointsContainer: import("react-redux").ConnectedComponent<(props: import("./Attach").AttachPointsProps & import("../../../modal.types").BaseCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<import("./Attach").AttachPointsProps & import("../../../modal.types").BaseCallProps, "formState">>;
+declare const AttachPointsContainer: import("react-redux").ConnectedComponent<(props: import("./Attach").AttachPointsProps & import("../../../modal.types").BaseCallProps) => import("react/jsx-runtime").JSX.Element, {
+    className: string;
+    primary: boolean;
+    secondary: boolean;
+    onCancel: () => void;
+    onOk: (result: any) => void;
+    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
+    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
+}>;
 export default AttachPointsContainer;

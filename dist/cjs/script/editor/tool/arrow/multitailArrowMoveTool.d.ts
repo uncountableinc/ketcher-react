@@ -8,5 +8,5 @@ export declare class MultitailArrowMoveTool extends ArrowTool implements ArrowMo
         closestItem: MultitailArrowClosestItem;
     };
     mousemove(event: PointerEvent, dragContext: CommonArrowDragContext<MultitailArrowClosestItem>): Action;
-    mouseup(event: PointerEvent, dragContext: CommonArrowDragContext<MultitailArrowClosestItem>): any;
+    mouseup(event: PointerEvent, dragContext: CommonArrowDragContext<MultitailArrowClosestItem>): Action | null;
 }

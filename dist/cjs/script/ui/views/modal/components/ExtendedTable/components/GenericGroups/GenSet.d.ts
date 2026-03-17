@@ -22,5 +22,5 @@ declare type GenSetProps = {
     group: string;
     disabledQueryElements: Array<string> | null;
 };
-declare function GenSet({ labels, selected, onAtomSelect, className, group, disabledQueryElements, }: GenSetProps): import("react/jsx-runtime").JSX.Element;
+declare function GenSet({ labels, selected, onAtomSelect, className, group, disabledQueryElements, }: Readonly<GenSetProps>): import("react/jsx-runtime").JSX.Element;
 export { GenSet };

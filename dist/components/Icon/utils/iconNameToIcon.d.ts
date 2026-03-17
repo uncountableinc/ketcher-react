@@ -95,9 +95,11 @@ export declare const iconNameToIcon: {
     readonly 'copy-image': ReactComponent;
     readonly 'copy-mol': ReactComponent;
     readonly 'copy-ket': ReactComponent;
+    readonly copyMenu: ReactComponent;
     readonly cut: ReactComponent;
     readonly dearom: ReactComponent;
     readonly delete: ReactComponent;
+    readonly deleteMenu: ReactComponent;
     readonly dropdown: ReactComponent;
     readonly 'enhanced-stereo': ReactComponent;
     readonly edit: ReactComponent;
@@ -121,6 +123,8 @@ export declare const iconNameToIcon: {
     readonly clear: ReactComponent;
     readonly open: ReactComponent;
     readonly paste: ReactComponent;
+    readonly editMenu: ReactComponent;
+    readonly pasteNavBar: ReactComponent;
     readonly 'period-table': ReactComponent;
     readonly arrows: ReactComponent;
     readonly 'reaction-arrow-elliptical-arc-arrow-filled-bow': ReactComponent;
@@ -155,6 +159,7 @@ export declare const iconNameToIcon: {
     readonly 'rgroup-label': ReactComponent;
     readonly save: ReactComponent;
     readonly search: ReactComponent;
+    readonly 'select-structure': ReactComponent;
     readonly 'select-fragment': ReactComponent;
     readonly 'select-lasso': ReactComponent;
     readonly 'select-rectangle': ReactComponent;
@@ -224,6 +229,8 @@ export declare const iconNameToIcon: {
     readonly phosphate: ReactComponent;
     readonly preset: ReactComponent;
     readonly nucleotide: ReactComponent;
+    readonly peptide: ReactComponent;
+    readonly chem: ReactComponent;
     readonly 'edit-filled': ReactComponent;
     readonly 'vertical-dots': ReactComponent;
     readonly expand: ReactComponent;
@@ -234,4 +241,16 @@ export declare const iconNameToIcon: {
     readonly 'sequence-layout-mode': ReactComponent;
     readonly questionMark: ReactComponent;
     readonly 'no-highlight-cross': ReactComponent;
+    readonly arrowsUpDown: ReactComponent;
+    readonly plus: ReactComponent;
+    readonly antisenseStrand: ReactComponent;
+    readonly antisenseRnaStrand: ReactComponent;
+    readonly antisenseDnaStrand: ReactComponent;
+    readonly 'arrange-ring': ReactComponent;
+    readonly 'monomer-autochain': ReactComponent;
+    readonly "create-monomer": ReactComponent;
+    readonly checkFilled: ReactComponent;
+    readonly warningFilled: ReactComponent;
+    readonly leavingGroup: ReactComponent;
+    readonly connectionPoint: ReactComponent;
 };

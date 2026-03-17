@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
 import { Ketcher, ServiceMode, StructService, StructServiceProvider } from 'ketcher-core';
 import { ButtonsConfig } from './ButtonsConfig';
 import { initApp } from '../../ui';
@@ -21,19 +20,16 @@ import { Root } from 'react-dom/client';
 import { CustomButton } from './CustomButtons';
 declare class KetcherBuilder {
     private structService;
-    private editor;
     private serviceMode;
     private formatterFactory;
     constructor();
-    appendApiAsync(structServiceProvider: StructServiceProvider): Promise<void>;
-    reinitializeApi(structServiceProvider: StructServiceProvider, setStructServiceToStore: (structService: StructService) => void): StructService;
+    appendApiAsync(structServiceProvider: StructServiceProvider): StructService & Promise<import("ketcher-core").InfoResult>;
+    reinitializeApi(ketcherId: string, structServiceProvider: StructServiceProvider, setStructServiceToStore: (structService: StructService) => void): StructService;
     appendServiceMode(mode: ServiceMode): void;
-    appendUiAsync(element: HTMLDivElement | null, appRoot: Root, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig, togglerComponent?: JSX.Element, customButtons?: Array<CustomButton>): Promise<{
-        setKetcher: (ketcher: Ketcher) => void;
-        ketcherId: string;
+    appendUiAsync(prevKetcherId: string, ketcherId: string, element: HTMLDivElement | null, appRoot: Root, staticResourcesUrl: string, errorHandler: (message: string) => void, buttons?: ButtonsConfig, togglerComponent?: JSX.Element, customButtons?: Array<CustomButton>): Promise<{
         cleanup: ReturnType<typeof initApp> | null;
         setServer: (structService: StructService) => void;
     }>;
-    build(): Ketcher | undefined;
+    build(): Ketcher;
 }
 export { KetcherBuilder };

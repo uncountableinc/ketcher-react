@@ -19,7 +19,6 @@ interface SystemControlsProps {
     className?: string;
     onSettingsOpen: () => void;
     onAboutOpen: () => void;
-    onHistoryClick: () => void;
     onFullscreen: (ketcherId: string) => void;
     onHelp: () => void;
 }

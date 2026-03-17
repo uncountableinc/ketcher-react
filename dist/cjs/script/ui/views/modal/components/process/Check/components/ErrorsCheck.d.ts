@@ -1,4 +1,3 @@
-export default ErrorsCheck;
 /****************************************************************************
  * Copyright 2021 EPAM Systems
  *
@@ -14,4 +13,29 @@ export default ErrorsCheck;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare function ErrorsCheck(props: any): import("react/jsx-runtime").JSX.Element;
+interface CheckSchemaItem {
+    type: string;
+    enum: string[];
+    enumNames: string[];
+}
+interface CheckSchemaProperties {
+    checkOptions: {
+        title: string;
+        type: string;
+        items: CheckSchemaItem;
+    };
+}
+interface CheckSchema {
+    title: string;
+    type: string;
+    properties: CheckSchemaProperties;
+}
+interface MoleculeErrors {
+    [key: string]: string;
+}
+interface ErrorsCheckProps {
+    moleculeErrors: MoleculeErrors;
+    checkSchema: CheckSchema;
+}
+declare function ErrorsCheck(props: Readonly<ErrorsCheckProps>): import("react/jsx-runtime").JSX.Element;
+export default ErrorsCheck;
