@@ -18,12 +18,11 @@ import { EditorState, Modifier } from 'draft-js';
 
 import { SpecialSymbolsList } from '../SpecialSymbolsList/SpecialSymbolsList';
 import classes from './SpecialSymbolsButton.module.less';
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import { Icon } from 'components';
 
 const SpecialSymbolsButton = ({ editorState, setEditorState, styles }) => {
   const [showSpecialSymbols, setShowSpecialSymbols] = useState(false);
-  const pickerId = 'special-symbols-picker-' + useId();
 
   const handleClose = (event) => {
     event.stopPropagation();
@@ -57,10 +56,9 @@ const SpecialSymbolsButton = ({ editorState, setEditorState, styles }) => {
   };
 
   return (
-    <div onBlur={closeSymbolsList} role="none">
+    <div onBlur={closeSymbolsList}>
       <button
         title="symbols"
-        data-testid="special-symbols-button"
         onMouseDown={(e) => {
           e.preventDefault();
           setShowSpecialSymbols(!showSpecialSymbols);
@@ -68,15 +66,10 @@ const SpecialSymbolsButton = ({ editorState, setEditorState, styles }) => {
         className={
           showSpecialSymbols ? classes.activeTextButton : classes.textButton
         }
-        aria-controls={pickerId}
-        aria-expanded={showSpecialSymbols}
-        aria-haspopup="true"
       >
         <Icon name="text-special-symbols" />
       </button>
-      {showSpecialSymbols && (
-        <SpecialSymbolsList id={pickerId} onSelect={addSymbol} />
-      )}
+      {showSpecialSymbols && <SpecialSymbolsList select={addSymbol} />}
     </div>
   );
 };

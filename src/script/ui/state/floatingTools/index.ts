@@ -27,13 +27,14 @@ export const updateFloatingTools = (payload: FloatingToolsPayload) => {
 
 const floatingToolsReducer: Reducer<FloatingToolsState, FloatingToolsAction> = (
   state = initialState,
-  action,
+  { type, payload },
 ) => {
-  const { type, payload } = action;
-  if (type === 'UPDATE_FLOATING_TOOLS') {
-    return { ...state, ...payload };
+  switch (type) {
+    case 'UPDATE_FLOATING_TOOLS':
+      return { ...state, ...payload };
+    default:
+      return state;
   }
-  return state;
 };
 
 export default floatingToolsReducer;

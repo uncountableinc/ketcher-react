@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-import { Modal } from './Modal';
-declare const ModalContainer: import("react-redux").ConnectedComponent<typeof Modal, {
-    ketcherId: string;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+import { Modal, ModalProps } from './Modal';
+import { BaseCallProps, ModalContainerProps } from './modal.types';
+declare const ModalContainer: import("react-redux").ConnectedComponent<typeof Modal, import("react-redux").Omit<ModalProps & BaseCallProps & ModalContainerProps, "modal" | "onCancel" | "onOk"> & ModalContainerProps>;
 export default ModalContainer;

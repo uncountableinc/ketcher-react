@@ -20,7 +20,6 @@ import {
   fromAtomsAttrs,
   FunctionalGroup,
   KetcherLogger,
-  CoordinateTransformation,
 } from 'ketcher-core';
 import Editor from '../Editor';
 import { Tool } from './Tool';
@@ -94,11 +93,7 @@ class RGroupAtomTool implements Tool {
     if (!ci) {
       //  ci.type == 'Canvas'
       this.editor.hover(null);
-      propsDialog(
-        this.editor,
-        null,
-        CoordinateTransformation.pageToModel(event, rnd),
-      );
+      propsDialog(this.editor, null, rnd.page2obj(event));
       return true;
     } else if (ci.map === 'atoms') {
       const struct = this.editor.render.ctab.molecule;
@@ -131,7 +126,7 @@ function propsDialog(editor, id, pos) {
   Promise.resolve(res)
     .then((elem) => {
       // TODO review: using Atom.attrlist as a source of default property values
-      elem = { ...Atom.attrlist, ...(elem || {}) };
+      elem = Object.assign({}, Atom.attrlist, elem);
 
       if (!id && id !== 0 && elem.rglabel) {
         editor.update(fromAtomAddition(editor.render.ctab, pos, elem));

@@ -30,12 +30,14 @@ export const TextEditor = ({
   testId,
 }: TextEditorProps) => {
   return (
-    <textarea
-      className={classes.textareaEditor}
-      value={structStr}
-      data-testid={testId}
-      onChange={(event) => inputHandler(event.target.value)}
-      autoFocus={autoFocus}
-    />
+    <>
+      <textarea
+        className={classes.textareaEditor}
+        value={structStr}
+        data-testid={testId}
+        onChange={(event) => inputHandler(event.target.value)}
+        autoFocus={autoFocus}
+      />
+    </>
   );
 };

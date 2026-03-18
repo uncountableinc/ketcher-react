@@ -16,7 +16,7 @@
 import { iconNameToIcon } from './utils/iconNameToIcon';
 import { MouseEvent } from 'react';
 export declare type SvgComponent = React.FunctionComponent<React.SVGProps<SVGSVGElement> & {
-    title?: string;
+    title?: string | undefined;
 }>;
 export declare type IconName = keyof typeof iconNameToIcon;
 export interface IIconProps {
@@ -24,8 +24,5 @@ export interface IIconProps {
     className?: string;
     title?: string;
     onClick?: (e: MouseEvent) => void;
-    onMouseOver?: (e: MouseEvent) => void;
-    onMouseOut?: (e: MouseEvent) => void;
-    onDoubleClick?: (e: MouseEvent) => void;
     dataTestId?: string;
 }

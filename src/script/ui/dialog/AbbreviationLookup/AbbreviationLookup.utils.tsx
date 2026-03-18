@@ -142,7 +142,8 @@ export const filterOptions = (
   const filteredOptions = options.filter((option) => {
     return (
       option.loweredName.includes(loweredLookupValue) ||
-      option.loweredAbbreviation?.includes(loweredLookupValue)
+      (option.loweredAbbreviation &&
+        option.loweredAbbreviation.includes(loweredLookupValue))
     );
   });
 

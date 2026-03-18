@@ -36,13 +36,10 @@ interface BondSettings {
 }
 interface BondProps extends BaseProps, BondSettings {}
 
-type Props = BondProps &
-  BaseCallProps & {
-    isMonomerCreationWizardActive?: boolean;
-  };
+type Props = BondProps & BaseCallProps;
 
 const Bond = (props: Props) => {
-  const { formState, isMonomerCreationWizardActive = false, ...rest } = props;
+  const { formState, ...rest } = props;
   const bondProps = bondSchema.properties;
   const [isCustomQuery, setIsCustomQuery] = useState(Boolean(rest.customQuery));
   const previousSettings = useRef<BondSettings>({
@@ -64,10 +61,6 @@ const Bond = (props: Props) => {
     _,
     updateFormState: (settings: BondSettings) => void,
   ) => {
-    if (isMonomerCreationWizardActive) {
-      return;
-    }
-
     setIsCustomQuery(value);
     if (value) {
       const { type, topology, center, customQuery } = formState;
@@ -119,7 +112,7 @@ const Bond = (props: Props) => {
           name="topology"
           component={Select}
           options={getSelectOptionsFromSchema(bondProps.topology)}
-          disabled={isCustomQuery || isMonomerCreationWizardActive}
+          disabled={isCustomQuery}
           formName="bond-properties"
           data-testid="topology"
         />
@@ -127,20 +120,17 @@ const Bond = (props: Props) => {
           name="center"
           component={Select}
           options={getSelectOptionsFromSchema(bondProps.center)}
-          disabled={isCustomQuery || isMonomerCreationWizardActive}
+          disabled={isCustomQuery}
           formName="bond-properties"
           data-testid="reacting-center"
         />
         {!SettingsManager.disableCustomQuery && (
-          <div
-            className={classes.customQueryWrapper}
-            aria-disabled={isMonomerCreationWizardActive}
-          >
+          <div className={classes.customQueryWrapper}>
             <CustomQueryField
               name="customQuery"
               labelPos="after"
               className={classes.checkbox}
-              disabled={!isCustomQuery || isMonomerCreationWizardActive}
+              disabled={!isCustomQuery}
               checkboxValue={isCustomQuery}
               onCheckboxChange={handleCustomQueryCheckBoxChange}
               data-testid="bond-custom-query"

@@ -26,7 +26,6 @@ import {
   Struct,
   Vec2,
   vectorUtils,
-  CoordinateTransformation,
 } from 'ketcher-core';
 import Editor from '../Editor';
 import { dropAndMerge } from './helper/dropAndMerge';
@@ -71,16 +70,12 @@ class PasteTool implements Tool {
 
     const rnd = this.editor.render;
     const { clientHeight, clientWidth } = rnd.clientArea;
-    const clientAreaRect = rnd.clientArea.getBoundingClientRect();
     const point = this.editor.lastEvent
-      ? CoordinateTransformation.pageToModel(this.editor.lastEvent, rnd)
-      : CoordinateTransformation.pageToModel(
-          {
-            clientX: clientAreaRect.left + clientWidth / 2,
-            clientY: clientAreaRect.top + clientHeight / 2,
-          },
-          rnd,
-        );
+      ? rnd.page2obj(this.editor.lastEvent)
+      : rnd.page2obj({
+          pageX: clientWidth / 2,
+          pageY: clientHeight / 2,
+        } as MouseEvent);
 
     const [action, pasteItems] = fromPaste(rnd.ctab, this.struct, point);
     this.action = action;
@@ -124,7 +119,7 @@ class PasteTool implements Tool {
       const [action] = fromPaste(
         this.restruct,
         this.struct,
-        CoordinateTransformation.pageToModel(event, this.editor.render),
+        this.editor.render.page2obj(event),
       );
       this.action = action;
       return;
@@ -134,7 +129,7 @@ class PasteTool implements Tool {
     this.action = null;
 
     this.dragCtx = {
-      xy0: CoordinateTransformation.pageToModel(event, this.editor.render),
+      xy0: this.editor.render.page2obj(event),
       item: closestGroupItem,
     };
   }
@@ -153,10 +148,7 @@ class PasteTool implements Tool {
     if (this.dragCtx) {
       // template-like logic for group-on-group actions
       let pos0: Vec2 | null | undefined = null;
-      const pos1 = CoordinateTransformation.pageToModel(
-        event,
-        this.editor.render,
-      );
+      const pos1 = this.editor.render.page2obj(event);
 
       const extraBond = true;
 
@@ -213,7 +205,7 @@ class PasteTool implements Tool {
       const [action, pasteItems] = fromPaste(
         this.restruct,
         this.struct,
-        CoordinateTransformation.pageToModel(event, this.editor.render),
+        this.editor.render.page2obj(event),
       );
       this.action = action;
       this.editor.update(this.action, true);
@@ -311,7 +303,7 @@ function prepareTemplateFromSingleGroup(molecule: Struct): Template | null {
     xy0.add_(atom.pp); // eslint-disable-line no-underscore-dangle
   });
 
-  template.aid = sgroup?.getAttachmentAtomId() ?? 0;
+  template.aid = sgroup?.getAttachmentAtomId() || 0;
   template.molecule = molecule;
   template.xy0 = xy0.scaled(1 / (molecule.atoms.size || 1)); // template center
 

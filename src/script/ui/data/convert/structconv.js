@@ -155,8 +155,7 @@ export function toAtom(atom) {
     ...restAtom
   } = atom;
   if (customQuery && customQuery !== '') {
-    return {
-      ...restAtom,
+    return Object.assign({}, restAtom, {
       label: 'A',
       atomList: null,
       pseudo: null,
@@ -181,13 +180,12 @@ export function toAtom(atom) {
       },
       invRet: 0,
       exactChangeFlag: 0,
-    };
+    });
   }
   const pch = matchCharge(restAtom.charge);
   const charge = pch ? parseInt(pch[1] + pch[3] + pch[2]) : restAtom.charge;
 
-  const conv = {
-    ...restAtom,
+  const conv = Object.assign({}, restAtom, {
     isotope: restAtom.isotope ? Number(restAtom.isotope) : null,
     // empty charge value by default treated as zero,
     // no need to pass and display zero values(0, -0) explicitly
@@ -204,7 +202,7 @@ export function toAtom(atom) {
       chirality,
       customQuery: customQuery === '' ? null : customQuery,
     },
-  };
+  });
 
   return conv;
 }
@@ -385,7 +383,7 @@ const bondCaptionMap = {
 };
 
 export function toBondType(caption) {
-  return { ...bondCaptionMap[caption] };
+  return Object.assign({}, bondCaptionMap[caption]);
 }
 
 function fromBondType(type, stereo) {
@@ -407,7 +405,10 @@ export function fromSgroup(ssgroup) {
     ssgroup.attrs.radiobuttons = 'Relative';
   else ssgroup.attrs.radiobuttons = attached ? 'Attached' : 'Absolute';
 
-  if (sdataSchema[context][fieldName]?.properties.fieldValue.items)
+  if (
+    sdataSchema[context][fieldName] &&
+    sdataSchema[context][fieldName].properties.fieldValue.items
+  )
     ssgroup.attrs.fieldValue = fieldValue.split('\n');
 
   const sDataInitValue =
@@ -428,7 +429,7 @@ export function fromSgroup(ssgroup) {
         }
       : {};
 
-  return { type, ...ssgroup.attrs, ...sDataInitValue };
+  return Object.assign({ type }, ssgroup.attrs, sDataInitValue);
 }
 
 export function toSgroup(sgroup) {

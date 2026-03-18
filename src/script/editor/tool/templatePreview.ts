@@ -23,7 +23,6 @@ import {
   Action,
   fromTemplateOnCanvas,
   fromMultipleMove,
-  CoordinateTransformation,
 } from 'ketcher-core';
 import Editor from '../Editor';
 import { MODES } from 'src/constants';
@@ -83,7 +82,7 @@ class TemplatePreview {
     this.hideFloatingPreview();
   }
 
-  private getPreviewTarget(event: PointerEvent) {
+  private getPreviewTarget() {
     const ci: ClosestItemType | null = this.editor.findItem(event, [
       'atoms',
       'bonds',
@@ -97,13 +96,10 @@ class TemplatePreview {
   }
 
   movePreview(event: PointerEvent) {
-    this.position = CoordinateTransformation.pageToModel(
-      event,
-      this.editor.render,
-    );
+    this.position = this.editor.render.page2obj(event);
 
     const struct = this.editor.struct();
-    const previewTarget = this.getPreviewTarget(event);
+    const previewTarget = this.getPreviewTarget();
     const isMouseAwayFromAtomsAndBonds = !previewTarget;
     const isPreviewTargetChanged =
       previewTarget && this.lastPreviewId !== getUniqueCiId(previewTarget);

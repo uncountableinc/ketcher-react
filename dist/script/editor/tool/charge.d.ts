@@ -20,6 +20,5 @@ declare class ChargeTool implements Tool {
     constructor(editor: any, charge: any);
     mousemove(event: any): boolean;
     click(event: any): true | undefined;
-    private isChargeableAtom;
 }
 export default ChargeTool;

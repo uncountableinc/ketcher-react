@@ -1,3 +1,4 @@
+export default FrozenInput;
 /****************************************************************************
  * Copyright 2021 EPAM Systems
  *
@@ -13,9 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-export declare type FrozenInputProps = {
-    value: string | number;
-    'data-testid'?: string;
-};
-declare const FrozenInput: ({ value, "data-testid": dataTestId, }: FrozenInputProps) => import("react/jsx-runtime").JSX.Element;
-export default FrozenInput;
+declare function FrozenInput({ value }: {
+    value: any;
+}): import("react/jsx-runtime").JSX.Element;

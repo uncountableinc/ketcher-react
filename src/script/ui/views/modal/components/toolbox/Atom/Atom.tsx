@@ -63,7 +63,6 @@ interface AtomProps extends BaseCallProps, BaseProps {
 type Props = AtomProps & {
   isMultipleAtoms?: boolean;
   isRestoredModal: boolean;
-  isMonomerCreationWizardActive?: boolean;
 };
 
 const atomProps = atomSchema.properties;
@@ -93,7 +92,6 @@ const Atom: FC<Props> = (props: Props) => {
     /* eslint-enable @typescript-eslint/no-unused-vars */
     isMultipleAtoms = false,
     isRestoredModal,
-    isMonomerCreationWizardActive = false,
     ...rest
   } = props;
   const [isCustomQuery, setIsCustomQuery] = useState(Boolean(rest.customQuery));
@@ -101,14 +99,7 @@ const Atom: FC<Props> = (props: Props) => {
     isCustomQuery ? [] : ['General'],
   );
   const handleAccordionChange = (accordion) => () => {
-    if (isMonomerCreationWizardActive) {
-      return;
-    }
-
-    if (isCustomQuery) {
-      return;
-    }
-
+    if (isCustomQuery) return;
     const isExpand = !expandedAccordions.includes(accordion);
     setExpandedAccordions(
       isExpand
@@ -124,10 +115,6 @@ const Atom: FC<Props> = (props: Props) => {
     formState,
     setCustomQuery: (value: string) => void,
   ) => {
-    if (isMonomerCreationWizardActive) {
-      return;
-    }
-
     const query = value ? getAtomCustomQuery(formState) : '';
     setCustomQuery(query);
     setIsCustomQuery(value);
@@ -212,7 +199,6 @@ const Atom: FC<Props> = (props: Props) => {
             name="invRet"
             component={Select}
             options={getSelectOptionsFromSchema(atomProps.invRet)}
-            data-testid="inversion"
           />
           <Field
             name="exactChangeFlag"
@@ -244,18 +230,12 @@ const Atom: FC<Props> = (props: Props) => {
         <div className={classes.accordionWrapper}>
           {itemGroups.map(({ groupName, component }) => {
             const shouldGroupBeRended = expandedAccordions.includes(groupName);
-            const isDisabled =
-              isMonomerCreationWizardActive &&
-              (groupName === 'Query specific' ||
-                groupName === 'Reaction flags');
-
             return (
               <div key={groupName} data-testid={`${groupName}-section`}>
-                <button
+                <div
                   onClick={handleAccordionChange(groupName)}
                   className={classes.accordionSummaryWrapper}
-                  disabled={isCustomQuery || isDisabled}
-                  type="button"
+                  aria-disabled={isCustomQuery}
                 >
                   <div className={classes.accordionSummary}>
                     <span>{groupName}</span>
@@ -267,13 +247,12 @@ const Atom: FC<Props> = (props: Props) => {
                       name="chevron"
                     />
                   </div>
-                </button>
+                </div>
                 <div
                   className={clsx({
                     [classes.accordionDetailsWrapper]: true,
                     [classes.hiddenAccordion]: !shouldGroupBeRended,
                   })}
-                  data-testid={`${groupName}-wrapper`}
                 >
                   <div className={classes.accordionDetails}>{component}</div>
                 </div>
@@ -281,10 +260,7 @@ const Atom: FC<Props> = (props: Props) => {
             );
           })}
           {!SettingsManager.disableCustomQuery && (
-            <div
-              className={classes.customQueryWrapper}
-              aria-disabled={isMonomerCreationWizardActive}
-            >
+            <div className={classes.customQueryWrapper}>
               <CustomQueryField
                 name="customQuery"
                 labelPos="after"

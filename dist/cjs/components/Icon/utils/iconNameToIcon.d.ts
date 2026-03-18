@@ -159,7 +159,6 @@ export declare const iconNameToIcon: {
     readonly 'rgroup-label': ReactComponent;
     readonly save: ReactComponent;
     readonly search: ReactComponent;
-    readonly 'select-structure': ReactComponent;
     readonly 'select-fragment': ReactComponent;
     readonly 'select-lasso': ReactComponent;
     readonly 'select-rectangle': ReactComponent;
@@ -229,8 +228,6 @@ export declare const iconNameToIcon: {
     readonly phosphate: ReactComponent;
     readonly preset: ReactComponent;
     readonly nucleotide: ReactComponent;
-    readonly peptide: ReactComponent;
-    readonly chem: ReactComponent;
     readonly 'edit-filled': ReactComponent;
     readonly 'vertical-dots': ReactComponent;
     readonly expand: ReactComponent;
@@ -246,11 +243,4 @@ export declare const iconNameToIcon: {
     readonly antisenseStrand: ReactComponent;
     readonly antisenseRnaStrand: ReactComponent;
     readonly antisenseDnaStrand: ReactComponent;
-    readonly 'arrange-ring': ReactComponent;
-    readonly 'monomer-autochain': ReactComponent;
-    readonly "create-monomer": ReactComponent;
-    readonly checkFilled: ReactComponent;
-    readonly warningFilled: ReactComponent;
-    readonly leavingGroup: ReactComponent;
-    readonly connectionPoint: ReactComponent;
 };

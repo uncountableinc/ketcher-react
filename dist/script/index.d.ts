@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+/// <reference types="react" />
 import { Root } from 'react-dom/client';
 import { ButtonsConfig, KetcherBuilder } from './builders';
 import { StructServiceProvider } from 'ketcher-core';
@@ -37,5 +38,3 @@ declare function buildKetcherAsync({ element, appRoot, staticResourcesUrl, struc
     setServer: (structService: import("ketcher-core").StructService) => void;
 }>;
 export default buildKetcherAsync;
-export * from './ui/views/toolbars/ArrowScroll';
-export * from './ui/views/toolbars/ToolbarGroupItem/ToolbarMultiToolItem/usePortalStyle';

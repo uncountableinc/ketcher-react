@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-import { useCallback, useId, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { HexColorPicker, HexColorInput } from 'react-colorful';
 import classes from './ColorPicker.module.less';
@@ -24,6 +24,8 @@ import { Icon } from 'components';
 interface ColorPickerProps {
   value: string;
   name: string;
+  schema: any;
+  type?: string;
 }
 
 interface ColorPickerCallProps {
@@ -46,7 +48,6 @@ const ColorPicker = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const { onChange, value } = props;
-  const paletteId = 'color-picker-' + useId();
 
   const handleChange = useCallback(
     (color) => {
@@ -88,39 +89,18 @@ const ColorPicker = (props: Props) => {
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleClick(e);
-    }
-  };
-
-  const handleWrapperKeyDown = (e) => {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  };
-
   return (
     <div
       className={classes.colorPickerWrapper}
       data-testid={isOpen ? 'color-picker-field-open' : 'color-picker-field'}
       onClick={(e) => e.preventDefault()}
-      onKeyDown={handleWrapperKeyDown}
-      role="none"
     >
-      <button
-        type="button"
+      <div
         className={clsx({
           [classes.colorPickerInput]: true,
           [classes.selectedInput]: isOpen,
         })}
-        aria-controls={paletteId}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
       >
         <div
           className={classes.colorPickerPreview}
@@ -135,17 +115,15 @@ const ColorPicker = (props: Props) => {
           })}
           name="chevron"
         />
-      </button>
+      </div>
       {isOpen && (
         <div
           className={clsx(
             classes.colorPickerWrap,
             isPaletteOpen && classes.withPalette,
           )}
-          id={paletteId}
           onBlur={handleBlur}
           data-testid="color-picker-preset"
-          role="none"
         >
           <div className={classes.presetColors}>
             <button

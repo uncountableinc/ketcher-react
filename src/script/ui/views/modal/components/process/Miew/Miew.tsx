@@ -121,8 +121,8 @@ const MiewDialog = ({
   miewTheme = 'light',
   ...prop
 }: Props) => {
-  const miewRef = useRef<MiewAsType>(undefined);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const miewRef = useRef<MiewAsType>();
+  const [isInitialized, setIsIsInitialized] = useState(false);
   const { ketcherId } = useAppContext();
   const ketcher = useMemo(
     () => ketcherProvider.getKetcher(ketcherId),
@@ -148,7 +148,7 @@ const MiewDialog = ({
         )
         .then(() => {
           miew.setOptions(miewOpts);
-          setIsInitialized(true);
+          setIsIsInitialized(true);
         })
         .catch((e) => {
           KetcherLogger.error('Miew.tsx::MiewDialog::onMiewInit', e);

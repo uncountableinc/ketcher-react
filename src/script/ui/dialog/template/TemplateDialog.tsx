@@ -34,7 +34,6 @@ import Input from '../../component/form/Input/Input';
 import { SaveButton } from '../../component/view/savebutton';
 import { SdfSerializer } from 'ketcher-core';
 import classes from './template-lib.module.less';
-import accordionClasses from '../../../../components/Accordion/Accordion.module.less';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { omit } from 'lodash/fp';
@@ -47,13 +46,13 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import useSaltsAndSolvents from './useSaltsAndSolvets';
 import { Icon } from 'components';
-import clsx from 'clsx';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
     <div
       className={classes.tabPanel}
+      component="div"
       role="tabpanel"
       id={`scrollable-auto-tabpanel-${index}`}
       aria-labelledby={`scrollable-auto-tab-${index}`}
@@ -81,7 +80,6 @@ interface TemplateLibProps {
   initialTab: number;
   saltsAndSolvents: Template[];
   renderOptions?: any;
-  isMonomerCreationWizardActive?: boolean;
 }
 
 interface TemplateLibCallProps {
@@ -119,21 +117,11 @@ const HeaderContent = () => (
   </div>
 );
 
-const FooterContent = ({ data, tab, isMonomerCreationWizardActive }) => {
-  const clickToAddToCanvas = (
-    <span data-testid="add-to-canvas-button">Click to add to canvas</span>
-  );
-
-  // Determine filename based on tab
-  let filename: string;
-  if (tab === TemplateTabs.TemplateLibrary) {
-    filename = 'ketcher-tmpls.sdf';
-  } else if (tab === TemplateTabs.FunctionalGroupLibrary) {
-    filename = 'ketcher-fg-tmpls.sdf';
-  } else {
-    filename = 'ketcher-salts-solvents.sdf';
+const FooterContent = ({ data, tab }) => {
+  const clickToAddToCanvas = <span>Click to add to canvas</span>;
+  if (tab === TemplateTabs.SaltsAndSolvents) {
+    return clickToAddToCanvas;
   }
-
   return (
     <div
       style={{
@@ -146,13 +134,12 @@ const FooterContent = ({ data, tab, isMonomerCreationWizardActive }) => {
       <SaveButton
         key="save-to-SDF"
         data={data}
-        className={clsx(
-          classes.saveButton,
-          isMonomerCreationWizardActive && classes.disabled,
-        )}
-        testId="save-to-sdf-button"
-        filename={filename}
-        disabled={isMonomerCreationWizardActive}
+        className={classes.saveButton}
+        filename={
+          tab === TemplateTabs.TemplateLibrary
+            ? 'ketcher-tmpls.sdf'
+            : 'ketcher-fg-tmpls.sdf'
+        }
       >
         Save to SDF
       </SaveButton>
@@ -176,7 +163,6 @@ const TemplateDialog: FC<Props> = (props) => {
     lib: templateLib,
     saltsAndSolvents,
     onSelect,
-    isMonomerCreationWizardActive = false,
     ...rest
   } = props;
 
@@ -210,15 +196,6 @@ const TemplateDialog: FC<Props> = (props) => {
     }
   }, [initialTab, onTabChange]);
 
-  useEffect(() => {
-    if (
-      isMonomerCreationWizardActive &&
-      tab === TemplateTabs.FunctionalGroupLibrary
-    ) {
-      onTabChange(TemplateTabs.TemplateLibrary);
-    }
-  }, [isMonomerCreationWizardActive, tab, onTabChange]);
-
   const handleAccordionChange = (accordion) => (_, isExpanded) => {
     setExpandedAccordions(
       isExpanded
@@ -249,13 +226,7 @@ const TemplateDialog: FC<Props> = (props) => {
   return (
     <Dialog
       headerContent={<HeaderContent />}
-      footerContent={
-        <FooterContent
-          tab={tab}
-          data={data}
-          isMonomerCreationWizardActive={isMonomerCreationWizardActive}
-        />
-      }
+      footerContent={<FooterContent tab={tab} data={data} />}
       className={`${classes.dialog_body}`}
       params={omit(['group'], rest)}
       buttons={[]}
@@ -270,7 +241,6 @@ const TemplateDialog: FC<Props> = (props) => {
           onChange={(value) => onFilter(value)}
           placeholder="Search by elements..."
           isFocused={true}
-          data-testid="template-search-input"
         />
         <Icon name="search" className={classes.searchIcon} />
       </div>
@@ -281,19 +251,14 @@ const TemplateDialog: FC<Props> = (props) => {
       >
         <Tab
           label="Template Library"
-          data-testid="template-library-tab"
           {...a11yProps(TemplateTabs.TemplateLibrary)}
         />
         <Tab
           label="Functional Groups"
-          data-testid="functional-groups-tab"
-          disabled={isMonomerCreationWizardActive}
-          className={clsx(isMonomerCreationWizardActive && classes.disabled)}
           {...a11yProps(TemplateTabs.FunctionalGroupLibrary)}
         />
         <Tab
           label="Salts and Solvents"
-          data-testid="salts-and-solvents-tab"
           {...a11yProps(TemplateTabs.SaltsAndSolvents)}
         />
       </Tabs>
@@ -306,7 +271,6 @@ const TemplateDialog: FC<Props> = (props) => {
                   expandedAccordions.includes(groupName);
                 return (
                   <Accordion
-                    className={accordionClasses.accordion}
                     square={true}
                     key={groupName}
                     onChange={handleAccordionChange(groupName)}
@@ -314,12 +278,8 @@ const TemplateDialog: FC<Props> = (props) => {
                   >
                     <AccordionSummary
                       className={classes.accordionSummary}
-                      data-testid={`${groupName}-accordion-item`}
                       expandIcon={
-                        <Icon
-                          className={accordionClasses.expandIcon}
-                          name="chevron"
-                        />
+                        <Icon className={classes.expandIcon} name="chevron" />
                       }
                     >
                       <Icon
@@ -408,13 +368,12 @@ const onModalClose = (props, dispatch) => {
 };
 
 export default connect(
-  (store: any) => ({
-    ...omit(['attach'], store.templates),
-    initialTab: store.modal?.prop?.tab,
-    renderOptions: store.editor?.render?.options,
+  (store) => ({
+    ...omit(['attach'], (store as any).templates),
+    initialTab: (store as any).modal?.prop?.tab,
+    renderOptions: (store as any).editor?.render?.options,
     functionalGroups: functionalGroupsSelector(store),
     saltsAndSolvents: saltsAndSolventsSelector(store),
-    isMonomerCreationWizardActive: store.editor?.isMonomerCreationWizardActive,
   }),
   (dispatch: Dispatch<any>, props: Props) => ({
     onFilter: (filter) => dispatch(changeFilter(filter)),

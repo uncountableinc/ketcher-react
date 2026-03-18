@@ -4,12 +4,12 @@ export function renderWithMockStore(component: any, initialState?: {
             errorMessage: string;
         };
     };
-}, store?: import("redux").Store<any, any, unknown>): {
-    store: import("redux").Store<any, any, unknown>;
+}, store?: any): {
+    store: any;
     container: HTMLElement;
     baseElement: HTMLElement;
-    debug: (baseElement?: any, maxLength?: number | undefined, options?: import("pretty-format").PrettyFormatOptions | undefined) => void;
-    rerender: (ui: import("react").ReactNode) => void;
+    debug: (baseElement?: Element | DocumentFragment | (Element | DocumentFragment)[] | undefined, maxLength?: number | undefined, options?: import("pretty-format").PrettyFormatOptions | undefined) => void;
+    rerender: (ui: import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>>) => void;
     unmount: () => void;
     asFragment: () => DocumentFragment;
     getByLabelText: (id: import("@testing-library/react").Matcher, options?: import("@testing-library/react").SelectorMatcherOptions | undefined) => HTMLElement;

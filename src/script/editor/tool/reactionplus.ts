@@ -14,11 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-import {
-  fromMultipleMove,
-  fromPlusAddition,
-  CoordinateTransformation,
-} from 'ketcher-core';
+import { fromMultipleMove, fromPlusAddition } from 'ketcher-core';
 import Editor from '../Editor';
 import { Tool } from './Tool';
 import { handleMovingPosibilityCursor } from '../utils';
@@ -39,7 +35,7 @@ class ReactionPlusTool implements Tool {
     if (ci && ci.map === 'rxnPluses') {
       this.editor.hover(null);
       this.editor.selection({ rxnPluses: [ci.id] });
-      this.dragCtx = { xy0: CoordinateTransformation.pageToModel(event, rnd) };
+      this.dragCtx = { xy0: rnd.page2obj(event) };
     }
   }
 
@@ -55,7 +51,7 @@ class ReactionPlusTool implements Tool {
       this.dragCtx.action = fromMultipleMove(
         rnd.ctab,
         this.editor.selection() || {},
-        CoordinateTransformation.pageToModel(event, rnd).sub(this.dragCtx.xy0),
+        rnd.page2obj(event).sub(this.dragCtx.xy0),
       );
       editor.update(this.dragCtx.action, true);
     } else {
@@ -73,14 +69,15 @@ class ReactionPlusTool implements Tool {
   }
 
   mouseup() {
-    if (this.dragCtx) {
-      if (this.dragCtx.action) {
-        this.editor.update(this.dragCtx.action); // TODO investigate, subsequent undo/redo fails
-      }
-
-      delete this.dragCtx;
+    if (!this.dragCtx) {
+      return true;
     }
 
+    if (this.dragCtx.action) {
+      this.editor.update(this.dragCtx.action); // TODO investigate, subsequent undo/redo fails
+    }
+
+    delete this.dragCtx;
     return true;
   }
 
@@ -89,12 +86,7 @@ class ReactionPlusTool implements Tool {
     const ci = this.editor.findItem(event, ['rxnPluses']);
 
     if (!ci) {
-      this.editor.update(
-        fromPlusAddition(
-          rnd.ctab,
-          CoordinateTransformation.pageToModel(event, rnd),
-        ),
-      );
+      this.editor.update(fromPlusAddition(rnd.ctab, rnd.page2obj(event)));
     }
   }
 }

@@ -18,24 +18,16 @@ interface ToolEventHandler {
   mouseover?(event: Event): void;
 }
 
-export type HoverTarget =
-  | { id: number; map: string }
-  | { map: 'merge'; items: Record<string, number[]> };
-
 export interface Tool extends ToolEventHandler {
   cancel?(): void;
 
   isSelectionRunning?(): boolean;
 
   isNotActiveTool?: boolean;
-
-  ci?: HoverTarget;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ToolConstructorInterface = new (
-  editor: Editor,
-  ...args: any[]
-) => Tool;
+export type ToolConstructorInterface = {
+  new (editor: Editor, ...args: any[]): Tool;
+};
 
 export type ToolEventHandlerName = keyof ToolEventHandler;

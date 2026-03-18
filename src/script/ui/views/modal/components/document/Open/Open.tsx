@@ -62,7 +62,7 @@ const FooterContent = ({
       <div className={classes.buttonsContainer}>
         <DialogActionButton
           key="openButton"
-          disabled={!structStr.trim()}
+          disabled={!structStr}
           clickHandler={openHandler}
           styles={classes.openButton}
           label="Open as New Project"
@@ -70,7 +70,7 @@ const FooterContent = ({
         />
         <DialogActionButton
           key="copyButton"
-          disabled={!structStr.trim() || isAddToCanvasDisabled}
+          disabled={!structStr || isAddToCanvasDisabled}
           clickHandler={copyHandler}
           styles={classes.copyButton}
           label="Add to Canvas"
@@ -152,11 +152,7 @@ const Open: FC<Props> = (props) => {
   };
 
   const openHandler = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      onOk({ structStr, fragment: false });
-      setIsLoading(false);
-    }, 0);
+    onOk({ structStr, fragment: false });
   };
 
   const withFooterContent =

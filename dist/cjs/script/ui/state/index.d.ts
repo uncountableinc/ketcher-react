@@ -1,4 +1,4 @@
-export default function _default(options: any, server: any, setEditor: any): import("redux").Store<any, any, unknown> & {
+export default function _default(options: any, server: any, setEditor: any): import("redux").Store<any, any> & {
     dispatch: any;
 };
 export function setServer(server: any): {

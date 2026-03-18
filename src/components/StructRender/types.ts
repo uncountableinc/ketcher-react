@@ -26,5 +26,4 @@ export interface IStructRenderProps {
   className?: string;
   update?: boolean;
   fullsize?: boolean;
-  testId?: string;
 }

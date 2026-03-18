@@ -32,13 +32,6 @@ class Tabs extends Component {
     if (this.props.changeTab) this.props.changeTab(index);
   }
 
-  handleKeyDown(ev, index) {
-    if (ev.key === 'Enter' || ev.key === ' ') {
-      ev.preventDefault();
-      this.changeTab(ev, index);
-    }
-  }
-
   componentDidUpdate(prevProps) {
     if (this.props.tabIndex !== prevProps.tabIndex) {
       this.setState({ tabIndex: this.props.tabIndex });
@@ -55,19 +48,18 @@ class Tabs extends Component {
         <ul className={className} tabIndex={tabIndex}>
           <li className={classes.tabs}>
             {tabs.map((tabPanel, index) => (
-              <button
-                type="button"
-                key={tabPanel.caption}
+              <a // eslint-disable-line
+                key={index}
                 className={clsx({
                   [classes.active]: this.state.tabIndex === index,
                 })}
                 onClick={(ev) => this.changeTab(ev, index)}
-                onKeyDown={(ev) => this.handleKeyDown(ev, index)}
-                tabIndex={0}
-                data-testid={tabPanel.caption + '-tab'}
+                data-testid={
+                  this.state.tabIndex === index ? 'preview-tab' : 'warnings-tab'
+                }
               >
                 {tabPanel.caption}
-              </button>
+              </a>
             ))}
           </li>
         </ul>

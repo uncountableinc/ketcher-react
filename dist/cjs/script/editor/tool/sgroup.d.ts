@@ -24,25 +24,8 @@ declare class SGroupTool implements Tool {
     mousedown(event: any): void;
     mousemove(event: any): void;
     mouseleave(event: any): void;
-    private isContractedFunctionalGroupClicked;
-    private processSelectedAtoms;
-    private getActualSgroupId;
-    private isAtomInContractedGroup;
-    private addContractedGroupToSelection;
-    private processSelectedBonds;
-    private expandFunctionalGroupSelection;
-    private expandAtomsToFunctionalGroups;
-    private expandBondsToFunctionalGroups;
-    private collectFunctionalGroupIds;
-    private collectFunctionalGroupIdsFromAtoms;
-    private collectFunctionalGroupIdsFromBonds;
-    private shouldRemoveSingleFunctionalGroup;
-    private determineSelection;
-    private handleLassoSelection;
-    private handleClickSelection;
-    private shouldOpenDialog;
     mouseup(event: any): void;
     cancel(): void;
-    static sgroupDialog(editor: Editor, id: number | null): Promise<void>;
+    static sgroupDialog(editor: Editor, id: number | null): void;
 }
 export default SGroupTool;

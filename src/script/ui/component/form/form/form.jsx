@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+import clsx from 'clsx';
+import { Validator } from 'jsonschema';
+import { cloneDeep } from 'lodash';
 import { Component, useCallback, useState } from 'react';
-import Ajv from 'ajv';
+import { connect } from 'react-redux';
 import { FormContext } from '../../../../../contexts';
+import { useFormContext } from '../../../../../hooks';
+import { updateFormState } from '../../../state/modal/form';
+import { getSelectOptionsFromSchema } from '../../../utils';
 import Input from '../Input/Input';
 import Select from '../Select';
 import { ErrorPopover } from './errorPopover';
 import classes from './form.module.less';
-import clsx from 'clsx';
-import { connect } from 'react-redux';
-import { getSelectOptionsFromSchema } from '../../../utils';
-import { updateFormState } from '../../../state/modal/form';
-import { useFormContext } from '../../../../../hooks';
-import { cloneDeep, omit } from 'lodash';
 import { Icon, IconButton } from 'components';
 import { Tooltip } from '@mui/material';
 
@@ -43,9 +43,6 @@ class Form extends Component {
       onUpdate(initialState, valid, errs);
     }
     this.updateState = this.updateState.bind(this);
-
-    this._cachedSchema = schema;
-    this._contextValue = { schema, stateStore: this };
   }
 
   componentDidUpdate(prevProps) {
@@ -79,7 +76,7 @@ class Form extends Component {
     const extraValue = extraName ? result[extraName] : null;
 
     const handleOnChange = (name, value) => {
-      const newState = { ...this.props.result, [name]: value };
+      const newState = Object.assign({}, this.props.result, { [name]: value });
 
       if (name === 'type') {
         switch (value) {
@@ -100,7 +97,7 @@ class Form extends Component {
     };
 
     return {
-      dataError: errors?.[name],
+      dataError: errors && errors[name],
       value,
       extraValue,
       onChange: (val) => handleOnChange(name, val),
@@ -111,15 +108,9 @@ class Form extends Component {
   render() {
     const { schema, children } = this.props;
 
-    // Update the cached context value only if schema has changed
-    if (this._cachedSchema !== schema) {
-      this._cachedSchema = schema;
-      this._contextValue = { schema, stateStore: this };
-    }
-
     return (
       <form>
-        <FormContext.Provider value={this._contextValue}>
+        <FormContext.Provider value={{ schema, stateStore: this }}>
           {children}
         </FormContext.Provider>
       </form>
@@ -133,63 +124,51 @@ export default connect(null, (dispatch) => ({
   },
 }))(Form);
 
-function renderLabelContent(title, tooltip) {
-  if (!title) {
-    return '';
-  }
-
-  if (tooltip) {
-    return (
-      <div
-        className={clsx({
-          [classes.divWithTooltipAndAboutIcon]: true,
-        })}
-      >
-        <span>{title}</span>
-        <Tooltip title={tooltip}>
-          <div>
-            <Icon name="about"></Icon>
-          </div>
-        </Tooltip>
-      </div>
-    );
-  }
-
-  return <span>{title}</span>;
-}
-
-function renderLabelContentAfter(title, tooltip) {
-  if (!title) {
-    return '';
-  }
-
-  if (tooltip) {
-    return (
-      <div
-        className={clsx({
-          [classes.divWithTooltipAndAboutIcon]: true,
-        })}
-      >
-        <Tooltip title={tooltip}>
-          <div>
-            <Icon name="about"></Icon>
-          </div>
-        </Tooltip>
-        <span>{title}</span>
-      </div>
-    );
-  }
-
-  return <span>{title}</span>;
-}
-
 function Label({ labelPos, title, children, ...props }) {
   const tooltip = props.tooltip ? props.tooltip : null;
   return (
     <label {...props}>
-      {labelPos !== 'after' && renderLabelContent(title, tooltip)}
+      {title && labelPos !== 'after' ? (
+        tooltip ? (
+          <div
+            className={clsx({
+              [classes.divWithTooltipAndAboutIcon]: true,
+            })}
+          >
+            <span>{title}</span>
+            <Tooltip title={tooltip}>
+              <div>
+                <Icon name="about"></Icon>
+              </div>
+            </Tooltip>
+          </div>
+        ) : (
+          <span>{title}</span>
+        )
+      ) : (
+        ''
+      )}
       {children}
-      {labelPos === 'after' && renderLabelContentAfter(title, tooltip)}
+      {title && labelPos === 'after' ? (
+        tooltip ? (
+          <div
+            className={clsx({
+              [classes.divWithTooltipAndAboutIcon]: true,
+            })}
+          >
+            <Tooltip title={tooltip}>
+              <div>
+                <Icon name="about"></Icon>
+              </div>
+            </Tooltip>
+            <span>{title}</span>
+          </div>
+        ) : (
+          <span>{title}</span>
+        )
+      ) : (
+        ''
+      )}
     </label>
   );
 }
@@ -240,7 +219,7 @@ function Field(props) {
       schema={desc}
       {...fieldOpts}
       {...rest}
-      data-testid={props['data-testid'] ?? `${name}-input`}
+      data-testid={`${name}-input`}
     />
   );
 
@@ -259,7 +238,6 @@ function Field(props) {
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
         data-testid={props['data-testid'] + '-input-span'}
-        role="none"
       >
         {formField}
       </span>
@@ -305,17 +283,14 @@ function FieldWithModal(props) {
         })}
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        role="none"
       >
         <Input name={name} schema={desc} {...fieldOpts} {...rest} />
         <IconButton
           onClick={() => {
             onEdit(fieldOpts.onChange);
           }}
-          name="testname"
           iconName="edit"
           className={classes.editButton}
-          testId={`edit-button`}
         />
       </span>
       {dataError && anchorEl && (
@@ -377,7 +352,6 @@ function CustomQueryField(props) {
           [classes.dataError]: dataError,
           [classes.inputWrapper]: true,
         })}
-        role="none"
       >
         <Input
           type="textarea"
@@ -427,20 +401,21 @@ const SelectOneOf = (props) => {
 };
 
 function propSchema(schema, { customValid, serialize = {}, deserialize = {} }) {
-  const ajv = new Ajv({ allErrors: true, verbose: true, strictSchema: false });
   const schemaCopy = cloneDeep(schema);
 
+  Validator.prototype.customFormats = {};
   if (customValid) {
     Object.entries(customValid).forEach(([formatName, formatValidator]) => {
-      ajv.addFormat(formatName, formatValidator);
-
-      const rest = omit(schemaCopy.properties[formatName], [
-        'pattern',
-        'maxLength',
-        'enum',
-        'enumNames',
-      ]);
-
+      Validator.prototype.customFormats[formatName] = formatValidator;
+      const {
+        /* eslint-disable @typescript-eslint/no-unused-vars */
+        pattern,
+        maxLength,
+        enum: enumIsReservedWord,
+        enumNames,
+        /* eslint-enable @typescript-eslint/no-unused-vars */
+        ...rest
+      } = schemaCopy.properties[formatName];
       schemaCopy.properties[formatName] = {
         ...rest,
         format: formatName,
@@ -448,21 +423,21 @@ function propSchema(schema, { customValid, serialize = {}, deserialize = {} }) {
     });
   }
 
-  const validate = ajv.compile(schemaCopy);
+  const validator = new Validator();
 
   return {
     key: schema.key || '',
     serialize: (inst) => {
-      validate(inst);
+      const result = validator.validate(inst, schemaCopy);
 
       return {
         instance: serializeRewrite(serialize, inst, schemaCopy),
-        valid: validate(inst),
-        errors: validate.errors || [],
+        valid: result.valid,
+        errors: result.errors,
       };
     },
     deserialize: (inst) => {
-      validate(inst);
+      validator.validate(inst, schemaCopy);
       return deserializeRewrite(deserialize, inst);
     },
   };
@@ -486,10 +461,10 @@ function deserializeRewrite(deserializeMap, instance) {
 }
 
 function getInvalidMessage(item) {
-  if (!item.parentSchema.invalidMessage) return item.message;
-  return typeof item.parentSchema.invalidMessage === 'function'
-    ? item.parentSchema.invalidMessage(item.data)
-    : item.parentSchema.invalidMessage;
+  if (!item.schema.invalidMessage) return item.message;
+  return typeof item.schema.invalidMessage === 'function'
+    ? item.schema.invalidMessage(item.data)
+    : item.schema.invalidMessage;
 }
 
 function getErrorsObj(errors) {
@@ -497,7 +472,7 @@ function getErrorsObj(errors) {
   let field;
 
   errors.forEach((item) => {
-    field = item.instancePath.slice(1);
+    field = item.path[item.path.length - 1];
     if (!errs[field]) errs[field] = getInvalidMessage(item);
   });
 

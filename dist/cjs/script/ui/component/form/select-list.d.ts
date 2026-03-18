@@ -1,3 +1,4 @@
+export default SelectList;
 /****************************************************************************
  * Copyright 2021 EPAM Systems
  *
@@ -13,23 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-/// <reference types="react" />
-interface Schema {
-    enum: string[];
-    enumNames?: string[];
-}
-interface SelectListProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'onSelect'> {
-    schema: Schema;
-    value: string;
-    onSelect: (opt: string, index: number) => void;
-    splitIndexes?: number[];
-    selected?: string;
-    component?: React.ComponentType<unknown>;
-    classes: {
-        selected?: string;
-        split?: string;
-        [key: string]: string | undefined;
-    };
-}
-declare function SelectList({ schema, value, onSelect, splitIndexes, selected, component, classes, ...props }: Readonly<SelectListProps>): import("react/jsx-runtime").JSX.Element;
-export default SelectList;
+declare function SelectList({ schema, value, onSelect, splitIndexes, selected, component, classes, ...props }: {
+    [x: string]: any;
+    schema: any;
+    value: any;
+    onSelect: any;
+    splitIndexes: any;
+    selected: any;
+    component: any;
+    classes: any;
+}): import("react/jsx-runtime").JSX.Element;

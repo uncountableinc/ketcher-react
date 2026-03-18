@@ -19,14 +19,7 @@ import { getSelectOptionsFromSchema } from '../../utils';
 import Select from '../../component/form/Select';
 import { sdataCustomSchema } from '../../data/schema/sdata-schema';
 
-const content = (
-  schema,
-  context,
-  fieldName,
-  fieldValue,
-  checked,
-  isContextEmpty,
-) =>
+const content = (schema, context, fieldName, fieldValue, checked) =>
   Object.keys(schema.properties)
     .filter(
       (prop) => prop !== 'type' && prop !== 'context' && prop !== 'fieldName',
@@ -40,7 +33,6 @@ const content = (
             type="radio"
             key={`${context}-${fieldName}-${prop}-radio`}
             labelPos={false}
-            disabled={isContextEmpty}
           />
         );
       } else if (prop === 'fieldValue') {
@@ -49,7 +41,6 @@ const content = (
             name={prop}
             key={`${context}-${fieldName}-${prop}-select`}
             placeholder="Enter value"
-            disabled={isContextEmpty}
           />
         );
       } else {
@@ -58,7 +49,6 @@ const content = (
             name={prop}
             type="textarea"
             key={`${context}-${fieldName}-${prop}-select`}
-            disabled={isContextEmpty}
           />
         );
       }
@@ -67,9 +57,6 @@ const content = (
 function SDataFieldset({ formState }) {
   const { result } = formState;
   const formSchema = sdataCustomSchema;
-  const validContextValues = formSchema.properties.context.enum;
-  const isContextEmpty =
-    !result.context || !validContextValues.includes(result.context);
 
   return (
     <fieldset className="sdata">
@@ -79,18 +66,13 @@ function SDataFieldset({ formState }) {
         component={Select}
         data-testid="context"
       />
-      <Field
-        name="fieldName"
-        placeholder="Enter name"
-        disabled={isContextEmpty}
-      />
+      <Field name="fieldName" placeholder="Enter name" />
       {content(
         formSchema,
         result.context,
         result.fieldName,
         result.fieldValue,
         result.radiobuttons,
-        isContextEmpty,
       )}
     </fieldset>
   );

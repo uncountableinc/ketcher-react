@@ -21,15 +21,5 @@ interface TextProps extends DialogParams {
     content: string;
     position?: string;
 }
-declare const _default: import("react-redux").ConnectedComponent<(props: TextProps) => import("react/jsx-runtime").JSX.Element, {
-    id?: any;
-    content: string;
-    position?: string | undefined;
-    className?: string | undefined;
-    isNestedModal?: boolean | undefined;
-    onCancel: () => void;
-    onOk: (result: unknown) => void;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+declare const _default: import("react-redux").ConnectedComponent<(props: TextProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<TextProps, "formState">>;
 export default _default;

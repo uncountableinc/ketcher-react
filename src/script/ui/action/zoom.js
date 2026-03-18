@@ -34,7 +34,7 @@ export default {
     hidden: (options) => isHidden(options, 'zoom'),
   },
   'zoom-out': {
-    shortcut: ['Mod+Minus', 'Mod+NumpadSubtract'],
+    shortcut: ['Ctrl+_', 'Ctrl+-'],
     title: 'Zoom Out',
     enabledInViewOnly: true,
     disabled: (editor) => editor.zoom() <= zoomList[0], // unsave
@@ -47,7 +47,7 @@ export default {
     hidden: (options) => isHidden(options, 'zoom-out'),
   },
   'zoom-in': {
-    shortcut: ['Mod+Equal', 'Mod+NumpadAdd'],
+    shortcut: ['Ctrl+=', 'Ctrl++'],
     title: 'Zoom In',
     enabledInViewOnly: true,
     disabled: (editor) => zoomList[zoomList.length - 1] <= editor.zoom(),

@@ -14,5 +14,5 @@
  * limitations under the License.
  ***************************************************************************/
 import { IStructRenderProps } from './types';
-declare const StructRender: ({ struct, options, className, fullsize, update, testId, }: IStructRenderProps) => import("react/jsx-runtime").JSX.Element;
+declare const StructRender: ({ struct, options, className, fullsize, update, }: IStructRenderProps) => import("react/jsx-runtime").JSX.Element;
 export default StructRender;

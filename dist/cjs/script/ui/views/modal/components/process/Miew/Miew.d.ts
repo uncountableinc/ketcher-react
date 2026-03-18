@@ -26,10 +26,5 @@ declare type MiewDialogCallProps = {
     onExportCML: (cmlStruct: string) => void;
 };
 declare type Props = MiewDialogProps & MiewDialogCallProps;
-declare const Miew: import("react-redux").ConnectedComponent<({ miewOpts, server, struct, onExportCML, miewTheme, ...prop }: Props) => import("react/jsx-runtime").JSX.Element, {
-    onCancel: () => void;
-    onOk: (result: any) => void;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+declare const Miew: import("react-redux").ConnectedComponent<({ miewOpts, server, struct, onExportCML, miewTheme, ...prop }: Props) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<MiewDialogProps & MiewDialogCallProps, "miewOpts" | "server" | "struct" | "onExportCML" | "miewTheme">>;
 export default Miew;

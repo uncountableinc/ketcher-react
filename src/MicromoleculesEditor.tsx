@@ -22,7 +22,7 @@ import 'whatwg-fetch';
 import './index.less';
 
 import init, { Config } from './script';
-import { RefObject, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 
 import { Ketcher, StructService } from 'ketcher-core';
@@ -45,7 +45,7 @@ export interface EditorProps extends Omit<Config, 'element' | 'appRoot'> {
   onSetKetcherId?: (ketcherId: string) => void;
 }
 
-function MicromoleculesEditor(props: Readonly<EditorProps>) {
+function MicromoleculesEditor(props: EditorProps) {
   const initPromiseRef = useRef<ReturnType<typeof init> | null>(null);
   const appRootRef = useRef<Root | null>(null);
   const cleanupRef = useRef<(() => unknown) | null>(null);
@@ -57,9 +57,13 @@ function MicromoleculesEditor(props: Readonly<EditorProps>) {
   const rootElRef = useRef<HTMLDivElement>(null);
 
   const { height, width } = useResizeObserver<HTMLDivElement>({
-    ref: rootElRef as RefObject<HTMLDivElement>,
+    ref: rootElRef,
   });
 
+  // IMPROVE: Can probably remove now that ketcherId is being passed through
+  // props?
+  // - Tony
+  const [ketcherId, setKetcherId] = useState<string | null>(null);
   useEffect(() => {
     if (!props.ketcherId) {
       return;
@@ -85,6 +89,7 @@ function MicromoleculesEditor(props: Readonly<EditorProps>) {
       ketcherBuilderRef.current = builder;
       setServerRef.current = setServer;
       props.onSetKetcherId?.(ketcher.id);
+      setKetcherId(ketcherId);
 
       if (typeof props.onInit === 'function' && ketcher) {
         props.onInit(ketcher);
@@ -116,7 +121,7 @@ function MicromoleculesEditor(props: Readonly<EditorProps>) {
       ref={rootElRef}
       className={clsx(
         KETCHER_ROOT_NODE_CLASS_NAME,
-        `ketcher-id-${props.ketcherId}`,
+        `ketcher-id-${ketcherId}`,
         classes.editor,
         {
           [classes.small]:

@@ -20,7 +20,7 @@ interface FGState {
     functionalGroupInfo: any;
     mode: string;
 }
-declare const functionalGroupsReducer: (state: FGState | undefined, action: AnyAction) => any;
+declare const functionalGroupsReducer: (state: FGState | undefined, { type, payload }: AnyAction) => any;
 export declare const initFGroups: (lib: SdfItem[]) => {
     type: string;
     payload: {

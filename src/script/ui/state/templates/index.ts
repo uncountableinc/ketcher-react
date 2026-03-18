@@ -88,7 +88,7 @@ export function editTmpl(tmpl) {
         (formData) => {
           tmpl.struct.name = formData ? formData.name.trim() : tmpl.struct.name;
           tmpl.props = formData
-            ? { ...(tmpl.props || {}), ...(formData.attach || {}) }
+            ? Object.assign({}, tmpl.props, formData.attach)
             : tmpl.props;
 
           if (tmpl.props.group === 'User Templates')
@@ -148,7 +148,7 @@ function updateLocalStore(lib) {
     .filter((item) => item.props.group === 'User Templates')
     .map((item) => ({
       struct: ketSerializer.serialize(item.struct),
-      props: { ...(omit(['group'], item.props) || {}) },
+      props: Object.assign({}, omit(['group'], item.props)),
     }));
 
   storage.setItem('ketcher-tmpls', userLib);
@@ -177,15 +177,15 @@ const attachActions = ['INIT_ATTACH', 'SET_ATTACH_POINTS', 'SET_TMPL_NAME'];
 
 function templatesReducer(state = initTmplsState, action) {
   if (tmplActions.includes(action.type))
-    return { ...state, ...(action.data || {}) };
+    return Object.assign({}, state, action.data);
 
   if (attachActions.includes(action.type)) {
-    const attach = { ...state.attach, ...(action.data || {}) };
+    const attach = Object.assign({}, state.attach, action.data);
     return { ...state, attach };
   }
 
   if (action.type === 'TMPL_DELETE') {
-    const currentState = { ...state };
+    const currentState = Object.assign({}, state);
     const lib = currentState.lib.filter((value) => value !== action.data.tmpl);
     return { ...currentState, lib };
   }

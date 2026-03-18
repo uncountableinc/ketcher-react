@@ -35,5 +35,5 @@ export function isFlipDisabled(editor): boolean {
     return amountOfAttachmentBonds;
   };
 
-  return getAmountOfAttachmentBonds() > 2;
+  return getAmountOfAttachmentBonds() > 1;
 }

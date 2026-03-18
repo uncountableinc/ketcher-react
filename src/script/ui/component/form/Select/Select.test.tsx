@@ -1,15 +1,6 @@
 import { render } from '@testing-library/react';
-import Select from './Select';
 
-jest.mock(
-  'ketcher-core',
-  () => ({
-    IMAGE_KEY: 'image',
-    MULTITAIL_ARROW_TOOL_NAME: 'multitail',
-    CREATE_MONOMER_TOOL_NAME: 'createMonomer',
-  }),
-  { virtual: true },
-);
+import Select from './Select';
 
 const mockProps = {
   options: [

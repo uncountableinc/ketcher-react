@@ -31,7 +31,7 @@ const content = (type) =>
   Object.keys(schemes[type].properties)
     .filter((prop) => prop !== 'type')
     .map((prop) => {
-      if (prop === 'connectivity' || prop === 'class' || prop === 'subtype') {
+      if (prop === 'connectivity' || prop === 'class') {
         return (
           <Field
             name={prop}

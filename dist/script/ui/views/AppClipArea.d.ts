@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare const AppClipArea: import("react-redux").ConnectedComponent<any, {
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+import ClipArea from '../component/cliparea/cliparea';
+declare const AppClipArea: import("react-redux").ConnectedComponent<typeof ClipArea, import("react-redux").Omit<any, string | number | symbol>>;
 export default AppClipArea;

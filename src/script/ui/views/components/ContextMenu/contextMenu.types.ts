@@ -1,4 +1,4 @@
-import { AttachmentPointName, FunctionalGroup } from 'ketcher-core';
+import { FunctionalGroup } from 'ketcher-core';
 import type { TriggerEvent, PredicateParams } from 'react-contexify';
 import { Selection } from '../../../../editor/Editor';
 
@@ -10,8 +10,9 @@ export enum CONTEXT_MENU_ID {
   FOR_R_GROUP_ATTACHMENT_POINT = 'context-menu-for-rgroup-attachment-point',
   FOR_MULTITAIL_ARROW = 'context-menu-for-multiple-arrowed',
   FOR_MACROMOLECULE = 'context-menu-for-macromolecule',
-  FOR_ATTACHMENT_POINT_LABEL = 'context-menu-for-attachment-point-label',
 }
+
+export type ItemData = unknown;
 
 interface BaseContextMenuProps {
   id: string;
@@ -68,12 +69,6 @@ export interface MultitailArrowContextMenuProps {
   tailId: number | null;
 }
 
-export interface AttachmentPointLabelContextMenuProps
-  extends BaseContextMenuProps {
-  id: string;
-  attachmentPointName: AttachmentPointName;
-}
-
 export type ContextMenuProps =
   | BondsContextMenuProps
   | AtomContextMenuProps
@@ -81,8 +76,7 @@ export type ContextMenuProps =
   | FunctionalGroupsContextMenuProps
   | RGroupAttachmentPointContextMenuProps
   | MultitailArrowContextMenuProps
-  | MacromoleculeContextMenuProps
-  | AttachmentPointLabelContextMenuProps;
+  | MacromoleculeContextMenuProps;
 
 export interface MenuItemsProps<T extends ContextMenuProps> {
   triggerEvent?: TriggerEvent;
@@ -90,7 +84,7 @@ export interface MenuItemsProps<T extends ContextMenuProps> {
 }
 
 export type ItemEventParams<T extends ContextMenuProps = ContextMenuProps> =
-  PredicateParams<T, unknown>;
+  PredicateParams<T, ItemData>;
 
 export type ContextMenuInfo = {
   [id in CONTEXT_MENU_ID]?: boolean;
@@ -100,7 +94,6 @@ export enum ContextMenuTriggerType {
   None = 'none',
   Selection = 'selection',
   ClosestItem = 'closestItem',
-  AuxiliaryItem = 'auxiliaryItem',
 }
 
 export interface ClosestItem {

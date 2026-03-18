@@ -34,7 +34,6 @@ interface AtomProps extends BaseCallProps, BaseProps {
 declare type Props = AtomProps & {
     isMultipleAtoms?: boolean;
     isRestoredModal: boolean;
-    isMonomerCreationWizardActive?: boolean;
 };
 declare const Atom: FC<Props>;
 export type { AtomProps };

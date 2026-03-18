@@ -31,7 +31,7 @@ declare function findClosestItem(restruct: ReStruct, pos: Vec2, maps: any, skip:
  *    atomToFunctionalGroup: Map<number, number>?
  * }}
  */
-declare function findCloseMerge(restruct: ReStruct, selected: any, options: any, maps?: string[]): {
+declare function findCloseMerge(restruct: ReStruct, selected: any, maps: string[] | undefined, options: any): {
     atoms: Map<any, any>;
     atomToFunctionalGroup: Map<any, any>;
 };

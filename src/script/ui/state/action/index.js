@@ -34,7 +34,8 @@ function execute(activeTool, { action, editor, server, options }) {
 function selected(actObj, activeTool, { editor, server }) {
   if (typeof actObj.selected === 'function')
     return actObj.selected(editor, server);
-  else if (actObj.action?.tool) return isEqual(activeTool, actObj.action);
+  else if (actObj.action && actObj.action.tool)
+    return isEqual(activeTool, actObj.action);
   return false;
 }
 
@@ -58,54 +59,39 @@ function status(actionName, activeTool, params) {
   });
 }
 
-/**
- * Builds the state object with action statuses for all actions
- * @param {object} activeTool - The currently active tool
- * @param {object} params - Additional parameters for status computation
- * @returns {object} State object containing active tool and action statuses
- */
-function buildStateWithStatuses(activeTool, params) {
-  return Object.keys(actions).reduce(
-    (res, actionName) => {
-      const value = status(actionName, res.activeTool, params);
-      if (!isEmpty(value)) res[actionName] = value;
-      return res;
-    },
-    { activeTool },
-  );
-}
-
+// TODO need a refactoring for this reducer since it uses (probably unintentionally falling through switch-case)
+// F.e. when it gets action: INIT it will call all cases below - INIT+ACTION+UPDATE
+/* eslint-disable no-fallthrough */
 export default function (state = null, { type, action, ...params }) {
   let activeTool;
   switch (type) {
     case 'INIT': {
       const savedSelectedTool = SettingsManager.selectionTool;
       action = savedSelectedTool || actions['select-rectangle'].action;
-      activeTool = execute(state?.activeTool, {
-        ...params,
-        action,
-      });
-      if (activeTool?.tool === 'select') {
-        SettingsManager.selectionTool = activeTool;
-      }
-      return buildStateWithStatuses(activeTool || state?.activeTool, params);
     }
 
     case 'ACTION': {
-      activeTool = execute(state?.activeTool, {
+      activeTool = execute(state && state.activeTool, {
         ...params,
         action,
       });
-      if (activeTool?.tool === 'select') {
+      if (activeTool.tool === 'select') {
         SettingsManager.selectionTool = activeTool;
       }
-      return buildStateWithStatuses(activeTool || state?.activeTool, params);
     }
 
     case 'UPDATE':
-      return buildStateWithStatuses(activeTool || state?.activeTool, params);
+      return Object.keys(actions).reduce(
+        (res, actionName) => {
+          const value = status(actionName, res.activeTool, params);
+          if (!isEmpty(value)) res[actionName] = value;
+          return res;
+        },
+        { activeTool: activeTool || state.activeTool },
+      );
 
     default:
       return state;
   }
 }
+/* eslint-enable no-fallthrough */

@@ -25,8 +25,8 @@ declare class SelectTool implements Tool {
     isReadyForCopy: boolean;
     isCopied: boolean;
     readonly isMoving = false;
-    private readonly multitailArrowMoveTool;
-    private readonly reactionArrowMoveTool;
+    private multitailArrowMoveTool;
+    private reactionArrowMoveTool;
     constructor(editor: Editor, mode: SelectMode);
     isSelectionRunning(): boolean;
     mousedown(event: PointerEvent): boolean;

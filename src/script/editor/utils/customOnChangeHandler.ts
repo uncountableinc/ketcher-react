@@ -23,7 +23,7 @@ type Position = {
 
 type ArrowPosition = [Position, Position];
 
-export type ChangeEventData = {
+type Data = {
   operation: any;
   id?: number;
   label?: string;
@@ -39,13 +39,15 @@ export type ChangeEventData = {
 };
 
 export function customOnChangeHandler(action, handler) {
-  const data: ChangeEventData[] = [];
+  const data: Data[] = [];
   if (action === undefined) {
     return handler();
-  } else if (window.isPolymerEditorTurnedOn) {
-    return handleMacroChanges(handler);
   } else {
-    return handleMicroChanges(action, handler);
+    if (window.isPolymerEditorTurnedOn) {
+      return handleMacroChanges(handler);
+    } else {
+      return handleMicroChanges(action, handler);
+    }
   }
 
   function handleMacroChanges(handler) {
@@ -53,13 +55,7 @@ export function customOnChangeHandler(action, handler) {
   }
 
   function handleMicroChanges(action, handler) {
-    // Check if action has operations array to avoid errors
-    if (!action?.operations || !Array.isArray(action.operations)) {
-      return handler(data);
-    }
-
-    // Use slice to avoid mutating the original array with reverse()
-    [...action.operations].reverse().forEach((operation) => {
+    action.operations.reverse().forEach((operation) => {
       const op = operation._inverted;
       switch (op.type) {
         case OperationType.ATOM_ADD:
@@ -98,7 +94,6 @@ export function customOnChangeHandler(action, handler) {
 
         case OperationType.BOND_ADD:
         case OperationType.BOND_DELETE:
-        case OperationType.BOND_ATTR:
           data.push({
             operation: op.type,
             id: op.data.bid,
@@ -154,7 +149,6 @@ export function customOnChangeHandler(action, handler) {
           break;
 
         case OperationType.RXN_ARROW_RESIZE:
-        case OperationType.SIMPLE_OBJECT_RESIZE:
           data.push({
             operation: op.type,
             id: op.data.id,
@@ -185,6 +179,13 @@ export function customOnChangeHandler(action, handler) {
             operation: op.type,
             id: op.data.id,
             mode: op.data.mode,
+          });
+          break;
+
+        case OperationType.SIMPLE_OBJECT_RESIZE:
+          data.push({
+            operation: op.type,
+            id: op.data.id,
           });
           break;
 

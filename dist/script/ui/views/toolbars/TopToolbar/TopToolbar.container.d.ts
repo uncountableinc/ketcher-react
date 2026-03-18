@@ -13,10 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare const TopToolbarContainer: import("react-redux").ConnectedComponent<({ className, disabledButtons, indigoVerification, hiddenButtons, shortcuts, onClear, onFileOpen, onSave, onUndo, onRedo, onCopy, onCopyMol, onCopyKet, onCopyImage, onCut, onPaste, currentZoom, onZoom, onZoomIn, onZoomOut, onSettingsOpen, onLayout, onClean, onAromatize, onDearomatize, onCalculate, onCheck, onAnalyse, onMiew, onToggleExplicitHydrogens, onFullscreen, onAbout, onHelp, togglerComponent, customButtons, }: import("./TopToolbar").PanelProps) => import("react/jsx-runtime").JSX.Element, {
-    className: string;
-    togglerComponent?: JSX.Element | undefined;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+declare const TopToolbarContainer: import("react-redux").ConnectedComponent<({ className, disabledButtons, indigoVerification, hiddenButtons, shortcuts, onClear, onFileOpen, onSave, onUndo, onRedo, onCopy, onCopyMol, onCopyKet, onCopyImage, onCut, onPaste, currentZoom, onZoom, onZoomIn, onZoomOut, onSettingsOpen, onLayout, onClean, onAromatize, onDearomatize, onCalculate, onCheck, onAnalyse, onMiew, onToggleExplicitHydrogens, onFullscreen, onAbout, onHelp, togglerComponent, customButtons, }: import("./TopToolbar").PanelProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<import("./TopToolbar").PanelProps, "disabledButtons" | "indigoVerification" | "hiddenButtons" | "shortcuts" | "onClear" | "onFileOpen" | "onSave" | "onUndo" | "onRedo" | "onCopy" | "onCopyMol" | "onCopyKet" | "onCopyImage" | "onCut" | "onPaste" | "currentZoom" | "onZoom" | "onZoomIn" | "onZoomOut" | "onSettingsOpen" | "onLayout" | "onClean" | "onAromatize" | "onDearomatize" | "onCalculate" | "onCheck" | "onAnalyse" | "onMiew" | "onToggleExplicitHydrogens" | "onFullscreen" | "onAbout" | "onHelp" | "customButtons">>;
 export { TopToolbarContainer };

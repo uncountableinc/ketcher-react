@@ -4,6 +4,7 @@ import {
   FunctionalGroup,
   MonomerMicromolecule,
   setExpandMonomerSGroup,
+  UnresolvedMonomer,
   ketcherProvider,
 } from 'ketcher-core';
 import { useCallback } from 'react';
@@ -20,7 +21,7 @@ export const canExpandMonomer = (functionalGroup: FunctionalGroup) => {
   return (
     functionalGroup.relatedSGroup instanceof MonomerMicromolecule &&
     !(functionalGroup.relatedSGroup.monomer instanceof AmbiguousMonomer) &&
-    !functionalGroup.relatedSGroup.monomer.monomerItem.props.unresolved
+    !(functionalGroup.relatedSGroup.monomer instanceof UnresolvedMonomer)
   );
 };
 

@@ -69,7 +69,6 @@ type LeftToolbarItemVariant =
   | 'select'
   | 'select-lasso'
   | 'select-rectangle'
-  | 'select-structure'
   | 'select-fragment'
   | 'erase'
   // bond group
@@ -132,8 +131,6 @@ type LeftToolbarItemVariant =
   | 'rgroup-label'
   | 'rgroup-fragment'
   | 'rgroup-attpoints'
-  // create monomer
-  | 'create-monomer'
   // shape group
   | 'shapes'
   | 'shape-ellipse'

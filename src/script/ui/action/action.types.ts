@@ -79,7 +79,6 @@ type ToolVariant =
   | 'rgroup-fragment'
   | 'rgroup-label'
   | 'save'
-  | 'select-structure'
   | 'select-fragment'
   | 'select-lasso'
   | 'select-rectangle'
@@ -109,24 +108,26 @@ type ToolVariant =
   | 'undo';
 
 // todo: find out types
+type Editor = any;
+type Server = any;
+type Options = any;
+type ReduxState = any;
+
 type ActionObj = {
   tool?: string;
   opts?: any;
   dialog?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  thunk?: (dispatch: Dispatch, getState: () => any) => void;
+  thunk?: (dispatch: Dispatch, getState: () => ReduxState) => void;
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ActionFn = (editor: any) => void;
+type ActionFn = (editor: Editor) => void;
 // todo: come up with better name
 type UiActionAction = ActionObj | ActionFn;
 
 // todo: come up with better name
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GetActionState = (
-  editor: any,
-  server?: any,
-  options?: any,
+  editor: Editor,
+  server?: Server,
+  options?: Options,
 ) => boolean;
 
 type IsActionState = boolean | GetActionState;

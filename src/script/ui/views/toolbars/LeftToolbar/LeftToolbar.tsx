@@ -14,8 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 
-import { RefObject, useRef } from 'react';
-import { CREATE_MONOMER_TOOL_NAME, IMAGE_KEY } from 'ketcher-core';
+import { FC, MutableRefObject, useRef } from 'react';
+import { IMAGE_KEY } from 'ketcher-core';
 import {
   ToolbarGroupItem,
   ToolbarGroupItemCallProps,
@@ -52,88 +52,76 @@ type LeftToolbarCallProps = ToolbarGroupItemCallProps;
 
 type Props = LeftToolbarProps & LeftToolbarCallProps;
 
-type ItemProps = {
-  id: ToolbarItemVariant;
-  options?: ToolbarItem[];
-  dataTestId?: string;
-};
-
-interface GroupProps {
-  items?: ItemProps[];
-  className?: string;
-  height?: number;
-  rest: Omit<Props, 'className'>;
-}
-
-const Group = ({ items, className, height, rest }: GroupProps) => {
-  const { status } = rest;
-  const visibleItems =
-    items?.reduce<ItemProps[]>(
-      (acc, item) =>
-        status[item.id]?.hidden ||
-        item.options?.every((option) => status[option.id]?.hidden)
-          ? acc
-          : acc.concat(item),
-      [],
-    ) ?? [];
-
-  return visibleItems.length ? (
-    <div className={clsx(classes.group, className)}>
-      {visibleItems.map((item) => {
-        switch (item.id) {
-          case 'bond-common':
-            return <Bond {...rest} height={height} key={item.id} />;
-          case 'rgroup':
-            return <RGroup {...rest} key={item.id} />;
-          case 'shapes':
-            return <Shape {...rest} key={item.id} />;
-          case 'bonds':
-            return (
-              <ToolbarGroupItem
-                id={item.id}
-                options={item.options}
-                key={item.id}
-                dataTestId="bonds"
-                {...rest}
-              />
-            );
-          default:
-            return (
-              <ToolbarGroupItem
-                id={item.id}
-                options={item.options}
-                key={item.id}
-                {...rest}
-              />
-            );
-        }
-      })}
-    </div>
-  ) : null;
-};
-
 const LeftToolbar = (props: Props) => {
   const { className, ...rest } = props;
   const { ref, height } = useResizeObserver<HTMLDivElement>();
-  const scrollRef = useRef(null) as RefObject<HTMLDivElement | null>;
+  const scrollRef = useRef() as MutableRefObject<HTMLDivElement>;
   const [startRef, startInView] = useInView({ threshold: 1 });
   const [endRef, endInView] = useInView({ threshold: 1 });
-  const sizeRef = useRef(null) as RefObject<HTMLDivElement | null>;
+  const sizeRef = useRef() as MutableRefObject<HTMLDivElement>;
+
+  type ItemProps = {
+    id: ToolbarItemVariant;
+    options?: ToolbarItem[];
+    dataTestId?: string;
+  };
+  const Item = ({ id, options, dataTestId }: ItemProps) =>
+    ToolbarGroupItem({ id, options, dataTestId, ...rest });
 
   const scrollUp = () => {
-    if (!scrollRef.current || !sizeRef.current) {
-      return;
-    }
-
     scrollRef.current.scrollTop -= sizeRef.current.offsetHeight;
   };
 
   const scrollDown = () => {
-    if (!scrollRef.current || !sizeRef.current) {
-      return;
+    scrollRef.current.scrollTop += sizeRef.current.offsetHeight;
+  };
+
+  const status = rest.status;
+
+  type GroupItem = ItemProps;
+
+  const Group: FC<{ items?: GroupItem[]; className?: string }> = ({
+    items,
+    className,
+  }) => {
+    const visibleItems: GroupItem[] = [];
+    if (items) {
+      items.forEach((item) => {
+        let visible = true;
+        if (status[item.id]?.hidden) {
+          visible = false;
+        } else if (item.options?.every((option) => status[option.id]?.hidden)) {
+          visible = false;
+        }
+        if (visible) visibleItems.push(item);
+      });
     }
 
-    scrollRef.current.scrollTop += sizeRef.current.offsetHeight;
+    return visibleItems.length ? (
+      <div className={clsx(classes.group, className)}>
+        {visibleItems.map((item) => {
+          switch (item.id) {
+            case 'bond-common':
+              return <Bond {...rest} height={height} key={item.id} />;
+            case 'rgroup':
+              return <RGroup {...rest} key={item.id} />;
+            case 'shapes':
+              return <Shape {...rest} key={item.id} />;
+            case 'bonds':
+              return (
+                <Item
+                  id={item.id}
+                  options={item.options}
+                  key={item.id}
+                  dataTestId="bonds"
+                />
+              );
+            default:
+              return <Item id={item.id} options={item.options} key={item.id} />;
+          }
+        })}
+      </div>
+    ) : null;
   };
 
   return (
@@ -155,8 +143,6 @@ const LeftToolbar = (props: Props) => {
               { id: 'select', options: selectOptions },
               { id: 'erase' },
             ]}
-            height={height}
-            rest={rest}
           />
         </div>
 
@@ -177,19 +163,11 @@ const LeftToolbar = (props: Props) => {
             { id: 'charge-plus' },
             { id: 'charge-minus' },
           ]}
-          height={height}
-          rest={rest}
         />
         <div className={classes.listener} ref={sizeRef}>
           <Group
             className={classes.groupItem}
-            items={[
-              { id: 'sgroup' },
-              { id: 'rgroup', options: rGroupOptions },
-              { id: CREATE_MONOMER_TOOL_NAME },
-            ]}
-            height={height}
-            rest={rest}
+            items={[{ id: 'sgroup' }, { id: 'rgroup', options: rGroupOptions }]}
           />
         </div>
 
@@ -203,8 +181,6 @@ const LeftToolbar = (props: Props) => {
               options: mappingOptions,
             },
           ]}
-          height={height}
-          rest={rest}
         />
 
         <div ref={endRef}>
@@ -215,17 +191,15 @@ const LeftToolbar = (props: Props) => {
               { id: 'text' },
               { id: IMAGE_KEY },
             ]}
-            height={height}
-            rest={rest}
           />
         </div>
       </div>
-      {height && (scrollRef?.current?.scrollHeight || 0) > height && (
+      {height && scrollRef?.current?.scrollHeight > height && (
         <ArrowScroll
           startInView={startInView}
           endInView={endInView}
-          scrollForward={scrollDown}
-          scrollBack={scrollUp}
+          scrollUp={scrollUp}
+          scrollDown={scrollDown}
         />
       )}
     </div>

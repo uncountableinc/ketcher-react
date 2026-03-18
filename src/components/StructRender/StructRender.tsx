@@ -43,7 +43,6 @@ const StructRender = ({
   className,
   fullsize,
   update,
-  testId,
 }: IStructRenderProps) => {
   const renderRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -58,7 +57,7 @@ const StructRender = ({
 
   return (
     <Container
-      data-testid={testId ?? 'monomer-preview-micro'}
+      data-testid="monomer-preview-micro"
       ref={renderRef}
       className={className}
       fullsize={fullsize}

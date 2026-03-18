@@ -15,7 +15,7 @@
  ***************************************************************************/
 import { RefCallback, RefObject } from 'react';
 declare type Options<THTMLElement extends HTMLElement> = {
-    ref?: RefObject<THTMLElement> | THTMLElement | null;
+    ref?: RefObject<THTMLElement> | THTMLElement | null | undefined;
 };
 declare type HookResponse<THTMLElement extends HTMLElement> = {
     ref: RefCallback<THTMLElement>;

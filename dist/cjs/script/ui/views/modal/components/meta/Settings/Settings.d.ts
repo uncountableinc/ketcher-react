@@ -34,7 +34,5 @@ interface SettingsCallProps extends BaseCallProps {
     onACSStyle: (result: any) => void;
 }
 declare type Props = SettingsProps & SettingsCallProps;
-declare const Settings: import("react-redux").ConnectedComponent<(props: Props) => import("react/jsx-runtime").JSX.Element, {
-    [x: string]: any;
-}>;
+declare const Settings: import("react-redux").ConnectedComponent<(props: Props) => import("react/jsx-runtime").JSX.Element, any>;
 export default Settings;

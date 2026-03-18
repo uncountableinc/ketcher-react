@@ -16,9 +16,8 @@
 interface ArrowScrollProps {
     startInView: boolean;
     endInView: boolean;
-    scrollForward: (dtMs: number) => void;
-    scrollBack: (dtMs: number) => void;
-    isLeftRight?: boolean;
+    scrollUp: any;
+    scrollDown: any;
 }
-declare const ArrowScroll: ({ startInView, endInView, scrollForward, scrollBack, isLeftRight, }: ArrowScrollProps) => import("react/jsx-runtime").JSX.Element;
+declare const ArrowScroll: ({ startInView, endInView, scrollUp, scrollDown, }: ArrowScrollProps) => import("react/jsx-runtime").JSX.Element;
 export { ArrowScroll };

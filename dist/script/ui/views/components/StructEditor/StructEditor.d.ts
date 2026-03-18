@@ -5,7 +5,6 @@ declare class StructEditor extends Component<any, any, any> {
         enableCursor: boolean;
         clientX: number;
         clientY: number;
-        tooltip: string;
     };
     editorRef: import("react").RefObject<any>;
     logRef: import("react").RefObject<any>;

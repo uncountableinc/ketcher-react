@@ -158,5 +158,5 @@ export function formReducer(state, action) {
   )
     return nucleotideComponentReducer(state, action);
 
-  return { ...state, ...action.data };
+  return Object.assign({}, state, action.data);
 }

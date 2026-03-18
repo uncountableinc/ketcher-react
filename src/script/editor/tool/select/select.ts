@@ -87,8 +87,8 @@ class SelectTool implements Tool {
   isReadyForCopy = false;
   isCopied = false;
   readonly isMoving = false;
-  private readonly multitailArrowMoveTool: ArrowMoveTool<MultitailArrowClosestItem>;
-  private readonly reactionArrowMoveTool: ArrowMoveTool<ReactionArrowClosestItem>;
+  private multitailArrowMoveTool: ArrowMoveTool<MultitailArrowClosestItem>;
+  private reactionArrowMoveTool: ArrowMoveTool<ReactionArrowClosestItem>;
 
   constructor(editor: Editor, mode: SelectMode) {
     this.editor = editor;
@@ -260,7 +260,7 @@ class SelectTool implements Tool {
         !selection.bonds;
       if (shouldDisplayDegree) {
         // moving selected objects
-        const pos = CoordinateTransformation.pageToModel(event, rnd);
+        const pos = rnd.page2obj(event);
         const angle = vectorUtils.calcAngle(dragCtx.xy0, pos);
         const degrees = vectorUtils.degrees(angle);
         editor.event.message.dispatch({ info: degrees + 'º' });
@@ -306,9 +306,7 @@ class SelectTool implements Tool {
       dragCtx.action = fromMultipleMove(
         restruct,
         expSel,
-        CoordinateTransformation.pageToModel(event, editor.render).sub(
-          dragCtx.xy0,
-        ),
+        editor.render.page2obj(event).sub(dragCtx.xy0),
       );
 
       const visibleSelectedItems = filterNotInContractedSGroup(
@@ -319,25 +317,30 @@ class SelectTool implements Tool {
       editor.hover(getHoverToFuse(dragCtx.mergeItems));
 
       editor.update(dragCtx.action, true);
-    } else {
-      const isSelectionRunning = onSelectionMove(
-        event,
-        this.editor,
-        this.#lassoHelper,
-      );
-      if (!isSelectionRunning) {
-        const maps = getMapsForClosestItem(
-          this.#lassoHelper.fragment || event.altKey,
-        );
-        const item = editor.findItem(event, maps, null);
-        editor.hover(item, null, event);
-        handleMovingPosibilityCursor(
-          item,
-          this.editor.render.paper.canvas,
-          getItemCursor(this.editor.render, item),
-        );
-      }
+      return true;
     }
+
+    const isSelectionRunning = onSelectionMove(
+      event,
+      this.editor,
+      this.#lassoHelper,
+    );
+    if (isSelectionRunning) {
+      return true;
+    }
+
+    const maps = getMapsForClosestItem(
+      this.#lassoHelper.fragment || event.altKey,
+    );
+    const item = editor.findItem(event, maps, null);
+    editor.hover(item, null, event);
+    handleMovingPosibilityCursor(
+      item,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore: raphael typing issues
+      this.editor.render.paper.canvas,
+      getItemCursor(this.editor.render, item),
+    );
 
     return true;
   }
@@ -446,6 +449,7 @@ class SelectTool implements Tool {
           atomFromStruct,
           sgroups,
           functionalGroups,
+          true,
         )
       )
         atomResult.push(atomId);
@@ -545,9 +549,9 @@ class SelectTool implements Tool {
   }
 
   mouseleave() {
-    if (this.dragCtx?.stopTapping) this.dragCtx.stopTapping();
+    if (this.dragCtx && this.dragCtx.stopTapping) this.dragCtx.stopTapping();
 
-    if (this.dragCtx?.action) {
+    if (this.dragCtx && this.dragCtx.action) {
       const action = this.dragCtx.action;
       this.editor.update(action);
     }
@@ -667,7 +671,9 @@ function closestToSel(ci) {
 }
 
 function isSelected(selection, item) {
-  return selection?.[item.map]?.includes(item.id) ?? false;
+  return (
+    selection && selection[item.map] && selection[item.map].includes(item.id)
+  );
 }
 
 function preventSaltAndSolventsMerge(
@@ -711,7 +717,7 @@ function getResizingProps(
   dragCtx,
   event,
 ): [ReStruct, number, Vec2, Vec2, any] {
-  const current = CoordinateTransformation.pageToModel(event, editor.render);
+  const current = editor.render.page2obj(event);
   const diff = current.sub(dragCtx.xy0);
   return [editor.render.ctab, dragCtx.item.id, diff, current, dragCtx.item.ref];
 }

@@ -14,5 +14,5 @@
  * limitations under the License.
  ***************************************************************************/
 import { IIconProps } from './types';
-declare const Icon: ({ name, className, title, onClick, onMouseOver, onMouseOut, onDoubleClick, dataTestId, }: IIconProps) => import("react/jsx-runtime").JSX.Element;
+declare const Icon: ({ name, className, title, onClick, dataTestId }: IIconProps) => import("react/jsx-runtime").JSX.Element;
 export default Icon;

@@ -35,9 +35,6 @@ function formulaInputMarkdown(contentData) {
       onKeyDown={onKeyDown}
       contentEditable={contentEditable}
       suppressContentEditableWarning={true}
-      role="textbox"
-      aria-multiline="false"
-      tabIndex={0}
     >
       {content}
     </div>

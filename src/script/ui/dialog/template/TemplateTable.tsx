@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-import { FC, KeyboardEvent } from 'react';
+import { FC } from 'react';
 import { Struct } from 'ketcher-core';
 import classes from './TemplateTable.module.less';
 import { greekify } from '../../utils';
@@ -63,16 +63,6 @@ function tmplName(tmpl: Template, i: number): string {
   return tmpl.struct.name || `${tmpl.props.group} template ${i + 1}`;
 }
 
-function createKeyDownHandler(callback: () => void) {
-  return (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      e.stopPropagation();
-      callback();
-    }
-  };
-}
-
 const TemplateTable: FC<TemplateTableProps> = (props) => {
   const {
     templates,
@@ -93,8 +83,7 @@ const TemplateTable: FC<TemplateTableProps> = (props) => {
     >
       {templates.map((tmpl, i) => {
         return (
-          <button
-            type="button"
+          <div
             className={
               tmpl.struct !== selected?.struct
                 ? classes.td
@@ -109,7 +98,6 @@ const TemplateTable: FC<TemplateTableProps> = (props) => {
             onClick={() => onSelect(tmpl)}
           >
             <StructRender
-              testId={tmpl.struct.name}
               struct={tmpl.struct}
               className={classes.struct}
               fullsize={true}
@@ -128,37 +116,26 @@ const TemplateTable: FC<TemplateTableProps> = (props) => {
               {greekify(tmplName(tmpl, i))}
             </div>
             {tmpl.props.group === 'User Templates' && (
-              <span
-                role="button"
-                tabIndex={0}
-                data-testid={'delete-template-button'}
+              <button
                 className={`${classes.button} ${classes.deleteButton}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete!(tmpl);
-                }}
-                onKeyDown={createKeyDownHandler(() => onDelete!(tmpl))}
+                onClick={() => onDelete!(tmpl)}
               >
                 <Icon name="delete" />
-              </span>
+              </button>
             )}
             {!isFunctionalGroupTemplate(tmpl) &&
               !isSaltOrSolventTemplate(tmpl) && (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  data-testid={'edit-template-button'}
+                <button
                   className={`${classes.button} ${classes.editButton}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onAttach!(tmpl);
                   }}
-                  onKeyDown={createKeyDownHandler(() => onAttach!(tmpl))}
                 >
                   <Icon name="edit" />
-                </span>
+                </button>
               )}
-          </button>
+          </div>
         );
       })}
     </div>

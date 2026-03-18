@@ -39,8 +39,7 @@ function updateVisibleTools(visibleTool, activeTool) {
       if (key === 'transform' && menuHeight > 800) return res;
       if (key === 'rgroup' && menuHeight > 850) return res;
       if (key === 'shape' && menuHeight > 900) return res;
-      const matchesBondGroup = regExp.exec(key);
-      if (!matchesBondGroup || menuHeight > 700) res[key] = visibleTool[key];
+      if (!key.match(regExp) || menuHeight > 700) res[key] = visibleTool[key];
       return res;
     },
     { ...activeTool },

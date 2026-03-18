@@ -34,7 +34,6 @@ import {
   BondAttr,
   AtomAttr,
   MonomerMicromolecule,
-  CoordinateTransformation,
 } from 'ketcher-core';
 import Editor from '../Editor';
 import { getGroupIdsFromItemArrays } from './helper/getGroupIdsFromItems';
@@ -44,7 +43,7 @@ import TemplatePreview from './templatePreview';
 
 export function getBondFlipSign(struct: Struct, bond: Bond): number {
   const xy0 = new Vec2();
-  const frid = struct.atoms.get(bond.begin)?.fragment;
+  const frid = struct.atoms.get(bond?.begin as number)?.fragment;
   const frIds = struct.getFragmentIds(frid as number);
   let count = 0;
 
@@ -127,7 +126,7 @@ class TemplateTool implements Tool {
       | SGroup
       | undefined;
     this.template = {
-      aid: (parseInt(tmpl.aid) || sGroup?.getAttachmentAtomId()) ?? 0,
+      aid: parseInt(tmpl.aid) || sGroup?.getAttachmentAtomId() || 0,
       bid: parseInt(tmpl.bid) || 0,
     };
 
@@ -193,10 +192,7 @@ class TemplateTool implements Tool {
     const targetId = this.findKeyOfRelatedGroupId(
       this.closestItem?.id as number,
     );
-    if (targetId === undefined) {
-      return false;
-    }
-    const functionalGroup = this.functionalGroups.get(targetId);
+    const functionalGroup = this.functionalGroups.get(targetId!);
 
     if (functionalGroup?.relatedSGroup instanceof MonomerMicromolecule) {
       return false;
@@ -209,12 +205,7 @@ class TemplateTool implements Tool {
     return Boolean(isTargetExpanded || isTargetAtomOrBond);
   }
 
-  private findKeyOfRelatedGroupId(
-    clickedClosestItemId?: number,
-  ): number | undefined {
-    if (clickedClosestItemId === undefined) {
-      return undefined;
-    }
+  private findKeyOfRelatedGroupId(clickedClosestItemId: number): number {
     let targetId;
 
     const relatedGroupId = FunctionalGroup.findFunctionalGroupByAtom(
@@ -285,7 +276,7 @@ class TemplateTool implements Tool {
     this.editor.hover(null);
 
     this.dragCtx = {
-      xy0: CoordinateTransformation.pageToModel(event, this.editor.render),
+      xy0: this.editor.render.page2obj(event),
       item: this.editor.findItem(this.event, this.findItems),
     };
 
@@ -326,10 +317,7 @@ class TemplateTool implements Tool {
       return true;
     }
 
-    const eventPosition = CoordinateTransformation.pageToModel(
-      event,
-      this.editor.render,
-    );
+    const eventPosition = this.editor.render.page2obj(event);
     const dragCtx = this.dragCtx;
     const ci = dragCtx.item;
     let targetPos: Vec2 | null | undefined = null;
@@ -377,7 +365,7 @@ class TemplateTool implements Tool {
 
       if (atomId !== undefined) {
         const atom = this.struct.atoms.get(atomId);
-        targetPos = atom?.pp ?? null;
+        targetPos = atom?.pp;
 
         if (targetPos) {
           extraBond = this.isModeFunctionalGroup

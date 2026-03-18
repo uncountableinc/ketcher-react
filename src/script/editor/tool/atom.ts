@@ -28,7 +28,6 @@ import {
   ElementColor,
   vectorUtils,
   KetcherLogger,
-  CoordinateTransformation,
 } from 'ketcher-core';
 
 import Editor from '../Editor';
@@ -54,10 +53,9 @@ class AtomTool implements Tool {
       if (editorSelection.atoms) {
         const struct = editor.render.ctab;
         const action = new Action();
-        const selectedSGroupsId = getGroupIdsFromItemArrays(
-          struct.molecule,
-          editorSelection,
-        );
+        const selectedSGroupsId =
+          editorSelection &&
+          getGroupIdsFromItemArrays(struct.molecule, editorSelection);
         const sgroups = struct.molecule.functionalGroups;
         const atomsInFunctionalGroup = editorSelection.atoms
           .filter((atomId) => {
@@ -208,16 +206,13 @@ class AtomTool implements Tool {
     if (atomId !== undefined) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const atom = molecule.atoms.get(atomId)!;
-      let angle = vectorUtils.calcAngle(
-        atom.pp,
-        CoordinateTransformation.pageToModel(event, rnd),
-      );
+      let angle = vectorUtils.calcAngle(atom.pp, rnd.page2obj(event));
       if (!event.ctrlKey) angle = vectorUtils.fracAngle(angle, null);
       const degrees = vectorUtils.degrees(angle);
       editor.event.message.dispatch({ info: degrees + 'º' });
       const newAtomPos = vectorUtils.calcNewAtomPos(
         atom.pp,
-        CoordinateTransformation.pageToModel(event, rnd),
+        rnd.page2obj(event),
         event.ctrlKey,
       );
 
@@ -229,7 +224,7 @@ class AtomTool implements Tool {
         rnd.ctab,
         this.#bondProps,
         atomId,
-        { ...(atomProps || {}) },
+        Object.assign({}, atomProps),
         undefined,
         newAtomPos,
       )[0];
@@ -265,11 +260,7 @@ class AtomTool implements Tool {
 
     if ((!dragCtx.item || dragCtx?.isSaltOrSolvent) && !ci) {
       action.mergeWith(
-        fromAtomAddition(
-          reStruct,
-          CoordinateTransformation.pageToModel(event, rnd),
-          atomProps,
-        ),
+        fromAtomAddition(reStruct, rnd.page2obj(event), atomProps),
       );
     } else if (dragCtx.item && ci) {
       if (dragCtx.item.id === ci.id) {

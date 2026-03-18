@@ -40,7 +40,6 @@ export function initOptionsState(): {
         'render-hash-spacing-unit': any;
         'reaction-component-margin-size': any;
         'reaction-component-margin-size-unit': any;
-        'render-stereo-style': string;
     };
 };
 export function appUpdate(data: any): (dispatch: any) => void;

@@ -28,10 +28,9 @@ import { logger } from 'redux-logger';
 import modalReducer from './modal';
 import { pick } from 'lodash/fp';
 import requestReducer from './request';
-import { thunk } from 'redux-thunk';
+import thunk from 'redux-thunk';
 import toolbarReducer from './toolbar';
 import floatingToolsReducer from './floatingTools';
-import notificationsReducer, { initNotificationsState } from './notifications';
 
 export { onAction, load };
 
@@ -51,56 +50,47 @@ const shared = combineReducers({
   saltsAndSolvents: saltsAndSolventsReducer,
   requestsStatuses: requestReducer,
   floatingTools: floatingToolsReducer,
-  notifications: notificationsReducer,
 });
 
 function getRootReducer(setEditor) {
   return function root(state, action) {
-    let updatedState = state;
-
+    // TODO need a refactoring for this reducer since it uses (probably unintentionally falling through switch-case)
+    // F.e. when it gets action: INIT it will call all cases below - INIT+UPDATE
+    /* eslint-disable no-fallthrough */
     switch (action.type) {
       case 'INIT': {
         setEditor(action.editor);
-        // Extract action data (excluding type) and merge into state
-        const { type: _type, ...data } = action;
-        if (data) {
-          updatedState = { ...updatedState, ...data };
-        }
-        // Set server
-        updatedState = {
-          ...updatedState,
-          server: action.server || updatedState.server,
-        };
-        break;
       }
 
       case 'UPDATE': {
-        const { type: _type, ...data } = action;
-        if (data) {
-          updatedState = { ...updatedState, ...data };
-        }
-        break;
+        const {
+          /* eslint-disable @typescript-eslint/no-unused-vars */
+          type,
+          /* eslint-enable @typescript-eslint/no-unused-vars */
+          ...data
+        } = action;
+        if (data) state = { ...state, ...data };
       }
 
       case SET_SERVER: {
-        updatedState = {
-          ...updatedState,
-          server: action.server || updatedState.server,
+        state = {
+          ...state,
+          server: action.server || state.server,
         };
-        break;
       }
     }
+    /* eslint-enable no-fallthrough */
 
-    const sh = shared(updatedState, {
+    const sh = shared(state, {
       ...action,
-      ...pick(['editor', 'server', 'options'], updatedState),
+      ...pick(['editor', 'server', 'options'], state),
     });
 
     const finalState =
-      sh === updatedState.shared
-        ? updatedState
+      sh === state.shared
+        ? state
         : {
-            ...updatedState,
+            ...state,
             ...sh,
           };
 
@@ -125,7 +115,6 @@ export default function (options, server, setEditor) {
     }),
     server: server || Promise.reject(new Error('Standalone mode!')),
     templates: initTmplsState,
-    notifications: initNotificationsState,
   };
 
   const middleware = [thunk];

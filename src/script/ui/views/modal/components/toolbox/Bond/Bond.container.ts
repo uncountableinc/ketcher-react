@@ -18,13 +18,10 @@ import { BaseProps } from '../../../modal.types';
 import Bond from './Bond';
 import { connect } from 'react-redux';
 
-type StateProps = Pick<BaseProps, 'formState'> & {
-  isMonomerCreationWizardActive?: boolean;
-};
+type StateProps = Pick<BaseProps, 'formState'>;
 
 const mapStateToProps = (state: any): StateProps => ({
   formState: state.modal.form,
-  isMonomerCreationWizardActive: state.editor.isMonomerCreationWizardActive,
 });
 
 const BondContainer = connect(mapStateToProps)(Bond);

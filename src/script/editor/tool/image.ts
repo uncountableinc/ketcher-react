@@ -1,4 +1,3 @@
-import { ClosestItemWithMap } from '../shared/closest.types';
 import {
   CoordinateTransformation,
   Scale,
@@ -13,6 +12,7 @@ import {
 } from 'ketcher-core';
 import { Tool } from './Tool';
 import type Editor from '../Editor';
+import { ClosestItemWithMap } from '../shared/closest.types';
 import { handleMovingPosibilityCursor } from '../utils';
 import { getItemCursor } from '../utils/getItemCursor';
 
@@ -35,7 +35,7 @@ interface DragContext {
 
 export class ImageTool implements Tool {
   static readonly INPUT_ID = 'image-upload';
-  private readonly element: HTMLInputElement;
+  private element: HTMLInputElement;
   private dragCtx: DragContext | null = null;
 
   constructor(private readonly editor: Editor) {
@@ -121,12 +121,12 @@ export class ImageTool implements Tool {
   onFileUpload(clickPosition: Vec2): void {
     const errorHandler = this.editor.errorHandler;
     this.element.onchange = null;
-    const file = this.element.files?.[0];
-    if (file) {
+    if (this.element.files && this.element.files[0]) {
+      const file = this.element.files[0];
       const image = new Image();
       const reader = new FileReader();
 
-      if (!file.type || !allowList.exec(file.type)) {
+      if (!file.type || !file.type.match(allowList)) {
         const errorMessage = `Unsupported image type`;
         KetcherLogger.error(`${TAG}:onFileUpload`, errorMessage);
         if (errorHandler) {
@@ -188,7 +188,7 @@ export class ImageTool implements Tool {
         }
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(this.element.files[0]);
     }
   }
 

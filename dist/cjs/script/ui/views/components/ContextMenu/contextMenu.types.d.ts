@@ -1,4 +1,4 @@
-import { AttachmentPointName, FunctionalGroup } from 'ketcher-core';
+import { FunctionalGroup } from 'ketcher-core';
 import type { TriggerEvent, PredicateParams } from 'react-contexify';
 import { Selection } from '../../../../editor/Editor';
 export declare enum CONTEXT_MENU_ID {
@@ -8,9 +8,9 @@ export declare enum CONTEXT_MENU_ID {
     FOR_FUNCTIONAL_GROUPS = "context-menu-for-functional-groups",
     FOR_R_GROUP_ATTACHMENT_POINT = "context-menu-for-rgroup-attachment-point",
     FOR_MULTITAIL_ARROW = "context-menu-for-multiple-arrowed",
-    FOR_MACROMOLECULE = "context-menu-for-macromolecule",
-    FOR_ATTACHMENT_POINT_LABEL = "context-menu-for-attachment-point-label"
+    FOR_MACROMOLECULE = "context-menu-for-macromolecule"
 }
+export declare type ItemData = unknown;
 interface BaseContextMenuProps {
     id: string;
 }
@@ -46,24 +46,19 @@ export interface MultitailArrowContextMenuProps {
     itemId: number;
     tailId: number | null;
 }
-export interface AttachmentPointLabelContextMenuProps extends BaseContextMenuProps {
-    id: string;
-    attachmentPointName: AttachmentPointName;
-}
-export declare type ContextMenuProps = BondsContextMenuProps | AtomContextMenuProps | SelectionContextMenuProps | FunctionalGroupsContextMenuProps | RGroupAttachmentPointContextMenuProps | MultitailArrowContextMenuProps | MacromoleculeContextMenuProps | AttachmentPointLabelContextMenuProps;
+export declare type ContextMenuProps = BondsContextMenuProps | AtomContextMenuProps | SelectionContextMenuProps | FunctionalGroupsContextMenuProps | RGroupAttachmentPointContextMenuProps | MultitailArrowContextMenuProps | MacromoleculeContextMenuProps;
 export interface MenuItemsProps<T extends ContextMenuProps> {
     triggerEvent?: TriggerEvent;
     propsFromTrigger?: T;
 }
-export declare type ItemEventParams<T extends ContextMenuProps = ContextMenuProps> = PredicateParams<T, unknown>;
+export declare type ItemEventParams<T extends ContextMenuProps = ContextMenuProps> = PredicateParams<T, ItemData>;
 export declare type ContextMenuInfo = {
     [id in CONTEXT_MENU_ID]?: boolean;
 };
 export declare enum ContextMenuTriggerType {
     None = "none",
     Selection = "selection",
-    ClosestItem = "closestItem",
-    AuxiliaryItem = "auxiliaryItem"
+    ClosestItem = "closestItem"
 }
 export interface ClosestItem {
     id: number;

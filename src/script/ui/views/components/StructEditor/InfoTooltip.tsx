@@ -42,32 +42,24 @@ interface InfoPanelProps {
 function getPanelPosition(
   position: CursorPosition,
   render: Render,
-  canvasOffset: { x: number; y: number },
 ): CursorPosition {
   const width = 140;
   const height = 40;
-
-  // Convert viewport coordinates to canvas-relative coordinates
-  const canvasRelativeX = position.x - canvasOffset.x;
-  const canvasRelativeY = position.y - canvasOffset.y;
-
-  // adjust position to keep inside canvas area
+  // adjust position to keep inside viewport
   const viewportRightLimit = render?.clientArea?.clientWidth - width / 2;
   const viewportBottomLimit = render?.clientArea?.clientHeight - height;
+  position.y -= tooltipOffset.y;
+  position.x -= tooltipOffset.x;
 
-  let adjustedX = canvasRelativeX - tooltipOffset.x;
-  let adjustedY = canvasRelativeY - tooltipOffset.y;
-
-  if (adjustedX > viewportRightLimit) {
-    adjustedX = adjustedX - width - HOVER_PANEL_PADDING;
+  if (position.x > viewportRightLimit) {
+    position.x = position.x - width - HOVER_PANEL_PADDING;
   }
 
-  if (adjustedY > viewportBottomLimit) {
-    adjustedY -= HOVER_PANEL_PADDING;
+  if (position.y > viewportBottomLimit) {
+    position.y -= HOVER_PANEL_PADDING;
   }
 
-  // Return canvas-relative coordinates
-  return { x: adjustedX, y: adjustedY };
+  return position;
 }
 
 const InfoTooltip: FC<InfoPanelProps> = (props) => {
@@ -121,29 +113,17 @@ const InfoTooltip: FC<InfoPanelProps> = (props) => {
     return null;
   }
 
-  // Get canvas offset from viewport
-  const canvasRect = render?.clientArea?.getBoundingClientRect();
-  const canvasOffset = canvasRect
-    ? { x: canvasRect.left, y: canvasRect.top }
-    : { x: 0, y: 0 };
-
-  const shiftedPosition = getPanelPosition(position, render, canvasOffset);
-  const isSmall = ["5'", "3'"].includes((tooltip || '').trim());
+  const shiftedPosition = getPanelPosition(position, render);
 
   return (
     <div
       id="atomInfoTooltip"
-      data-testid="atom-info-tooltip"
       role="tooltip"
       style={{
         left: shiftedPosition.x + 'px',
         top: shiftedPosition.y + 'px',
       }}
-      className={clsx(
-        classes.infoTooltip,
-        isSmall && classes.infoTooltipSmallSquare,
-        className,
-      )}
+      className={clsx(classes.infoTooltip, className)}
       dangerouslySetInnerHTML={{ __html: tooltip }}
     />
   );

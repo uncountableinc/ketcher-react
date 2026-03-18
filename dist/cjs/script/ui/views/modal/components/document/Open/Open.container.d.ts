@@ -18,10 +18,7 @@ import { OpenProps } from './Open';
 import { BaseCallProps } from '../../../modal.types';
 declare const OpenContainer: import("react-redux").ConnectedComponent<import("react").FC<OpenProps & Pick<import("../../../modal.types").BaseProps, "className"> & BaseCallProps & {
     onImageUpload: (file: File) => void;
-}>, {
-    className: string;
-    onCancel: () => void;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+}>, import("react-redux").Omit<OpenProps & Pick<import("../../../modal.types").BaseProps, "className"> & BaseCallProps & {
+    onImageUpload: (file: File) => void;
+}, "onOk" | "server" | "errorHandler" | "isRecognizeDisabled" | "isAnalyzingFile" | "ignoreChiralFlag" | "onImageUpload">>;
 export default OpenContainer;

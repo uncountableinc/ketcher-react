@@ -74,5 +74,4 @@ export type ButtonName =
   // text group
   | 'text'
   // right
-  | 'enhanced-stereo'
-  | 'create-monomer';
+  | 'enhanced-stereo';

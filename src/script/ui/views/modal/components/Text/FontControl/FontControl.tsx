@@ -28,10 +28,6 @@ export const FontControl = ({ editorState, setEditorState, styles }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const onClickOutsideCloseDrowndown = (): void =>
     setIsShowingFontSizeMenu(false);
-
-  // TODO suppressed after upgrade to react 19. Need to fix
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   useClickOutside(wrapperRef, onClickOutsideCloseDrowndown);
 
   const setFontSize = (e, value) => {
@@ -55,15 +51,13 @@ export const FontControl = ({ editorState, setEditorState, styles }) => {
   const fontSizeOptions = useMemo(
     () =>
       fontSizes.map((fontSize) => (
-        <button
+        <div
           key={fontSize}
-          type="button"
           className={classes.fontSizeOption}
           onMouseDown={(e) => setFontSize(e, `${fontSize}px`)}
-          data-testid={`${fontSize}-option`}
         >
           {fontSize}
-        </button>
+        </div>
       )),
     [isShowingFontSizeMenu],
   );
@@ -71,7 +65,6 @@ export const FontControl = ({ editorState, setEditorState, styles }) => {
   return (
     <div ref={wrapperRef}>
       <button
-        data-testid="font-size-button"
         className={classes.fontBtn}
         onMouseDown={(e) => {
           e.preventDefault();

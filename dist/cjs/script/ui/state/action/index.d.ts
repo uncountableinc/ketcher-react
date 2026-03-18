@@ -2,4 +2,6 @@ export default function _default(state: null | undefined, { type, action, ...par
     [x: string]: any;
     type: any;
     action: any;
-}): any;
+}): {
+    activeTool: any;
+} | null;

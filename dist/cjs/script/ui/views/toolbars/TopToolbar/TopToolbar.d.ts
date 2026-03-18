@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+/// <reference types="react" />
 import { CustomButton } from '../../../../builders/ketcher/CustomButtons';
 declare type VoidFunction = () => void;
 export interface PanelProps {

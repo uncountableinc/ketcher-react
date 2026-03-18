@@ -99,7 +99,6 @@ const EnhancedStereo: FC<Props> = (props) => {
               type="radio"
               value={StereoLabel.Abs}
               checked={result.type === StereoLabel.Abs}
-              data-testid="abs-radio"
             />
             ABS
           </label>
@@ -112,7 +111,6 @@ const EnhancedStereo: FC<Props> = (props) => {
                 type="radio"
                 value={StereoLabel.And}
                 checked={result.type === StereoLabel.And}
-                data-testid="add-to-and-group-radio"
               />
               Add to AND
               <Field
@@ -120,7 +118,6 @@ const EnhancedStereo: FC<Props> = (props) => {
                 schema={range(1, maxAnd + 1)}
                 type="text"
                 className={classes.labelGroupSelect}
-                data-testid="add-to-and-group"
               />
               Group
             </label>
@@ -134,7 +131,6 @@ const EnhancedStereo: FC<Props> = (props) => {
                 type="radio"
                 value={StereoLabel.Or}
                 checked={result.type === StereoLabel.Or}
-                data-testid="add-to-or-group-radio"
               />
               Add to OR
               <Field
@@ -142,7 +138,6 @@ const EnhancedStereo: FC<Props> = (props) => {
                 schema={range(1, maxOr + 1)}
                 type="text"
                 className={classes.labelGroupSelect}
-                data-testid="add-to-or-group"
               />
               Group
             </label>
@@ -155,7 +150,6 @@ const EnhancedStereo: FC<Props> = (props) => {
               type="radio"
               value={`${StereoLabel.And}${maxAnd + 1}`}
               checked={result.type === `${StereoLabel.And}${maxAnd + 1}`}
-              data-testid="create-new-and-group-radio"
             />
             Create new AND Group
           </label>
@@ -167,7 +161,6 @@ const EnhancedStereo: FC<Props> = (props) => {
               type="radio"
               value={`${StereoLabel.Or}${maxOr + 1}`}
               checked={result.type === `${StereoLabel.Or}${maxOr + 1}`}
-              data-testid="create-new-or-group-radio"
             />
             Create new OR Group
           </label>
@@ -189,17 +182,17 @@ function maxOfAnds(stereLabels): number {
   const numbers = stereLabels.map((label) => {
     return label.match(/&/) ? +label.match(/\d+/)?.join() : 0;
   });
-  return numbers.length === 0 ? 0 : Math.max(...numbers);
+  return Math.max(...numbers);
 }
 
 function maxOfOrs(stereLabels): number {
   const numbers = stereLabels.map((label) => {
     return label.match(/or/) ? +label.match(/\d+/)?.join() : 0;
   });
-  return numbers.length === 0 ? 0 : Math.max(...numbers);
+  return Math.max(...numbers);
 }
 
-export default connect((state: any) => ({
-  formState: state.modal.form || { result: {}, valid: false },
-  struct: state.editor.struct(),
+export default connect((state) => ({
+  formState: (state as any).modal.form || { result: {}, valid: false },
+  struct: (state as any).editor.struct(),
 }))(EnhancedStereo);

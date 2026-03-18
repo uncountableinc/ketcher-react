@@ -46,13 +46,12 @@ class KetcherBuilder {
   }
 
   appendApiAsync(structServiceProvider: StructServiceProvider) {
-    const structService = createApi(
+    this.structService = createApi(
       structServiceProvider,
       DefaultStructServiceOptions,
     );
-    this.structService = structService;
-    this.formatterFactory = new FormatterFactory(structService);
-    return structService;
+    this.formatterFactory = new FormatterFactory(this.structService!);
+    return this.structService;
   }
 
   reinitializeApi(
@@ -109,9 +108,6 @@ class KetcherBuilder {
     setServer: (structService: StructService) => void;
   }> {
     const { structService } = this;
-    if (!structService) {
-      throw new Error('You should append Api before initializing UI');
-    }
     let cleanup: ReturnType<typeof initApp> | null = null;
 
     const { editor, setServer } = await new Promise<{
@@ -132,7 +128,7 @@ class KetcherBuilder {
           buildNumber: process.env.BUILD_NUMBER || '',
           customButtons: customButtons || [],
         },
-        structService,
+        structService!,
         resolve,
         togglerComponent,
       );

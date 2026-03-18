@@ -18,7 +18,6 @@ const shapeOptions: ToolbarItem[] = makeItems([
 const selectOptions: ToolbarItem[] = makeItems([
   'select-rectangle',
   'select-lasso',
-  'select-structure',
   'select-fragment',
 ]);
 

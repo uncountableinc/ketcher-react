@@ -122,6 +122,7 @@ class EraserTool implements Tool {
             atomFromStruct,
             sgroups,
             functionalGroups,
+            true,
           )
         ) {
           const sgroupAtoms =
@@ -141,6 +142,7 @@ class EraserTool implements Tool {
             atomFromStruct,
             sgroups,
             functionalGroups,
+            true,
           )
         ) {
           atomsResult.push(atomId);
@@ -271,6 +273,7 @@ class EraserTool implements Tool {
           atomFromStruct,
           sgroups,
           functionalGroups,
+          true,
         )
       ) {
         atomResult.push(atomId);

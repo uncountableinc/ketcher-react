@@ -14,12 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-import {
-  Action,
-  Scale,
-  fromAtomsAttrs,
-  CoordinateTransformation,
-} from 'ketcher-core';
+import { Action, Scale, fromAtomsAttrs } from 'ketcher-core';
 import Editor from '../Editor';
 import { Tool } from './Tool';
 
@@ -42,7 +37,7 @@ class ReactionMapTool implements Tool {
       this.editor.hover(null);
       this.dragCtx = {
         item: closestItem,
-        xy0: CoordinateTransformation.pageToModel(event, rnd),
+        xy0: rnd.page2obj(event),
       };
     }
   }
@@ -69,7 +64,7 @@ class ReactionMapTool implements Tool {
         editor.hover(null);
         this.updateLine(
           atoms.get(this.dragCtx.item.id)?.pp,
-          CoordinateTransformation.pageToModel(event, rnd),
+          rnd.page2obj(event),
         );
       }
     } else {

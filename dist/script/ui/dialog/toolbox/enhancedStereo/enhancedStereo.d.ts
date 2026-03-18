@@ -38,14 +38,5 @@ interface EnhancedStereoCallProps {
     onOk: (res: any) => void;
 }
 declare type Props = EnhancedStereoProps & EnhancedStereoCallProps;
-declare const _default: import("react-redux").ConnectedComponent<FC<Props>, {
-    className: string;
-    init: EnhancedStereoResult & {
-        init?: true | undefined;
-    };
-    onCancel: () => void;
-    onOk: (res: any) => void;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+declare const _default: import("react-redux").ConnectedComponent<FC<Props>, import("react-redux").Omit<EnhancedStereoProps & EnhancedStereoCallProps, "formState" | "struct">>;
 export default _default;

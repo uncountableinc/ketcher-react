@@ -186,6 +186,7 @@ const InfoPanel: FC<InfoPanelProps> = (props) => {
       clientX={clientX}
       clientY={clientY}
       render={render}
+      groupStruct={groupStruct}
       sGroup={sGroup}
       sGroupData={sGroupData}
       className={className}

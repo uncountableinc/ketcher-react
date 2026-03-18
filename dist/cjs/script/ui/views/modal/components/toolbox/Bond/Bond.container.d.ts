@@ -13,17 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-declare const BondContainer: import("react-redux").ConnectedComponent<(props: import("./Bond").BondProps & import("../../../modal.types").BaseCallProps & {
-    isMonomerCreationWizardActive?: boolean | undefined;
-}) => import("react/jsx-runtime").JSX.Element, {
-    className: string;
-    type: string;
-    topology: number | null;
-    center: number | null;
-    customQuery: string;
-    onCancel: () => void;
-    onOk: (result: any) => void;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+declare const BondContainer: import("react-redux").ConnectedComponent<(props: import("./Bond").BondProps & import("../../../modal.types").BaseCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<import("./Bond").BondProps & import("../../../modal.types").BaseCallProps, "formState">>;
 export default BondContainer;

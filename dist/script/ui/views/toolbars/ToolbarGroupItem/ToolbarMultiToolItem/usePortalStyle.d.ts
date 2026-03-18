@@ -14,11 +14,6 @@
  * limitations under the License.
  ***************************************************************************/
 import { CSSProperties, RefObject } from 'react';
-declare type HookParams = [
-    RefObject<HTMLDivElement | null>,
-    boolean,
-    boolean?,
-    string?
-];
-declare function usePortalStyle([ref, isOpen, isTop, rootElementSelector,]: HookParams): [CSSProperties];
+declare type HookParams = [RefObject<HTMLDivElement>, boolean];
+declare function usePortalStyle([ref, isOpen]: HookParams): [CSSProperties];
 export { usePortalStyle };

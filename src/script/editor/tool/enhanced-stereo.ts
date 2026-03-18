@@ -55,7 +55,7 @@ class EnhancedStereoTool implements Tool {
     const restruct = editor.render.ctab;
     const stereoLabels = stereoAtoms.map((stereoAtom) => {
       const atom = struct.atoms.get(stereoAtom);
-      return atom?.stereoLabel;
+      return atom && atom.stereoLabel;
     });
     const hasAnotherLabel = stereoLabels.some(
       (stereoLabel) => stereoLabel !== stereoLabels[0],
@@ -75,7 +75,7 @@ class EnhancedStereoTool implements Tool {
           const frag =
             frid !== undefined ? restruct.molecule.frags.get(frid) : null;
 
-          if (frag?.stereoAtoms) {
+          if (frag && frag.stereoAtoms) {
             return acc.mergeWith(fromStereoFlagUpdate(restruct, frid));
           }
           return acc;

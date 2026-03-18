@@ -14,9 +14,5 @@
  * limitations under the License.
  ***************************************************************************/
 import { LeftToolbarProps } from './LeftToolbar';
-declare const LeftToolbarContainer: import("react-redux").ConnectedComponent<(props: LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps) => import("react/jsx-runtime").JSX.Element, {
-    className?: string | undefined;
-    context?: import("react").Context<import("react-redux").ReactReduxContextValue<any, import("redux").UnknownAction> | null> | undefined;
-    store?: import("redux").Store<any, import("redux").UnknownAction, unknown> | undefined;
-}>;
+declare const LeftToolbarContainer: import("react-redux").ConnectedComponent<(props: LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps) => import("react/jsx-runtime").JSX.Element, import("react-redux").Omit<LeftToolbarProps & import("../ToolbarGroupItem/ToolbarGroupItem").ToolbarGroupItemCallProps, "status" | "opened" | "disableableButtons" | "indigoVerification" | "vertical" | "dataTestId" | "onAction" | "onOpen">>;
 export { LeftToolbarContainer };

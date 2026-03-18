@@ -18,5 +18,5 @@ declare type GenericGroupsProps = {
     onAtomSelect: (label: string, activateImmediately: boolean) => void;
     disabledQueryElements: Array<string> | null;
 };
-declare function GenericGroups({ selected, onAtomSelect, disabledQueryElements, }: Readonly<GenericGroupsProps>): import("react/jsx-runtime").JSX.Element;
+declare function GenericGroups({ selected, onAtomSelect, disabledQueryElements, }: GenericGroupsProps): import("react/jsx-runtime").JSX.Element;
 export default GenericGroups;

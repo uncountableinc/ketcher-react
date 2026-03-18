@@ -60,12 +60,13 @@ const SaveButton = (props: SaveButtonProps) => {
   } = props;
   const { ketcherId } = useAppContext();
 
-  const saveFile = async () => {
+  const saveFile = () => {
     if (data) {
       try {
-        const saver: SaverType = await fileSaver(server);
-        saver(data, filename, type);
-        onSave();
+        fileSaver(server).then((saver: SaverType) => {
+          saver(data, filename, type);
+          onSave();
+        });
       } catch (e) {
         KetcherLogger.error('savebutton.tsx::SaveButton::saveFile', e);
         onError(e);
